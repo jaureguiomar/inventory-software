@@ -1,0 +1,55 @@
+// #############
+// ## General ##
+@mixin box-sizing($box-model) {
+  box-sizing: $box-model;
+}
+
+@mixin default-container($width: 100%, $height: auto) {
+  width: $width;
+  height: $height;
+}
+
+@mixin center-block() {
+  display: block;
+  margin: 0 auto;
+}
+
+@mixin flex($direction: row, $align: center, $justify: space-between) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+// Buttons
+@mixin button($color) {
+  background: $color;
+  padding: .5rem 1rem;
+
+  display: block;
+  margin-top: .5rem;
+
+  text-align: center;
+  color: $blanco;
+  text-decoration: none;
+}
+
+// ###################
+// ## Media Queries ##
+@mixin telefono() {
+    @media only screen and(min-width: #{$telefono}) {
+        @content;
+    }
+}
+
+@mixin tablet() {
+  @media only screen and(min-width: #{$tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop() {
+  @media only screen and(min-width: #{$desktop}) {
+    @content;
+  }
+}
