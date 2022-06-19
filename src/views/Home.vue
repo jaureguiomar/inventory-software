@@ -1,9 +1,8 @@
-<template>
-   <div>
-      <HeaderElem />
-      <h1>Index page</h1>
-      <FooterElem />
-   </div>
+<template lang="pug">
+   div
+      HeaderElem
+      h1 Index Page
+      FooterElem
 </template>
 
 <script>
