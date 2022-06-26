@@ -1,16 +1,33 @@
-<template lang="html">
+<template>
    <div id="app">
-      <RouterView />
+      <img alt="Vue logo" src="./assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
    </div>
 </template>
 
-<script>
-export default {
-  name: "App",
-  data() {
-      return {};
-  }
-};
+<script lang="ts">
+import Vue from "vue";
+import HelloWorld from "./components/HelloWorld.vue";
+
+// interface Something {
+//    data1: string;
+// }
+
+export default Vue.extend({
+name: "App",
+   components: {
+      HelloWorld
+   }
+});
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+#app {
+   font-family: Avenir, Helvetica, Arial, sans-serif;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   text-align: center;
+   color: #2c3e50;
+   margin-top: 60px;
+}
+</style>

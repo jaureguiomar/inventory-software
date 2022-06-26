@@ -15,9 +15,9 @@ import "@/assets/scss/styles.scss";
 
 Vue.config.productionTip = false;
 new Vue({
-  el: "#app",
-  render: h => h(App),
-  router,
-  store,
-  i18n,
+   el: "#app",
+   render: h => h(App),
+   router,
+   store,
+   i18n,
 });

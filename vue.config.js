@@ -4,7 +4,7 @@ module.exports = defineConfig({
   pluginOptions: {
     electronBuilder: {
       externals: ["escpos", "escpos-usb"],
-      preload: "src/preload.js",
+      preload: "src/preload.ts",
       builderOptions: {
         extraResources: [
           {
@@ -17,7 +17,7 @@ module.exports = defineConfig({
             provider: "github",
             owner: "jaureguiomar",
             private: true,
-            repo: "inventory-software",
+            repo: "vue-typescript-full-sample",
             releaseType: "draft"
           }
         ],
@@ -25,11 +25,11 @@ module.exports = defineConfig({
           "target": [
               "nsis"
           ],
-          icon: "src/assets/img/inventory-icon.ico",
+          icon: "src/assets/img/vue-typescript-full-sample-icon.ico",
         },
         nsis: {
-          "installerIcon": "src/assets/img/inventory-icon.ico",
-          "uninstallerIcon": "src/assets/img/inventory-icon.ico"
+          "installerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico",
+          "uninstallerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico"
         }
       }
     }

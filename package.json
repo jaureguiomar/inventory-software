@@ -1,6 +1,6 @@
 {
-   "name": "inventory-software",
-   "description": "Inventory software",
+   "name": "vue-typescript-full-sample",
+   "description": "Vue Typescript Full Example",
    "author": "Omar Jauregui",
    "version": "0.1.1",
    "private": true,
@@ -20,13 +20,13 @@
          "provider": "github",
          "private": true,
          "owner": "jaureguiomar",
-         "repo": "inventory-software",
-         "token": "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"
+         "repo": "vue-typescript-full-sample",
+         "token": "<token-here>"
       }
    ],
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/jaureguiomar/inventory-software.git"
+      "url": "git+https://github.com/jaureguiomar/vue-typescript-full-sample.git"
    },
    "dependencies": {
       "@fortawesome/fontawesome-svg-core": "^6.1.1",
@@ -45,6 +45,7 @@
       "pug-plain-loader": "^1.1.0",
       "sass": "^1.49.9",
       "sass-loader": "^10.2.1",
+      "ts-loader": "^8.2.0",
       "usb": "^2.4.2",
       "vue": "^2.6.14",
       "vue-i18n": "^8.22.1",
@@ -53,16 +54,21 @@
       "webpack": "^5.73.0"
    },
    "devDependencies": {
-      "@babel/core": "^7.12.16",
-      "@babel/eslint-parser": "^7.12.16",
+      "@types/electron-devtools-installer": "^2.2.0",
+      "@types/escpos": "^2.5.2",
+      "@typescript-eslint/eslint-plugin": "^5.4.0",
+      "@typescript-eslint/parser": "^5.4.0",
       "@vue/cli-plugin-babel": "~5.0.0",
       "@vue/cli-plugin-eslint": "~5.0.0",
+      "@vue/cli-plugin-typescript": "~5.0.0",
       "@vue/cli-service": "~5.0.0",
+      "@vue/eslint-config-typescript": "^9.1.0",
       "electron": "^13.0.0",
       "electron-devtools-installer": "^3.1.0",
       "electron-rebuild": "^3.2.7",
       "eslint": "^7.32.0",
       "eslint-plugin-vue": "^8.0.3",
+      "typescript": "~4.5.5",
       "vue-cli-plugin-electron-builder": "~2.1.1",
       "vue-template-compiler": "^2.6.14"
    },
@@ -73,10 +79,11 @@
       },
       "extends": [
          "plugin:vue/essential",
-         "eslint:recommended"
+         "eslint:recommended",
+         "@vue/typescript/recommended"
       ],
       "parserOptions": {
-         "parser": "@babel/eslint-parser"
+         "ecmaVersion": 2020
       },
       "rules": {}
    },

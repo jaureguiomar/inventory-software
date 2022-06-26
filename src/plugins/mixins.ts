@@ -1,6 +1,6 @@
 const sampleMixin = {
    methods: {
-      sampleFunction() {},
+      // sampleFunction() {},
    },
    mutation: {},
    data() {
