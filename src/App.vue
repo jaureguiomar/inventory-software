@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Home from "@/views/components/Home.vue";
+import Home from "@/views/Home.vue";
 
 // interface Something {
 //    data1: string;
