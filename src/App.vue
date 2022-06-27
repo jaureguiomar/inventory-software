@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import HelloWorld from "./views/components/HelloWorld.vue";
 
 // interface Something {
 //    data1: string;
