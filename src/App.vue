@@ -1,12 +1,11 @@
 <template lang="pug">
    div#app
-      img(alt="Vue logo" src="@/assets/logo.png")
-      HelloWorld(msg="Welcome to Your Vue.js + TypeScript App")
+      router-view
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "@/views/components/HelloWorld.vue";
+import Home from "@/views/components/Home.vue";
 
 // interface Something {
 //    data1: string;
@@ -15,18 +14,9 @@ import HelloWorld from "@/views/components/HelloWorld.vue";
 export default Vue.extend({
    name: "App",
    components: {
-      HelloWorld
+      Home
    }
 });
 </script>
 
-<style>
-#app {
-   font-family: Avenir, Helvetica, Arial, sans-serif;
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale;
-   text-align: center;
-   color: #2c3e50;
-   margin-top: 60px;
-}
-</style>
+<style lang="scss" scoped></style>

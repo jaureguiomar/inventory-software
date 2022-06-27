@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HelloWorld from "@/views/components/HelloWorld.vue";
+import Home from "@/views/components/Home.vue";
 
 const routes = [
-   { path: "/", component: HelloWorld, name: "hello-world" }
+   { path: "/", component: Home, name: "home" }
 ];
 
 Vue.use(VueRouter);
