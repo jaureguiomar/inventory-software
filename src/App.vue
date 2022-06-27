@@ -1,20 +1,19 @@
-<template>
-   <div id="app">
-      <img alt="Vue logo" src="@/assets/logo.png">
-      <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-   </div>
+<template lang="pug">
+   div#app
+      img(alt="Vue logo" src="@/assets/logo.png")
+      HelloWorld(msg="Welcome to Your Vue.js + TypeScript App")
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./views/components/HelloWorld.vue";
+import HelloWorld from "@/views/components/HelloWorld.vue";
 
 // interface Something {
 //    data1: string;
 // }
 
 export default Vue.extend({
-name: "App",
+   name: "App",
    components: {
       HelloWorld
    }
