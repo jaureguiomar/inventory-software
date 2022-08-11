@@ -13,11 +13,11 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 // import USB from "escpos-usb";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-let win:BrowserWindow;
-// const window = {
-//    main: new BrowserWindow,
-//    secondary: new BrowserWindow
-// };
+// let win:BrowserWindow;
+const window = {
+   main: null as unknown as BrowserWindow,
+   secondary: null as unknown as BrowserWindow
+};
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -37,7 +37,7 @@ async function createWindow() {
       icon_path = path.join(rootDir, "resources/img/vue-typescript-full-sample-icon.ico");
 
    // Create the browser window.
-   const win = new BrowserWindow({
+   window.main = new BrowserWindow({
       width: 1024,
       height: 768,
       // fullscreen: true,
@@ -50,14 +50,14 @@ async function createWindow() {
          preload: path.join(__dirname, "preload.js")
       }
    });
-   // win.removeMenu();
-   // win.maximize();
+   // window.main.removeMenu();
+   // window.main.maximize();
 
    if(process.env.WEBPACK_DEV_SERVER_URL) {
       // Load the url of the dev server if in development mode
-      await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+      await window.main.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
       if(!process.env.IS_TEST)
-         win.webContents.openDevTools();
+         window.main.webContents.openDevTools();
 
       autoUpdater.updateConfigPath = path.join(
          __dirname,
@@ -66,7 +66,7 @@ async function createWindow() {
    } else {
       createProtocol("app");
       // Load the index.html when not in development
-      win.loadURL("app://./index.html");
+      window.main.loadURL("app://./index.html");
    }
 
    process.env.GH_TOKEN = "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";
@@ -111,7 +111,7 @@ app.on("ready", async () => {
 // Auto Updater //
 autoUpdater.on("update-available", () => {
    log.info("update-available");
-   dialog.showMessageBox(win, {
+   dialog.showMessageBox(window.main, {
       title: "System message",
       buttons: ["Ok"],
       type: "info",
@@ -120,7 +120,7 @@ autoUpdater.on("update-available", () => {
 });
 autoUpdater.on("update-not-available", () => {
    log.info("update-not-available");
-   dialog.showMessageBox(win, {
+   dialog.showMessageBox(window.main, {
       title: "System message",
       buttons: ["Ok"],
       type: "info",
@@ -150,7 +150,7 @@ autoUpdater.on("error", (message) => {
    log.info(message);
    console.log("update-error", message);
 
-   dialog.showMessageBox(win, {
+   dialog.showMessageBox(window.main, {
       title: "System message",
       buttons: ["Ok"],
       type: "info",
@@ -161,7 +161,7 @@ autoUpdater.on("error", (message) => {
  ///////////////////////////////
 // Listen for ipcMain Events //
 ipcMain.on("new-window", function(e) {
-   const window = new BrowserWindow({
+   window.secondary = new BrowserWindow({
       width: 1024,
       height: 768,
       // fullscreen: true,
@@ -174,13 +174,17 @@ ipcMain.on("new-window", function(e) {
    });
    const setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/new-window" : `file://${__dirname}/index.html#/new-window`;
 
-   window.on("close", function () {
-      window.destroy();
+   window.secondary.on("close", function () {
+      window.secondary.destroy();
    });
-   window.loadURL(setURL);
+   window.secondary.loadURL(setURL);
    if(!process.env.IS_TEST)
-      window.webContents.openDevTools();
-   window.show();
+      window.secondary.webContents.openDevTools();
+   window.secondary.show();
+});
+
+ipcMain.on("new-window-close", function(e) {
+   window.secondary.destroy();
 });
 ///////////////////////////////////
 ///////////////////////////////////
