@@ -6,8 +6,8 @@
                <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
             h1 Clients
          div.actions
-            router-link(to="/")
-               <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
+            a(href="#_" @click="onSomeClick")
+               <font-awesome-icon icon="fa-solid fa-users" size="2x" />
             router-link(to="/")
                <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
             router-link(to="/")
@@ -216,6 +216,10 @@ export default Vue.extend({
          });
    },
    methods: {
+      onSomeClick() {
+         console.log("onSomeClick!");
+         window.api.send("new-window");
+      },
       onFiltered(filteredItems) {
         this.table.totalRows = filteredItems.length;
         this.table.currentPage = 1;
