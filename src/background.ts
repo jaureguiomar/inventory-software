@@ -160,26 +160,30 @@ autoUpdater.on("error", (message) => {
  ///////////////////////////////
 // Listen for ipcMain Events //
 ipcMain.on("new-window", function(e) {
-   window.secondary = new BrowserWindow({
-      width: 1024,
-      height: 768,
-      // fullscreen: true,
-      // icon: icon_path,
-      webPreferences: {
-         nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-         contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-         preload: path.join(__dirname, "preload.js")
-      }
-   });
-   const setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/new-window" : `file://${__dirname}/index.html#/new-window`;
+   if(!window.secondary) {
+      window.secondary = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preload.js")
+         }
+      });
+      const setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/new-window" : `file://${__dirname}/index.html#/new-window`;
 
-   window.secondary.on("close", function () {
-      window.secondary.destroy();
-   });
-   window.secondary.loadURL(setURL);
-   if(!process.env.IS_TEST)
-      window.secondary.webContents.openDevTools();
-   window.secondary.show();
+      window.secondary.on("close", function () {
+         window.secondary.destroy();
+      });
+      window.secondary.loadURL(setURL);
+      if(!process.env.IS_TEST)
+         window.secondary.webContents.openDevTools();
+      window.secondary.show();
+   } else {
+      window.secondary.focus();
+   }
 });
 
 ipcMain.on("new-window-close", function(e) {
