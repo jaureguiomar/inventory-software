@@ -13,7 +13,6 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 // import USB from "escpos-usb";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-// let win:BrowserWindow;
 const window = {
    main: null as unknown as BrowserWindow,
    secondary: null as unknown as BrowserWindow
