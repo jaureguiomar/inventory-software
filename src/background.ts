@@ -14,8 +14,8 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 const window = {
-   main: null as unknown as BrowserWindow,
-   secondary: null as unknown as BrowserWindow
+   main: null as any,
+   secondary: null as any
 };
 
 // Scheme must be registered before the app is ready
@@ -159,8 +159,8 @@ autoUpdater.on("error", (message) => {
 
  ///////////////////////////////
 // Listen for ipcMain Events //
-ipcMain.on("new-window", function(e) {
-   if(!window.secondary) {
+ipcMain.on("new-window", function(e, data) {
+   if(!window.secondary || window.secondary.isDestroyed()) {
       window.secondary = new BrowserWindow({
          width: 1024,
          height: 768,
@@ -169,18 +169,23 @@ ipcMain.on("new-window", function(e) {
          webPreferences: {
             nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, "preloadSecondary.js")
          }
       });
-      const setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/new-window" : `file://${__dirname}/index.html#/new-window`;
 
-      window.secondary.on("close", function () {
-         window.secondary.destroy();
-      });
+      const setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/new-window" : `file://${__dirname}/index.html#/new-window`;
       window.secondary.loadURL(setURL);
+      window.secondary.show();
       if(!process.env.IS_TEST)
          window.secondary.webContents.openDevTools();
-      window.secondary.show();
+
+      window.secondary.webContents.once("did-finish-load", function () {
+         window.secondary.webContents.send("new-window-reply", data);
+      });
+      window.secondary.once("close", function () {
+         window.secondary.destroy();
+         window.secondary = null;
+      });
    } else {
       window.secondary.focus();
    }

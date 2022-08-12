@@ -6,10 +6,22 @@
 
 <script lang="ts">
 import Vue from "vue";
+
+interface IPCParams {
+   data1: string;
+   data2: string;
+   data3: string;
+}
+
 export default Vue.extend({
    name: "new-window-component",
    data() {
       return {};
+   },
+   created() {
+      window.api.receive("new-window-reply", (data:IPCParams) => {
+         console.log("data", data);
+      });
    },
    methods: {
       onClose() {

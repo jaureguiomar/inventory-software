@@ -217,8 +217,11 @@ export default Vue.extend({
    },
    methods: {
       onSomeClick() {
-         console.log("onSomeClick!");
-         window.api.send("new-window");
+         window.api.send("new-window", {
+            data1: "Something",
+            data2: "Another message",
+            data3: "One more message"
+         });
       },
       onFiltered(filteredItems) {
         this.table.totalRows = filteredItems.length;

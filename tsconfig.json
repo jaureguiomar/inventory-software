@@ -35,6 +35,7 @@
       "tests/**/*.ts",
       "tests/**/*.tsx",
       "src/preload.js",
+      "src/preloadSecondary.js",
       "src/index.d.ts"
    ],
    "exclude": [

@@ -4,7 +4,10 @@ module.exports = defineConfig({
   pluginOptions: {
     electronBuilder: {
       externals: ["escpos", "escpos-usb"],
-      preload: "src/preload.ts",
+      preload: {
+        preload: "src/preload.ts",
+        preloadSecondary: "src/preloadSecondary.ts"
+      },
       builderOptions: {
         extraResources: [
           {
