@@ -13,10 +13,20 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 // import USB from "escpos-usb";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+let icon_path = "";
+let rootDir = app.getAppPath();
+const last = path.basename(rootDir);
 const window = {
    main: null as any,
    secondary: null as any
 };
+
+if(last == "app.asar")
+   rootDir = path.dirname(app.getPath("exe"));
+if(isDevelopment)
+   icon_path = path.join(__dirname, "src/assets/img/vue-typescript-full-sample-icon.ico");
+else
+   icon_path = path.join(rootDir, "resources/img/vue-typescript-full-sample-icon.ico");
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -24,17 +34,6 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 async function createWindow() {
-   let rootDir = app.getAppPath();
-   const last = path.basename(rootDir);
-   let icon_path = "";
-
-   if(last == "app.asar")
-      rootDir = path.dirname(app.getPath("exe"));
-   if(isDevelopment)
-      icon_path = path.join(__dirname, "src/assets/img/vue-typescript-full-sample-icon.ico");
-   else
-      icon_path = path.join(rootDir, "resources/img/vue-typescript-full-sample-icon.ico");
-
    // Create the browser window.
    window.main = new BrowserWindow({
       width: 1024,
@@ -165,7 +164,7 @@ ipcMain.on("new-window", function(e, data) {
          width: 1024,
          height: 768,
          // fullscreen: true,
-         // icon: icon_path,
+         icon: icon_path,
          webPreferences: {
             nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
