@@ -25,7 +25,6 @@ export default Vue.extend({
    },
    methods: {
       onClose() {
-         console.log("onClose!");
          window.api.send("new-window-close");
       }
    }
