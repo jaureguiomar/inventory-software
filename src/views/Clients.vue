@@ -217,11 +217,40 @@ export default Vue.extend({
    },
    methods: {
       onSomeClick() {
-         window.api.send("new-window", {
-            data1: "Something",
-            data2: "Another message",
-            data3: "One more message"
-         });
+         // window.api.send("new-window", {
+         //    title: "New Window",
+         //    form: [
+         //       {
+         //          type: "text",
+         //          size: "6",
+         //          placeholder: "Enter value here",
+         //          defaultValue: "Default value",
+         //          options: ["disabled"]
+         //       },
+         //       {
+         //          type: "text",
+         //          size: "6",
+         //          placeholder: "Enter value here",
+         //          defaultValue: "Default value",
+         //          options: ["readonly"]
+         //       },
+         //       {
+         //          type: "textarea",
+         //          size: "12",
+         //          placeholder: "Enter value here",
+         //          defaultValue: "Default value",
+         //          rows: "10",
+         //          cols: "10",
+         //          options: ["readonly"]
+         //       },
+         //       {
+         //          type: "button",
+         //          text: "Click me!",
+         //          options: ["disabled"]
+         //       }
+         //    ]
+         // });
+         window.api.send("new-window");
       },
       onFiltered(filteredItems) {
         this.table.totalRows = filteredItems.length;
