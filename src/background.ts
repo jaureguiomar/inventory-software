@@ -158,7 +158,7 @@ autoUpdater.on("error", (message) => {
 
  ///////////////////////////////
 // Listen for ipcMain Events //
-ipcMain.on("new-window", function(e, data) {
+ipcMain.on("client-add-update-window", function(e, data) {
    if(!window.secondary || window.secondary.isDestroyed()) {
       window.secondary = new BrowserWindow({
          width: 1024,
@@ -172,14 +172,19 @@ ipcMain.on("new-window", function(e, data) {
          }
       });
 
-      const setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/new-window" : `file://${__dirname}/index.html#/new-window`;
+      let setURL = "";
+      if(data.id > 0)
+         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/client-add" : `file://${__dirname}/index.html#/client-add`;
+      else
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-update/${data.id}` : `file://${__dirname}/index.html#/client-update/${data.id}`;
+
       window.secondary.loadURL(setURL);
       window.secondary.show();
       if(!process.env.IS_TEST)
          window.secondary.webContents.openDevTools();
 
       window.secondary.webContents.once("did-finish-load", function () {
-         window.secondary.webContents.send("new-window-reply", data);
+         window.secondary.webContents.send("client-add-update-window-reply", data);
       });
       window.secondary.once("close", function () {
          window.secondary.destroy();
@@ -190,7 +195,7 @@ ipcMain.on("new-window", function(e, data) {
    }
 });
 
-ipcMain.on("new-window-close", function(e) {
+ipcMain.on("client-add-update-window-close", function(e) {
    window.secondary.destroy();
    window.secondary = null;
 });

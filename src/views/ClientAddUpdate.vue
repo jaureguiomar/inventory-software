@@ -48,7 +48,7 @@
                div.text-center
                   button(type="submit" class="btn btn-primary text-center mr-2") Sign in
                   button(type="clear" class="btn btn-danger text-center mr-2") Clear
-                  button(type="clear" class="btn btn-info text-center") Other
+                  button(type="clear" class="btn btn-info text-center" @click="onClose") Other
 </template>
 
 <script lang="ts">
@@ -72,7 +72,7 @@ export default Vue.extend({
    // },
    methods: {
       onClose() {
-         window.api.send("new-window-close");
+         window.api.send("client-add-update-window-close");
       }
    }
 });

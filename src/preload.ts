@@ -3,7 +3,7 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld(
    "api", {
       send: (channel:string, data) => {
-         const validChannels:Array<string> = ["new-window"];
+         const validChannels:Array<string> = ["client-add-update-window"];
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);
       },

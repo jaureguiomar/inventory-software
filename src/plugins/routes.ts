@@ -1,13 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
-import Clients from "@/views/Clients.vue";
-import NewWindow from "@/views/NewWindow.vue";
+import Client from "@/views/Client.vue";
+import ClientAddUpdate from "@/views/ClientAddUpdate.vue";
 
 const routes = [
    { path: "/", component: Home, name: "home" },
-   { path: "/clients", component: Clients, name: "clients" },
-   { path: "/new-window", component: NewWindow, name: "new-window" }
+   { path: "/client", component: Client, name: "client" },
+   { path: "/client-add", component: ClientAddUpdate, name: "client-add" },
+   { path: "/client-update/:id", component: ClientAddUpdate, name: "client-update" }
 ];
 
 Vue.use(VueRouter);

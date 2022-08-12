@@ -6,10 +6,10 @@
                <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
             h1 Clients
          div.actions
-            a(href="#_" @click="onSomeClick")
+            a(href="#_" @click="onClientAddWindowClick")
                <font-awesome-icon icon="fa-solid fa-users" size="2x" />
-            router-link(to="/")
-               <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
+            a(href="#_" @click="onClientUpdateWindowClick")
+               <font-awesome-icon icon="fa-solid fa-users-left" size="2x" />
             router-link(to="/")
                <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
 
@@ -216,41 +216,11 @@ export default Vue.extend({
          });
    },
    methods: {
-      onSomeClick() {
-         // window.api.send("new-window", {
-         //    title: "New Window",
-         //    form: [
-         //       {
-         //          type: "text",
-         //          size: "6",
-         //          placeholder: "Enter value here",
-         //          defaultValue: "Default value",
-         //          options: ["disabled"]
-         //       },
-         //       {
-         //          type: "text",
-         //          size: "6",
-         //          placeholder: "Enter value here",
-         //          defaultValue: "Default value",
-         //          options: ["readonly"]
-         //       },
-         //       {
-         //          type: "textarea",
-         //          size: "12",
-         //          placeholder: "Enter value here",
-         //          defaultValue: "Default value",
-         //          rows: "10",
-         //          cols: "10",
-         //          options: ["readonly"]
-         //       },
-         //       {
-         //          type: "button",
-         //          text: "Click me!",
-         //          options: ["disabled"]
-         //       }
-         //    ]
-         // });
-         window.api.send("new-window");
+      onClientAddWindowClick() {
+         window.api.send("client-add-update-window");
+      },
+      onClientUpdateWindowClick() {
+         window.api.send("client-add-update-window");
       },
       onFiltered(filteredItems) {
         this.table.totalRows = filteredItems.length;
