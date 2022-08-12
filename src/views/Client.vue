@@ -9,7 +9,7 @@
             a(href="#_" @click="onClientAddWindowClick")
                <font-awesome-icon icon="fa-solid fa-users" size="2x" />
             a(href="#_" @click="onClientUpdateWindowClick")
-               <font-awesome-icon icon="fa-solid fa-users-left" size="2x" />
+               <font-awesome-icon icon="fa-solid fa-users" size="2x" />
             router-link(to="/")
                <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
 
