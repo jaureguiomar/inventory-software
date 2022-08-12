@@ -18,7 +18,10 @@ let rootDir = app.getAppPath();
 const last = path.basename(rootDir);
 const window = {
    main: null as any,
-   secondary: null as any
+   client: {
+      add: null as any,
+      update: null as any
+   }
 };
 
 if(last == "app.asar")
@@ -159,8 +162,14 @@ autoUpdater.on("error", (message) => {
  ///////////////////////////////
 // Listen for ipcMain Events //
 ipcMain.on("client-add-update-window", function(e, data) {
-   if(!window.secondary || window.secondary.isDestroyed()) {
-      window.secondary = new BrowserWindow({
+   let key = "";
+   if(data.id <= 0)
+      key = "add";
+   else
+      key = "update";
+
+   if(!window.client[key] || window.client[key].isDestroyed()) {
+      window.client[key] = new BrowserWindow({
          width: 1024,
          height: 768,
          // fullscreen: true,
@@ -178,26 +187,32 @@ ipcMain.on("client-add-update-window", function(e, data) {
       else
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-update/${data.id}` : `file://${__dirname}/index.html#/client-update/${data.id}`;
 
-      window.secondary.loadURL(setURL);
-      window.secondary.show();
+      window.client[key].loadURL(setURL);
+      window.client[key].show();
       if(!process.env.IS_TEST)
-         window.secondary.webContents.openDevTools();
+         window.client[key].webContents.openDevTools();
 
-      window.secondary.webContents.once("did-finish-load", function () {
-         window.secondary.webContents.send("client-add-update-window-reply", data);
+      window.client[key].webContents.once("did-finish-load", function () {
+         window.client[key].webContents.send("client-add-update-window-reply", data);
       });
-      window.secondary.once("close", function () {
-         window.secondary.destroy();
-         window.secondary = null;
+      window.client[key].once("close", function () {
+         window.client[key].destroy();
+         window.client[key] = null;
       });
    } else {
-      window.secondary.focus();
+      window.client[key].focus();
    }
 });
 
-ipcMain.on("client-add-update-window-close", function(e) {
-   window.secondary.destroy();
-   window.secondary = null;
+ipcMain.on("client-add-update-window-close", function(e, id) {
+   let key = "";
+   if(id <= 0)
+      key = "add";
+   else
+      key = "update";
+
+   window.client[key].destroy();
+   window.client[key] = null;
 });
 ///////////////////////////////////
 ///////////////////////////////////
