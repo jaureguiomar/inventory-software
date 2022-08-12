@@ -193,6 +193,7 @@ ipcMain.on("new-window", function(e, data) {
 
 ipcMain.on("new-window-close", function(e) {
    window.secondary.destroy();
+   window.secondary = null;
 });
 ///////////////////////////////////
 ///////////////////////////////////
