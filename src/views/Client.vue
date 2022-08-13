@@ -10,8 +10,6 @@
                <font-awesome-icon icon="fa-solid fa-users" size="2x" />
             a(href="#_" @click="onClientUpdateWindowClick")
                <font-awesome-icon icon="fa-solid fa-users" size="2x" />
-            router-link(to="/")
-               <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
 
       div.content
          b-row(align-h="end")
@@ -217,10 +215,31 @@ export default Vue.extend({
    },
    methods: {
       onClientAddWindowClick() {
-         window.api.send("client-add-update-window");
+         window.api.send("client-add-update-window", {
+            id: -1,
+            content: {
+               title: "Add Client",
+               description: "The clients that will be added for the use of the system"
+            },
+            data: null
+         });
       },
       onClientUpdateWindowClick() {
-         window.api.send("client-add-update-window");
+         window.api.send("client-add-update-window", {
+            id: 10,
+            content: {
+               title: "Update Client",
+               description: "The clients that will be updated for the use of the system"
+            },
+            data: {
+               first_name: "Omar Misael",
+               last_name: "Torres Jauregui",
+               addressd: "Florido 3ra secc",
+               cellphone: "6641309641",
+               cellphone2: "6644877638",
+               email: "omarmisael.1997@gmail.com"
+            }
+         });
       },
       onFiltered(filteredItems) {
         this.table.totalRows = filteredItems.length;

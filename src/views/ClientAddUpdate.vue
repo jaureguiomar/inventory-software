@@ -11,38 +11,24 @@
             div.border-top
             div.content-container
                div(class="form-group row")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") First Name
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
-                  div(class="col-sm-4")
-                     input(type="text" class="form-control")
-               div(class="form-group row")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
-                  div(class="col-sm-4")
-                     input(type="text" class="form-control")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") Last Name
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
                div(class="form-group row")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") Address
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") Cellphone
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
                div(class="form-group row")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") Cellphone 2
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
-                  div(class="col-sm-4")
-                     input(type="text" class="form-control")
-               div(class="form-group row mb-4")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
-                  div(class="col-sm-4")
-                     input(type="text" class="form-control")
-                  label(for="staticEmail" class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") Email
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
                div.text-center
@@ -54,22 +40,34 @@
 <script lang="ts">
 import Vue from "vue";
 
-// interface IPCParams {
-//    data1: string;
-//    data2: string;
-//    data3: string;
-// }
+interface Content {
+   title: string;
+   description: string;
+}
+interface Client {
+   first_name: string;
+   last_name: string;
+   address: string;
+   cellphone: string;
+   cellphone2: string;
+   email: string;
+}
+interface IPCParams {
+   id: number;
+   content: Content,
+   data: Client|null
+}
 
 export default Vue.extend({
    name: "new-window-component",
    data() {
       return {};
    },
-   // created() {
-   //    window.api.receive("new-window-reply", (data:IPCParams) => {
-   //       console.log("data", data);
-   //    });
-   // },
+   created() {
+      window.api.receive("client-add-update-window-reply", (data:IPCParams) => {
+         console.log("data", data);
+      });
+   },
    methods: {
       onClose() {
          window.api.send("client-add-update-window-close");
