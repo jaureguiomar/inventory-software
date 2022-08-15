@@ -234,7 +234,7 @@ export default Vue.extend({
             data: {
                first_name: "Omar Misael",
                last_name: "Torres Jauregui",
-               addressd: "Florido 3ra secc",
+               address: "Florido 3ra secc",
                cellphone: "6641309641",
                cellphone2: "6644877638",
                email: "omarmisael.1997@gmail.com"

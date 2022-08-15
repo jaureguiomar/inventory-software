@@ -57,15 +57,44 @@ interface IPCParams {
    content: Content,
    data: Client|null
 }
+interface Props {
+   id: number;
+   content: Content,
+   data: Client
+}
 
 export default Vue.extend({
    name: "new-window-component",
    data() {
-      return {};
+      return {
+         id: -1,
+         content: {
+            title: "",
+            description: ""
+         },
+         data: {
+            first_name: "",
+            last_name: "",
+            address: "",
+            cellphone: "",
+            cellphone2: "",
+            email: ""
+         }
+      } as Props;
    },
    created() {
+      const vue_this = this;
       window.api.receive("client-add-update-window-reply", (data:IPCParams) => {
-         console.log("data", data);
+         vue_this.id = data.id;
+         vue_this.content = data.content;
+         if(data.data) {
+            vue_this.data.first_name = data.data.first_name;
+            vue_this.data.last_name = data.data.last_name;
+            vue_this.data.address = data.data.address;
+            vue_this.data.cellphone = data.data.cellphone;
+            vue_this.data.cellphone2 = data.data.cellphone2;
+            vue_this.data.email = data.data.email;
+         }
       });
    },
    methods: {
