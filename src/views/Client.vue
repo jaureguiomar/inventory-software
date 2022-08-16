@@ -13,34 +13,33 @@
 
       div.content
          b-row(align-h="end")
-            b-col(lg="7" class="mb-2")
-               b-form-group(
-                  label="Filtrar"
-                  label-for="filter-input"
-                  label-cols-sm="3"
-                  label-align-sm="right"
-                  label-size="sm"
-                  class="mb-0"
+            b-col(lg="12" class="mb-2")
+               b-form-datepicker(
+                  size="sm"
+                  placeholder="Selecciona fecha inicial"
+                  locale="es"
                )
-                  b-input-group(size="sm")
-                     b-form-input(
-                        id="filter-input"
-                        v-model="table.filter"
-                        type="search"
-                        placeholder="Buscar..."
-                     )
-                     b-input-group-append
-                        b-button(:disabled="!table.filter" @click="table.filter=''") Limpiar
-            b-col(sm="5" md="5" class="mb-2")
+               b-form-datepicker(
+                  size="sm"
+                  placeholder="Selecciona fecha final"
+                  locale="es"
+               )
+               b-form-input(
+                  id="filter-input"
+                  v-model="table.filter"
+                  type="search"
+                  size="sm"
+                  placeholder="Buscar..."
+               )
                b-form-select(
                   id="per-page-select"
                   v-model="table.perPage"
                   :options="table.pageOptions"
-                  size="sm"
-               )
+                  size="sm")
 
          div.table-responsive
             b-table(
+               ref="selectableTable"
                :items="data.sale"
                :fields="table.fields"
                :current-page="table.currentPage"
@@ -55,28 +54,52 @@
                empty-text="No hay registros disponibles para mostrar"
                empty-filtered-text="No hay registros disponibles para mostrar"
                small
-               @filtered="onFiltered"
                selectable
-               ref="selectableTable"
+               filter-debounce="600"
                :select-mode="'single'"
+               @filtered="onFiltered"
                @row-selected="onSaleRowClick"
             )
-               template(#cell(name)="row") {{ row.value.first }} {{ row.value.last }}
-               template(#cell(actions)="row")
-                  b-button(
-                     size="sm"
-                     @click="info(row.item, row.index, $event.target)"
-                     class="mr-1"
-                  ) Info modal
-                  b-button(
-                     size="sm"
-                     @click="row.toggleDetails"
-                  ) {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+               template(#cell(details)="row")
+                  b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? "Ocultar" : "Mostrar" }} detalles
+                  b-button(variant="primary" size="sm" @click="saleInfoModal(row.item, $event.target)") Info. venta
 
                template(#row-details="row")
                   b-card
-                     ul
-                        li(v-for="(value, key) in row.item" :key="key") {{ key }}: {{ value }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Nombre:
+                        b-col {{ row.item.name }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Fecha:
+                        b-col {{ getFormattedDateString(row.item.posting_date, 0) }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Hora:
+                        b-col {{ row.item.posting_time }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Genero:
+                        b-col {{ row.item.owner }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Ticket:
+                        b-col {{ row.item.ticket_no }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Total:
+                        b-col {{ row.item.total }}
+
+            b-col(sm="12" md="12" class="my-1")
+               b-pagination(
+                  v-model="table.currentPage"
+                  :total-rows="table.totalRows"
+                  :per-page="table.perPage"
+                  align="right"
+                  size="sm"
+                  class="my-0 customPagination"
+               )
 </template>
 
 <script lang="ts">
@@ -286,6 +309,62 @@ export default Vue.extend({
          //    this.table.selected = -1;
          // }
       },
+      ///////////////
+      // Functions //
+      getFormattedDate(date:Date) {
+         let day:number|string = date.getDate();
+         let month:number|string = (date.getMonth() + 1);
+         let year:number|string = date.getFullYear();
+
+         if(day < 10)
+            day = "0" + day;
+         if(month < 10)
+            month = "0" + month;
+
+         return year + "-" + month + "-" + day;
+      },
+      getFormattedDateString(date:string, type:number=0, format:number=0) {
+         let new_date = date;
+         if(new_date) {
+            const splitted_date = date.split("-");
+            if(splitted_date.length === 3) {
+               let day:number|string = parseInt(splitted_date[2]);
+               let month:number|string = parseInt(splitted_date[1]);
+               const year:number = parseInt(splitted_date[0]);
+
+               if(day < 10)
+                  day = "0" + day;
+
+               if(type === 0) {
+                  switch(month) {
+                     case 1: month = "Enero"; break;
+                     case 2: month = "Febrero"; break;
+                     case 3: month = "Marzo"; break;
+                     case 4: month = "Abril"; break;
+                     case 5: month = "Mayo"; break;
+                     case 6: month = "Junio"; break;
+                     case 7: month = "Julio"; break;
+                     case 8: month = "Agosto"; break;
+                     case 9: month = "Septiembre"; break;
+                     case 10: month = "Octubre"; break;
+                     case 11: month = "Noviembre"; break;
+                     case 12: month = "Diciembre"; break;
+                  }
+               } else {
+                  if(month < 10)
+                     month = "0" + month;
+               }
+
+               if(format === 0)
+                  new_date = day + "/" + month + "/" + year;
+               else if(format === 1)
+                  new_date = year + "-" + month + "-" + day;
+            }
+         } else {
+            new_date = "----";
+         }
+         return new_date;
+      }
    }
 });
 </script>
