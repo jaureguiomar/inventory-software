@@ -12,35 +12,39 @@
             div.logo Inventory
             div.text System
          div.menu
-            div.title Add Client
-            div.subtitle The clients that will be added for the use of the system
+            div.title {{ content.title }}
+            div.subtitle {{ content.description }}
          div.content
             div.border-top
             div.content-container
+               div(v-if="id > 0" class="form-group row")
+                  label(class="col-sm-2 col-form-label") ID
+                  div(class="col-sm-2")
+                     input(v-model="id" type="text" class="form-control" disabled)
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") First Name
                   div(class="col-sm-4")
-                     input(type="text" class="form-control")
+                     input(v-model="data.first_name" type="text" class="form-control")
                   label(class="col-sm-2 col-form-label") Last Name
                   div(class="col-sm-4")
-                     input(type="text" class="form-control")
+                     input(v-model="data.last_name" type="text" class="form-control")
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") Address
                   div(class="col-sm-4")
-                     input(type="text" class="form-control")
+                     input(v-model="data.address" type="text" class="form-control")
                   label(class="col-sm-2 col-form-label") Cellphone
                   div(class="col-sm-4")
-                     input(type="text" class="form-control")
+                     input(v-model="data.cellphone" type="text" class="form-control")
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") Cellphone 2
                   div(class="col-sm-4")
-                     input(type="text" class="form-control")
+                     input(v-model="data.cellphone2" type="text" class="form-control")
                   label(class="col-sm-2 col-form-label") Email
                   div(class="col-sm-4")
-                     input(type="text" class="form-control")
+                     input(v-model="data.email" type="text" class="form-control")
                div.text-center
-                  button(type="submit" class="btn btn-primary text-center mr-2") Add / Update
-                  button(type="clear" class="btn btn-danger text-center mr-2") Clear
+                  button(type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? "Add" : "Update" }}
+                  button(type="clear" class="btn btn-danger text-center mr-2" @click="onClear") Clear
                   button(type="clear" class="btn btn-info text-center" @click="onClose") Close
 </template>
 
@@ -108,8 +112,27 @@ export default Vue.extend({
       });
    },
    methods: {
+      onAddUpdate() {
+         const vue_this = this;
+         window.api.send("client-add-update-window-dialog", this.id);
+         window.api.receive("client-add-update-window-dialog-reply", () => {
+            this.clearForm();
+            vue_this.onClose();
+         });
+      },
+      onClear() {
+         this.clearForm();
+      },
       onClose() {
-         window.api.send("client-add-update-window-close");
+         window.api.send("client-add-update-window-close", this.id);
+      },
+      clearForm() {
+         this.data.first_name = "";
+         this.data.last_name = "";
+         this.data.address = "";
+         this.data.cellphone = "";
+         this.data.cellphone2 = "";
+         this.data.email = "";
       }
    }
 });
@@ -199,5 +222,5 @@ export default Vue.extend({
             border-start-start-radius: 10px
             border-start-end-radius: 10px
          .content-container
-            padding: 20px 36px
+            padding: 40px 36px
 </style>

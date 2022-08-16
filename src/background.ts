@@ -206,6 +206,28 @@ ipcMain.on("client-add-update-window", function(e, data) {
    }
 });
 
+ipcMain.on("client-add-update-window-dialog", function(e, id) {
+   let key = "";
+   let message = "";
+
+   if(id <= 0) {
+      key = "add";
+      message = "The client has been added properly";
+   } else {
+      key = "update";
+      message = "The client has been updated properly";
+   }
+
+   dialog.showMessageBox(window.client[key], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: message,
+   }).then(() => {
+      e.sender.send("client-add-update-window-dialog-reply");
+   });
+});
+
 ipcMain.on("client-add-update-window-close", function(e, id) {
    let key = "";
    if(id <= 0)
