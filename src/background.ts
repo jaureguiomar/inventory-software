@@ -52,7 +52,7 @@ async function createWindow() {
       }
    });
    // window.main.removeMenu();
-   // window.main.maximize();
+   window.main.maximize();
 
    if(process.env.WEBPACK_DEV_SERVER_URL) {
       // Load the url of the dev server if in development mode
@@ -180,6 +180,8 @@ ipcMain.on("client-add-update-window", function(e, data) {
             preload: path.join(__dirname, "preloadSecondary.js")
          }
       });
+      // window.client[key].removeMenu();
+      window.client[key].maximize();
 
       let setURL = "";
       if(data.id > 0)
