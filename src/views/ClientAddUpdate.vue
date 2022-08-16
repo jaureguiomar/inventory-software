@@ -76,7 +76,7 @@ interface Props {
 }
 
 export default Vue.extend({
-   name: "new-window-component",
+   name: "client-add-update-component",
    data() {
       return {
          id: -1,
