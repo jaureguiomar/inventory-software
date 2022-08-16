@@ -10,7 +10,7 @@
       div.main-container(v-if="loaded" key="content")
          div.banner
             div.logo Inventory
-            div.text System ({{ getSomeData }})
+            div.text System
          div.menu
             div.title {{ content.title }}
             div.subtitle {{ content.description }}
@@ -50,7 +50,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapGetters } from "vuex";
 
 interface Content {
    title: string;
@@ -66,8 +65,8 @@ interface Client {
 }
 interface IPCParams {
    id: number;
-   content: Content,
-   data: Client|null
+   content: Content;
+   data: Client|null;
 }
 interface Props {
    id: number;
@@ -95,11 +94,6 @@ export default Vue.extend({
          },
          loaded: false
       } as Props;
-   },
-   computed: {
-      ...mapGetters([
-         "getSomeData"
-      ])
    },
    created() {
       const vue_this = this;
