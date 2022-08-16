@@ -1,4 +1,4 @@
-const formMixin = {
+const defaultMixin = {
    // data() {
    //    return {
    //    }
@@ -56,11 +56,4 @@ const formMixin = {
    }
 };
 
-////////////////////////////
-// Sample Usage in Script //
-// import mySampleMixin from "@/plugins/mixins";
-// export default {
-//    mixins: [ mySampleMixin ],
-// }
-
-export default sampleMixin;
+export default defaultMixin;
