@@ -6,6 +6,7 @@
                div(class="spinner-ripple-loader-container")
                   div
                   div
+
       div.main-container(v-if="loaded" key="content")
          div.banner
             div.logo Inventory
