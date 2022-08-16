@@ -177,7 +177,7 @@ ipcMain.on("client-add-update-window", function(e, data) {
          webPreferences: {
             nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-            preload: path.join(__dirname, "preloadSecondary.js")
+            preload: path.join(__dirname, "preloadClient.js")
          }
       });
       // window.client[key].removeMenu();
