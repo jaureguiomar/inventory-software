@@ -1,6 +1,12 @@
 <template lang="pug">
-   div
-      div.main-container
+   transition-group(name="list" tag="div")
+      div(v-if="!loaded" key="loader" class="spinner-loader")
+         div(class="spinner-loader-container")
+            div(class="spinner-ripple-loader")
+               div(class="spinner-ripple-loader-container")
+                  div
+                  div
+      div.main-container(v-if="loaded" key="content")
          div.banner
             div.logo Inventory
             div.text System
@@ -60,7 +66,8 @@ interface IPCParams {
 interface Props {
    id: number;
    content: Content,
-   data: Client
+   data: Client,
+   loaded: boolean;
 }
 
 export default Vue.extend({
@@ -79,7 +86,8 @@ export default Vue.extend({
             cellphone: "",
             cellphone2: "",
             email: ""
-         }
+         },
+         loaded: false
       } as Props;
    },
    created() {
@@ -95,6 +103,7 @@ export default Vue.extend({
             vue_this.data.cellphone2 = data.data.cellphone2;
             vue_this.data.email = data.data.email;
          }
+         vue_this.loaded = true;
       });
    },
    methods: {
@@ -106,6 +115,13 @@ export default Vue.extend({
 </script>
 
 <style lang="sass" scoped>
+   @import "../assets/scss/loader.scss"
+
+   .list-enter-active, .list-leave-active
+      transition: all 0.3s ease
+   .list-enter-from, .list-leave-to
+      opacity: 0
+
    .main-container
       width: 100%
       height: 100vh
