@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.send(channel, data);
       },
       receive: (channel:string, func) => {
-         const validChannels:Array<string> = [];
+         const validChannels:Array<string> = ["main-window-client-add-update-reply"];
          if(validChannels.includes(channel))
             ipcRenderer.on(channel, (event, ...args) => func(...args));
       }

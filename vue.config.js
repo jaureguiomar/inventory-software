@@ -28,12 +28,12 @@ module.exports = defineConfig({
           "target": [
               "nsis"
           ],
-          icon: "src/assets/img/vue-typescript-full-sample-icon.ico",
+          // icon: "src/assets/img/vue-typescript-full-sample-icon.ico",
         },
-        nsis: {
-          "installerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico",
-          "uninstallerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico"
-        }
+        // nsis: {
+        //   "installerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico",
+        //   "uninstallerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico"
+        // }
       }
     }
   }

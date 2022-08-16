@@ -13,9 +13,9 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 // import USB from "escpos-usb";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-let icon_path = "";
-let rootDir = app.getAppPath();
-const last = path.basename(rootDir);
+// let icon_path = "";
+// let rootDir = app.getAppPath();
+// const last = path.basename(rootDir);
 const window = {
    main: null as any,
    client: {
@@ -24,28 +24,24 @@ const window = {
    }
 };
 
-if(last == "app.asar")
-   rootDir = path.dirname(app.getPath("exe"));
-if(isDevelopment)
-   icon_path = path.join(__dirname, "src/assets/img/vue-typescript-full-sample-icon.ico");
-else
-   icon_path = path.join(rootDir, "resources/img/vue-typescript-full-sample-icon.ico");
+// if(last == "app.asar")
+//    rootDir = path.dirname(app.getPath("exe"));
+// if(isDevelopment)
+//    icon_path = path.join(__dirname, "src/assets/img/vue-typescript-full-sample-icon.ico");
+// else
+//    icon_path = path.join(rootDir, "resources/img/vue-typescript-full-sample-icon.ico");
 
-// Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
    { scheme: "app", privileges: { secure: true, standard: true } }
 ]);
 
 async function createWindow() {
-   // Create the browser window.
    window.main = new BrowserWindow({
       width: 1024,
       height: 768,
       // fullscreen: true,
-      icon: icon_path,
+      // icon: icon_path,
       webPreferences: {
-         // Use pluginOptions.nodeIntegration, leave this alone
-         // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
          nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
          contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
          preload: path.join(__dirname, "preload.js")
@@ -55,18 +51,16 @@ async function createWindow() {
    window.main.maximize();
 
    if(process.env.WEBPACK_DEV_SERVER_URL) {
-      // Load the url of the dev server if in development mode
       await window.main.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
       if(!process.env.IS_TEST)
          window.main.webContents.openDevTools();
 
       autoUpdater.updateConfigPath = path.join(
          __dirname,
-         "../app-update.yml" // change path if needed
+         "../app-update.yml"
       );
    } else {
       createProtocol("app");
-      // Load the index.html when not in development
       window.main.loadURL("app://./index.html");
    }
 
@@ -77,31 +71,21 @@ async function createWindow() {
    autoUpdater.quitAndInstall();
 }
 
-// Quit when all windows are closed.
 app.on("window-all-closed", () => {
-   // On macOS it is common for applications and their menu bar
-   // to stay active until the user quits explicitly with Cmd + Q
    if(process.platform !== "darwin")
       app.quit();
 });
 
 app.on("activate", () => {
-// On macOS it's common to re-create a window in the app when the
-// dock icon is clicked and there are no other windows open.
    if(BrowserWindow.getAllWindows().length === 0)
       createWindow();
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
    if(isDevelopment && !process.env.IS_TEST) {
-      // Install Vue Devtools
       try {
          await installExtension(VUEJS_DEVTOOLS);
       } catch (error) {
-         // console.error("Vue Devtools failed to install:", e.toString())
          console.log("error", error);
       }
    }
@@ -173,7 +157,7 @@ ipcMain.on("client-add-update-window", function(e, data) {
          width: 1024,
          height: 768,
          // fullscreen: true,
-         icon: icon_path,
+         // icon: icon_path,
          webPreferences: {
             nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
             contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
@@ -228,20 +212,20 @@ ipcMain.on("client-add-update-window-dialog", function(e, id) {
    });
 });
 
-ipcMain.on("client-add-update-window-close", function(e, id) {
+ipcMain.on("client-add-update-window-close", function(e, data) {
    let key = "";
-   if(id <= 0)
+   if(data.id <= 0)
       key = "add";
    else
       key = "update";
 
    window.client[key].destroy();
    window.client[key] = null;
+   window.main.webContents.send("main-window-client-add-update-reply", data);
 });
 ///////////////////////////////////
 ///////////////////////////////////
 
-// Exit cleanly on request from parent process in development mode.
 if(isDevelopment) {
    if(process.platform === "win32") {
       process.on("message", (data) => {

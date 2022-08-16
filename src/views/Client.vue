@@ -4,7 +4,7 @@
          div.title
             router-link(to="/")
                <font-awesome-icon icon="fa-solid fa-arrow-left" size="2x" />
-            h1 Clients
+            h1 Clients {{ getSomeData }}
          div.actions
             a(href="#_" @click="onClientAddWindowClick")
                <font-awesome-icon icon="fa-solid fa-users" size="2x" />
@@ -119,6 +119,7 @@
 
 <script lang="ts">
 import Vue from "vue"
+import { mapGetters } from "vuex";
 import { Props, AxiosResponse } from "../interfaces/client/client";
 
 export default Vue.extend({
@@ -191,6 +192,11 @@ export default Vue.extend({
          }
       } as unknown as Props
    },
+   computed: {
+      ...mapGetters([
+         "getSomeData"
+      ])
+   },
    created() {
       const vue_this = this;
       Vue.prototype.$http.get("client/v3/select-all.php")
@@ -217,6 +223,11 @@ export default Vue.extend({
                // });
             }
          });
+
+      window.api.receive("main-window-client-add-update-reply", (data) => {
+         vue_this.$store.commit("SET_SOME_DATA_DATA", "New value");
+         vue_this.data.client.push(data.data);
+      });
    },
    methods: {
       onClientAddWindowClick() {

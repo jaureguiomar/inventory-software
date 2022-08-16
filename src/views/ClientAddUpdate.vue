@@ -10,7 +10,7 @@
       div.main-container(v-if="loaded" key="content")
          div.banner
             div.logo Inventory
-            div.text System
+            div.text System ({{ getSomeData }})
          div.menu
             div.title {{ content.title }}
             div.subtitle {{ content.description }}
@@ -50,6 +50,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapGetters } from "vuex";
 
 interface Content {
    title: string;
@@ -95,6 +96,11 @@ export default Vue.extend({
          loaded: false
       } as Props;
    },
+   computed: {
+      ...mapGetters([
+         "getSomeData"
+      ])
+   },
    created() {
       const vue_this = this;
       window.api.receive("client-add-update-window-reply", (data:IPCParams) => {
@@ -116,15 +122,34 @@ export default Vue.extend({
          const vue_this = this;
          window.api.send("client-add-update-window-dialog", this.id);
          window.api.receive("client-add-update-window-dialog-reply", () => {
-            this.clearForm();
-            vue_this.onClose();
+            let data:Object|null = null;
+            if(vue_this.id > 0)
+               data = {
+                  id: vue_this.id,
+                  first_name: vue_this.data.first_name,
+                  last_name: vue_this.data.last_name,
+                  address: vue_this.data.address,
+                  cellphone: vue_this.data.cellphone,
+                  cellphone2: vue_this.data.cellphone2,
+                  email: vue_this.data.email
+               };
+
+            window.api.send("client-add-update-window-close", {
+               id: vue_this.id,
+               type: "success",
+               data: data
+            });
          });
       },
       onClear() {
          this.clearForm();
       },
       onClose() {
-         window.api.send("client-add-update-window-close", this.id);
+         window.api.send("client-add-update-window-close", {
+            id: this.id,
+            type: "closed",
+            data: null
+         });
       },
       clearForm() {
          this.data.first_name = "";
