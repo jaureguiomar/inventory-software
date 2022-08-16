@@ -260,8 +260,8 @@ export default Vue.extend({
         this.table.currentPage = 1;
       },
       onRowClick(selected_sale) {
-         // console.error("---");
-         // console.log("selected_sale", selected_sale);
+         console.error("---");
+         console.log("selected_sale", selected_sale);
          // // if(this.table.selected == selected_sale.idventa)
          // //    return;
 
