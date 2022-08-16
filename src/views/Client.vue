@@ -14,16 +14,16 @@
       div.content
          b-row(align-h="end")
             b-col(lg="12" class="mb-2")
-               b-form-datepicker(
-                  size="sm"
-                  placeholder="Selecciona fecha inicial"
-                  locale="es"
-               )
-               b-form-datepicker(
-                  size="sm"
-                  placeholder="Selecciona fecha final"
-                  locale="es"
-               )
+               //- b-form-datepicker(
+               //-    size="sm"
+               //-    placeholder="Selecciona fecha inicial"
+               //-    locale="es"
+               //- )
+               //- b-form-datepicker(
+               //-    size="sm"
+               //-    placeholder="Selecciona fecha final"
+               //-    locale="es"
+               //- )
                b-form-input(
                   id="filter-input"
                   v-model="table.filter"
@@ -40,7 +40,7 @@
          div.table-responsive
             b-table(
                ref="selectableTable"
-               :items="data.sale"
+               :items="data.client"
                :fields="table.fields"
                :current-page="table.currentPage"
                :per-page="table.perPage"
@@ -58,38 +58,53 @@
                filter-debounce="600"
                :select-mode="'single'"
                @filtered="onFiltered"
-               @row-selected="onSaleRowClick"
+               @row-selected="onRowClick"
             )
                template(#cell(details)="row")
                   b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? "Ocultar" : "Mostrar" }} detalles
-                  b-button(variant="primary" size="sm" @click="saleInfoModal(row.item, $event.target)") Info. venta
 
                template(#row-details="row")
                   b-card
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
-                           b Nombre:
-                        b-col {{ row.item.name }}
+                           b # Client:
+                        b-col {{ row.item.id }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
-                           b Fecha:
-                        b-col {{ getFormattedDateString(row.item.posting_date, 0) }}
+                           b Active?:
+                        b-col {{ row.item.is_active }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
-                           b Hora:
-                        b-col {{ row.item.posting_time }}
+                           b Date Created:
+                        b-col {{ row.item.created }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
-                           b Genero:
-                        b-col {{ row.item.owner }}
+                           b Date Updated:
+                        b-col {{ row.item.updated }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
-                           b Ticket:
-                        b-col {{ row.item.ticket_no }}
+                           b First Name:
+                        b-col {{ row.item.first_name }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
-                           b Total:
-                        b-col {{ row.item.total }}
+                           b Last Name:
+                        b-col {{ row.item.last_name }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Address:
+                        b-col {{ row.item.address }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Cellphone:
+                        b-col {{ row.item.cellphone }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Cellphone 2:
+                        b-col {{ row.item.cellphone2 }}
+                     b-row(class="mb-1")
+                        b-col(sm="3" class="text-sm-right")
+                           b Email:
+                        b-col {{ row.item.email }}
 
             b-col(sm="12" md="12" class="my-1")
                b-pagination(
@@ -103,55 +118,24 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-// import Header from "@/views/layout/Header.vue";
-// import Footer from "@/views/layout/Footer.vue";
-
-interface Mesero {
-   nombre: string;
-   apellidos: string;
-}
-// interface Venta {
-// }
+import Vue from "vue"
+import { Props, AxiosResponse } from "../interfaces/client/client";
 
 export default Vue.extend({
-   name: "home-component",
+   name: "client-component",
    data() {
       return {
          data: {
-            sale: [],
-            new_sale: {}
+            client: [],
+            new_client: {}
          },
          table: {
             selected: -1,
             fields: [
-               { key: "idventa", label: "No. de Venta", sortable: true, sortDirection: "desc", class: "text-center" },
+               { key: "id", label: "ID Client", sortable: true, sortDirection: "desc", class: "text-center" },
                {
-                  key: "mesero",
-                  label: "Mesero",
-                  sortable: true,
-                  sortByFormatted: true,
-                  filterByFormatted: true,
-                  class: "text-center",
-                  formatter: (mesero:Mesero) => {
-                     return mesero.nombre + " " + mesero.apellidos;
-                  }
-               },
-               { key: "status", label: "Status", sortable: true, class: "text-center" },
-               {
-                  key: "total",
-                  label: "Total",
-                  sortable: false,
-                  sortByFormatted: true,
-                  filterByFormatted: true,
-                  class: "text-center",
-                  formatter: (total:string) => {
-                     return "$" + total;
-                  }
-               },
-               {
-                  key: "fecha_final",
-                  label: "Fecha",
+                  key: "created",
+                  label: "Created",
                   sortable: false,
                   sortByFormatted: true,
                   filterByFormatted: true,
@@ -167,18 +151,18 @@ export default Vue.extend({
                            if(day < 10)
                               day = "0" + 10;
                            switch(month) {
-                              case 1: month = "Enero"; break;
-                              case 2: month = "Febrero"; break;
-                              case 3: month = "Marzo"; break;
-                              case 4: month = "Abril"; break;
-                              case 5: month = "Mayo"; break;
-                              case 6: month = "Junio"; break;
-                              case 7: month = "Julio"; break;
-                              case 8: month = "Agosto"; break;
-                              case 9: month = "Septiembre"; break;
-                              case 10: month = "Octubre"; break;
-                              case 11: month = "Noviembre"; break;
-                              case 12: month = "Diciembre"; break;
+                              case 1: month = "January"; break;
+                              case 2: month = "February"; break;
+                              case 3: month = "March"; break;
+                              case 4: month = "April"; break;
+                              case 5: month = "May"; break;
+                              case 6: month = "June"; break;
+                              case 7: month = "July"; break;
+                              case 8: month = "August"; break;
+                              case 9: month = "September"; break;
+                              case 10: month = "October"; break;
+                              case 11: month = "November"; break;
+                              case 12: month = "December"; break;
                            }
                            new_date = day + "/" + month + "/" + year;
                         }
@@ -188,20 +172,9 @@ export default Vue.extend({
                      return new_date;
                   }
                },
-               {
-                  key: "hora_final",
-                  label: "Hora",
-                  sortable: false,
-                  sortByFormatted: true,
-                  filterByFormatted: true,
-                  class: "text-center",
-                  formatter: (time:string) => {
-                     if(!time)
-                        return "----";
-                     else
-                        return time;
-                  }
-               }
+               { key: "first_name", label: "First Name", sortable: true, class: "text-center" },
+               { key: "last_name", label: "Last Name", sortable: true, class: "text-center" },
+               { key: "details", label: "Show details", sortable: true, class: "text-center" }
             ],
             totalRows: 1,
             currentPage: 1,
@@ -216,17 +189,26 @@ export default Vue.extend({
             filter: null,
             filterOn: []
          }
-      }
+      } as unknown as Props
    },
    created() {
       const vue_this = this;
       Vue.prototype.$http.get("client/v3/select-all.php")
-         .then(function (response) {
+         .then(function (response:AxiosResponse) {
             if(response) {
-               const data = response.data;
-               console.log("data", data);
-               vue_this.data.sale = data;
-               vue_this.table.totalRows = vue_this.data.sale.length;
+               if(!response.data.error.is_error) {
+                  const data = response.data;
+                  console.log("data", data);
+                  vue_this.data.client = data.data;
+                  vue_this.table.totalRows = data.data.length;
+                  console.log("data", vue_this.data.client);
+               } else {
+                  // vue_this.$fire({
+                  //    title: "Error",
+                  //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  //    type: "error"
+                  // });
+               }
             } else {
                // vue_this.$fire({
                //    title: "Error",
@@ -268,7 +250,7 @@ export default Vue.extend({
         this.table.totalRows = filteredItems.length;
         this.table.currentPage = 1;
       },
-      onSaleRowClick(selected_sale) {
+      onRowClick(selected_sale) {
          console.error("---");
          console.log("selected_sale", selected_sale);
          // // if(this.table.selected == selected_sale.idventa)
