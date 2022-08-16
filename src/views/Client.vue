@@ -197,7 +197,7 @@ export default Vue.extend({
    },
    created() {
       const vue_this = this;
-      Vue.prototype.$http.get("Rutes/venta_ventas")
+      Vue.prototype.$http.get("client/v3/select-all.php")
          .then(function (response) {
             if(response) {
                const data = response.data;

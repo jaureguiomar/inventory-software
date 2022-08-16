@@ -32,9 +32,9 @@
                   div(class="col-sm-4")
                      input(type="text" class="form-control")
                div.text-center
-                  button(type="submit" class="btn btn-primary text-center mr-2") Sign in
+                  button(type="submit" class="btn btn-primary text-center mr-2") Add / Update
                   button(type="clear" class="btn btn-danger text-center mr-2") Clear
-                  button(type="clear" class="btn btn-info text-center" @click="onClose") Other
+                  button(type="clear" class="btn btn-info text-center" @click="onClose") Close
 </template>
 
 <script lang="ts">
