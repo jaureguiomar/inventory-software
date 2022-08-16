@@ -24,7 +24,7 @@
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") First Name
                   div(class="col-sm-4")
-                     input(v-model="data.first_name" type="text" class="form-control")
+                     input(v-model="data.first_name" v-focus type="text" class="form-control")
                   label(class="col-sm-2 col-form-label") Last Name
                   div(class="col-sm-4")
                      input(v-model="data.last_name" type="text" class="form-control")
