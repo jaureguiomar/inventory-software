@@ -29,7 +29,7 @@
                   v-model="table.filter"
                   type="search"
                   size="sm"
-                  placeholder="Buscar..."
+                  placeholder="Search..."
                )
                b-form-select(
                   id="per-page-select"
@@ -39,7 +39,6 @@
 
          div.table-responsive
             b-table(
-               ref="selectableTable"
                :items="data.client"
                :fields="table.fields"
                :current-page="table.currentPage"
@@ -51,8 +50,8 @@
                :sort-direction="table.sortDirection"
                stacked="md"
                show-empty
-               empty-text="No hay registros disponibles para mostrar"
-               empty-filtered-text="No hay registros disponibles para mostrar"
+               empty-text="Theres no data to display"
+               empty-filtered-text="Theres no data to display"
                small
                selectable
                filter-debounce="600"
@@ -61,7 +60,7 @@
                @row-selected="onRowClick"
             )
                template(#cell(details)="row")
-                  b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? "Ocultar" : "Mostrar" }} detalles
+                  b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? "Hide" : "Show" }} details
 
                template(#row-details="row")
                   b-card
@@ -72,15 +71,15 @@
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
                            b Active?:
-                        b-col {{ row.item.is_active }}
+                        b-col {{ (row.item.is_active) ? row.item.is_active : "Unknown" }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
                            b Date Created:
-                        b-col {{ row.item.created }}
+                        b-col {{ (row.item.created) ? row.item.created : "---" }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
                            b Date Updated:
-                        b-col {{ row.item.updated }}
+                        b-col {{ (row.item.updated) ? row.item.updated : "---" }}
                      b-row(class="mb-1")
                         b-col(sm="3" class="text-sm-right")
                            b First Name:
@@ -182,9 +181,9 @@ export default Vue.extend({
             perPage: 5,
             pageOptions: [
                5, 10, 15,
-               { value: 100, text: "Mostrar todo" }
+               { value: 100, text: "Show all" }
             ],
-            sortBy: "idventa",
+            sortBy: "id",
             sortDesc: true,
             sortDirection: "desc",
             filter: null,

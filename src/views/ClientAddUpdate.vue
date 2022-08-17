@@ -232,12 +232,12 @@ export default mixins(defaultMixin).extend({ // Vue.extend
             if(vue_this.id > 0)
                data = {
                   id: vue_this.id,
-                  first_name: vue_this.data.first_name,
-                  last_name: vue_this.data.last_name,
-                  address: vue_this.data.address,
-                  cellphone: vue_this.data.cellphone,
-                  cellphone2: vue_this.data.cellphone2,
-                  email: vue_this.data.email
+                  first_name: vue_this.data.first_name.text,
+                  last_name: vue_this.data.last_name.text,
+                  address: vue_this.data.address.text,
+                  cellphone: vue_this.data.cellphone.text,
+                  cellphone2: vue_this.data.cellphone2.text,
+                  email: vue_this.data.email.text
                };
 
             window.api.send("client-add-update-window-close", {
