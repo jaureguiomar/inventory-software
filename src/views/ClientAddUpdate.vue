@@ -70,7 +70,7 @@ import mixins from "vue-typed-mixins";
 import defaultMixin from "../plugins/mixins";
 import { Props, IPCParams } from "../interfaces/client/client-add-update";
 
-export default mixins(defaultMixin).extend({ // Vue.extend({
+export default mixins(defaultMixin).extend({ // Vue.extend
    name: "client-add-update-component",
    mixins: [defaultMixin],
    data() {
@@ -237,28 +237,38 @@ export default mixins(defaultMixin).extend({ // Vue.extend({
       /////////////////////
       // Keypress Events //
       onFirstNameKeyup(e) {
-         let first_name = this.data.first_name.text;
-         this.validateFirstName(first_name);
+         let value = this.data.first_name.text;
+         this.validateFirstName(value);
          this.enterKeyNavigation(e, "last-name", "");
       },
       onLastNameKeyup(e) {
+         let value = this.data.last_name.text;
+         this.validateLastName(value);
          this.enterKeyNavigation(e, "address", "first-name");
       },
       onAddressKeyup(e) {
+         let value = this.data.address.text;
+         this.validateAddress(value);
          this.enterKeyNavigation(e, "cellphone", "last-name");
       },
       onCellphoneKeyup(e) {
+         let value = this.data.cellphone.text;
+         this.validateCellphone(value);
          this.enterKeyNavigation(e, "cellphone2", "address");
       },
       onCellphone2Keyup(e) {
+         let value = this.data.cellphone2.text;
+         this.validateCellphone2(value);
          this.enterKeyNavigation(e, "email", "cellphone");
       },
       onEmailKeyup(e) {
+         let value = this.data.email.text;
+         this.validateEmail(value);
          this.enterKeyNavigation(e, "add-update-button", "cellphone2");
       },
       ////////////////
       // Validators //
-      validateFirstName(firstName) {
+      validateFirstName(firstName:string) {
          let error = false;
          error = this.validateField(firstName, "first_name", "data", () => {
             if(this.data.first_name.text.length <= this.data.first_name.max_text)
@@ -267,7 +277,7 @@ export default mixins(defaultMixin).extend({ // Vue.extend({
          });
          return error;
       },
-      validateLastName(lastName) {
+      validateLastName(lastName:string) {
          let error = false;
          error = this.validateField(lastName, "last_name", "data", () => {
             if(this.data.last_name.text.length <= this.data.last_name.max_text)
@@ -276,7 +286,7 @@ export default mixins(defaultMixin).extend({ // Vue.extend({
          });
          return error;
       },
-      validateAddress(address) {
+      validateAddress(address:string) {
          let error = false;
          error = this.validateField(address, "address", "data", () => {
             if(this.data.address.text.length <= this.data.address.max_text)
@@ -285,7 +295,7 @@ export default mixins(defaultMixin).extend({ // Vue.extend({
          });
          return error;
       },
-      validateCellphone(cellphone) {
+      validateCellphone(cellphone:string) {
          let error = false;
          error = this.validateField(cellphone, "cellphone", "data", () => {
             if(this.data.cellphone.text.length <= this.data.cellphone.max_text)
@@ -294,7 +304,7 @@ export default mixins(defaultMixin).extend({ // Vue.extend({
          });
          return error;
       },
-      validateCellphone2(cellphone2) {
+      validateCellphone2(cellphone2:string) {
          let error = false;
          error = this.validateField(cellphone2, "cellphone2", "data", () => {
             if(this.data.cellphone2.text.length <= this.data.cellphone2.max_text)
@@ -303,7 +313,7 @@ export default mixins(defaultMixin).extend({ // Vue.extend({
          });
          return error;
       },
-      validateEmail(email) {
+      validateEmail(email:string) {
          let error = false;
          error = this.validateField(email, "email", "data", () => {
             if(this.data.email.text.length <= this.data.email.max_text)
