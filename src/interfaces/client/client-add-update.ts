@@ -1,15 +1,7 @@
+// IPC params
 interface Content {
    title: string;
    description: string;
-}
-interface InputErrorField {
-   is_error: boolean;
-   message: string;
-}
-interface InputFields {
-   text: string;
-   max_text: number;
-   error: InputErrorField;
 }
 interface Client {
    first_name: string;
@@ -25,6 +17,16 @@ interface IPCParams {
    data?: Client;
 }
 
+// Props
+interface InputErrorField {
+   is_error: boolean;
+   message: string;
+}
+interface InputFields {
+   text: string;
+   max_text: number;
+   error: InputErrorField;
+}
 interface ClientProps {
    first_name: InputFields;
    last_name: InputFields;
@@ -40,7 +42,40 @@ interface Props {
    loaded: boolean;
 }
 
+// Axios response
+interface Error {
+   is_error: boolean;
+   message: string|null;
+   no_error: number;
+}
+interface Client {
+   id: number;
+   is_active: number;
+   created: Date;
+   updated: Date;
+   first_name: string;
+   last_name: string;
+   address: string;
+   cellphone: string;
+   cellphone2: string;
+   email: string;
+}
+interface ClientResponse {
+   data: Client;
+   error: Error;
+}
+interface AxiosResponse {
+   data: ClientResponse;
+   config: any;
+   headers: any;
+   request: any;
+   status: number;
+   statusText: string;
+}
+
 export {
    Props,
-   IPCParams
+   IPCParams,
+   AxiosResponse,
+   Client
 };

@@ -222,8 +222,11 @@ export default Vue.extend({
          });
 
       window.api.receive("main-window-client-add-update-reply", (data) => {
-         vue_this.$store.commit("SET_SOME_DATA_DATA", "New value");
-         vue_this.data.client.push(data.data);
+         if(data.type === "success") {
+            vue_this.$store.commit("SET_SOME_DATA_DATA", "New value");
+            vue_this.data.client.push(data.data.data);
+            // Check if added or updated & add / update row in table
+         }
       });
    },
    methods: {
@@ -239,7 +242,7 @@ export default Vue.extend({
       },
       onClientUpdateWindowClick() {
          window.api.send("client-add-update-window", {
-            id: 10,
+            id: 6,
             content: {
                title: "Update Client",
                description: "The clients that will be updated for the use of the system"

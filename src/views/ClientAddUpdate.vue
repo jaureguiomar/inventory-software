@@ -140,11 +140,12 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import mixins from "vue-typed-mixins";
 import defaultMixin from "../plugins/mixins";
-import { Props, IPCParams } from "../interfaces/client/client-add-update";
+import { Props, IPCParams, AxiosResponse, Client } from "../interfaces/client/client-add-update";
 
-export default mixins(defaultMixin).extend({ // Vue.extend
+export default mixins(defaultMixin).extend({
    name: "client-add-update-component",
    mixins: [defaultMixin],
    data() {
@@ -224,22 +225,70 @@ export default mixins(defaultMixin).extend({ // Vue.extend
       });
    },
    methods: {
-      onAddUpdate() {
+      async onAddUpdate() {
+         let data:Client|null = null;
+         if(this.id <= 0) {
+            let response:AxiosResponse = await Vue.prototype.$http.put("client/v3/create.php", {
+               first_name: this.data.first_name.text,
+               last_name: this.data.last_name.text,
+               address: this.data.address.text,
+               cellphone: this.data.cellphone.text,
+               cellphone2: this.data.cellphone2.text,
+               email: this.data.email.text
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  data = response.data.data;
+               } else {
+                  // vue_this.$fire({
+                  //    title: "Error",
+                  //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  //    type: "error"
+                  // });
+                  // return;
+               }
+            } else {
+               // vue_this.$fire({
+               //    title: "Error",
+               //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+               //    type: "error"
+               // });
+               // return;
+            }
+         } else {
+            let response:AxiosResponse = await Vue.prototype.$http.post("client/v3/update.php", {
+               id: this.id,
+               first_name: this.data.first_name.text,
+               last_name: this.data.last_name.text,
+               address: this.data.address.text,
+               cellphone: this.data.cellphone.text,
+               cellphone2: this.data.cellphone2.text,
+               email: this.data.email.text
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  data = response.data.data;
+               } else {
+                  // vue_this.$fire({
+                  //    title: "Error",
+                  //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  //    type: "error"
+                  // });
+                  // return;
+               }
+            } else {
+               // vue_this.$fire({
+               //    title: "Error",
+               //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+               //    type: "error"
+               // });
+               // return;
+            }
+         }
+
          const vue_this = this;
          window.api.send("client-add-update-window-dialog", this.id);
          window.api.receive("client-add-update-window-dialog-reply", () => {
-            let data:Object|null = null;
-            if(vue_this.id > 0)
-               data = {
-                  id: vue_this.id,
-                  first_name: vue_this.data.first_name.text,
-                  last_name: vue_this.data.last_name.text,
-                  address: vue_this.data.address.text,
-                  cellphone: vue_this.data.cellphone.text,
-                  cellphone2: vue_this.data.cellphone2.text,
-                  email: vue_this.data.email.text
-               };
-
             window.api.send("client-add-update-window-close", {
                id: vue_this.id,
                type: "success",
