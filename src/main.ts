@@ -12,6 +12,7 @@ import "@/plugins/bootstrap";
 import "@/plugins/font-awesome";
 // Global Template styles
 import "@/assets/scss/styles.scss";
+import "@/assets/scss/input-counter.scss";
 
 Vue.config.productionTip = false;
 new Vue({

@@ -24,36 +24,55 @@
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") First Name
                   div(class="col-sm-4")
-                     input(v-model="data.first_name" v-focus type="text" class="form-control")
+                     input(
+                        v-model="data.first_name.text"
+                        v-focus
+                        id="first-name"
+                        type="text"
+                        class="form-control counter"
+                        placeholder="Enter first name"
+                        @blur="onFirstNameBlur"
+                        @keyup="onFirstNameKeyup"
+                        :class="{ 'is-invalid': data.first_name.error.is_error }"
+                     )
+
+                     span(
+                        class="badge text-counter"
+                        :class="{ 'badge-primary': data.first_name.text.length <= data.first_name.max_text, 'badge-danger': data.first_name.text.length > data.first_name.max_text, 'error': data.first_name.error.is_error }"
+                     ) {{ data.first_name.text.length }}/{{ data.first_name.max_text }}
+                     div(v-if="data.first_name.error.is_error" class="invalid-feedback text-left") {{ data.first_name.error.message }}
+
                   label(class="col-sm-2 col-form-label") Last Name
                   div(class="col-sm-4")
-                     input(v-model="data.last_name" type="text" class="form-control")
+                     input(v-model="data.last_name.text" id="last-name" type="text" class="form-control" @keyup="onLastNameKeyup")
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") Address
                   div(class="col-sm-4")
-                     input(v-model="data.address" type="text" class="form-control")
+                     input(v-model="data.address.text" id="address" type="text" class="form-control" @keyup="onAddressKeyup")
                   label(class="col-sm-2 col-form-label") Cellphone
                   div(class="col-sm-4")
-                     input(v-model="data.cellphone" type="text" class="form-control")
+                     input(v-model="data.cellphone.text" id="cellphone" type="text" class="form-control" @keyup="onCellphoneKeyup")
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") Cellphone 2
                   div(class="col-sm-4")
-                     input(v-model="data.cellphone2" type="text" class="form-control")
+                     input(v-model="data.cellphone2.text" id="cellphone2" type="text" class="form-control" @keyup="onCellphone2Keyup")
                   label(class="col-sm-2 col-form-label") Email
                   div(class="col-sm-4")
-                     input(v-model="data.email" type="text" class="form-control")
+                     input(v-model="data.email.text" id="email" type="text" class="form-control" @keyup="onEmailKeyup")
                div.text-center
-                  button(type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? "Add" : "Update" }}
+                  button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? "Add" : "Update" }}
                   button(type="clear" class="btn btn-danger text-center mr-2" @click="onClear") Clear
                   button(type="clear" class="btn btn-info text-center" @click="onClose") Close
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import mixins from "vue-typed-mixins";
+import defaultMixin from "../plugins/mixins";
 import { Props, IPCParams } from "../interfaces/client/client-add-update";
 
-export default Vue.extend({
+export default mixins(defaultMixin).extend({ // Vue.extend({
    name: "client-add-update-component",
+   mixins: [defaultMixin],
    data() {
       return {
          id: -1,
@@ -62,12 +81,54 @@ export default Vue.extend({
             description: ""
          },
          data: {
-            first_name: "",
-            last_name: "",
-            address: "",
-            cellphone: "",
-            cellphone2: "",
-            email: ""
+            first_name: {
+               text: "",
+               max_text: 70,
+               error: {
+                  is_error: false,
+                  message: ""
+               }
+            },
+            last_name: {
+               text: "",
+               max_text: 70,
+               error: {
+                  is_error: false,
+                  message: ""
+               }
+            },
+            address: {
+               text: "",
+               max_text: 160,
+               error: {
+                  is_error: false,
+                  message: ""
+               }
+            },
+            cellphone: {
+               text: "",
+               max_text: 20,
+               error: {
+                  is_error: false,
+                  message: ""
+               }
+            },
+            cellphone2: {
+               text: "",
+               max_text: 20,
+               error: {
+                  is_error: false,
+                  message: ""
+               }
+            },
+            email: {
+               text: "",
+               max_text: 100,
+               error: {
+                  is_error: false,
+                  message: ""
+               }
+            }
          },
          loaded: false
       } as Props;
@@ -78,12 +139,12 @@ export default Vue.extend({
          vue_this.id = data.id;
          vue_this.content = data.content;
          if(data.data) {
-            vue_this.data.first_name = data.data.first_name;
-            vue_this.data.last_name = data.data.last_name;
-            vue_this.data.address = data.data.address;
-            vue_this.data.cellphone = data.data.cellphone;
-            vue_this.data.cellphone2 = data.data.cellphone2;
-            vue_this.data.email = data.data.email;
+            vue_this.data.first_name.text = data.data.first_name;
+            vue_this.data.last_name.text = data.data.last_name;
+            vue_this.data.address.text = data.data.address;
+            vue_this.data.cellphone.text = data.data.cellphone;
+            vue_this.data.cellphone2.text = data.data.cellphone2;
+            vue_this.data.email.text = data.data.email;
          }
          vue_this.loaded = true;
       });
@@ -123,12 +184,148 @@ export default Vue.extend({
          });
       },
       clearForm() {
-         this.data.first_name = "";
-         this.data.last_name = "";
-         this.data.address = "";
-         this.data.cellphone = "";
-         this.data.cellphone2 = "";
-         this.data.email = "";
+         this.data.first_name.text = "";
+         this.data.first_name.error.is_error = false;
+         this.data.first_name.error.message = "";
+
+         this.data.last_name.text = "";
+         this.data.last_name.error.is_error = false;
+         this.data.last_name.error.message = "";
+
+         this.data.address.text = "";
+         this.data.address.error.is_error = false;
+         this.data.address.error.message = "";
+
+         this.data.cellphone.text = "";
+         this.data.cellphone.error.is_error = false;
+         this.data.cellphone.error.message = "";
+
+         this.data.cellphone2.text = "";
+         this.data.cellphone2.error.is_error = false;
+         this.data.cellphone2.error.message = "";
+
+         this.data.email.text = "";
+         this.data.email.error.is_error = false;
+         this.data.email.error.message = "";
+      },
+      /////////////////
+      // Blur Events //
+      onFirstNameBlur() {
+         let value = this.data.first_name.text;
+         this.validateFirstName(value);
+      },
+      onLastNameBlur() {
+         let value = this.data.last_name.text;
+         this.validateLastName(value);
+      },
+      onAddressBlur() {
+         let value = this.data.address.text;
+         this.validateAddress(value);
+      },
+      onCellphoneBlur() {
+         let value = this.data.cellphone.text;
+         this.validateCellphone(value);
+      },
+      onCellphone2Blur() {
+         let value = this.data.cellphone2.text;
+         this.validateCellphone2(value);
+      },
+      onEmailBlur() {
+         let value = this.data.email.text;
+         this.validateEmail(value);
+      },
+      /////////////////////
+      // Keypress Events //
+      onFirstNameKeyup(e) {
+         let first_name = this.data.first_name.text;
+         this.validateFirstName(first_name);
+         this.enterKeyNavigation(e, "last-name", "");
+      },
+      onLastNameKeyup(e) {
+         this.enterKeyNavigation(e, "address", "first-name");
+      },
+      onAddressKeyup(e) {
+         this.enterKeyNavigation(e, "cellphone", "last-name");
+      },
+      onCellphoneKeyup(e) {
+         this.enterKeyNavigation(e, "cellphone2", "address");
+      },
+      onCellphone2Keyup(e) {
+         this.enterKeyNavigation(e, "email", "cellphone");
+      },
+      onEmailKeyup(e) {
+         this.enterKeyNavigation(e, "add-update-button", "cellphone2");
+      },
+      ////////////////
+      // Validators //
+      validateFirstName(firstName) {
+         let error = false;
+         error = this.validateField(firstName, "first_name", "data", () => {
+            if(this.data.first_name.text.length <= this.data.first_name.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         return error;
+      },
+      validateLastName(lastName) {
+         let error = false;
+         error = this.validateField(lastName, "last_name", "data", () => {
+            if(this.data.last_name.text.length <= this.data.last_name.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         return error;
+      },
+      validateAddress(address) {
+         let error = false;
+         error = this.validateField(address, "address", "data", () => {
+            if(this.data.address.text.length <= this.data.address.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         return error;
+      },
+      validateCellphone(cellphone) {
+         let error = false;
+         error = this.validateField(cellphone, "cellphone", "data", () => {
+            if(this.data.cellphone.text.length <= this.data.cellphone.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         return error;
+      },
+      validateCellphone2(cellphone2) {
+         let error = false;
+         error = this.validateField(cellphone2, "cellphone2", "data", () => {
+            if(this.data.cellphone2.text.length <= this.data.cellphone2.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         return error;
+      },
+      validateEmail(email) {
+         let error = false;
+         error = this.validateField(email, "email", "data", () => {
+            if(this.data.email.text.length <= this.data.email.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         return error;
+      },
+      ///////////////
+      // Functions //
+      enterKeyNavigation(e, inputAfter:string, inputBefore:string) {
+         if(e.keyCode === 13) {
+            if(e.shiftKey) {
+               if(inputBefore) {
+                  const input = document.getElementById(inputBefore) as any;
+                  input.focus();
+               }
+            } else {
+               const input = document.getElementById(inputAfter) as any;
+               input.focus();
+            }
+         }
       }
    }
 });

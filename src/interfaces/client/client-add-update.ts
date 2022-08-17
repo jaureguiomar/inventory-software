@@ -2,6 +2,15 @@ interface Content {
    title: string;
    description: string;
 }
+interface InputErrorField {
+   is_error: boolean;
+   message: string;
+}
+interface InputFields {
+   text: string;
+   max_text: number;
+   error: InputErrorField;
+}
 interface Client {
    first_name: string;
    last_name: string;
@@ -13,12 +22,21 @@ interface Client {
 interface IPCParams {
    id: number;
    content: Content;
-   data: Client|null;
+   data?: Client;
+}
+
+interface ClientProps {
+   first_name: InputFields;
+   last_name: InputFields;
+   address: InputFields;
+   cellphone: InputFields;
+   cellphone2: InputFields;
+   email: InputFields;
 }
 interface Props {
    id: number;
    content: Content;
-   data: Client;
+   data: ClientProps;
    loaded: boolean;
 }
 
