@@ -226,6 +226,9 @@ export default mixins(defaultMixin).extend({
    },
    methods: {
       async onAddUpdate() {
+         // Validate form from here and send data if theres no errors!
+         // Check cors error!
+
          let data:Client|null = null;
          if(this.id <= 0) {
             let response:AxiosResponse = await Vue.prototype.$http.put("client/v3/create.php", {
@@ -289,10 +292,16 @@ export default mixins(defaultMixin).extend({
          const vue_this = this;
          window.api.send("client-add-update-window-dialog", this.id);
          window.api.receive("client-add-update-window-dialog-reply", () => {
+            let type = "create";
+            if(vue_this.id > 0)
+               type = "update";
+
+
             window.api.send("client-add-update-window-close", {
                id: vue_this.id,
-               type: "success",
-               data: data
+               data: data,
+               result: "success",
+               type: type
             });
          });
       },
