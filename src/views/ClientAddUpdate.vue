@@ -428,7 +428,7 @@ export default mixins(defaultMixin).extend({ // Vue.extend
       height: 100vh
       display: block
       padding: 16px
-      background: #edf5e1
+      background: #5cdb94
       .banner
          width: 100%
          height: auto
@@ -460,13 +460,13 @@ export default mixins(defaultMixin).extend({ // Vue.extend
          width: 100%
          height: auto
          display: block
-         background: #5cdb94
+         background: #edf5e1
          border-radius: 10px
          padding: 20px 40px
          margin-bottom: 10px
          transition: 0.3s
          &:hover
-            box-shadow: 5px 5px #8ee4af
+            box-shadow: 5px 5px #379683
          .title
             font-size: 26px
             font-weight: bold
@@ -480,18 +480,18 @@ export default mixins(defaultMixin).extend({ // Vue.extend
                background-position: left
          .subtitle
             font-size: 19px
-            color: #edf5e1
+            color: #05386b
       .content
          width: 100%
          height: auto
          display: block
-         background: #5cdb94
+         background: #edf5e1
          border-radius: 10px
          transition: 0.3s
          &:hover
-            box-shadow: 5px 5px #8ee4af
+            box-shadow: 5px 5px #379683
          label
-            color: #edf5e1
+            color: #05386b
             font-weight: bold
          .border-top
             background: #05386b
