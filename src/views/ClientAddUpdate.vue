@@ -227,7 +227,6 @@ export default mixins(defaultMixin).extend({
    methods: {
       async onAddUpdate() {
          // Validate form from here and send data if theres no errors!
-         // Check cors error!
 
          let data:Client|null = null;
          if(this.id <= 0) {
@@ -241,7 +240,7 @@ export default mixins(defaultMixin).extend({
             });
             if(response) {
                if(!response.data.error.is_error) {
-                  data = response.data.data;
+                  data = response.data.data.data;
                } else {
                   // vue_this.$fire({
                   //    title: "Error",
@@ -269,8 +268,9 @@ export default mixins(defaultMixin).extend({
                email: this.data.email.text
             });
             if(response) {
+               console.log("response", response);
                if(!response.data.error.is_error) {
-                  data = response.data.data;
+                  data = response.data.data.data;
                } else {
                   // vue_this.$fire({
                   //    title: "Error",
@@ -296,7 +296,6 @@ export default mixins(defaultMixin).extend({
             if(vue_this.id > 0)
                type = "update";
 
-
             window.api.send("client-add-update-window-close", {
                id: vue_this.id,
                data: data,
@@ -309,10 +308,15 @@ export default mixins(defaultMixin).extend({
          this.clearForm();
       },
       onClose() {
+         let type = "create";
+         if(this.id > 0)
+            type = "update";
+
          window.api.send("client-add-update-window-close", {
             id: this.id,
-            type: "closed",
-            data: null
+            data: null,
+            result: "closed",
+            type: type
          });
       },
       clearForm() {

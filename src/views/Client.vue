@@ -119,7 +119,7 @@
 <script lang="ts">
 import Vue from "vue"
 import { mapGetters } from "vuex";
-import { Props, AxiosResponse } from "../interfaces/client/client";
+import { Props, AxiosResponse, WindowResponse } from "../interfaces/client/client";
 
 export default Vue.extend({
    name: "client-component",
@@ -221,11 +221,28 @@ export default Vue.extend({
             }
          });
 
-      window.api.receive("main-window-client-add-update-reply", (data) => {
-         if(data.type === "success") {
-            vue_this.$store.commit("SET_SOME_DATA_DATA", "New value");
-            vue_this.data.client.push(data.data.data);
-            // Check if added or updated & add / update row in table
+      window.api.receive("main-window-client-add-update-reply", (data:WindowResponse) => {
+         if(data.result === "success") {
+            if(data.type === "create") {
+               vue_this.data.client.push(data.data);
+            } else if(data.type === "update") {
+               for(let i = 0; i < vue_this.data.client.length; i++) {
+                  const curr_client = vue_this.data.client[i];
+                  if(curr_client.id === data.data.id) {
+                     vue_this.data.client[i].id = curr_client.id;
+                     vue_this.data.client[i].is_active = curr_client.id;
+                     vue_this.data.client[i].created = curr_client.created;
+                     vue_this.data.client[i].updated = curr_client.updated;
+                     vue_this.data.client[i].first_name = curr_client.first_name;
+                     vue_this.data.client[i].last_name = curr_client.last_name;
+                     vue_this.data.client[i].address = curr_client.address;
+                     vue_this.data.client[i].cellphone = curr_client.cellphone;
+                     vue_this.data.client[i].cellphone2 = curr_client.cellphone2;
+                     vue_this.data.client[i].email = curr_client.email;
+                     break;
+                  }
+               }
+            }
          }
       });
    },

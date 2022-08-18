@@ -60,8 +60,13 @@ interface Client {
    cellphone2: string;
    email: string;
 }
-interface ClientResponse {
+interface ClientSubResponse {
    data: Client;
+   message: string;
+   ok: boolean;
+}
+interface ClientResponse {
+   data: ClientSubResponse;
    error: Error;
 }
 interface AxiosResponse {

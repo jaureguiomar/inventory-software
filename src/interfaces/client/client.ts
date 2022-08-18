@@ -1,3 +1,4 @@
+// Axios response
 interface Error {
    is_error: boolean;
    message: string|null;
@@ -28,6 +29,7 @@ interface AxiosResponse {
    statusText: string;
 }
 
+// Props
 interface PropsData {
    client: Array<Client>;
    new_client: Array<Client>;
@@ -37,7 +39,16 @@ interface Props {
    table: any;
 }
 
+// Window response
+interface WindowResponse {
+   id: number;
+   data: Client;
+   result: string;
+   type: string;
+}
+
 export {
    Props,
-   AxiosResponse
+   AxiosResponse,
+   WindowResponse
 };
