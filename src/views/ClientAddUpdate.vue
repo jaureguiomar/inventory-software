@@ -268,7 +268,6 @@ export default mixins(defaultMixin).extend({
                email: this.data.email.text
             });
             if(response) {
-               console.log("response", response);
                if(!response.data.error.is_error) {
                   data = response.data.data.data;
                } else {
