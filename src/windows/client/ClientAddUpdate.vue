@@ -140,8 +140,8 @@
 <script lang="ts">
 import Vue from "vue";
 import mixins from "vue-typed-mixins";
-import defaultMixin from "../plugins/mixins";
-import { Props, IPCParams, AxiosResponse, Client } from "../interfaces/client/client-add-update";
+import defaultMixin from "../../plugins/mixins";
+import { Props, IPCParams, AxiosResponse, Client } from "../../interfaces/client/client-add-update";
 
 export default mixins(defaultMixin).extend({
    name: "client-add-update-component",
@@ -505,7 +505,7 @@ export default mixins(defaultMixin).extend({
 </script>
 
 <style lang="sass" scoped>
-   @import "../assets/scss/loader.scss"
+   @import "../../assets/scss/loader.scss"
 
    .list-enter-active, .list-leave-active
       transition: all 0.3s ease

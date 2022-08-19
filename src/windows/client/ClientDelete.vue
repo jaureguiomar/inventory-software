@@ -91,8 +91,8 @@
 <script lang="ts">
 import Vue from "vue";
 import mixins from "vue-typed-mixins";
-import defaultMixin from "../plugins/mixins";
-import { Props, IPCParams, AxiosResponse } from "../interfaces/client/client-delete";
+import defaultMixin from "../../plugins/mixins";
+import { Props, IPCParams, AxiosResponse } from "../../interfaces/client/client-delete";
 
 export default mixins(defaultMixin).extend({
    name: "client-delete-component",
@@ -112,7 +112,6 @@ export default mixins(defaultMixin).extend({
    created() {
       const vue_this = this;
       window.api.receive("client-module-window-reply", (data:IPCParams) => {
-         console.log("data", data);
          vue_this.id = data.id;
          if(data.data) {
             vue_this.first_name = data.data.first_name;
@@ -173,7 +172,7 @@ export default mixins(defaultMixin).extend({
 </script>
 
 <style lang="sass" scoped>
-   @import "../assets/scss/loader.scss"
+   @import "../../assets/scss/loader.scss"
 
    .list-enter-active, .list-leave-active
       transition: all 0.3s ease
