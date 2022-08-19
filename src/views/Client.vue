@@ -1,18 +1,9 @@
 <template lang="pug">
-   div.main-container
-         div.banner
-            div.logo Inventory
-            div.text System
-         div.menu
-            div.title
-               div.left-content Clients
-               div.right-content
-                  a(href="#_" @click="onClientAddWindowClick")
-                     <font-awesome-icon icon="fa-solid fa-plus" />
-            div.subtitle Descriptions about the clients view
-         div.content
-            div.border-top
-            div.content-container
+   MainContainer
+      //- template(#menu)
+      template(#content)
+         Content
+            template(#content)
                b-row
                   b-col(lg="6" class="mb-2")
                      b-form-input(
@@ -117,9 +108,15 @@
 import Vue from "vue"
 import { mapGetters } from "vuex";
 import { Props, AxiosResponse, WindowResponse, Client } from "../interfaces/client/client";
+import MainContainer from "../views/layout/MainContainer.vue";
+import Content from "../views/layout/Content.vue";
 
 export default Vue.extend({
    name: "client-component",
+   components: {
+      MainContainer,
+      Content
+   },
    data() {
       return {
          data: {
@@ -256,7 +253,6 @@ export default Vue.extend({
          });
       },
       onClientUpdateWindowClick(item:Client) {
-         console.log("item", item);
          window.api.send("client-add-update-window", {
             id: item.id,
             content: {
