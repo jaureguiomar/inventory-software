@@ -9,10 +9,10 @@
 
       div.main-container(v-if="loaded" key="content")
          Banner
-         Menu(
-            title="Delete Client"
-            subtitle="The clients that will be deleted from the system"
-         )
+         Menu
+            template(#left-content)
+                  p Delete Client
+            template(#subtitle) The clients that will be deleted from the system
          Content
             template(#content)
                div(v-if="id > 0" class="form-group row")

@@ -9,10 +9,10 @@
 
       div.main-container(v-if="loaded" key="content")
          Banner
-         Menu(
-            :title="content.title"
-            :subtitle="content.description"
-         )
+         Menu
+            template(#left-content)
+               p {{ content.title }}
+            template(#subtitle) {{ content.description }}
          Content
             template(#content)
                div(v-if="id > 0" class="form-group row")

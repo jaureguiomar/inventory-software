@@ -1,13 +1,15 @@
 <template lang="pug">
    div.main-container
       Banner
-      Menu(
-         title="Clients"
-         subtitle="Descriptions about the clients view"
-      )
+      Menu
+         template(#left-content)
+            router-link(to="/")
+               <font-awesome-icon icon="fa-solid fa-arrow-left" />
+            p Clients
          template(#right-content)
             a(href="#_" @click="onClientAddWindowClick")
                <font-awesome-icon icon="fa-solid fa-plus" />
+         template(#subtitle) Descriptions about the clients view
       Content
          template(#content)
             b-row

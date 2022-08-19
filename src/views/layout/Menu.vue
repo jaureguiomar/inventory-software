@@ -1,10 +1,12 @@
 <template lang="pug">
    div.menu
       div.title
-         div.left-content {{ title }}
+         div.left-content
+            slot(name="left-content")
          div.right-content
             slot(name="right-content")
-      div.subtitle {{ subtitle }}
+      div.subtitle
+         slot(name="subtitle")
 </template>
 
 <script lang="ts">
@@ -12,16 +14,6 @@ import Vue from "vue";
 
 export default Vue.extend({
    name: "menu-component",
-   props: {
-      title: {
-         type: String,
-         required: true
-      },
-      subtitle: {
-         type: String,
-         required: true
-      }
-   },
    data() {
       return {};
    }
@@ -55,7 +47,20 @@ export default Vue.extend({
          justify-content: space-between
          &:hover
             background-position: left
-         // .left-content
+         .left-content
+            display: flex
+            flex-direction: row
+            align-items: center
+            p
+               margin: 0
+               padding: 0
+               margin-left: 5px
+            a
+               margin-left: 10px
+               color: #edf5e1
+               transition: 0.3s
+               &:hover
+                  color: #5cdb94
          .right-content
             margin-right: 20px
             a
