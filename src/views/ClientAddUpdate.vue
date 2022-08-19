@@ -105,8 +105,6 @@
                         type="text"
                         class="form-control"
                         placeholder="Enter cellphone 2"
-                        @blur="onCellphone2Blur"
-                        @keyup="onCellphone2Keyup"
                         :class="{ 'is-invalid': data.cellphone2.error.is_error }"
                      )
                      span(
@@ -226,7 +224,35 @@ export default mixins(defaultMixin).extend({
    },
    methods: {
       async onAddUpdate() {
-         // Validate form from here and send data if theres no errors!
+         this.data.first_name.text = this.data.first_name.text.trim();
+         this.data.last_name.text = this.data.last_name.text.trim();
+         this.data.address.text = this.data.address.text.trim();
+         this.data.cellphone.text = this.data.cellphone.text.trim();
+         this.data.cellphone2.text = this.data.cellphone2.text.trim();
+         this.data.email.text = this.data.email.text.trim();
+
+         let first_name = this.data.first_name.text;
+         let last_name = this.data.last_name.text;
+         let address = this.data.address.text;
+         let cellphone = this.data.cellphone.text;
+         // let cellphone2 = this.data.cellphone2.text;
+         let email = this.data.email.text;
+         let error_first_name = false;
+         let error_last_name = false;
+         let error_address = false;
+         let error_cellphone = false;
+         // let error_cellphone2 = false;
+         let error_email = false;
+
+         error_first_name = this.validateFirstName(first_name);
+         error_last_name = this.validateLastName(last_name);
+         error_address = this.validateAddress(address);
+         error_cellphone = this.validateCellphone(cellphone);
+         // error_cellphone2 = this.validateCellphone2(cellphone2);
+         error_email = this.validateEmail(email);
+
+         if(error_first_name || error_last_name || error_address || error_cellphone || error_email)
+            return;
 
          let data:Client|null = null;
          if(this.id <= 0) {
@@ -361,10 +387,10 @@ export default mixins(defaultMixin).extend({
          let value = this.data.cellphone.text;
          this.validateCellphone(value);
       },
-      onCellphone2Blur() {
-         let value = this.data.cellphone2.text;
-         this.validateCellphone2(value);
-      },
+      // onCellphone2Blur() {
+      //    let value = this.data.cellphone2.text;
+      //    this.validateCellphone2(value);
+      // },
       onEmailBlur() {
          let value = this.data.email.text;
          this.validateEmail(value);
@@ -391,11 +417,11 @@ export default mixins(defaultMixin).extend({
          this.validateCellphone(value);
          this.enterKeyNavigation(e, "cellphone2", "address");
       },
-      onCellphone2Keyup(e) {
-         let value = this.data.cellphone2.text;
-         this.validateCellphone2(value);
-         this.enterKeyNavigation(e, "email", "cellphone");
-      },
+      // onCellphone2Keyup(e) {
+      //    let value = this.data.cellphone2.text;
+      //    this.validateCellphone2(value);
+      //    this.enterKeyNavigation(e, "email", "cellphone");
+      // },
       onEmailKeyup(e) {
          let value = this.data.email.text;
          this.validateEmail(value);
