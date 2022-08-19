@@ -59,18 +59,18 @@
                            b-col(sm="3" class="text-sm-right")
                               b # Client:
                            b-col {{ row.item.id }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b Active?:
-                           b-col {{ (row.item.is_active) ? row.item.is_active : "Unknown" }}
+                        //- b-row(class="mb-1")
+                        //-    b-col(sm="3" class="text-sm-right")
+                        //-       b Active?:
+                        //-    b-col {{ (row.item.is_active) ? row.item.is_active : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b Date Created:
-                           b-col {{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0) : "---" }}
+                           b-col {{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0, true) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b Date Updated:
-                           b-col {{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0) : "---" }}
+                           b-col {{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0, true) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b First Name:
@@ -90,7 +90,7 @@
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b Cellphone 2:
-                           b-col {{ row.item.cellphone2 }}
+                           b-col {{ (row.item.cellphone2) ? row.item.cellphone2 : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b Email:
@@ -325,10 +325,11 @@ export default Vue.extend({
 
          return year + "-" + month + "-" + day;
       },
-      getFormattedDateString(date:string, type:number=0, format:number=0) {
+      getFormattedDateString(date:string, type:number=0, format:number=0, time=false) {
          let new_date = date;
          if(new_date) {
             const splitted_date = date.split("-");
+            const splitted_time = date.split(" ");
             if(splitted_date.length === 3) {
                let day:number|string = parseInt(splitted_date[2]);
                let month:number|string = parseInt(splitted_date[1]);
@@ -361,6 +362,12 @@ export default Vue.extend({
                   new_date = day + "/" + month + "/" + year;
                else if(format === 1)
                   new_date = year + "-" + month + "-" + day;
+
+               if(time) {
+                  const time = splitted_time[1];
+                  new_date += " ";
+                  new_date += time;
+               }
             }
          } else {
             new_date = "----";
