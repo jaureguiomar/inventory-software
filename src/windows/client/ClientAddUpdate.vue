@@ -325,15 +325,11 @@ export default mixins(defaultMixin).extend({
          const vue_this = this;
          window.api.send("client-module-window-dialog", this.type);
          window.api.receive("client-module-window-dialog-reply", () => {
-            let type = "create";
-            if(vue_this.id > 0)
-               type = "update";
-
             window.api.send("client-module-window-close", {
                id: vue_this.id,
                data: data,
                result: "success",
-               type: type
+               type: vue_this.type
             });
          });
       },
@@ -341,15 +337,12 @@ export default mixins(defaultMixin).extend({
          this.clearForm();
       },
       onClose() {
-         let type = "create";
-         if(this.id > 0)
-            type = "update";
-
+         const vue_this = this;
          window.api.send("client-module-window-close", {
             id: this.id,
             data: null,
             result: "closed",
-            type: type
+            type: vue_this.type
          });
       },
       clearForm() {
