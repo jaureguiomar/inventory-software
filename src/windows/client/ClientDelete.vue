@@ -11,7 +11,7 @@
          Banner
          Menu
             template(#left-content)
-                  p Delete Client
+               p Delete Client
             template(#subtitle) The clients that will be deleted from the system
          Content
             template(#content)
