@@ -8,9 +8,7 @@
                div.left-content Clients
                div.right-content
                   a(href="#_" @click="onClientAddWindowClick")
-                     <font-awesome-icon icon="fa-solid fa-users" size="1x" />
-                  a(href="#_" @click="onClientUpdateWindowClick")
-                     <font-awesome-icon icon="fa-solid fa-users" size="1x" />
+                     <font-awesome-icon icon="fa-solid fa-plus" />
             div.subtitle Descriptions about the clients view
          div.content
             div.border-top
@@ -32,6 +30,9 @@
                         size="sm")
 
                div.table-responsive
+                  //- selectable
+                  //- :select-mode="'single'"
+                  //- @row-selected="onRowClick"
                   b-table(
                      :items="data.client"
                      :fields="table.fields"
@@ -47,15 +48,12 @@
                      empty-text="Theres no data to display"
                      empty-filtered-text="Theres no data to display"
                      small
-                     selectable
                      filter-debounce="600"
-                     :select-mode="'single'"
                      @filtered="onFiltered"
-                     @row-selected="onRowClick"
+                     hover
                   )
                      template(#cell(details)="row")
                         b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? "Hide" : "Show" }} details
-
                      template(#row-details="row")
                         b-card
                            b-row(class="mb-1")
@@ -98,6 +96,11 @@
                               b-col(sm="3" class="text-sm-right")
                                  b Email:
                               b-col {{ row.item.email }}
+                     template(#cell(actions)="row")
+                        a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
+                           <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+                        a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick")
+                           <font-awesome-icon icon="fa-solid fa-xmark" />
 
                   b-col(sm="12" md="12" class="my-1")
                      b-pagination(
@@ -113,7 +116,7 @@
 <script lang="ts">
 import Vue from "vue"
 import { mapGetters } from "vuex";
-import { Props, AxiosResponse, WindowResponse } from "../interfaces/client/client";
+import { Props, AxiosResponse, WindowResponse, Client } from "../interfaces/client/client";
 
 export default Vue.extend({
    name: "client-component",
@@ -168,7 +171,8 @@ export default Vue.extend({
                },
                { key: "first_name", label: "First Name", sortable: true, class: "text-center" },
                { key: "last_name", label: "Last Name", sortable: true, class: "text-center" },
-               { key: "details", label: "Show details", sortable: true, class: "text-center" }
+               { key: "details", label: "Show details", sortable: true, class: "text-center" },
+               { key: "actions", label: "Actions", sortable: false, class: "text-center" }
             ],
             totalRows: 1,
             currentPage: 1,
@@ -251,68 +255,38 @@ export default Vue.extend({
             data: null
          });
       },
-      onClientUpdateWindowClick() {
+      onClientUpdateWindowClick(item:Client) {
+         console.log("item", item);
          window.api.send("client-add-update-window", {
-            id: 6,
+            id: item.id,
             content: {
                title: "Update Client",
                description: "The clients that will be updated for the use of the system"
             },
             data: {
-               first_name: "Omar Misael",
-               last_name: "Torres Jauregui",
-               address: "Florido 3ra secc",
-               cellphone: "6641309641",
-               cellphone2: "6644877638",
-               email: "omarmisael.1997@gmail.com"
+               first_name: item.first_name,
+               last_name: item.last_name,
+               address: item.address,
+               cellphone: item.cellphone,
+               cellphone2: item.cellphone2,
+               email: item.email
             }
+         });
+      },
+      onClientDeleteWindowClick() {
+         console.log("onClientDeleteWindowClick");
+         window.api.send("client-delete-window", {
+            id: 10,
          });
       },
       onFiltered(filteredItems) {
         this.table.totalRows = filteredItems.length;
         this.table.currentPage = 1;
       },
-      onRowClick(selected_sale) {
-         console.error("---");
-         console.log("selected_sale", selected_sale);
-         // // if(this.table.selected == selected_sale.idventa)
-         // //    return;
-
-         // if(selected_sale.length > 0) {
-         //    let index = -1;
-         //    selected_sale = selected_sale[0];
-
-         //    for(let i = 0; i < this.data.sale.length; i++) {
-         //       const curr_oder = this.data.sale[i];
-         //       if(selected_sale.idventa == curr_oder.idventa) {
-         //          index = i;
-         //          break;
-         //       }
-         //    }
-
-         //    this.data.new_sale = false;
-         //    this.table.selected = selected_sale.idventa;
-
-         //    const vue_this = this;
-         //    Vue.prototype.$http.post("Ventas/get_by_id/" + this.table.selected)
-         //       .then(function (response) {
-         //          if(response) {
-         //             const data = response.data;
-         //             vue_this.data.curr_sale = data;
-         //             vue_this.data.curr_sale_index = index;
-         //          } else {
-         //             this.$fire({
-         //                title: "Error",
-         //                text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-         //                type: "error"
-         //             });
-         //          }
-         //       });
-         // } else {
-         //    this.data.new_sale = false;
-         //    this.table.selected = -1;
-         // }
-      },
+      // onRowClick(selected_data) {
+      //    console.error("---");
+      //    console.log("selected_data", selected_data);
+      // },
       ///////////////
       // Functions //
       getFormattedDate(date:Date) {

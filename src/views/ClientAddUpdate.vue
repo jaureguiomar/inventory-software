@@ -218,7 +218,7 @@ export default mixins(defaultMixin).extend({
             vue_this.data.last_name.text = data.data.last_name;
             vue_this.data.address.text = data.data.address;
             vue_this.data.cellphone.text = data.data.cellphone;
-            vue_this.data.cellphone2.text = data.data.cellphone2;
+            vue_this.data.cellphone2.text = (data.data.cellphone2) ? data.data.cellphone2 : "";
             vue_this.data.email.text = data.data.email;
          }
          vue_this.loaded = true;

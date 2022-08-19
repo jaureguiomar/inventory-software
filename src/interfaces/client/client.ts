@@ -50,5 +50,6 @@ interface WindowResponse {
 export {
    Props,
    AxiosResponse,
-   WindowResponse
+   WindowResponse,
+   Client
 };
