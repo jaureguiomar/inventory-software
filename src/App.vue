@@ -5,17 +5,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Home from "@/views/Home.vue";
-
-// interface Something {
-//    data1: string;
-// }
-
 export default Vue.extend({
-   name: "App",
-   components: {
-      Home
-   }
+   name: "App"
 });
 </script>
 
