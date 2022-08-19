@@ -140,20 +140,20 @@ export default mixins(defaultMixin).extend({
          });
          if(response) {
             if(response.data.error.is_error) {
-               // vue_this.$fire({
-               //    title: "Error",
-               //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-               //    type: "error"
-               // });
-               // return;
+               this.$fire({
+                  title: "Error",
+                  text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  type: "error"
+               });
+               return;
             }
          } else {
-            // vue_this.$fire({
-            //    title: "Error",
-            //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-            //    type: "error"
-            // });
-            // return;
+            this.$fire({
+               title: "Error",
+               text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+               type: "error"
+            });
+            return;
          }
 
          const vue_this = this;

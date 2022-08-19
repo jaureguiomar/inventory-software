@@ -211,18 +211,18 @@ export default Vue.extend({
                   vue_this.data.client = data.data;
                   vue_this.table.totalRows = data.data.length;
                } else {
-                  // vue_this.$fire({
-                  //    title: "Error",
-                  //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-                  //    type: "error"
-                  // });
+                  vue_this.$fire({
+                     title: "Error",
+                     text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                     type: "error"
+                  });
                }
             } else {
-               // vue_this.$fire({
-               //    title: "Error",
-               //    text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-               //    type: "error"
-               // });
+               vue_this.$fire({
+                  title: "Error",
+                  text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  type: "error"
+               });
             }
          });
 
