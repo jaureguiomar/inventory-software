@@ -1,11 +1,10 @@
 <template lang="pug">
    div.menu
       div.title
-         div.left-content Clients
+         div.left-content {{ title }}
          div.right-content
-            a(href="#_" @click="onClientAddWindowClick")
-               <font-awesome-icon icon="fa-solid fa-plus" />
-      div.subtitle Descriptions about the clients view
+            slot(name="right-content")
+      div.subtitle {{ subtitle }}
 </template>
 
 <script lang="ts">
@@ -13,6 +12,16 @@ import Vue from "vue";
 
 export default Vue.extend({
    name: "menu-component",
+   props: {
+      title: {
+         type: String,
+         required: true
+      },
+      subtitle: {
+         type: String,
+         required: true
+      }
+   },
    data() {
       return {};
    }

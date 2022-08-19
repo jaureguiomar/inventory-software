@@ -1,9 +1,10 @@
 @import "variables";
 @import "mixins";
 
-// body {
-//   color: white;
-//   background: rgb(52, 50, 49);
-//   /* font-family: 'Courier New', Courier, monospace; */
-//   font-size: 12px;
-// }
+.main-container {
+  width: 100%;
+  height: 100vh;
+  display: block;
+  padding: 16px;
+  background: #5cdb94;
+}
