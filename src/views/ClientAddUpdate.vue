@@ -149,6 +149,7 @@ export default mixins(defaultMixin).extend({
    data() {
       return {
          id: -1,
+         type: "",
          content: {
             title: "",
             description: ""
@@ -208,8 +209,9 @@ export default mixins(defaultMixin).extend({
    },
    created() {
       const vue_this = this;
-      window.api.receive("client-add-update-window-reply", (data:IPCParams) => {
+      window.api.receive("client-module-window-reply", (data:IPCParams) => {
          vue_this.id = data.id;
+         vue_this.type = data.type;
          vue_this.content = data.content;
          if(data.data) {
             vue_this.data.first_name.text = data.data.first_name;
@@ -315,13 +317,13 @@ export default mixins(defaultMixin).extend({
          }
 
          const vue_this = this;
-         window.api.send("client-add-update-window-dialog", this.id);
-         window.api.receive("client-add-update-window-dialog-reply", () => {
+         window.api.send("client-module-window-dialog", this.type);
+         window.api.receive("client-module-window-dialog-reply", () => {
             let type = "create";
             if(vue_this.id > 0)
                type = "update";
 
-            window.api.send("client-add-update-window-close", {
+            window.api.send("client-module-window-close", {
                id: vue_this.id,
                data: data,
                result: "success",
@@ -337,7 +339,7 @@ export default mixins(defaultMixin).extend({
          if(this.id > 0)
             type = "update";
 
-         window.api.send("client-add-update-window-close", {
+         window.api.send("client-module-window-close", {
             id: this.id,
             data: null,
             result: "closed",

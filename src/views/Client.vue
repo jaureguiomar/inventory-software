@@ -90,7 +90,7 @@
                      template(#cell(actions)="row")
                         a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
                            <font-awesome-icon icon="fa-solid fa-pen-to-square" />
-                        a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick")
+                        a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick(row.item)")
                            <font-awesome-icon icon="fa-solid fa-xmark" />
 
                   b-col(sm="12" md="12" class="my-1")
@@ -237,14 +237,23 @@ export default Vue.extend({
                      break;
                   }
                }
+            } else if(data.type === "delete") {
+               for(let i = 0; i < vue_this.data.client.length; i++) {
+                  const curr_client = vue_this.data.client[i];
+                  if(curr_client.id === data.data.id) {
+                     vue_this.data.client.splice(i, 1);
+                     break;
+                  }
+               }
             }
          }
       });
    },
    methods: {
       onClientAddWindowClick() {
-         window.api.send("client-add-update-window", {
+         window.api.send("client-module-window", {
             id: -1,
+            type: "add",
             content: {
                title: "Add Client",
                description: "The clients that will be added for the use of the system"
@@ -253,8 +262,9 @@ export default Vue.extend({
          });
       },
       onClientUpdateWindowClick(item:Client) {
-         window.api.send("client-add-update-window", {
+         window.api.send("client-module-window", {
             id: item.id,
+            type: "update",
             content: {
                title: "Update Client",
                description: "The clients that will be updated for the use of the system"
@@ -269,10 +279,18 @@ export default Vue.extend({
             }
          });
       },
-      onClientDeleteWindowClick() {
-         console.log("onClientDeleteWindowClick");
-         window.api.send("client-delete-window", {
-            id: 10,
+      onClientDeleteWindowClick(item:Client) {
+         window.api.send("client-module-window", {
+            id: item.id,
+            type: "delete",
+            data: {
+               first_name: item.first_name,
+               last_name: item.last_name,
+               address: item.address,
+               cellphone: item.cellphone,
+               cellphone2: item.cellphone2,
+               email: item.email
+            }
          });
       },
       onFiltered(filteredItems) {

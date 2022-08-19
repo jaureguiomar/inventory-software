@@ -13,6 +13,7 @@ interface Client {
 }
 interface IPCParams {
    id: number;
+   type: string;
    content: Content;
    data?: Client;
 }
@@ -37,6 +38,7 @@ interface ClientProps {
 }
 interface Props {
    id: number;
+   type: string;
    content: Content;
    data: ClientProps;
    loaded: boolean;

@@ -20,7 +20,8 @@ const window = {
    main: null as any,
    client: {
       add: null as any,
-      update: null as any
+      update: null as any,
+      delete: null as any
    }
 };
 
@@ -145,15 +146,9 @@ autoUpdater.on("error", (message) => {
 
  ///////////////////////////////
 // Listen for ipcMain Events //
-ipcMain.on("client-add-update-window", function(e, data) {
-   let key = "";
-   if(data.id <= 0)
-      key = "add";
-   else
-      key = "update";
-
-   if(!window.client[key] || window.client[key].isDestroyed()) {
-      window.client[key] = new BrowserWindow({
+ipcMain.on("client-module-window", function(e, data) {
+   if(!window.client[data.type] || window.client[data.type].isDestroyed()) {
+      window.client[data.type] = new BrowserWindow({
          width: 1024,
          height: 768,
          // fullscreen: true,
@@ -164,63 +159,56 @@ ipcMain.on("client-add-update-window", function(e, data) {
             preload: path.join(__dirname, "preloadClient.js")
          }
       });
-      // window.client[key].removeMenu();
-      window.client[key].maximize();
+      // window.client[data.type].removeMenu();
+      window.client[data.type].maximize();
 
       let setURL = "";
-      if(data.id > 0)
+      if(data.type === "add")
          setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/client-add" : `file://${__dirname}/index.html#/client-add`;
-      else
+      else if(data.type === "update")
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-update/${data.id}` : `file://${__dirname}/index.html#/client-update/${data.id}`;
+      else if(data.type === "delete")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-delete/${data.id}` : `file://${__dirname}/index.html#/client-delete/${data.id}`;
 
-      window.client[key].loadURL(setURL);
-      window.client[key].show();
+      window.client[data.type].loadURL(setURL);
+      window.client[data.type].show();
       if(!process.env.IS_TEST)
-         window.client[key].webContents.openDevTools();
+         window.client[data.type].webContents.openDevTools();
 
-      window.client[key].webContents.once("did-finish-load", function () {
-         window.client[key].webContents.send("client-add-update-window-reply", data);
+      window.client[data.type].webContents.once("did-finish-load", function () {
+         window.client[data.type].webContents.send("client-module-window-reply", data);
       });
-      window.client[key].once("close", function () {
-         window.client[key].destroy();
-         window.client[key] = null;
+      window.client[data.type].once("close", function () {
+         window.client[data.type].destroy();
+         window.client[data.type] = null;
       });
    } else {
-      window.client[key].focus();
+      window.client[data.type].focus();
    }
 });
 
-ipcMain.on("client-add-update-window-dialog", function(e, id) {
-   let key = "";
+ipcMain.on("client-module-window-dialog", function(e, type) {
    let message = "";
-
-   if(id <= 0) {
-      key = "add";
+   if(type === "add")
       message = "The client has been added properly";
-   } else {
-      key = "update";
+   else if(type === "update")
       message = "The client has been updated properly";
-   }
+   else if(type === "delete")
+      message = "The client has been deleted properly";
 
-   dialog.showMessageBox(window.client[key], {
+   dialog.showMessageBox(window.client[type], {
       title: "System message",
       buttons: ["Ok"],
       type: "info",
       message: message,
    }).then(() => {
-      e.sender.send("client-add-update-window-dialog-reply");
+      e.sender.send("client-module-window-dialog-reply");
    });
 });
 
-ipcMain.on("client-add-update-window-close", function(e, data) {
-   let key = "";
-   if(data.id <= 0)
-      key = "add";
-   else
-      key = "update";
-
-   window.client[key].destroy();
-   window.client[key] = null;
+ipcMain.on("client-module-window-close", function(e, data) {
+   window.client[data.type].destroy();
+   window.client[data.type] = null;
    window.main.webContents.send("main-window-client-add-update-reply", data);
 });
 ///////////////////////////////////
