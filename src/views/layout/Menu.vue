@@ -12,7 +12,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-   name: "header-component",
+   name: "menu-component",
    data() {
       return {};
    }
