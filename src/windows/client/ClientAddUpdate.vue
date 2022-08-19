@@ -466,15 +466,15 @@ export default mixins(defaultMixin).extend({
          });
          return error;
       },
-      validateCellphone2(cellphone2:string) {
-         let error = false;
-         error = this.validateField(cellphone2, "cellphone2", "data", () => {
-            if(this.data.cellphone2.text.length <= this.data.cellphone2.max_text)
-               return null;
-            return "This field has exceeded the length limit";
-         });
-         return error;
-      },
+      // validateCellphone2(cellphone2:string) {
+      //    let error = false;
+      //    error = this.validateField(cellphone2, "cellphone2", "data", () => {
+      //       if(this.data.cellphone2.text.length <= this.data.cellphone2.max_text)
+      //          return null;
+      //       return "This field has exceeded the length limit";
+      //    });
+      //    return error;
+      // },
       validateEmail(email:string) {
          let error = false;
          error = this.validateField(email, "email", "data", () => {
