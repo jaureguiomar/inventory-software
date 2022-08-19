@@ -66,11 +66,11 @@
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b Date Created:
-                           b-col {{ (row.item.created) ? row.item.created : "---" }}
+                           b-col {{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b Date Updated:
-                           b-col {{ (row.item.updated) ? row.item.updated : "---" }}
+                           b-col {{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
                               b First Name:
@@ -339,18 +339,18 @@ export default Vue.extend({
 
                if(type === 0) {
                   switch(month) {
-                     case 1: month = "Enero"; break;
-                     case 2: month = "Febrero"; break;
-                     case 3: month = "Marzo"; break;
-                     case 4: month = "Abril"; break;
-                     case 5: month = "Mayo"; break;
-                     case 6: month = "Junio"; break;
-                     case 7: month = "Julio"; break;
-                     case 8: month = "Agosto"; break;
-                     case 9: month = "Septiembre"; break;
-                     case 10: month = "Octubre"; break;
-                     case 11: month = "Noviembre"; break;
-                     case 12: month = "Diciembre"; break;
+                     case 1: month = "January"; break;
+                     case 2: month = "February"; break;
+                     case 3: month = "March"; break;
+                     case 4: month = "April"; break;
+                     case 5: month = "May"; break;
+                     case 6: month = "June"; break;
+                     case 7: month = "July"; break;
+                     case 8: month = "August"; break;
+                     case 9: month = "September"; break;
+                     case 10: month = "October"; break;
+                     case 11: month = "November"; break;
+                     case 12: month = "December"; break;
                   }
                } else {
                   if(month < 10)
