@@ -90,7 +90,7 @@
 import Vue from "vue";
 import mixins from "vue-typed-mixins";
 import defaultMixin from "../../plugins/mixins";
-import { Props, IPCParams, AxiosResponse } from "../../interfaces/client/client-delete";
+import { Props, IPCParams } from "../../interfaces/client/client-delete";
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
@@ -132,9 +132,11 @@ export default mixins(defaultMixin).extend({
    },
    methods: {
       async onDelete() {
-         let response:AxiosResponse = await Vue.prototype.$http.delete("client/v3/delete.php", {
-            type: "id",
-            value: this.id
+         let response = await Vue.prototype.$http.delete("client/v3/delete.php", {
+            params: {
+               field: "id",
+               data: this.id
+            },
          });
          if(response) {
             if(response.data.error.is_error) {
@@ -155,7 +157,7 @@ export default mixins(defaultMixin).extend({
          }
 
          const vue_this = this;
-         window.api.send("client-module-window-dialog", this.id);
+         window.api.send("client-module-window-dialog", "delete");
          window.api.receive("client-module-window-dialog-reply", () => {
             window.api.send("client-module-window-close", {
                id: vue_this.id,
