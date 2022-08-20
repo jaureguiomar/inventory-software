@@ -209,7 +209,7 @@ ipcMain.on("client-module-window-dialog", function(e, type) {
 ipcMain.on("client-module-window-close", function(e, data) {
    window.client[data.type].destroy();
    window.client[data.type] = null;
-   window.main.webContents.send("main-window-client-add-update-reply", data);
+   window.main.webContents.send("main-window-client-module-reply", data);
 });
 ///////////////////////////////////
 ///////////////////////////////////

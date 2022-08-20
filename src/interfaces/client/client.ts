@@ -42,7 +42,7 @@ interface Props {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Client;
+   data: Client|null;
    result: string;
    type: string;
 }
