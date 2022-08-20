@@ -4,16 +4,18 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 const store = new Vuex.Store({
    state: {
-      some_data: "Default value",
+      client: {
+         loaded_reply: false
+      }
    },
    getters: {
-      getSomeData(state) {
-         return state.some_data;
+      getClientLoadedReply(state) {
+         return state.client.loaded_reply;
       }
    },
    mutations: {
-      SET_SOME_DATA_DATA: (state, data) => {
-         state.some_data = data;
+      SET_CLIENTT_LOADED_REPLY: (state, data:boolean) => {
+         state.client.loaded_reply = data;
       }
    }
 });

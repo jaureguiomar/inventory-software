@@ -198,7 +198,7 @@ export default Vue.extend({
    },
    computed: {
       ...mapGetters([
-         "getSomeData"
+         "getClientLoadedReply"
       ])
    },
    created() {
@@ -226,48 +226,51 @@ export default Vue.extend({
             }
          });
 
-      window.api.receive("main-window-client-module-reply", (data:WindowResponse) => {
-         if(data.result === "success") {
-            if(data.type === "add") {
-               if(data.data)
-                  vue_this.data.client.push(data.data);
-            } else if(data.type === "update") {
-               let finded_index = -1;
-               for(let i = 0; i < vue_this.data.client.length; i++) {
-                  const curr_client = vue_this.data.client[i];
-                  if(curr_client.id == data.id) {
-                     finded_index = i;
-                     break;
+      if(!this.getClientLoadedReply) {
+         window.api.receive("main-window-client-module-reply", (data:WindowResponse) => {
+            if(data.result === "success") {
+               if(data.type === "add") {
+                  if(data.data)
+                     vue_this.data.client.push(data.data);
+               } else if(data.type === "update") {
+                  let finded_index = -1;
+                  for(let i = 0; i < vue_this.data.client.length; i++) {
+                     const curr_client = vue_this.data.client[i];
+                     if(curr_client.id == data.id) {
+                        finded_index = i;
+                        break;
+                     }
                   }
-               }
-               if(finded_index > 0) {
-                  if(data.data) {
-                     vue_this.data.client[finded_index].id = data.data.id;
-                     vue_this.data.client[finded_index].is_active = data.data.is_active;
-                     vue_this.data.client[finded_index].created = data.data.created;
-                     vue_this.data.client[finded_index].updated = data.data.updated;
-                     vue_this.data.client[finded_index].first_name = data.data.first_name;
-                     vue_this.data.client[finded_index].last_name = data.data.last_name;
-                     vue_this.data.client[finded_index].address = data.data.address;
-                     vue_this.data.client[finded_index].cellphone = data.data.cellphone;
-                     vue_this.data.client[finded_index].cellphone2 = data.data.cellphone2;
-                     vue_this.data.client[finded_index].email = data.data.email;
+                  if(finded_index > 0) {
+                     if(data.data) {
+                        vue_this.data.client[finded_index].id = data.data.id;
+                        vue_this.data.client[finded_index].is_active = data.data.is_active;
+                        vue_this.data.client[finded_index].created = data.data.created;
+                        vue_this.data.client[finded_index].updated = data.data.updated;
+                        vue_this.data.client[finded_index].first_name = data.data.first_name;
+                        vue_this.data.client[finded_index].last_name = data.data.last_name;
+                        vue_this.data.client[finded_index].address = data.data.address;
+                        vue_this.data.client[finded_index].cellphone = data.data.cellphone;
+                        vue_this.data.client[finded_index].cellphone2 = data.data.cellphone2;
+                        vue_this.data.client[finded_index].email = data.data.email;
+                     }
                   }
-               }
-            } else if(data.type === "delete") {
-               let finded_index = -1;
-               for(let i = 0; i < vue_this.data.client.length; i++) {
-                  const curr_client = vue_this.data.client[i];
-                  if(curr_client.id == data.id) {
-                     finded_index = i;
-                     break;
+               } else if(data.type === "delete") {
+                  let finded_index = -1;
+                  for(let i = 0; i < vue_this.data.client.length; i++) {
+                     const curr_client = vue_this.data.client[i];
+                     if(curr_client.id == data.id) {
+                        finded_index = i;
+                        break;
+                     }
                   }
+                  if(finded_index > 0)
+                     vue_this.data.client.splice(finded_index, 1);
                }
-               if(finded_index > 0)
-                  vue_this.data.client.splice(finded_index, 1);
             }
-         }
-      });
+         });
+         this.$store.commit("SET_CLIENTT_LOADED_REPLY", true);
+      }
    },
    methods: {
       onClientAddWindowClick() {
