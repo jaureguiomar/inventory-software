@@ -4,11 +4,13 @@
       Menu
          template(#left-content)
             router-link(to="/")
-               <font-awesome-icon icon="fa-solid fa-arrow-left" />
+               font-awesome-icon(icon="fa-solid fa-arrow-left")
             p Clients
          template(#right-content)
             a(href="#_" @click="onClientAddWindowClick")
-               <font-awesome-icon icon="fa-solid fa-plus" />
+               font-awesome-icon(icon="fa-solid fa-plus")
+            a(href="#_" @click="onRefreshData")
+               font-awesome-icon(icon="fa-solid fa-arrows-rotate")
          template(#subtitle) Descriptions about the clients view
       Content
          template(#content)
@@ -97,9 +99,9 @@
                            b-col {{ row.item.email }}
                   template(#cell(actions)="row")
                      a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
-                        <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+                        font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick(row.item)")
-                        <font-awesome-icon icon="fa-solid fa-xmark" />
+                        font-awesome-icon(icon="fa-solid fa-xmark")
 
                b-col(sm="12" md="12" class="my-1")
                   b-pagination(
@@ -202,31 +204,10 @@ export default Vue.extend({
       ])
    },
    created() {
-      const vue_this = this;
-      Vue.prototype.$http.get("client/v3/select-all.php")
-         .then(function (response:AxiosResponse) {
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data;
-                  vue_this.data.client = data.data;
-                  vue_this.table.totalRows = data.data.length;
-               } else {
-                  vue_this.$fire({
-                     title: "Error",
-                     text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-                     type: "error"
-                  });
-               }
-            } else {
-               vue_this.$fire({
-                  title: "Error",
-                  text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
-                  type: "error"
-               });
-            }
-         });
+      this.onRefreshData();
 
       if(!this.getClientLoadedReply) {
+         const vue_this = this;
          window.api.receive("main-window-client-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
@@ -273,6 +254,33 @@ export default Vue.extend({
       }
    },
    methods: {
+      onRefreshData() {
+         const vue_this = this;
+         this.data.client = [];
+
+         Vue.prototype.$http.get("client/v3/select-all.php")
+            .then(function (response:AxiosResponse) {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data;
+                     vue_this.data.client = data.data;
+                     vue_this.table.totalRows = data.data.length;
+                  } else {
+                     vue_this.$fire({
+                        title: "Error",
+                        text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                        type: "error"
+                     });
+                  }
+               } else {
+                  vue_this.$fire({
+                     title: "Error",
+                     text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                     type: "error"
+                  });
+               }
+            });
+      },
       onClientAddWindowClick() {
          window.api.send("client-module-window", {
             id: -1,
