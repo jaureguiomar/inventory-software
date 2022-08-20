@@ -7,40 +7,40 @@
                router-link(to="/client")
                   <font-awesome-icon icon="fa-solid fa-users" size="4x" />
             div.home-item
-               router-link(to="/client")
+               router-link(to="/supplier")
                   <font-awesome-icon icon="fa-solid fa-users" size="4x" />
             div.home-item
-               router-link(to="/client")
+               router-link(to="/product")
                   <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-         div.home-row
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-         div.home-row
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-            div.home-item
-               router-link(to="/client")
-                  <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //- div.home-row
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //- div.home-row
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
+         //-    div.home-item
+         //-       router-link(to="/client")
+         //-          <font-awesome-icon icon="fa-solid fa-users" size="4x" />
 </template>
 
 <script lang="ts">
