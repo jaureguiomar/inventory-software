@@ -11,12 +11,12 @@
          Banner
          Menu
             template(#left-content)
-               p Delete Client
-            template(#subtitle) The clients that will be deleted from the system
+               p {{ $t("client.window.delete.title") }}
+            template(#subtitle) {{ $t("client.window.delete.subtitle") }}
          Content
             template(#content)
                div(v-if="id > 0" class="form-group row")
-                  label(class="col-sm-2 col-form-label") ID
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.id") }}:
                   div(class="col-sm-2")
                      input(
                         v-model="id"
@@ -25,7 +25,7 @@
                         disabled
                      )
                div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") First Name
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.first_name") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="first_name"
@@ -34,7 +34,7 @@
                         placeholder="Enter first name"
                         disabled
                      )
-                  label(class="col-sm-2 col-form-label") Last Name
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.last_name") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="last_name"
@@ -44,7 +44,7 @@
                         disabled
                      )
                div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") Address
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.address") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="address"
@@ -53,7 +53,7 @@
                         placeholder="Enter address"
                         disabled
                      )
-                  label(class="col-sm-2 col-form-label") Cellphone
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.cellphone") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="cellphone"
@@ -63,7 +63,7 @@
                         disabled
                      )
                div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") Cellphone 2
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.cellphone2") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="cellphone2"
@@ -72,7 +72,7 @@
                         placeholder="Enter cellphone 2"
                         disabled
                      )
-                  label(class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.email") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="email"
@@ -82,8 +82,8 @@
                         disabled
                      )
                div.text-center
-                  button( type="submit" class="btn btn-danger text-center mr-2" @click="onDelete") Delete
-                  button(type="clear" class="btn btn-info text-center" @click="onClose") Close
+                  button( type="submit" class="btn btn-danger text-center mr-2" @click="onDelete") {{ $t("client.window.delete.button.delete") }}
+                  button(type="clear" class="btn btn-info text-center" @click="onClose") {{ $t("client.window.button.close") }}
 </template>
 
 <script lang="ts">
@@ -142,7 +142,7 @@ export default mixins(defaultMixin).extend({
             if(response.data.error.is_error) {
                this.$fire({
                   title: "Error",
-                  text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  text: this.$t("global.default_error") as string,
                   type: "error"
                });
                return;
@@ -150,14 +150,17 @@ export default mixins(defaultMixin).extend({
          } else {
             this.$fire({
                title: "Error",
-               text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+               text: this.$t("global.default_error") as string,
                type: "error"
             });
             return;
          }
 
          const vue_this = this;
-         window.api.send("client-module-window-dialog", "delete");
+         window.api.send("client-module-window-dialog", {
+            type: "delete",
+            message: "The client has been deleted properly"
+         });
          window.api.receive("client-module-window-dialog-reply", () => {
             window.api.send("client-module-window-close", {
                id: vue_this.id,

@@ -5,13 +5,13 @@
          template(#left-content)
             router-link(to="/")
                font-awesome-icon(icon="fa-solid fa-arrow-left")
-            p Clients
+            p {{ $t("client.title") }}
          template(#right-content)
             a(href="#_" @click="onClientAddWindowClick")
                font-awesome-icon(icon="fa-solid fa-plus")
             a(href="#_" @click="onRefreshData")
                font-awesome-icon(icon="fa-solid fa-arrows-rotate")
-         template(#subtitle) Descriptions about the clients view
+         template(#subtitle) {{ $t("client.subtitle") }}
       Content
          template(#content)
             b-row
@@ -21,7 +21,7 @@
                      v-model="table.filter"
                      type="search"
                      size="sm"
-                     placeholder="Search..."
+                     :placeholder="$t('client.table.search')"
                   )
                b-col(lg="6" class="mb-2")
                   b-form-select(
@@ -45,21 +45,21 @@
                   :sort-desc.sync="table.sortDesc"
                   :sort-direction="table.sortDirection"
                   stacked="md"
-                  show-empty
-                  empty-text="Theres no data to display"
-                  empty-filtered-text="Theres no data to display"
+                  show-emptya
+                  :empty-text="$t('client.table.content.details.empty')"
+                  :empty-filtered-text="$t('client.table.content.details.empty')"
                   small
                   filter-debounce="600"
                   @filtered="onFiltered"
                   hover
                )
                   template(#cell(details)="row")
-                     b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? "Hide" : "Show" }} details
+                     b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? $t("client.table.content.details.hide_details") : $t("client.table.content.details.show_details") }}
                   template(#row-details="row")
                      b-card
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b # Client:
+                              b {{ $t("client.table.content.id") }}:
                            b-col {{ row.item.id }}
                         //- b-row(class="mb-1")
                         //-    b-col(sm="3" class="text-sm-right")
@@ -67,35 +67,35 @@
                         //-    b-col {{ (row.item.is_active) ? row.item.is_active : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Date Created:
+                              b {{ $t("client.table.content.created") }}:
                            b-col {{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0, true) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Date Updated:
+                              b {{ $t("client.table.content.updated") }}:
                            b-col {{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0, true) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b First Name:
+                              b {{ $t("client.table.content.first_name") }}:
                            b-col {{ row.item.first_name }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Last Name:
+                              b {{ $t("client.table.content.last_name") }}:
                            b-col {{ row.item.last_name }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Address:
+                              b {{ $t("client.table.content.address") }}:
                            b-col {{ row.item.address }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Cellphone:
+                              b {{ $t("client.table.content.cellphone") }}:
                            b-col {{ row.item.cellphone }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Cellphone 2:
+                              b {{ $t("client.table.content.cellphone2") }}:
                            b-col {{ (row.item.cellphone2) ? row.item.cellphone2 : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b Email:
+                              b {{ $t("client.table.content.email") }}:
                            b-col {{ row.item.email }}
                   template(#cell(actions)="row")
                      a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
@@ -138,10 +138,16 @@ export default Vue.extend({
          table: {
             selected: -1,
             fields: [
-               { key: "id", label: "ID Client", sortable: true, sortDirection: "desc", class: "text-center" },
+               {
+                  key: "id",
+                  label: this.$t("client.table.field.id"),
+                  sortable: true,
+                  sortDirection: "desc",
+                  class: "text-center"
+               },
                {
                   key: "created",
-                  label: "Created",
+                  label: this.$t("client.table.field.created"),
                   sortable: false,
                   sortByFormatted: true,
                   filterByFormatted: true,
@@ -178,10 +184,30 @@ export default Vue.extend({
                      return new_date;
                   }
                },
-               { key: "first_name", label: "First Name", sortable: true, class: "text-center" },
-               { key: "last_name", label: "Last Name", sortable: true, class: "text-center" },
-               { key: "details", label: "Show details", sortable: true, class: "text-center" },
-               { key: "actions", label: "Actions", sortable: false, class: "text-center" }
+               {
+                  key: "first_name",
+                  label: this.$t("client.table.field.first_name"),
+                  sortable: true,
+                  class: "text-center"
+               },
+               {
+                  key: "last_name",
+                  label: this.$t("client.table.field.last_name"),
+                  sortable: true,
+                  class: "text-center"
+               },
+               {
+                  key: "details",
+                  label: this.$t("client.table.field.show_details"),
+                  sortable: true,
+                  class: "text-center"
+               },
+               {
+                  key: "actions",
+                  label: this.$t("client.table.field.actions"),
+                  sortable: false,
+                  class: "text-center"
+               }
             ],
             totalRows: 1,
             currentPage: 1,
@@ -268,14 +294,14 @@ export default Vue.extend({
                   } else {
                      vue_this.$fire({
                         title: "Error",
-                        text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                        text: vue_this.$t("global.default_error") as string,
                         type: "error"
                      });
                   }
                } else {
                   vue_this.$fire({
                      title: "Error",
-                     text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                     text: vue_this.$t("global.default_error") as string,
                      type: "error"
                   });
                }
@@ -286,8 +312,8 @@ export default Vue.extend({
             id: -1,
             type: "add",
             content: {
-               title: "Add Client",
-               description: "The clients that will be added for the use of the system"
+               title: this.$t("client.window.add.title"),
+               description: this.$t("client.window.add.subtitle")
             },
             data: null
          });
@@ -297,8 +323,8 @@ export default Vue.extend({
             id: item.id,
             type: "update",
             content: {
-               title: "Update Client",
-               description: "The clients that will be updated for the use of the system"
+               title: this.$t("client.window.update.title"),
+               description: this.$t("client.window.update.subtitle")
             },
             data: {
                first_name: item.first_name,

@@ -16,11 +16,11 @@
          Content
             template(#content)
                div(v-if="id > 0" class="form-group row")
-                  label(class="col-sm-2 col-form-label") ID
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.id") }}:
                   div(class="col-sm-2")
                      input(v-model="id" type="text" class="form-control" disabled)
                div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") First Name
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.first_name") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="data.first_name.text"
@@ -39,7 +39,7 @@
                      ) {{ data.first_name.text.length }}/{{ data.first_name.max_text }}
                      div(v-if="data.first_name.error.is_error" class="invalid-feedback text-left") {{ data.first_name.error.message }}
 
-                  label(class="col-sm-2 col-form-label") Last Name
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.last_name") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="data.last_name.text"
@@ -58,7 +58,7 @@
                      div(v-if="data.last_name.error.is_error" class="invalid-feedback text-left") {{ data.last_name.error.message }}
 
                div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") Address
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.address") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="data.address.text"
@@ -76,7 +76,7 @@
                      ) {{ data.address.text.length }}/{{ data.address.max_text }}
                      div(v-if="data.address.error.is_error" class="invalid-feedback text-left") {{ data.address.error.message }}
 
-                  label(class="col-sm-2 col-form-label") Cellphone
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.cellphone") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="data.cellphone.text"
@@ -95,7 +95,7 @@
                      div(v-if="data.cellphone.error.is_error" class="invalid-feedback text-left") {{ data.cellphone.error.message }}
 
                div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") Cellphone 2
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.cellphone2") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="data.cellphone2.text"
@@ -111,7 +111,7 @@
                      ) {{ data.cellphone2.text.length }}/{{ data.cellphone2.max_text }}
                      div(v-if="data.cellphone2.error.is_error" class="invalid-feedback text-left") {{ data.cellphone2.error.message }}
 
-                  label(class="col-sm-2 col-form-label") Email
+                  label(class="col-sm-2 col-form-label") {{ $t("client.window.field.email") }}:
                   div(class="col-sm-4")
                      input(
                         v-model="data.email.text"
@@ -130,9 +130,9 @@
                      div(v-if="data.email.error.is_error" class="invalid-feedback text-left") {{ data.email.error.message }}
 
                div.text-center
-                  button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? "Add" : "Update" }}
-                  button(type="clear" class="btn btn-danger text-center mr-2" @click="onClear") Clear
-                  button(type="clear" class="btn btn-info text-center" @click="onClose") Close
+                  button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? $t("client.window.add.button.add") : $t("client.window.update.button.update") }}
+                  button(type="clear" class="btn btn-danger text-center mr-2" @click="onClear") {{ $t("client.window.button.clear") }}
+                  button(type="clear" class="btn btn-info text-center" @click="onClose") {{ $t("client.window.button.close") }}
 </template>
 
 <script lang="ts">
@@ -278,7 +278,7 @@ export default mixins(defaultMixin).extend({
                } else {
                   this.$fire({
                      title: "Error",
-                     text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                     text: this.$t("global.default_error") as string,
                      type: "error"
                   });
                   return;
@@ -286,7 +286,7 @@ export default mixins(defaultMixin).extend({
             } else {
                this.$fire({
                   title: "Error",
-                  text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  text: this.$t("global.default_error") as string,
                   type: "error"
                });
                return;
@@ -307,7 +307,7 @@ export default mixins(defaultMixin).extend({
                } else {
                   this.$fire({
                      title: "Error",
-                     text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                     text: this.$t("global.default_error") as string,
                      type: "error"
                   });
                   return;
@@ -315,7 +315,7 @@ export default mixins(defaultMixin).extend({
             } else {
                this.$fire({
                   title: "Error",
-                  text: "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+                  text: this.$t("global.default_error") as string,
                   type: "error"
                });
                return;
@@ -323,7 +323,16 @@ export default mixins(defaultMixin).extend({
          }
 
          const vue_this = this;
-         window.api.send("client-module-window-dialog", this.type);
+         let message = "";
+         if(this.type === "add")
+            message = "The client has been added properly";
+         else if(this.type === "update")
+            message = "The client has been updated properly";
+
+         window.api.send("client-module-window-dialog", {
+            type: this.type,
+            message: message
+         });
          window.api.receive("client-module-window-dialog-reply", () => {
             window.api.send("client-module-window-close", {
                id: vue_this.id,

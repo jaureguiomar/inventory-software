@@ -1,7 +1,7 @@
 <template lang="pug">
    div.banner
-      div.logo Inventory
-      div.text System
+      div.logo {{ $t("banner.inventory") }}
+      div.text {{ $t("banner.system") }}
 </template>
 
 <script lang="ts">

@@ -187,20 +187,12 @@ ipcMain.on("client-module-window", function(e, data) {
    }
 });
 
-ipcMain.on("client-module-window-dialog", function(e, type) {
-   let message = "";
-   if(type === "add")
-      message = "The client has been added properly";
-   else if(type === "update")
-      message = "The client has been updated properly";
-   else if(type === "delete")
-      message = "The client has been deleted properly";
-
-   dialog.showMessageBox(window.client[type], {
+ipcMain.on("client-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.client[data.type], {
       title: "System message",
       buttons: ["Ok"],
       type: "info",
-      message: message,
+      message: data.message,
    }).then(() => {
       e.sender.send("client-module-window-dialog-reply");
    });
