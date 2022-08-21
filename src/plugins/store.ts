@@ -6,15 +6,24 @@ const store = new Vuex.Store({
    state: {
       client: {
          loaded_reply: false
+      },
+      supplier: {
+         loaded_reply: false
       }
    },
    getters: {
       getClientLoadedReply(state) {
          return state.client.loaded_reply;
+      },
+      getSupplierLoadedReply(state) {
+         return state.supplier.loaded_reply;
       }
    },
    mutations: {
-      SET_CLIENTT_LOADED_REPLY: (state, data:boolean) => {
+      SET_CLIENT_LOADED_REPLY: (state, data:boolean) => {
+         state.client.loaded_reply = data;
+      },
+      SET_SUPPLIER_LOADED_REPLY: (state, data:boolean) => {
          state.client.loaded_reply = data;
       }
    }

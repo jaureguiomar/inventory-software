@@ -74,6 +74,62 @@ const messages = {
             }
          }
       },
+      supplier: {
+         title: "Suppliers",
+         subtitle: "Description about the suppliers view",
+         table: {
+            search: "Search...",
+            field: {
+               id: "Id Supplier",
+               created: "Created",
+               name: "Name",
+               show_details: "Show details",
+               actions: "Actions"
+            },
+            content: {
+               id: "# Supplier",
+               created: "Date Created",
+               updated: "Date Updated",
+               name: "Name",
+               details: {
+                  show_details: "Show details",
+                  hide_details: "Hide details",
+                  empty: "Theres no data to display"
+               }
+            }
+         },
+         window: {
+            add: {
+               title: "Add Supplier",
+               subtitle: "The suppliers that will be added for the use of the system",
+               button: {
+                  add: "Add"
+               }
+            },
+            update: {
+               title: "Update Supplier",
+               subtitle: "The suppliers that will be updated for the use of the system",
+               button: {
+                  update: "Update"
+               }
+            },
+            delete: {
+               title: "Delete Supplier",
+               subtitle: "The suppliers that will be deleted from the system",
+               button: {
+                  delete: "Delete",
+               }
+            },
+            field: {
+               id: "ID",
+               name: "Name"
+            },
+            button: {
+               clear: "Clear",
+               close: "Close"
+            }
+         }
+      },
       global: {
          default_error: "An unexpected error has occurred. Please, try again"
       }

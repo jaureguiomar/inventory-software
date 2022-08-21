@@ -5,13 +5,13 @@
          template(#left-content)
             router-link(to="/")
                font-awesome-icon(icon="fa-solid fa-arrow-left")
-            p {{ $t("client.title") }}
+            p {{ $t("supplier.title") }}
          template(#right-content)
-            a(href="#_" @click="onClientAddWindowClick")
+            a(href="#_" @click="onSupplierAddWindowClick")
                font-awesome-icon(icon="fa-solid fa-plus")
             a(href="#_" @click="onRefreshData")
                font-awesome-icon(icon="fa-solid fa-arrows-rotate")
-         template(#subtitle) {{ $t("client.subtitle") }}
+         template(#subtitle) {{ $t("supplier.subtitle") }}
       Content
          template(#content)
             b-row
@@ -21,7 +21,7 @@
                      v-model="table.filter"
                      type="search"
                      size="sm"
-                     :placeholder="$t('client.table.search')"
+                     :placeholder="$t('supplier.table.search')"
                   )
                b-col(lg="6" class="mb-2")
                   b-form-select(
@@ -35,7 +35,7 @@
                //- :select-mode="'single'"
                //- @row-selected="onRowClick"
                b-table(
-                  :items="data.client"
+                  :items="data.supplier"
                   :fields="table.fields"
                   :current-page="table.currentPage"
                   :per-page="table.perPage"
@@ -46,20 +46,20 @@
                   :sort-direction="table.sortDirection"
                   stacked="md"
                   show-emptya
-                  :empty-text="$t('client.table.content.details.empty')"
-                  :empty-filtered-text="$t('client.table.content.details.empty')"
+                  :empty-text="$t('supplier.table.content.details.empty')"
+                  :empty-filtered-text="$t('supplier.table.content.details.empty')"
                   small
                   filter-debounce="600"
                   @filtered="onFiltered"
                   hover
                )
                   template(#cell(details)="row")
-                     b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? $t("client.table.content.details.hide_details") : $t("client.table.content.details.show_details") }}
+                     b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? $t("supplier.table.content.details.hide_details") : $t("supplier.table.content.details.show_details") }}
                   template(#row-details="row")
                      b-card
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.id") }}:
+                              b {{ $t("supplier.table.content.id") }}:
                            b-col {{ row.item.id }}
                         //- b-row(class="mb-1")
                         //-    b-col(sm="3" class="text-sm-right")
@@ -67,40 +67,20 @@
                         //-    b-col {{ (row.item.is_active) ? row.item.is_active : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.created") }}:
+                              b {{ $t("supplier.table.content.created") }}:
                            b-col {{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0, true) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.updated") }}:
+                              b {{ $t("supplier.table.content.updated") }}:
                            b-col {{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0, true) : "---" }}
                         b-row(class="mb-1")
                            b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.first_name") }}:
-                           b-col {{ row.item.first_name }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.last_name") }}:
-                           b-col {{ row.item.last_name }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.address") }}:
-                           b-col {{ row.item.address }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.cellphone") }}:
-                           b-col {{ row.item.cellphone }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.cellphone2") }}:
-                           b-col {{ (row.item.cellphone2) ? row.item.cellphone2 : "---" }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("client.table.content.email") }}:
-                           b-col {{ row.item.email }}
+                              b {{ $t("supplier.table.content.name") }}:
+                           b-col {{ row.item.name }}
                   template(#cell(actions)="row")
-                     a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
+                     a(class="btn btn-primary mr-2" href="#_" @click="onSupplierUpdateWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-pen-to-square")
-                     a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick(row.item)")
+                     a(class="btn btn-danger" href="#_" @click="onSupplierDeleteWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-xmark")
 
                b-col(sm="12" md="12" class="my-1")
@@ -117,13 +97,13 @@
 <script lang="ts">
 import Vue from "vue"
 import { mapGetters } from "vuex";
-import { Props, AxiosResponse, WindowResponse, Client } from "../interfaces/client/client";
+import { Props, AxiosResponse, WindowResponse, Supplier } from "../interfaces/supplier/supplier";
 import Banner from "../views/layout/Banner.vue";
 import Menu from "../views/layout/Menu.vue";
 import Content from "../views/layout/Content.vue";
 
 export default Vue.extend({
-   name: "client-component",
+   name: "supplier-component",
    components: {
       Banner,
       Menu,
@@ -132,22 +112,22 @@ export default Vue.extend({
    data() {
       return {
          data: {
-            client: [],
-            new_client: {}
+            supplier: [],
+            new_supplier: {}
          },
          table: {
             selected: -1,
             fields: [
                {
                   key: "id",
-                  label: this.$t("client.table.field.id"),
+                  label: this.$t("supplier.table.field.id"),
                   sortable: true,
                   sortDirection: "desc",
                   class: "text-center"
                },
                {
                   key: "created",
-                  label: this.$t("client.table.field.created"),
+                  label: this.$t("supplier.table.field.created"),
                   sortable: false,
                   sortByFormatted: true,
                   filterByFormatted: true,
@@ -185,26 +165,20 @@ export default Vue.extend({
                   }
                },
                {
-                  key: "first_name",
-                  label: this.$t("client.table.field.first_name"),
-                  sortable: true,
-                  class: "text-center"
-               },
-               {
-                  key: "last_name",
-                  label: this.$t("client.table.field.last_name"),
+                  key: "name",
+                  label: this.$t("supplier.table.field.name"),
                   sortable: true,
                   class: "text-center"
                },
                {
                   key: "details",
-                  label: this.$t("client.table.field.show_details"),
+                  label: this.$t("supplier.table.field.show_details"),
                   sortable: true,
                   class: "text-center"
                },
                {
                   key: "actions",
-                  label: this.$t("client.table.field.actions"),
+                  label: this.$t("supplier.table.field.actions"),
                   sortable: false,
                   class: "text-center"
                }
@@ -226,70 +200,65 @@ export default Vue.extend({
    },
    computed: {
       ...mapGetters([
-         "getClientLoadedReply"
+         "getSupplierLoadedReply"
       ])
    },
    created() {
       this.onRefreshData();
 
-      if(!this.getClientLoadedReply) {
+      if(!this.getSupplierLoadedReply) {
          const vue_this = this;
-         window.api.receive("main-window-client-module-reply", (data:WindowResponse) => {
+         window.api.receive("main-window-supplier-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     vue_this.data.client.push(data.data);
+                     vue_this.data.supplier.push(data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
-                  for(let i = 0; i < vue_this.data.client.length; i++) {
-                     const curr_client = vue_this.data.client[i];
-                     if(curr_client.id == data.id) {
+                  for(let i = 0; i < vue_this.data.supplier.length; i++) {
+                     const curr_supplier = vue_this.data.supplier[i];
+                     if(curr_supplier.id == data.id) {
                         finded_index = i;
                         break;
                      }
                   }
                   if(finded_index > 0) {
                      if(data.data) {
-                        vue_this.data.client[finded_index].id = data.data.id;
-                        vue_this.data.client[finded_index].is_active = data.data.is_active;
-                        vue_this.data.client[finded_index].created = data.data.created;
-                        vue_this.data.client[finded_index].updated = data.data.updated;
-                        vue_this.data.client[finded_index].first_name = data.data.first_name;
-                        vue_this.data.client[finded_index].last_name = data.data.last_name;
-                        vue_this.data.client[finded_index].address = data.data.address;
-                        vue_this.data.client[finded_index].cellphone = data.data.cellphone;
-                        vue_this.data.client[finded_index].cellphone2 = data.data.cellphone2;
-                        vue_this.data.client[finded_index].email = data.data.email;
+                        vue_this.data.supplier[finded_index].id = data.data.id;
+                        vue_this.data.supplier[finded_index].is_active = data.data.is_active;
+                        vue_this.data.supplier[finded_index].created = data.data.created;
+                        vue_this.data.supplier[finded_index].updated = data.data.updated;
+                        vue_this.data.supplier[finded_index].name = data.data.name;
                      }
                   }
                } else if(data.type === "delete") {
                   let finded_index = -1;
-                  for(let i = 0; i < vue_this.data.client.length; i++) {
-                     const curr_client = vue_this.data.client[i];
-                     if(curr_client.id == data.id) {
+                  for(let i = 0; i < vue_this.data.supplier.length; i++) {
+                     const curr_supplier = vue_this.data.supplier[i];
+                     if(curr_supplier.id == data.id) {
                         finded_index = i;
                         break;
                      }
                   }
                   if(finded_index > 0)
-                     vue_this.data.client.splice(finded_index, 1);
+                     vue_this.data.supplier.splice(finded_index, 1);
                }
             }
          });
-         this.$store.commit("SET_CLIENT_LOADED_REPLY", true);
+         this.$store.commit("SET_SUPPLIER_LOADED_REPLY", true);
       }
    },
    methods: {
       onRefreshData() {
          const vue_this = this;
-         this.data.client = [];
+         this.data.supplier = [];
 
-         Vue.prototype.$http.get("client/v3/select-all.php")
+         Vue.prototype.$http.get("supplier/v3/select-all.php")
             .then(function (response:AxiosResponse) {
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data;
-                     vue_this.data.client = data.data;
+                     vue_this.data.supplier = data.data;
                      vue_this.table.totalRows = data.data.length;
                   } else {
                      vue_this.$fire({
@@ -307,46 +276,36 @@ export default Vue.extend({
                }
             });
       },
-      onClientAddWindowClick() {
-         window.api.send("client-module-window", {
+      onSupplierAddWindowClick() {
+         window.api.send("supplier-module-window", {
             id: -1,
             type: "add",
             content: {
-               title: this.$t("client.window.add.title"),
-               description: this.$t("client.window.add.subtitle")
+               title: this.$t("supplier.window.add.title"),
+               description: this.$t("supplier.window.add.subtitle")
             },
             data: null
          });
       },
-      onClientUpdateWindowClick(item:Client) {
-         window.api.send("client-module-window", {
+      onSupplierUpdateWindowClick(item:Supplier) {
+         window.api.send("supplier-module-window", {
             id: item.id,
             type: "update",
             content: {
-               title: this.$t("client.window.update.title"),
-               description: this.$t("client.window.update.subtitle")
+               title: this.$t("supplier.window.update.title"),
+               description: this.$t("supplier.window.update.subtitle")
             },
             data: {
-               first_name: item.first_name,
-               last_name: item.last_name,
-               address: item.address,
-               cellphone: item.cellphone,
-               cellphone2: item.cellphone2,
-               email: item.email
+               name: item.name
             }
          });
       },
-      onClientDeleteWindowClick(item:Client) {
-         window.api.send("client-module-window", {
+      onSupplierDeleteWindowClick(item:Supplier) {
+         window.api.send("supplier-module-window", {
             id: item.id,
             type: "delete",
             data: {
-               first_name: item.first_name,
-               last_name: item.last_name,
-               address: item.address,
-               cellphone: item.cellphone,
-               cellphone2: item.cellphone2,
-               email: item.email
+               name: item.name
             }
          });
       },

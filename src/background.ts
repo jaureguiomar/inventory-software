@@ -22,6 +22,11 @@ const window = {
       add: null as any,
       update: null as any,
       delete: null as any
+   },
+   supplier: {
+      add: null as any,
+      update: null as any,
+      delete: null as any
    }
 };
 
@@ -146,6 +151,7 @@ autoUpdater.on("error", (message) => {
 
  ///////////////////////////////
 // Listen for ipcMain Events //
+// Client
 ipcMain.on("client-module-window", function(e, data) {
    if(!window.client[data.type] || window.client[data.type].isDestroyed()) {
       window.client[data.type] = new BrowserWindow({
@@ -186,7 +192,6 @@ ipcMain.on("client-module-window", function(e, data) {
       window.client[data.type].focus();
    }
 });
-
 ipcMain.on("client-module-window-dialog", function(e, data) {
    dialog.showMessageBox(window.client[data.type], {
       title: "System message",
@@ -197,11 +202,67 @@ ipcMain.on("client-module-window-dialog", function(e, data) {
       e.sender.send("client-module-window-dialog-reply");
    });
 });
-
 ipcMain.on("client-module-window-close", function(e, data) {
    window.client[data.type].destroy();
    window.client[data.type] = null;
    window.main.webContents.send("main-window-client-module-reply", data);
+});
+
+// Supplier
+ipcMain.on("supplier-module-window", function(e, data) {
+   if(!window.supplier[data.type] || window.supplier[data.type].isDestroyed()) {
+      window.supplier[data.type] = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preloadSupplier.js")
+         }
+      });
+      // window.supplier[data.type].removeMenu();
+      window.supplier[data.type].maximize();
+
+      let setURL = "";
+      if(data.type === "add")
+         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/supplier-add" : `file://${__dirname}/index.html#/supplier-add`;
+      else if(data.type === "update")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-update/${data.id}` : `file://${__dirname}/index.html#/supplier-update/${data.id}`;
+      else if(data.type === "delete")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-delete/${data.id}` : `file://${__dirname}/index.html#/supplier-delete/${data.id}`;
+
+      window.supplier[data.type].loadURL(setURL);
+      window.supplier[data.type].show();
+      if(!process.env.IS_TEST)
+         window.supplier[data.type].webContents.openDevTools();
+
+      window.supplier[data.type].webContents.once("did-finish-load", function () {
+         window.supplier[data.type].webContents.send("supplier-module-window-reply", data);
+      });
+      window.supplier[data.type].once("close", function () {
+         window.supplier[data.type].destroy();
+         window.supplier[data.type] = null;
+      });
+   } else {
+      window.supplier[data.type].focus();
+   }
+});
+ipcMain.on("supplier-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.supplier[data.type], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: data.message,
+   }).then(() => {
+      e.sender.send("supplier-module-window-dialog-reply");
+   });
+});
+ipcMain.on("supplier-module-window-close", function(e, data) {
+   window.supplier[data.type].destroy();
+   window.supplier[data.type] = null;
+   window.main.webContents.send("main-window-supplier-module-reply", data);
 });
 ///////////////////////////////////
 ///////////////////////////////////

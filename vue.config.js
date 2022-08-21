@@ -6,7 +6,8 @@ module.exports = defineConfig({
       externals: ["escpos", "escpos-usb"],
       preload: {
         preload: "src/preload.ts",
-        preloadClient: "src/preloadClient.ts"
+        preloadClient: "src/preloadClient.ts",
+        preloadSupplier: "src/preloadSupplier.ts"
       },
       builderOptions: {
         extraResources: [
