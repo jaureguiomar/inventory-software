@@ -45,6 +45,7 @@ export default Vue.extend({
          text-align: center
          padding: 17px
          color: #05386b
+         border-radius: 17px
          transition: 0.3s
          &:hover
             background: #05386b
