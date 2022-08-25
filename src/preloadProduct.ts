@@ -3,12 +3,12 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld(
    "api", {
       send: (channel:string, data) => {
-         const validChannels:Array<string> = ["client-module-window", "supplier-module-window", "product-module-window"];
+         const validChannels:Array<string> = ["product-module-window-dialog", "product-module-window-close"];
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);
       },
       receive: (channel:string, func) => {
-         const validChannels:Array<string> = ["main-window-client-module-reply", "main-window-supplier-module-reply", "main-window-product-module-reply"];
+         const validChannels:Array<string> = ["product-module-window-dialog-reply", "product-module-window-reply"];
          if(validChannels.includes(channel))
             ipcRenderer.on(channel, (event, ...args) => func(...args));
       }

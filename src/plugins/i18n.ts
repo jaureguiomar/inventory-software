@@ -130,6 +130,77 @@ const messages = {
             }
          }
       },
+      product: {
+         title: "Products",
+         subtitle: "Description about the products view",
+         table: {
+            search: "Search...",
+            field: {
+               id: "Id Product",
+               created: "Created",
+               code: "Code",
+               name: "Name",
+               description: "Description",
+               buy_price: "Buy Price",
+               sale_price: "Sale Price",
+               quantity: "Quantity",
+               show_details: "Show details",
+               actions: "Actions"
+            },
+            content: {
+               id: "# Product",
+               created: "Date Created",
+               updated: "Date Updated",
+               code: "Code",
+               name: "Name",
+               description: "Description",
+               buy_price: "Buy Price",
+               sale_price: "Sale Price",
+               quantity: "Quantity",
+               details: {
+                  show_details: "Show details",
+                  hide_details: "Hide details",
+                  empty: "Theres no data to display"
+               }
+            }
+         },
+         window: {
+            add: {
+               title: "Add Product",
+               subtitle: "The productss that will be added for the use of the system",
+               button: {
+                  add: "Add"
+               }
+            },
+            update: {
+               title: "Update Product",
+               subtitle: "The productss that will be updated for the use of the system",
+               button: {
+                  update: "Update"
+               }
+            },
+            delete: {
+               title: "Delete Product",
+               subtitle: "The productss that will be deleted from the system",
+               button: {
+                  delete: "Delete",
+               }
+            },
+            field: {
+               id: "ID",
+               code: "Code",
+               name: "Name",
+               description: "Description",
+               buy_price: "Buy Price",
+               sale_price: "Sale Price",
+               quantity: "Quantity",
+            },
+            button: {
+               clear: "Clear",
+               close: "Close"
+            }
+         }
+      },
       global: {
          default_error: "An unexpected error has occurred. Please, try again"
       }

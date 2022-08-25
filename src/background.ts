@@ -27,6 +27,11 @@ const window = {
       add: null as any,
       update: null as any,
       delete: null as any
+   },
+   product: {
+      add: null as any,
+      update: null as any,
+      delete: null as any
    }
 };
 
@@ -263,6 +268,63 @@ ipcMain.on("supplier-module-window-close", function(e, data) {
    window.supplier[data.type].destroy();
    window.supplier[data.type] = null;
    window.main.webContents.send("main-window-supplier-module-reply", data);
+});
+
+// Product
+ipcMain.on("product-module-window", function(e, data) {
+   if(!window.product[data.type] || window.product[data.type].isDestroyed()) {
+      window.product[data.type] = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preloadProduct.js")
+         }
+      });
+      // window.product[data.type].removeMenu();
+      window.product[data.type].maximize();
+
+      let setURL = "";
+      if(data.type === "add")
+         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/product-add" : `file://${__dirname}/index.html#/product-add`;
+      else if(data.type === "update")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-update/${data.id}` : `file://${__dirname}/index.html#/product-update/${data.id}`;
+      else if(data.type === "delete")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-delete/${data.id}` : `file://${__dirname}/index.html#/product-delete/${data.id}`;
+
+      window.product[data.type].loadURL(setURL);
+      window.product[data.type].show();
+      if(!process.env.IS_TEST)
+         window.product[data.type].webContents.openDevTools();
+
+      window.product[data.type].webContents.once("did-finish-load", function () {
+         window.product[data.type].webContents.send("product-module-window-reply", data);
+      });
+      window.product[data.type].once("close", function () {
+         window.product[data.type].destroy();
+         window.product[data.type] = null;
+      });
+   } else {
+      window.product[data.type].focus();
+   }
+});
+ipcMain.on("product-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.product[data.type], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: data.message,
+   }).then(() => {
+      e.sender.send("product-module-window-dialog-reply");
+   });
+});
+ipcMain.on("product-module-window-close", function(e, data) {
+   window.product[data.type].destroy();
+   window.product[data.type] = null;
+   window.main.webContents.send("main-window-product-module-reply", data);
 });
 ///////////////////////////////////
 ///////////////////////////////////

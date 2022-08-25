@@ -9,6 +9,9 @@ const store = new Vuex.Store({
       },
       supplier: {
          loaded_reply: false
+      },
+      product: {
+         loaded_reply: false
       }
    },
    getters: {
@@ -17,6 +20,9 @@ const store = new Vuex.Store({
       },
       getSupplierLoadedReply(state) {
          return state.supplier.loaded_reply;
+      },
+      getProductLoadedReply(state) {
+         return state.product.loaded_reply;
       }
    },
    mutations: {
@@ -25,6 +31,9 @@ const store = new Vuex.Store({
       },
       SET_SUPPLIER_LOADED_REPLY: (state, data:boolean) => {
          state.client.loaded_reply = data;
+      },
+      SET_PRODUCT_LOADED_REPLY: (state, data:boolean) => {
+         state.product.loaded_reply = data;
       }
    }
 });
