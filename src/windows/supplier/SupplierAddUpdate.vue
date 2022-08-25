@@ -33,101 +33,12 @@
                         @keyup="onNameKeyup"
                         :class="{ 'is-invalid': data.name.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.name.text.length <= data.name.max_text, 'badge-danger': data.name.text.length > data.name.max_text, 'error': data.name.error.is_error }"
-                     ) {{ data.name.text.length }}/{{ data.name.max_text }}
                      div(v-if="data.name.error.is_error" class="invalid-feedback text-left") {{ data.name.error.message }}
-
-               //-    label(class="col-sm-2 col-form-label") {{ $t("supplier.window.field.last_name") }}:
-               //-    div(class="col-sm-4")
-               //-       input(
-               //-          v-model="data.last_name.text"
-               //-          id="last-name"
-               //-          type="text"
-               //-          class="form-control"
-               //-          placeholder="Enter last name"
-               //-          @blur="onLastNameBlur"
-               //-          @keyup="onLastNameKeyup"
-               //-          :class="{ 'is-invalid': data.last_name.error.is_error }"
-               //-       )
-               //-       span(
-               //-          class="badge text-counter"
-               //-          :class="{ 'badge-primary': data.last_name.text.length <= data.last_name.max_text, 'badge-danger': data.last_name.text.length > data.last_name.max_text, 'error': data.last_name.error.is_error }"
-               //-       ) {{ data.last_name.text.length }}/{{ data.last_name.max_text }}
-               //-       div(v-if="data.last_name.error.is_error" class="invalid-feedback text-left") {{ data.last_name.error.message }}
-
-               //- div(class="form-group row")
-               //-    label(class="col-sm-2 col-form-label") {{ $t("supplier.window.field.address") }}:
-               //-    div(class="col-sm-4")
-               //-       input(
-               //-          v-model="data.address.text"
-               //-          id="address"
-               //-          type="text"
-               //-          class="form-control"
-               //-          placeholder="Enter address"
-               //-          @blur="onAddressBlur"
-               //-          @keyup="onAddressKeyup"
-               //-          :class="{ 'is-invalid': data.address.error.is_error }"
-               //-       )
-               //-       span(
-               //-          class="badge text-counter"
-               //-          :class="{ 'badge-primary': data.address.text.length <= data.address.max_text, 'badge-danger': data.address.text.length > data.address.max_text, 'error': data.address.error.is_error }"
-               //-       ) {{ data.address.text.length }}/{{ data.address.max_text }}
-               //-       div(v-if="data.address.error.is_error" class="invalid-feedback text-left") {{ data.address.error.message }}
-
-               //-    label(class="col-sm-2 col-form-label") {{ $t("supplier.window.field.cellphone") }}:
-               //-    div(class="col-sm-4")
-               //-       input(
-               //-          v-model="data.cellphone.text"
-               //-          id="cellphone"
-               //-          type="text"
-               //-          class="form-control"
-               //-          placeholder="Enter cellphone"
-               //-          @blur="onCellphoneBlur"
-               //-          @keyup="onCellphoneKeyup"
-               //-          :class="{ 'is-invalid': data.cellphone.error.is_error }"
-               //-       )
-               //-       span(
-               //-          class="badge text-counter"
-               //-          :class="{ 'badge-primary': data.cellphone.text.length <= data.cellphone.max_text, 'badge-danger': data.cellphone.text.length > data.cellphone.max_text, 'error': data.cellphone.error.is_error }"
-               //-       ) {{ data.cellphone.text.length }}/{{ data.cellphone.max_text }}
-               //-       div(v-if="data.cellphone.error.is_error" class="invalid-feedback text-left") {{ data.cellphone.error.message }}
-
-               //- div(class="form-group row")
-               //-    label(class="col-sm-2 col-form-label") {{ $t("supplier.window.field.cellphone2") }}:
-               //-    div(class="col-sm-4")
-               //-       input(
-               //-          v-model="data.cellphone2.text"
-               //-          id="cellphone2"
-               //-          type="text"
-               //-          class="form-control"
-               //-          placeholder="Enter cellphone 2"
-               //-          :class="{ 'is-invalid': data.cellphone2.error.is_error }"
-               //-       )
-               //-       span(
-               //-          class="badge text-counter"
-               //-          :class="{ 'badge-primary': data.cellphone2.text.length <= data.cellphone2.max_text, 'badge-danger': data.cellphone2.text.length > data.cellphone2.max_text, 'error': data.cellphone2.error.is_error }"
-               //-       ) {{ data.cellphone2.text.length }}/{{ data.cellphone2.max_text }}
-               //-       div(v-if="data.cellphone2.error.is_error" class="invalid-feedback text-left") {{ data.cellphone2.error.message }}
-
-               //-    label(class="col-sm-2 col-form-label") {{ $t("supplier.window.field.email") }}:
-               //-    div(class="col-sm-4")
-               //-       input(
-               //-          v-model="data.email.text"
-               //-          id="email"
-               //-          type="text"
-               //-          class="form-control"
-               //-          placeholder="Enter email"
-               //-          @blur="onEmailBlur"
-               //-          @keyup="onEmailKeyup"
-               //-          :class="{ 'is-invalid': data.email.error.is_error }"
-               //-       )
-               //-       span(
-               //-          class="badge text-counter"
-               //-          :class="{ 'badge-primary': data.email.text.length <= data.email.max_text, 'badge-danger': data.email.text.length > data.email.max_text, 'error': data.email.error.is_error }"
-               //-       ) {{ data.email.text.length }}/{{ data.email.max_text }}
-               //-       div(v-if="data.email.error.is_error" class="invalid-feedback text-left") {{ data.email.error.message }}
+                     BadgeCounter(
+                        :value="data.name.text"
+                        :maxText="data.name.max_text"
+                        :isError="data.name.error.is_error"
+                     )
 
                div.text-center
                   button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? $t("supplier.window.add.button.add") : $t("supplier.window.update.button.update") }}
@@ -143,6 +54,7 @@ import { Props, IPCParams, AxiosResponse, Supplier } from "../../interfaces/supp
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
+import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
 export default mixins(defaultMixin).extend({
    name: "supplier-add-update-component",
@@ -150,7 +62,8 @@ export default mixins(defaultMixin).extend({
    components: {
       Banner,
       Menu,
-      Content
+      Content,
+      BadgeCounter
    },
    data() {
       return {

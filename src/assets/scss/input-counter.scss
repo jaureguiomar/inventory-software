@@ -21,14 +21,13 @@ textarea.form-control.counter.is-invalid {
 
 .text-counter, .textarea-counter {
   position: absolute;
-  right: 1.6rem;
-  bottom: 0.62rem;
+  right: 1.7rem;
+  top: 0.62rem;
 }
 .text-counter.error, .text-counter.ok {
-  right: 2.9rem;
-  bottom: 2.09rem;
+  right: 3.1rem;
 }
 
 .textarea-counter.error, .textarea-counter.ok {
-  bottom: 2.1rem;
+  top: 2.1rem;
 }

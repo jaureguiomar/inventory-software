@@ -33,11 +33,12 @@
                         @keyup="onCodeKeyup"
                         :class="{ 'is-invalid': data.code.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.code.text.length <= data.code.max_text, 'badge-danger': data.code.text.length > data.code.max_text, 'error': data.code.error.is_error }"
-                     ) {{ data.code.text.length }}/{{ data.code.max_text }}
                      div(v-if="data.code.error.is_error" class="invalid-feedback text-left") {{ data.code.error.message }}
+                     BadgeCounter(
+                        :value="data.code.text"
+                        :maxText="data.code.max_text"
+                        :isError="data.code.error.is_error"
+                     )
 
                   label(class="col-sm-2 col-form-label") {{ $t("product.window.field.name") }}:
                   div(class="col-sm-4")
@@ -51,11 +52,12 @@
                         @keyup="onNameKeyup"
                         :class="{ 'is-invalid': data.name.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.name.text.length <= data.name.max_text, 'badge-danger': data.name.text.length > data.name.max_text, 'error': data.name.error.is_error }"
-                     ) {{ data.name.text.length }}/{{ data.name.max_text }}
                      div(v-if="data.name.error.is_error" class="invalid-feedback text-left") {{ data.name.error.message }}
+                     BadgeCounter(
+                        :value="data.name.text"
+                        :maxText="data.name.max_text"
+                        :isError="data.name.error.is_error"
+                     )
 
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") {{ $t("product.window.field.description") }}:
@@ -70,11 +72,12 @@
                         @keyup="onDescriptionKeyup"
                         :class="{ 'is-invalid': data.description.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.description.text.length <= data.description.max_text, 'badge-danger': data.description.text.length > data.description.max_text, 'error': data.description.error.is_error }"
-                     ) {{ data.description.text.length }}/{{ data.description.max_text }}
                      div(v-if="data.description.error.is_error" class="invalid-feedback text-left") {{ data.description.error.message }}
+                     BadgeCounter(
+                        :value="data.description.text"
+                        :maxText="data.description.max_text"
+                        :isError="data.description.error.is_error"
+                     )
 
                   label(class="col-sm-2 col-form-label") {{ $t("product.window.field.buy_price") }}:
                   div(class="col-sm-4")
@@ -88,11 +91,12 @@
                         @keyup="onBuyPriceKeyup"
                         :class="{ 'is-invalid': data.buy_price.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.buy_price.text.length <= data.buy_price.max_text, 'badge-danger': data.buy_price.text.length > data.buy_price.max_text, 'error': data.buy_price.error.is_error }"
-                     ) {{ data.buy_price.text.length }}/{{ data.buy_price.max_text }}
                      div(v-if="data.buy_price.error.is_error" class="invalid-feedback text-left") {{ data.buy_price.error.message }}
+                     BadgeCounter(
+                        :value="data.buy_price.text"
+                        :maxText="data.buy_price.max_text"
+                        :isError="data.buy_price.error.is_error"
+                     )
 
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") {{ $t("product.window.field.sale_price") }}:
@@ -107,11 +111,12 @@
                         @keyup="onSalePriceKeyup"
                         :class="{ 'is-invalid': data.sale_price.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.sale_price.text.length <= data.sale_price.max_text, 'badge-danger': data.sale_price.text.length > data.sale_price.max_text, 'error': data.sale_price.error.is_error }"
-                     ) {{ data.sale_price.text.length }}/{{ data.sale_price.max_text }}
                      div(v-if="data.sale_price.error.is_error" class="invalid-feedback text-left") {{ data.sale_price.error.message }}
+                     BadgeCounter(
+                        :value="data.sale_price.text"
+                        :maxText="data.sale_price.max_text"
+                        :isError="data.sale_price.error.is_error"
+                     )
 
                   label(class="col-sm-2 col-form-label") {{ $t("product.window.field.quantity") }}:
                   div(class="col-sm-4")
@@ -125,11 +130,12 @@
                         @keyup="onQuantityKeyup"
                         :class="{ 'is-invalid': data.quantity.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.quantity.text.length <= data.quantity.max_text, 'badge-danger': data.quantity.text.length > data.quantity.max_text, 'error': data.quantity.error.is_error }"
-                     ) {{ data.quantity.text.length }}/{{ data.quantity.max_text }}
                      div(v-if="data.quantity.error.is_error" class="invalid-feedback text-left") {{ data.quantity.error.message }}
+                     BadgeCounter(
+                        :value="data.quantity.text"
+                        :maxText="data.quantity.max_text"
+                        :isError="data.quantity.error.is_error"
+                     )
 
                div.text-center
                   button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? $t("product.window.add.button.add") : $t("product.window.update.button.update") }}
@@ -145,6 +151,7 @@ import { Props, IPCParams, AxiosResponse, Product } from "../../interfaces/produ
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
+import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
 export default mixins(defaultMixin).extend({
    name: "product-add-update-component",
@@ -152,7 +159,8 @@ export default mixins(defaultMixin).extend({
    components: {
       Banner,
       Menu,
-      Content
+      Content,
+      BadgeCounter
    },
    data() {
       return {

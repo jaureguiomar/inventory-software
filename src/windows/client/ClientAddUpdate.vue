@@ -33,11 +33,12 @@
                         @keyup="onFirstNameKeyup"
                         :class="{ 'is-invalid': data.first_name.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.first_name.text.length <= data.first_name.max_text, 'badge-danger': data.first_name.text.length > data.first_name.max_text, 'error': data.first_name.error.is_error }"
-                     ) {{ data.first_name.text.length }}/{{ data.first_name.max_text }}
                      div(v-if="data.first_name.error.is_error" class="invalid-feedback text-left") {{ data.first_name.error.message }}
+                     BadgeCounter(
+                        :value="data.first_name.text"
+                        :maxText="data.first_name.max_text"
+                        :isError="data.first_name.error.is_error"
+                     )
 
                   label(class="col-sm-2 col-form-label") {{ $t("client.window.field.last_name") }}:
                   div(class="col-sm-4")
@@ -51,11 +52,12 @@
                         @keyup="onLastNameKeyup"
                         :class="{ 'is-invalid': data.last_name.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.last_name.text.length <= data.last_name.max_text, 'badge-danger': data.last_name.text.length > data.last_name.max_text, 'error': data.last_name.error.is_error }"
-                     ) {{ data.last_name.text.length }}/{{ data.last_name.max_text }}
                      div(v-if="data.last_name.error.is_error" class="invalid-feedback text-left") {{ data.last_name.error.message }}
+                     BadgeCounter(
+                        :value="data.last_name.text"
+                        :maxText="data.last_name.max_text"
+                        :isError="data.last_name.error.is_error"
+                     )
 
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") {{ $t("client.window.field.address") }}:
@@ -70,11 +72,12 @@
                         @keyup="onAddressKeyup"
                         :class="{ 'is-invalid': data.address.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.address.text.length <= data.address.max_text, 'badge-danger': data.address.text.length > data.address.max_text, 'error': data.address.error.is_error }"
-                     ) {{ data.address.text.length }}/{{ data.address.max_text }}
                      div(v-if="data.address.error.is_error" class="invalid-feedback text-left") {{ data.address.error.message }}
+                     BadgeCounter(
+                        :value="data.address.text"
+                        :maxText="data.address.max_text"
+                        :isError="data.address.error.is_error"
+                     )
 
                   label(class="col-sm-2 col-form-label") {{ $t("client.window.field.cellphone") }}:
                   div(class="col-sm-4")
@@ -88,11 +91,12 @@
                         @keyup="onCellphoneKeyup"
                         :class="{ 'is-invalid': data.cellphone.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.cellphone.text.length <= data.cellphone.max_text, 'badge-danger': data.cellphone.text.length > data.cellphone.max_text, 'error': data.cellphone.error.is_error }"
-                     ) {{ data.cellphone.text.length }}/{{ data.cellphone.max_text }}
                      div(v-if="data.cellphone.error.is_error" class="invalid-feedback text-left") {{ data.cellphone.error.message }}
+                     BadgeCounter(
+                        :value="data.cellphone.text"
+                        :maxText="data.cellphone.max_text"
+                        :isError="data.cellphone.error.is_error"
+                     )
 
                div(class="form-group row")
                   label(class="col-sm-2 col-form-label") {{ $t("client.window.field.cellphone2") }}:
@@ -105,11 +109,12 @@
                         placeholder="Enter cellphone 2"
                         :class="{ 'is-invalid': data.cellphone2.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.cellphone2.text.length <= data.cellphone2.max_text, 'badge-danger': data.cellphone2.text.length > data.cellphone2.max_text, 'error': data.cellphone2.error.is_error }"
-                     ) {{ data.cellphone2.text.length }}/{{ data.cellphone2.max_text }}
                      div(v-if="data.cellphone2.error.is_error" class="invalid-feedback text-left") {{ data.cellphone2.error.message }}
+                     BadgeCounter(
+                        :value="data.cellphone2.text"
+                        :maxText="data.cellphone2.max_text"
+                        :isError="data.cellphone2.error.is_error"
+                     )
 
                   label(class="col-sm-2 col-form-label") {{ $t("client.window.field.email") }}:
                   div(class="col-sm-4")
@@ -123,11 +128,12 @@
                         @keyup="onEmailKeyup"
                         :class="{ 'is-invalid': data.email.error.is_error }"
                      )
-                     span(
-                        class="badge text-counter"
-                        :class="{ 'badge-primary': data.email.text.length <= data.email.max_text, 'badge-danger': data.email.text.length > data.email.max_text, 'error': data.email.error.is_error }"
-                     ) {{ data.email.text.length }}/{{ data.email.max_text }}
                      div(v-if="data.email.error.is_error" class="invalid-feedback text-left") {{ data.email.error.message }}
+                     BadgeCounter(
+                        :value="data.email.text"
+                        :maxText="data.email.max_text"
+                        :isError="data.email.error.is_error"
+                     )
 
                div.text-center
                   button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? $t("client.window.add.button.add") : $t("client.window.update.button.update") }}
@@ -143,6 +149,7 @@ import { Props, IPCParams, AxiosResponse, Client } from "../../interfaces/client
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
+import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
 export default mixins(defaultMixin).extend({
    name: "client-add-update-component",
@@ -150,7 +157,8 @@ export default mixins(defaultMixin).extend({
    components: {
       Banner,
       Menu,
-      Content
+      Content,
+      BadgeCounter
    },
    data() {
       return {
