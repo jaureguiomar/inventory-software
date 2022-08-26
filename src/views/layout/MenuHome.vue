@@ -16,7 +16,7 @@
          div.top
             <font-awesome-icon icon="fa-solid fa-book" size="4x" />
          div.bottom Categories
-      a(href="#_")
+      a(href="#_" @click="onLogout")
          div.top
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />
          div.bottom Logout
@@ -29,6 +29,12 @@ export default Vue.extend({
    name: "menu-home-component",
    data() {
       return {};
+   },
+   methods: {
+      onLogout() {
+         this.$store.commit("SET_LOGGUED_IN_DATA", false);
+         this.$router.push({ name: "login" });
+      }
    }
 });
 </script>
