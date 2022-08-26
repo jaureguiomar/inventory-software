@@ -24,6 +24,7 @@ export default Vue.extend({
       background: #edf5e1
       border-radius: 10px
       transition: 0.3s
+      margin-bottom: 10px
       &:hover
          box-shadow: 5px 5px #379683
       label
