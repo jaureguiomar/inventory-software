@@ -46,7 +46,7 @@ const routes = [
       component: ClientAddUpdate,
       name: "client-add",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -54,7 +54,7 @@ const routes = [
       component: ClientAddUpdate,
       name: "client-update",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -62,7 +62,7 @@ const routes = [
       component: ClientDelete,
       name: "client-delete",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -78,7 +78,7 @@ const routes = [
       component: SupplierAddUpdate,
       name: "supplier-add",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -86,7 +86,7 @@ const routes = [
       component: SupplierAddUpdate,
       name: "supplier-update",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -94,7 +94,7 @@ const routes = [
       component: SupplierDelete,
       name: "supplier-delete",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -110,7 +110,7 @@ const routes = [
       component: ProductAddUpdate,
       name: "product-add",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -118,7 +118,7 @@ const routes = [
       component: ProductAddUpdate,
       name: "product-update",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -126,7 +126,7 @@ const routes = [
       component: ProductDelete,
       name: "product-delete",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -142,7 +142,7 @@ const routes = [
       component: CategoryAddUpdate,
       name: "category-add",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -150,7 +150,7 @@ const routes = [
       component: CategoryAddUpdate,
       name: "category-update",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
    {
@@ -158,7 +158,7 @@ const routes = [
       component: CategoryDelete,
       name: "category-delete",
       meta: {
-         requiresAuth: true
+         requiresAuth: false
       }
    },
 ];
@@ -174,7 +174,7 @@ router.beforeEach((to:any, from:any, next:Function) => {
       next();
    else if(!to.meta.requiresAuth)
       next();
-   else if(store.getters.getSessionLogguedIn)
+   else if(store.getters.getLogguedIn)
       next();
    else
       next({ name: "login" });

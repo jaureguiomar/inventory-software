@@ -19,7 +19,7 @@ const store = new Vuex.Store({
       }
    },
    getters: {
-      getSessionLogguedIn(state) {
+      getLogguedIn(state) {
          return state.loggued_in;
       },
       getClientLoadedReply(state) {
