@@ -3,7 +3,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
    faUsers, faArrowLeft, faPlus,
    faXmark, faPenToSquare, faArrowsRotate,
-   faTruckField, faBoxesStacked
+   faTruckField, faBoxesStacked, faBook,
+   faArrowRightFromBracket
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -15,4 +16,6 @@ library.add(faPenToSquare);
 library.add(faArrowsRotate);
 library.add(faTruckField);
 library.add(faBoxesStacked);
+library.add(faBook);
+library.add(faArrowRightFromBracket);
 Vue.component("font-awesome-icon", FontAwesomeIcon);

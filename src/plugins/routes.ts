@@ -10,6 +10,9 @@ import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
 import Product from "@/views/Product.vue";
 import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
 import ProductDelete from "@/windows/product/ProductDelete.vue";
+import Category from "@/views/Category.vue";
+import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
+import CategoryDelete from "@/windows/category/CategoryDelete.vue";
 
 const routes = [
    { path: "/", component: Home, name: "home" },
@@ -24,7 +27,11 @@ const routes = [
    { path: "/product", component: Product, name: "product" },
    { path: "/product-add", component: ProductAddUpdate, name: "product-add" },
    { path: "/product-update/:id", component: ProductAddUpdate, name: "product-update" },
-   { path: "/product-delete/:id", component: ProductDelete, name: "product-delete" }
+   { path: "/product-delete/:id", component: ProductDelete, name: "product-delete" },
+   { path: "/category", component: Category, name: "category" },
+   { path: "/category-add", component: CategoryAddUpdate, name: "category-add" },
+   { path: "/category-update/:id", component: CategoryAddUpdate, name: "category-update" },
+   { path: "/category-delete/:id", component: CategoryDelete, name: "category-delete" }
 ];
 
 Vue.use(VueRouter);

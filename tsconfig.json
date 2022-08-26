@@ -38,6 +38,7 @@
       "src/preloadClient.js",
       "src/preloadSupplier.js",
       "src/preloadProduct.js",
+      "src/preloadCategory.js",
       "src/index.d.ts"
    ],
    "exclude": [

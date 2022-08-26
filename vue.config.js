@@ -8,7 +8,8 @@ module.exports = defineConfig({
         preload: "src/preload.ts",
         preloadClient: "src/preloadClient.ts",
         preloadSupplier: "src/preloadSupplier.ts",
-        preloadProduct: "src/preloadProduct.ts"
+        preloadProduct: "src/preloadProduct.ts",
+        preloadCategory: "src/preloadCategory.ts"
       },
       builderOptions: {
         extraResources: [

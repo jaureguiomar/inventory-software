@@ -12,6 +12,14 @@
          div.top
             <font-awesome-icon icon="fa-solid fa-boxes-stacked" size="4x" />
          div.bottom Products
+      router-link(to="/category")
+         div.top
+            <font-awesome-icon icon="fa-solid fa-book" size="4x" />
+         div.bottom Categories
+      a(href="#_")
+         div.top
+            <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />
+         div.bottom Exit
 </template>
 
 <script lang="ts">
@@ -47,6 +55,7 @@ export default Vue.extend({
          color: #05386b
          border-radius: 17px
          transition: 0.3s
+         // width: 160px
          &:hover
             background: #05386b
             color: #5cdb94
