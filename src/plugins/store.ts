@@ -43,7 +43,7 @@ const store = new Vuex.Store({
          state.client.loaded_reply = data;
       },
       SET_SUPPLIER_LOADED_REPLY: (state, data:boolean) => {
-         state.client.loaded_reply = data;
+         state.supplier.loaded_reply = data;
       },
       SET_PRODUCT_LOADED_REPLY: (state, data:boolean) => {
          state.product.loaded_reply = data;
