@@ -19,7 +19,7 @@
       a(href="#_")
          div.top
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />
-         div.bottom Exit
+         div.bottom Logout
 </template>
 
 <script lang="ts">

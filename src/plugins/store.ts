@@ -4,6 +4,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 const store = new Vuex.Store({
    state: {
+      loggued_in: false,
       client: {
          loaded_reply: false
       },
@@ -18,6 +19,9 @@ const store = new Vuex.Store({
       }
    },
    getters: {
+      getSessionLogguedIn(state) {
+         return state.loggued_in;
+      },
       getClientLoadedReply(state) {
          return state.client.loaded_reply;
       },
@@ -32,6 +36,9 @@ const store = new Vuex.Store({
       }
    },
    mutations: {
+      SET_LOGGUED_IN_DATA: (state, data) => {
+         state.loggued_in = data;
+      },
       SET_CLIENT_LOADED_REPLY: (state, data:boolean) => {
          state.client.loaded_reply = data;
       },
