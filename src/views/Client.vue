@@ -101,7 +101,7 @@
                      a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onClienSeeWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-eye")
                      a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
-                        font-awesome-icon(icon="fa-solid fa-xmark")
+                        font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-xmark")
 

@@ -79,7 +79,7 @@
                            b-col {{ row.item.name }}
                   template(#cell(actions)="row")
                      a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onCategorySeeWindowClick(row.item)")
-                        font-awesome-icon(icon="fa-solid fa-eye")
+                        font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-primary mr-2" href="#_" @click="onCategoryUpdateWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-danger" href="#_" @click="onCategoryDeleteWindowClick(row.item)")
