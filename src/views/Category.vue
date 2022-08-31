@@ -78,6 +78,8 @@
                               b {{ $t("category.table.content.name") }}:
                            b-col {{ row.item.name }}
                   template(#cell(actions)="row")
+                     a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onCategorySeeWindowClick(row.item)")
+                        font-awesome-icon(icon="fa-solid fa-eye")
                      a(class="btn btn-primary mr-2" href="#_" @click="onCategoryUpdateWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-danger" href="#_" @click="onCategoryDeleteWindowClick(row.item)")
@@ -285,6 +287,15 @@ export default Vue.extend({
                description: this.$t("category.window.add.subtitle")
             },
             data: null
+         });
+      },
+      onCategorySeeWindowClick(item:Category) {
+         window.api.send("category-module-window", {
+            id: item.id,
+            type: "see",
+            data: {
+               name: item.name
+            }
          });
       },
       onCategoryUpdateWindowClick(item:Category) {

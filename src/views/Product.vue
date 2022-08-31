@@ -98,6 +98,8 @@
                               b {{ $t("product.table.content.quantity") }}:
                            b-col {{ row.item.quantity }}
                   template(#cell(actions)="row")
+                     a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onProductSeeWindowClick(row.item)")
+                        font-awesome-icon(icon="fa-solid fa-eye")
                      a(class="btn btn-primary mr-2" href="#_" @click="onProductUpdateWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-danger" href="#_" @click="onProductDeleteWindowClick(row.item)")
@@ -328,6 +330,20 @@ export default Vue.extend({
                description: this.$t("product.window.add.subtitle")
             },
             data: null
+         });
+      },
+      onProductSeeWindowClick(item:Product) {
+         window.api.send("product-module-window", {
+            id: item.id,
+            type: "see",
+            data: {
+               code: item.code,
+               name: item.name,
+               description: item.description,
+               buy_price: item.buy_price,
+               sale_price: item.sale_price,
+               quantity: item.quantity
+            }
          });
       },
       onProductUpdateWindowClick(item:Product) {

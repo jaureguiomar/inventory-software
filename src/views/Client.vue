@@ -98,8 +98,10 @@
                               b {{ $t("client.table.content.email") }}:
                            b-col {{ row.item.email }}
                   template(#cell(actions)="row")
+                     a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onClienSeeWindowClick(row.item)")
+                        font-awesome-icon(icon="fa-solid fa-eye")
                      a(class="btn btn-primary mr-2" href="#_" @click="onClientUpdateWindowClick(row.item)")
-                        font-awesome-icon(icon="fa-solid fa-pen-to-square")
+                        font-awesome-icon(icon="fa-solid fa-xmark")
                      a(class="btn btn-danger" href="#_" @click="onClientDeleteWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-xmark")
 
@@ -316,6 +318,20 @@ export default Vue.extend({
                description: this.$t("client.window.add.subtitle")
             },
             data: null
+         });
+      },
+      onClienSeeWindowClick(item:Client) {
+         window.api.send("client-module-window", {
+            id: item.id,
+            type: "see",
+            data: {
+               first_name: item.first_name,
+               last_name: item.last_name,
+               address: item.address,
+               cellphone: item.cellphone,
+               cellphone2: item.cellphone2,
+               email: item.email
+            }
          });
       },
       onClientUpdateWindowClick(item:Client) {

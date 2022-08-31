@@ -21,22 +21,26 @@ const window = {
    client: {
       add: null as any,
       update: null as any,
-      delete: null as any
+      delete: null as any,
+      see: null as any
    },
    supplier: {
       add: null as any,
       update: null as any,
-      delete: null as any
+      delete: null as any,
+      see: null as any
    },
    product: {
       add: null as any,
       update: null as any,
-      delete: null as any
+      delete: null as any,
+      see: null as any
    },
    category: {
       add: null as any,
       update: null as any,
-      delete: null as any
+      delete: null as any,
+      see: null as any
    }
 };
 
@@ -185,6 +189,8 @@ ipcMain.on("client-module-window", function(e, data) {
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-update/${data.id}` : `file://${__dirname}/index.html#/client-update/${data.id}`;
       else if(data.type === "delete")
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-delete/${data.id}` : `file://${__dirname}/index.html#/client-delete/${data.id}`;
+      else if(data.type === "see")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-see/${data.id}` : `file://${__dirname}/index.html#/client-see/${data.id}`;
 
       window.client[data.type].loadURL(setURL);
       window.client[data.type].show();
@@ -242,6 +248,8 @@ ipcMain.on("supplier-module-window", function(e, data) {
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-update/${data.id}` : `file://${__dirname}/index.html#/supplier-update/${data.id}`;
       else if(data.type === "delete")
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-delete/${data.id}` : `file://${__dirname}/index.html#/supplier-delete/${data.id}`;
+      else if(data.type === "see")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-see/${data.id}` : `file://${__dirname}/index.html#/supplier-see/${data.id}`;
 
       window.supplier[data.type].loadURL(setURL);
       window.supplier[data.type].show();
@@ -299,6 +307,8 @@ ipcMain.on("product-module-window", function(e, data) {
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-update/${data.id}` : `file://${__dirname}/index.html#/product-update/${data.id}`;
       else if(data.type === "delete")
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-delete/${data.id}` : `file://${__dirname}/index.html#/product-delete/${data.id}`;
+      else if(data.type === "see")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-see/${data.id}` : `file://${__dirname}/index.html#/product-see/${data.id}`;
 
       window.product[data.type].loadURL(setURL);
       window.product[data.type].show();
@@ -356,6 +366,8 @@ ipcMain.on("category-module-window", function(e, data) {
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/category-update/${data.id}` : `file://${__dirname}/index.html#/category-update/${data.id}`;
       else if(data.type === "delete")
          setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/category-delete/${data.id}` : `file://${__dirname}/index.html#/category-delete/${data.id}`;
+      else if(data.type === "see")
+         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/category-see/${data.id}` : `file://${__dirname}/index.html#/category-see/${data.id}`;
 
       window.category[data.type].loadURL(setURL);
       window.category[data.type].show();

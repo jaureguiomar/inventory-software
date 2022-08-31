@@ -78,6 +78,8 @@
                               b {{ $t("supplier.table.content.name") }}:
                            b-col {{ row.item.name }}
                   template(#cell(actions)="row")
+                     a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onSupplierSeeWindowClick(row.item)")
+                        font-awesome-icon(icon="fa-solid fa-eye")
                      a(class="btn btn-primary mr-2" href="#_" @click="onSupplierUpdateWindowClick(row.item)")
                         font-awesome-icon(icon="fa-solid fa-pen-to-square")
                      a(class="btn btn-danger" href="#_" @click="onSupplierDeleteWindowClick(row.item)")
@@ -285,6 +287,15 @@ export default Vue.extend({
                description: this.$t("supplier.window.add.subtitle")
             },
             data: null
+         });
+      },
+      onSupplierSeeWindowClick(item:Supplier) {
+         window.api.send("supplier-module-window", {
+            id: item.id,
+            type: "see",
+            data: {
+               name: item.name
+            }
          });
       },
       onSupplierUpdateWindowClick(item:Supplier) {

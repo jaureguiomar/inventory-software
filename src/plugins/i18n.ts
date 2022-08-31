@@ -59,6 +59,10 @@ const messages = {
                   delete: "Delete",
                }
             },
+            see: {
+               title: "See Client",
+               subtitle: "The clients in the system",
+            },
             field: {
                id: "ID",
                first_name: "First Name",
@@ -119,6 +123,10 @@ const messages = {
                button: {
                   delete: "Delete",
                }
+            },
+            see: {
+               title: "See Supplier",
+               subtitle: "The suppliers in the system",
             },
             field: {
                id: "ID",
@@ -186,6 +194,10 @@ const messages = {
                   delete: "Delete",
                }
             },
+            see: {
+               title: "See Product",
+               subtitle: "The products in the system",
+            },
             field: {
                id: "ID",
                code: "Code",
@@ -246,6 +258,10 @@ const messages = {
                button: {
                   delete: "Delete",
                }
+            },
+            see: {
+               title: "See Catetgory",
+               subtitle: "The categories in the system",
             },
             field: {
                id: "ID",
@@ -317,6 +333,10 @@ const messages = {
                button: {
                   delete: "Eliminar",
                }
+            },
+            see: {
+               title: "Ver Cliente",
+               subtitle: "Los clientes del sistema",
             },
             field: {
                id: "ID",

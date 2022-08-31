@@ -3,15 +3,19 @@ import VueRouter from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Client from "@/views/Client.vue";
+import ClientSee from "@/windows/client/ClientSee.vue";
 import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
 import ClientDelete from "@/windows/client/ClientDelete.vue";
 import Supplier from "@/views/Supplier.vue";
+import SupplierSee from "@/windows/supplier/SupplierSee.vue";
 import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
 import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
 import Product from "@/views/Product.vue";
+import ProductSee from "@/windows/product/ProductSee.vue";
 import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
 import ProductDelete from "@/windows/product/ProductDelete.vue";
 import Category from "@/views/Category.vue";
+import CategorySee from "@/windows/category/CategorySee.vue";
 import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
 import CategoryDelete from "@/windows/category/CategoryDelete.vue";
 import store from './store';
@@ -39,6 +43,14 @@ const routes = [
       name: "client",
       meta: {
          requiresAuth: true
+      }
+   },
+   {
+      path: "/client-see/:id",
+      component: ClientSee,
+      name: "client-see",
+      meta: {
+         requiresAuth: false
       }
    },
    {
@@ -74,6 +86,14 @@ const routes = [
       }
    },
    {
+      path: "/supplier-see/:id",
+      component: SupplierSee,
+      name: "supplier-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
       path: "/supplier-add",
       component: SupplierAddUpdate,
       name: "supplier-add",
@@ -106,6 +126,14 @@ const routes = [
       }
    },
    {
+      path: "/product-see/:id",
+      component: ProductSee,
+      name: "product-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
       path: "/product-add",
       component: ProductAddUpdate,
       name: "product-add",
@@ -135,6 +163,14 @@ const routes = [
       name: "category",
       meta: {
          requiresAuth: true
+      }
+   },
+   {
+      path: "/category-see/:id",
+      component: CategorySee,
+      name: "category-see",
+      meta: {
+         requiresAuth: false
       }
    },
    {
