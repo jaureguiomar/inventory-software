@@ -1,26 +1,25 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
-// Template Plugins
-import router from "@/plugins/routes";
-import store from "@/plugins/store";
+// import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import i18n from "@/plugins/i18n";
-import "@/plugins/event-bus";
-import "@/plugins/axios";
-import "@/plugins/filters";
-import "@/plugins/directives";
-import "@/plugins/bootstrap";
+import router from "@/plugins/routes";
+import store, { key } from "@/plugins/store";
+// import "@/plugins/directives";
 import "@/plugins/font-awesome";
-import "@/plugins/simple-alert";
+// import "@/plugins/simple-alert";
 // Global Template styles
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 import "@/assets/scss/bootstrap-theme.scss";
 import "@/assets/scss/styles.scss";
 import "@/assets/scss/input-counter.scss";
 
-Vue.config.productionTip = false;
-new Vue({
-   el: "#app",
-   render: h => h(App),
-   router,
-   store,
-   i18n,
-});
+createApp(App)
+   .use(router)
+   .use(store, key)
+   .use(i18n)
+   // .use(BootstrapVue)
+   // .use(IconsPlugin)
+   .component("font-awesome-icon", FontAwesomeIcon)
+   .mount("#app");

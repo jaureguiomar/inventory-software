@@ -1,110 +1,138 @@
-<template lang="pug">
-   div.main-container
-      Banner
-      Menu
-         template(#left-content)
-            router-link(to="/")
-               font-awesome-icon(icon="fa-solid fa-arrow-left")
-            p {{ $t("category.title") }}
-         template(#right-content)
-            a(href="#_" @click="onCategoryAddWindowClick")
-               font-awesome-icon(icon="fa-solid fa-plus")
-            a(href="#_" @click="onRefreshData")
-               font-awesome-icon(icon="fa-solid fa-arrows-rotate")
-         template(#subtitle) {{ $t("category.subtitle") }}
-      Content
-         template(#content)
-            b-row
-               b-col(lg="6" class="mb-2")
-                  b-form-input(
+<template>
+   <div class="main-container">
+      <Banner />
+      <Menu>
+         <template #left-content>
+            <router-link to="/">
+               <font-awesome-icon icon="fa-solid fa-arrow-left"></font-awesome-icon>
+            </router-link>
+            <p>{{ $t("category.title") }}</p>
+         </template>
+         <template #right-content>
+            <a href="#_" @click="onCategoryAddWindowClick">
+               <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
+            </a>
+            <a href="#_" @click="onRefreshData">
+               <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
+            </a>
+         </template>
+         <template #subtitle>
+            {{ $t("category.subtitle") }}
+         </template>
+      </Menu>
+
+      <Content>
+         <template #content>
+            <b-row>
+               <b-col class="mb-2" lg="6">
+                  <b-form-input
                      id="filter-input"
                      v-model="table.filter"
                      type="search"
                      size="sm"
                      :placeholder="$t('category.table.search')"
-                  )
-               b-col(lg="6" class="mb-2")
-                  b-form-select(
+                  >
+                  </b-form-input>
+               </b-col>
+               <b-col class="mb-2" lg="6">
+                  <b-form-select
                      id="per-page-select"
                      v-model="table.perPage"
                      :options="table.pageOptions"
-                     size="sm")
-
-            div.table-responsive
-               //- selectable
-               //- :select-mode="'single'"
-               //- @row-selected="onRowClick"
-               b-table(
+                     size="sm"
+                  >
+                  </b-form-select>
+               </b-col>
+            </b-row>
+            <div class="table-responsive">
+               <b-table
                   :items="data.category"
                   :fields="table.fields"
                   :current-page="table.currentPage"
                   :per-page="table.perPage"
                   :filter="table.filter"
                   :filter-included-fields="table.filterOn"
-                  :sort-by.sync="table.sortBy"
-                  :sort-desc.sync="table.sortDesc"
+                  v-model:sort-by.sync="table.sortBy"
+                  v-model:sort-desc.sync="table.sortDesc"
                   :sort-direction="table.sortDirection"
                   stacked="md"
-                  show-emptya
+                  show-emptya="show-emptya"
                   :empty-text="$t('category.table.content.details.empty')"
                   :empty-filtered-text="$t('category.table.content.details.empty')"
-                  small
+                  small="small"
                   filter-debounce="600"
                   @filtered="onFiltered"
-                  hover
-               )
-                  template(#cell(details)="row")
-                     b-button(class="mr-2" variant="primary" size="sm" @click="row.toggleDetails") {{ row.detailsShowing ? $t("category.table.content.details.hide_details") : $t("category.table.content.details.show_details") }}
-                  template(#row-details="row")
-                     b-card
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("category.table.content.id") }}:
-                           b-col {{ row.item.id }}
-                        //- b-row(class="mb-1")
-                        //-    b-col(sm="3" class="text-sm-right")
-                        //-       b Active?:
-                        //-    b-col {{ (row.item.is_active) ? row.item.is_active : "---" }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("category.table.content.created") }}:
-                           b-col {{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0, true) : "---" }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("category.table.content.updated") }}:
-                           b-col {{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0, true) : "---" }}
-                        b-row(class="mb-1")
-                           b-col(sm="3" class="text-sm-right")
-                              b {{ $t("category.table.content.name") }}:
-                           b-col {{ row.item.name }}
-                  template(#cell(actions)="row")
-                     a(class="btn btn-success mr-2" style="color: white;" href="#_" @click="onCategorySeeWindowClick(row.item)")
-                        font-awesome-icon(icon="fa-solid fa-eye")
-                     a(class="btn btn-primary mr-2" href="#_" @click="onCategoryUpdateWindowClick(row.item)")
-                        font-awesome-icon(icon="fa-solid fa-pen-to-square")
-                     a(class="btn btn-danger" href="#_" @click="onCategoryDeleteWindowClick(row.item)")
-                        font-awesome-icon(icon="fa-solid fa-xmark")
+                  hover="hover"
+               >
+                  <template #cell(details)="row">
+                     <b-button
+                        class="mr-2"
+                        variant="primary"
+                        size="sm"
+                        @click="row.toggleDetails"
+                     >
+                        {{ row.detailsShowing ? $t("category.table.content.details.hide_details") : $t("category.table.content.details.show_details") }}
+                     </b-button>
+                  </template>
+                  <template #row-details="row">
+                     <b-card>
+                        <b-row class="mb-1">
+                           <b-col class="text-sm-right" sm="3"><b>{{ $t("category.table.content.id") }}:</b></b-col>
+                           <b-col>{{ row.item.id }}</b-col>
+                        </b-row>
+                        <b-row class="mb-1">
+                           <b-col class="text-sm-right" sm="3"><b>{{ $t("category.table.content.created") }}:</b></b-col>
+                           <b-col>{{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0, true) : "---" }}</b-col>
+                        </b-row>
+                        <b-row class="mb-1">
+                           <b-col class="text-sm-right" sm="3"><b>{{ $t("category.table.content.updated") }}:</b></b-col>
+                           <b-col>{{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0, true) : "---" }}</b-col>
+                        </b-row>
+                        <b-row class="mb-1">
+                           <b-col class="text-sm-right" sm="3"><b>{{ $t("category.table.content.name") }}:</b></b-col>
+                           <b-col>{{ row.item.name }}</b-col>
+                        </b-row>
+                     </b-card>
+                  </template>
+                  <template #cell(actions)="row">
+                     <a class="btn btn-success mr-2" style="color: white;" href="#_" @click="onCategorySeeWindowClick(row.item)">
+                        <font-awesome-icon icon="fa-solid fa-eye"></font-awesome-icon>
+                     </a>
+                     <a class="btn btn-primary mr-2" href="#_" @click="onCategoryUpdateWindowClick(row.item)">
+                        <font-awesome-icon icon="fa-solid fa-pen-to-square"></font-awesome-icon>
+                     </a>
+                     <a class="btn btn-danger" href="#_" @click="onCategoryDeleteWindowClick(row.item)">
+                        <font-awesome-icon icon="fa-solid fa-xmark"></font-awesome-icon>
+                     </a>
+                  </template>
+               </b-table>
 
-               b-col(sm="12" md="12" class="my-1")
-                  b-pagination(
+               <b-col class="my-1" sm="12" md="12">
+                  <b-pagination
+                     class="my-0 customPagination"
                      v-model="table.currentPage"
                      :total-rows="table.totalRows"
                      :per-page="table.perPage"
                      align="right"
                      size="sm"
-                     class="my-0 customPagination"
-                  )
+                  >
+                  </b-pagination>
+               </b-col>
+            </div>
+         </template>
+      </Content>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue"
+import Vue, { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 import { Props, AxiosResponse, WindowResponse, Category } from "../interfaces/category/category";
 import Banner from "../views/layout/Banner.vue";
 import Menu from "../views/layout/Menu.vue";
 import Content from "../views/layout/Content.vue";
 
-export default Vue.extend({
+export default defineComponent({
    name: "category-component",
    components: {
       Banner,

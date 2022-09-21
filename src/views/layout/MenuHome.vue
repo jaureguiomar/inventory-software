@@ -1,40 +1,61 @@
-<template lang="pug">
-   div.menu-home
-      router-link(to="/client")
-         div.top
+<template>
+   <div class="menu-home">
+      <router-link to="/client">
+         <div class="top">
             <font-awesome-icon icon="fa-solid fa-users" size="4x" />
-         div.bottom Clients
-      router-link(to="/supplier")
-         div.top
+         </div>
+         <div class="bottom">Clients</div>
+      </router-link>
+      <router-link to="/supplier">
+         <div class="top">
             <font-awesome-icon icon="fa-solid fa-truck-field" size="4x" />
-         div.bottom Suppliers
-      router-link(to="/product")
-         div.top
+         </div>
+         <div class="bottom">Suppliers</div>
+      </router-link>
+      <router-link to="/product">
+         <div class="top">
             <font-awesome-icon icon="fa-solid fa-boxes-stacked" size="4x" />
-         div.bottom Products
-      router-link(to="/category")
-         div.top
+         </div>
+         <div class="bottom">Products</div>
+      </router-link>
+      <router-link to="/category">
+         <div class="top">
             <font-awesome-icon icon="fa-solid fa-book" size="4x" />
-         div.bottom Categories
-      a(href="#_" @click="onLogout")
-         div.top
+         </div>
+         <div class="bottom">Categories</div>
+      </router-link>
+      <a href="#_" @click="onLogout">
+         <div class="top">
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />
-         div.bottom Logout
+         </div>
+         <div class="bottom">Logout</div>
+      </a>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { key } from "@/plugins/store";
 
-export default Vue.extend({
+export default defineComponent({
    name: "menu-home-component",
-   data() {
-      return {};
-   },
-   methods: {
-      onLogout() {
-         this.$store.commit("SET_LOGGUED_IN_DATA", false);
-         this.$router.push({ name: "login" });
+   setup() {
+      const store = useStore(key);
+      const router = useRouter();
+
+      const onLogout = () => {
+         localStorage.setItem("session", JSON.stringify({
+            loggued_in: false
+         }));
+         store.commit("SET_LOGGUED_IN_DATA", false);
+         router.push({ name: "login" });
       }
+
+      return {
+         onLogout
+      };
    }
 });
 </script>

@@ -1,4 +1,4 @@
-# vue-typescript-full-sample
+# inventory-software-vue3
 
 ## Project setup
 ```

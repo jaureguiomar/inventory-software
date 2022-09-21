@@ -1,20 +1,24 @@
-<template lang="pug">
-   div.menu
-      div.title
-         div.left-content
-            slot(name="left-content")
-         div.right-content
-            slot(name="right-content")
-      div.subtitle
-         slot(name="subtitle")
+<template>
+   <div class="menu">
+      <div class="title">
+         <div class="left-content">
+            <slot name="left-content"></slot>
+         </div>
+         <div class="right-content">
+         <slot name="right-content"></slot>
+      </div>
+      </div>
+      <div class="subtitle">
+         <slot name="subtitle"></slot>
+      </div>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+import { defineComponent } from "vue";
+export default defineComponent({
    name: "menu-component",
-   data() {
+   setup() {
       return {};
    }
 });

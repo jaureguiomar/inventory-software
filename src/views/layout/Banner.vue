@@ -1,15 +1,15 @@
-<template lang="pug">
-   div.banner
-      div.logo {{ $t("banner.inventory") }}
-      div.text {{ $t("banner.system") }}
+<template>
+   <div class="banner">
+      <div class="logo">{{ $t("banner.inventory") }}</div>
+      <div class="text">{{ $t("banner.system") }}</div>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+import { defineComponent } from "vue";
+export default defineComponent({
    name: "banner-component",
-   data() {
+   setup() {
       return {};
    }
 });

@@ -1,21 +1,37 @@
-<template lang="pug">
-   div.login
-      div.login-container
-         h1.title.mb-2 Inventory System
-         h2.subtitle.mb-4 Welcome back
-         input(class="form-control mb-2" type="text" placeholder="Username / email")
-         input(class="form-control mb-4" type="password" placeholder="Password")
-         button(class="btn btn-primary" @click="onLogin") Login
+<template>
+   <div class="login">
+      <div class="login-container">
+         <h1 class="title mb-2">Inventory System</h1>
+         <h2 class="subtitle mb-4">Welcome back</h2>
+         <input class="form-control mb-2" type="text" placeholder="Username / email" />
+         <input class="form-control mb-4" type="password" placeholder="Password" />
+         <button class="btn btn-primary" @click="onLogin">Login</button>
+      </div>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
+import { defineComponent } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { key } from "@/plugins/store";
+
+export default defineComponent({
    name: "login-component",
-   methods: {
-      onLogin() {
-         this.$store.commit("SET_LOGGUED_IN_DATA", true);
-         this.$router.push({ name: "home" });
+   setup() {
+      const store = useStore(key);
+      const router = useRouter();
+
+      const onLogin = () => {
+         localStorage.setItem("session", JSON.stringify({
+            loggued_in: true
+         }));
+         store.commit("SET_LOGGUED_IN_DATA", true);
+         router.push({ name: "home" });
+      }
+
+      return {
+         onLogin
       }
    }
 });

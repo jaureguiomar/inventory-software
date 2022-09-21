@@ -1,12 +1,13 @@
-<template lang="pug">
-   div#app
-      router-view
+<template>
+   <div id="app">
+      <router-view></router-view>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({
-   name: "App"
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "App"
 });
 </script>
 

@@ -1,53 +1,72 @@
-<template lang="pug">
-   transition-group(name="list" tag="div")
-      div(v-if="!loaded" key="loader" class="spinner-loader")
-         div(class="spinner-loader-container")
-            div(class="spinner-ripple-loader")
-               div(class="spinner-ripple-loader-container")
-                  div
-                  div
+<template>
+   <transition-group name="list" tag="div">
+      <div class="spinner-loader" v-if="!loaded" key="loader">
+         <div class="spinner-loader-container">
+            <div class="spinner-ripple-loader">
+               <div class="spinner-ripple-loader-container">
+                  <div></div>
+                  <div></div>
+               </div>
+            </div>
+         </div>
+      </div>
 
-      div.main-container(v-if="loaded" key="content")
-         Banner
-         Menu
-            template(#left-content)
-               p {{ content.title }}
-            template(#subtitle) {{ content.description }}
-         Content
-            template(#content)
-               div(v-if="id > 0" class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("category.window.field.id") }}:
-                  div(class="col-sm-2")
-                     input(v-model="id" type="text" class="form-control" disabled)
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("category.window.field.name") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.name.text"
-                        v-focus
-                        id="name"
-                        type="text"
-                        class="form-control counter"
-                        placeholder="Enter name"
-                        @blur="onNameBlur"
-                        @keyup="onNameKeyup"
-                        :class="{ 'is-invalid': data.name.error.is_error }"
-                     )
-                     div(v-if="data.name.error.is_error" class="invalid-feedback text-left") {{ data.name.error.message }}
-                     BadgeCounter(
-                        :value="data.name.text"
-                        :maxText="data.name.max_text"
-                        :isError="data.name.error.is_error"
-                     )
-
-               div.text-center
-                  button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? $t("category.window.add.button.add") : $t("category.window.update.button.update") }}
-                  button(type="clear" class="btn btn-danger text-center mr-2" @click="onClear") {{ $t("category.window.button.clear") }}
-                  button(type="clear" class="btn btn-info text-center" @click="onClose") {{ $t("category.window.button.close") }}
+      <div class="main-container" v-if="loaded" key="content">
+         <Banner />
+         <Menu>
+            <template #left-content>
+               <p>{{ content.title }}</p>
+            </template>
+            <template #subtitle>{{ content.description }}</template>
+         </Menu>
+         <Content>
+            <template #content>
+               <div class="form-group row" v-if="id &gt; 0">
+                  <label class="col-sm-2 col-form-label">{{ $t("category.window.field.id") }}:</label>
+                  <div class="col-sm-2">
+                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("category.window.field.name") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control counter" v-model="data.name.text" v-focus="v-focus" id="name" type="text" placeholder="Enter name" @blur="onNameBlur" @keyup="onNameKeyup" :class="{ 'is-invalid': data.name.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.name.error.is_error">{{ data.name.error.message }}</div>
+                     <BadgeCounter :value="data.name.text" :maxText="data.name.max_text" :isError="data.name.error.is_error"></BadgeCounter>
+                  </div>
+               </div>
+               <div class="text-center">
+                  <button
+                     class="btn btn-primary text-center mr-2"
+                     id="add-update-button"
+                     type="submit"
+                     @click="onAddUpdate"
+                  >
+                     {{ (id <= 0) ? $t("category.window.add.button.add") : $t("category.window.update.button.update") }}
+                  </button>
+                  <button
+                     class="btn btn-danger text-center mr-2"
+                     type="clear"
+                     @click="onClear"
+                  >
+                     {{ $t("category.window.button.clear") }}
+                  </button>
+                  <button
+                     class="btn btn-info text-center"
+                     type="clear"
+                     @click="onClose"
+                  >
+                     {{ $t("category.window.button.close") }}
+                  </button>
+               </div>
+            </template>
+         </Content>
+      </div>
+   </transition-group>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue, { defineComponent } from "vue";
 import mixins from "vue-typed-mixins";
 import defaultMixin from "../../plugins/mixins";
 import { Props, IPCParams, AxiosResponse, Category } from "../../interfaces/category/category-add-update";
@@ -56,7 +75,7 @@ import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
 import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
-export default mixins(defaultMixin).extend({
+export default defineComponent({
    name: "category-add-update-component",
    mixins: [defaultMixin],
    components: {

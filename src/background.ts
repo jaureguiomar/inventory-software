@@ -47,9 +47,9 @@ const window = {
 // if(last == "app.asar")
 //    rootDir = path.dirname(app.getPath("exe"));
 // if(isDevelopment)
-//    icon_path = path.join(__dirname, "src/assets/img/vue-typescript-full-sample-icon.ico");
+//    icon_path = path.join(__dirname, "src/assets/img/inventory-software-icon.ico");
 // else
-//    icon_path = path.join(rootDir, "resources/img/vue-typescript-full-sample-icon.ico");
+//    icon_path = path.join(rootDir, "resources/img/inventory-software-icon.ico");
 
 protocol.registerSchemesAsPrivileged([
    { scheme: "app", privileges: { secure: true, standard: true } }
@@ -84,7 +84,7 @@ async function createWindow() {
       window.main.loadURL("app://./index.html");
    }
 
-   process.env.GH_TOKEN = "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";
+   process.env.GH_TOKEN = "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";
    log.info("Checking for updates...");
    autoUpdater.autoDownload = true;
    autoUpdater.checkForUpdates();

@@ -1,5 +1,5 @@
 provider: github
 private: true
 owner: jaureguiomar
-repo: vue-typescript-full-sample-software
-token: <token-here>
+repo: inventory-software
+token: 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

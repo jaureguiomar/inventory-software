@@ -1,9 +1,7 @@
-const { defineConfig } = require("@vue/cli-service");
-module.exports = defineConfig({
-  transpileDependencies: true,
+module.exports = {
   pluginOptions: {
     electronBuilder: {
-      externals: ["escpos", "escpos-usb"],
+      // externals: ["escpos", "escpos-usb"],
       preload: {
         preload: "src/preload.ts",
         preloadClient: "src/preloadClient.ts",
@@ -23,7 +21,7 @@ module.exports = defineConfig({
             provider: "github",
             owner: "jaureguiomar",
             private: true,
-            repo: "vue-typescript-full-sample",
+            repo: "inventory-software",
             releaseType: "draft"
           }
         ],
@@ -31,13 +29,13 @@ module.exports = defineConfig({
           "target": [
               "nsis"
           ],
-          // icon: "src/assets/img/vue-typescript-full-sample-icon.ico",
+          // icon: "src/assets/img/inventory-software-icon.ico",
         },
         // nsis: {
-        //   "installerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico",
-        //   "uninstallerIcon": "src/assets/img/vue-typescript-full-sample-icon.ico"
+        //   "installerIcon": "src/assets/img/inventory-software-icon.ico",
+        //   "uninstallerIcon": "src/assets/img/inventory-software-icon.ico"
         // }
       }
     }
   }
-});
+};

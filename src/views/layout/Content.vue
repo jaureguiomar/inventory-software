@@ -1,16 +1,17 @@
-<template lang="pug">
-   div.content
-      div.border-top
-      div.content-container
-         slot(name="content")
+<template>
+   <div class="content">
+      <div class="border-top"></div>
+      <div class="content-container">
+         <slot name="content"></slot>
+      </div>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+import { defineComponent } from "vue";
+export default defineComponent({
    name: "content-component",
-   data() {
+   setup() {
       return {};
    }
 });

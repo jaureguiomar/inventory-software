@@ -1,150 +1,106 @@
-<template lang="pug">
-   transition-group(name="list" tag="div")
-      div(v-if="!loaded" key="loader" class="spinner-loader")
-         div(class="spinner-loader-container")
-            div(class="spinner-ripple-loader")
-               div(class="spinner-ripple-loader-container")
-                  div
-                  div
+<template>
+   <transition-group name="list" tag="div">
+      <div class="spinner-loader" v-if="!loaded" key="loader">
+         <div class="spinner-loader-container">
+            <div class="spinner-ripple-loader">
+               <div class="spinner-ripple-loader-container">
+                  <div></div>
+                  <div></div>
+               </div>
+            </div>
+         </div>
+      </div>
 
-      div.main-container(v-if="loaded" key="content")
-         Banner
-         Menu
-            template(#left-content)
-               p {{ content.title }}
-            template(#subtitle) {{ content.description }}
-         Content
-            template(#content)
-               div(v-if="id > 0" class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.id") }}:
-                  div(class="col-sm-2")
-                     input(v-model="id" type="text" class="form-control" disabled)
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.code") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.code.text"
-                        v-focus
-                        id="code"
-                        type="text"
-                        class="form-control counter"
-                        placeholder="Enter code"
-                        @blur="onCodeBlur"
-                        @keyup="onCodeKeyup"
-                        :class="{ 'is-invalid': data.code.error.is_error }"
-                     )
-                     div(v-if="data.code.error.is_error" class="invalid-feedback text-left") {{ data.code.error.message }}
-                     BadgeCounter(
-                        :value="data.code.text"
-                        :maxText="data.code.max_text"
-                        :isError="data.code.error.is_error"
-                     )
-
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.name") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.name.text"
-                        id="name"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter name"
-                        @blur="onNameBlur"
-                        @keyup="onNameKeyup"
-                        :class="{ 'is-invalid': data.name.error.is_error }"
-                     )
-                     div(v-if="data.name.error.is_error" class="invalid-feedback text-left") {{ data.name.error.message }}
-                     BadgeCounter(
-                        :value="data.name.text"
-                        :maxText="data.name.max_text"
-                        :isError="data.name.error.is_error"
-                     )
-
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.description") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.description.text"
-                        id="description"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter description"
-                        @blur="onDescriptionBlur"
-                        @keyup="onDescriptionKeyup"
-                        :class="{ 'is-invalid': data.description.error.is_error }"
-                     )
-                     div(v-if="data.description.error.is_error" class="invalid-feedback text-left") {{ data.description.error.message }}
-                     BadgeCounter(
-                        :value="data.description.text"
-                        :maxText="data.description.max_text"
-                        :isError="data.description.error.is_error"
-                     )
-
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.buy_price") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.buy_price.text"
-                        id="buy-price"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter buy price"
-                        @blur="onBuyPriceBlur"
-                        @keyup="onBuyPriceKeyup"
-                        :class="{ 'is-invalid': data.buy_price.error.is_error }"
-                     )
-                     div(v-if="data.buy_price.error.is_error" class="invalid-feedback text-left") {{ data.buy_price.error.message }}
-                     BadgeCounter(
-                        :value="data.buy_price.text"
-                        :maxText="data.buy_price.max_text"
-                        :isError="data.buy_price.error.is_error"
-                     )
-
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.sale_price") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.sale_price.text"
-                        id="sale-price"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter cellphone 2"
-                        @blur="onSalePriceBlur"
-                        @keyup="onSalePriceKeyup"
-                        :class="{ 'is-invalid': data.sale_price.error.is_error }"
-                     )
-                     div(v-if="data.sale_price.error.is_error" class="invalid-feedback text-left") {{ data.sale_price.error.message }}
-                     BadgeCounter(
-                        :value="data.sale_price.text"
-                        :maxText="data.sale_price.max_text"
-                        :isError="data.sale_price.error.is_error"
-                     )
-
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.quantity") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="data.quantity.text"
-                        id="quantity"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter quantity"
-                        @blur="onQuantityBlur"
-                        @keyup="onQuantityKeyup"
-                        :class="{ 'is-invalid': data.quantity.error.is_error }"
-                     )
-                     div(v-if="data.quantity.error.is_error" class="invalid-feedback text-left") {{ data.quantity.error.message }}
-                     BadgeCounter(
-                        :value="data.quantity.text"
-                        :maxText="data.quantity.max_text"
-                        :isError="data.quantity.error.is_error"
-                     )
-
-               div.text-center
-                  button(id="add-update-button" type="submit" class="btn btn-primary text-center mr-2" @click="onAddUpdate") {{ (id <= 0) ? $t("product.window.add.button.add") : $t("product.window.update.button.update") }}
-                  button(type="clear" class="btn btn-danger text-center mr-2" @click="onClear") {{ $t("product.window.button.clear") }}
-                  button(type="clear" class="btn btn-info text-center" @click="onClose") {{ $t("product.window.button.close") }}
+      <div class="main-container" v-if="loaded" key="content">
+         <Banner />
+         <Menu>
+            <template #left-content>
+               <p>{{ content.title }}</p>
+            </template>
+            <template #subtitle>{{ content.description }}</template>
+         </Menu>
+         <Content>
+            <template #content>
+               <div class="form-group row" v-if="id &gt; 0">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.id") }}:</label>
+                  <div class="col-sm-2">
+                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.code") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control counter" v-model="data.code.text" v-focus="v-focus" id="code" type="text" placeholder="Enter code" @blur="onCodeBlur" @keyup="onCodeKeyup" :class="{ 'is-invalid': data.code.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.code.error.is_error">{{ data.code.error.message }}</div>
+                     <BadgeCounter :value="data.code.text" :maxText="data.code.max_text" :isError="data.code.error.is_error"></BadgeCounter>
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.name") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="data.name.text" id="name" type="text" placeholder="Enter name" @blur="onNameBlur" @keyup="onNameKeyup" :class="{ 'is-invalid': data.name.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.name.error.is_error">{{ data.name.error.message }}</div>
+                     <BadgeCounter :value="data.name.text" :maxText="data.name.max_text" :isError="data.name.error.is_error"></BadgeCounter>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.description") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="data.description.text" id="description" type="text" placeholder="Enter description" @blur="onDescriptionBlur" @keyup="onDescriptionKeyup" :class="{ 'is-invalid': data.description.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.description.error.is_error">{{ data.description.error.message }}</div>
+                     <BadgeCounter :value="data.description.text" :maxText="data.description.max_text" :isError="data.description.error.is_error"></BadgeCounter>
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.buy_price") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="data.buy_price.text" id="buy-price" type="text" placeholder="Enter buy price" @blur="onBuyPriceBlur" @keyup="onBuyPriceKeyup" :class="{ 'is-invalid': data.buy_price.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.buy_price.error.is_error">{{ data.buy_price.error.message }}</div>
+                     <BadgeCounter :value="data.buy_price.text" :maxText="data.buy_price.max_text" :isError="data.buy_price.error.is_error"></BadgeCounter>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.sale_price") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="data.sale_price.text" id="sale-price" type="text" placeholder="Enter cellphone 2" @blur="onSalePriceBlur" @keyup="onSalePriceKeyup" :class="{ 'is-invalid': data.sale_price.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.sale_price.error.is_error">{{ data.sale_price.error.message }}</div>
+                     <BadgeCounter :value="data.sale_price.text" :maxText="data.sale_price.max_text" :isError="data.sale_price.error.is_error"></BadgeCounter>
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.quantity") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="data.quantity.text" id="quantity" type="text" placeholder="Enter quantity" @blur="onQuantityBlur" @keyup="onQuantityKeyup" :class="{ 'is-invalid': data.quantity.error.is_error }"/>
+                     <div class="invalid-feedback text-left" v-if="data.quantity.error.is_error">{{ data.quantity.error.message }}</div>
+                     <BadgeCounter :value="data.quantity.text" :maxText="data.quantity.max_text" :isError="data.quantity.error.is_error"></BadgeCounter>
+                  </div>
+               </div>
+               <div class="text-center">
+                  <button
+                     class="btn btn-primary text-center mr-2"
+                     id="add-update-button"
+                     type="submit"
+                     @click="onAddUpdate"
+                  >
+                     {{ (id <= 0) ? $t("product.window.add.button.add") : $t("product.window.update.button.update") }}
+                  </button>
+                  <button
+                     class="btn btn-danger text-center mr-2"
+                     type="clear"
+                     @click="onClear"
+                  >
+                     {{ $t("product.window.button.clear") }}
+                  </button>
+                  <button
+                     class="btn btn-info text-center"
+                     type="clear"
+                     @click="onClose"
+                  >
+                     {{ $t("product.window.button.close") }}
+                  </button>
+               </div>
+            </template>
+         </Content>
+      </div>
+   </transition-group>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue, { defineComponent } from "vue";
 import mixins from "vue-typed-mixins";
 import defaultMixin from "../../plugins/mixins";
 import { Props, IPCParams, AxiosResponse, Product } from "../../interfaces/product/product-add-update";
@@ -153,7 +109,7 @@ import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
 import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
-export default mixins(defaultMixin).extend({
+export default defineComponent({
    name: "product-add-update-component",
    mixins: [defaultMixin],
    components: {

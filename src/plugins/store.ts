@@ -1,21 +1,34 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { InjectionKey } from "vue";
+import { createStore, Store } from "vuex";
 
-Vue.use(Vuex);
-const store = new Vuex.Store({
-   state: {
-      loggued_in: false,
-      client: {
-         loaded_reply: false
-      },
-      supplier: {
-         loaded_reply: false
-      },
-      product: {
-         loaded_reply: false
-      },
-      category: {
-         loaded_reply: false
+interface GenericInterface {
+   loaded_reply: boolean;
+}
+interface State {
+   loggued_in: boolean;
+   client: GenericInterface;
+   supplier: GenericInterface;
+   product: GenericInterface;
+   category: GenericInterface;
+}
+export const key: InjectionKey<Store<State>> = Symbol();
+
+const store = createStore<State>({
+   state() {
+      return {
+         loggued_in: false,
+         client: {
+            loaded_reply: false
+         },
+         supplier: {
+            loaded_reply: false
+         },
+         product: {
+            loaded_reply: false
+         },
+         category: {
+            loaded_reply: false
+         }
       }
    },
    getters: {

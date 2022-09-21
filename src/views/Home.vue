@@ -1,51 +1,72 @@
-<template lang="pug">
-   div.main-container
-      Banner
-      MenuHome
-      Content
-         template(#content)
-            div.indicators
-               div.indicator-item
-                  div.indicator-left
-                     a(href="#_")
-                        font-awesome-icon(icon="fa-solid fa-arrows-rotate" size="4x")
-                  div.indicator-right
-                     h4 Data
-                     h6 Description about this data
-               div.indicator-item
-                  div.indicator-left
-                     a(href="#_")
-                        font-awesome-icon(icon="fa-solid fa-arrows-rotate" size="4x")
-                  div.indicator-right
-                     h4 Data
-                     h6 Description about this data
-               div.indicator-item
-                  div.indicator-left
-                     a(href="#_")
-                        font-awesome-icon(icon="fa-solid fa-arrows-rotate" size="4x")
-                  div.indicator-right
-                     h4 Data
-                     h6 Description about this data
-               div.indicator-item
-                  div.indicator-left
-                     a(href="#_")
-                        font-awesome-icon(icon="fa-solid fa-arrows-rotate" size="4x")
-                  div.indicator-right
-                     h4 Data
-                     h6 Description about this data
-
-      Content
-         template(#content)
-            h1 Charts here!
+<template>
+   <div class="main-container">
+      <Banner />
+      <MenuHome />
+      <Content>
+         <template #content>
+            <div class="indicators">
+               <div class="indicator-item">
+                  <div class="indicator-left">
+                     <a href="#_">
+                        <font-awesome-icon icon="fa-solid fa-arrows-rotate" size="4x"></font-awesome-icon>
+                     </a>
+                  </div>
+                  <div class="indicator-right">
+                     <h4>Data</h4>
+                     <h6>Description about this data</h6>
+                  </div>
+               </div>
+               <div class="indicator-item">
+                  <div class="indicator-left">
+                     <a href="#_">
+                        <font-awesome-icon icon="fa-solid fa-arrows-rotate" size="4x"></font-awesome-icon>
+                     </a>
+                  </div>
+                  <div class="indicator-right">
+                     <h4>Data</h4>
+                     <h6>Description about this data</h6>
+                  </div>
+               </div>
+               <div class="indicator-item">
+                  <div class="indicator-left">
+                     <a href="#_">
+                        <font-awesome-icon icon="fa-solid fa-arrows-rotate" size="4x"></font-awesome-icon>
+                     </a>
+                  </div>
+                  <div class="indicator-right">
+                     <h4>Data</h4>
+                     <h6>Description about this data</h6>
+                  </div>
+               </div>
+               <div class="indicator-item">
+                  <div class="indicator-left">
+                     <a href="#_">
+                        <font-awesome-icon icon="fa-solid fa-arrows-rotate" size="4x"></font-awesome-icon>
+                     </a>
+                  </div>
+                  <div class="indicator-right">
+                     <h4>Data</h4>
+                     <h6>Description about this data</h6>
+                  </div>
+               </div>
+            </div>
+         </template>
+      </Content>
+      <Content>
+         <template #content>
+            <h1>Charts here!</h1>
+         </template>
+      </Content>
+   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "vue";
 import Banner from "../views/layout/Banner.vue";
 import Content from "../views/layout/Content.vue";
 import MenuHome from "../views/layout/MenuHome.vue";
 
-export default Vue.extend({
+export default defineComponent({
    name: "home-component",
    components: {
       Banner,

@@ -1,93 +1,86 @@
-<template lang="pug">
-   transition-group(name="list" tag="div")
-      div(v-if="!loaded" key="loader" class="spinner-loader")
-         div(class="spinner-loader-container")
-            div(class="spinner-ripple-loader")
-               div(class="spinner-ripple-loader-container")
-                  div
-                  div
+<template>
+   <transition-group name="list" tag="div">
+      <div class="spinner-loader" v-if="!loaded" key="loader">
+         <div class="spinner-loader-container">
+            <div class="spinner-ripple-loader">
+               <div class="spinner-ripple-loader-container">
+                  <div></div>
+                  <div></div>
+               </div>
+            </div>
+         </div>
+      </div>
 
-      div.main-container(v-if="loaded" key="content")
-         Banner
-         Menu
-            template(#left-content)
-               p {{ $t("product.window.delete.title") }}
-            template(#subtitle) {{ $t("product.window.delete.subtitle") }}
-         Content
-            template(#content)
-               div(v-if="id > 0" class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.id") }}:
-                  div(class="col-sm-2")
-                     input(
-                        v-model="id"
-                        type="text"
-                        class="form-control"
-                        disabled
-                     )
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.code") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="code"
-                        type="text"
-                        class="form-control counter"
-                        placeholder="Enter code"
-                        disabled
-                     )
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.name") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="name"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter name"
-                        disabled
-                     )
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.description") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="description"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter description"
-                        disabled
-                     )
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.buy_price") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="buy_price"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter buy price"
-                        disabled
-                     )
-               div(class="form-group row")
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.sale_price") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="sale_price"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter sale price"
-                        disabled
-                     )
-                  label(class="col-sm-2 col-form-label") {{ $t("product.window.field.quantity") }}:
-                  div(class="col-sm-4")
-                     input(
-                        v-model="quantity"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter quantity"
-                        disabled
-                     )
-               div.text-center
-                  button( type="submit" class="btn btn-danger text-center mr-2" @click="onDelete") {{ $t("product.window.delete.button.delete") }}
-                  button(type="clear" class="btn btn-info text-center" @click="onClose") {{ $t("product.window.button.close") }}
+      <div class="main-container" v-if="loaded" key="content">
+         <Banner />
+         <Menu>
+            <template #left-content>
+               <p>{{ $t("product.window.delete.title") }}</p>
+            </template>
+            <template #subtitle>{{ $t("product.window.delete.subtitle") }}</template>
+         </Menu>
+         <Content>
+            <template #content>
+               <div class="form-group row" v-if="id &gt; 0">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.id") }}:</label>
+                  <div class="col-sm-2">
+                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.code") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control counter" v-model="code" type="text" placeholder="Enter code" disabled="disabled"/>
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.name") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="name" type="text" placeholder="Enter name" disabled="disabled"/>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.description") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="description" type="text" placeholder="Enter description" disabled="disabled"/>
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.buy_price") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="buy_price" type="text" placeholder="Enter buy price" disabled="disabled"/>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.sale_price") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="sale_price" type="text" placeholder="Enter sale price" disabled="disabled"/>
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ $t("product.window.field.quantity") }}:</label>
+                  <div class="col-sm-4">
+                     <input class="form-control" v-model="quantity" type="text" placeholder="Enter quantity" disabled="disabled"/>
+                  </div>
+               </div>
+               <div class="text-center">
+                  <button
+                     class="btn btn-danger text-center mr-2"
+                     type="submit"
+                     @click="onDelete"
+                  >
+                     {{ $t("product.window.delete.button.delete") }}
+                  </button>
+                  <button
+                     class="btn btn-info text-center"
+                     type="clear"
+                     @click="onClose"
+                  >
+                     {{ $t("product.window.button.close") }}
+                  </button>
+               </div>
+            </template>
+         </Content>
+      </div>
+   </transition-group>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue, { defineComponent } from "vue";
 import mixins from "vue-typed-mixins";
 import defaultMixin from "../../plugins/mixins";
 import { Props, IPCParams } from "../../interfaces/product/product-delete";
@@ -95,7 +88,7 @@ import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
 
-export default mixins(defaultMixin).extend({
+export default defineComponent({
    name: "product-delete-component",
    mixins: [defaultMixin],
    components: {
