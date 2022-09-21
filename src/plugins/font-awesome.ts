@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
    faUsers, faArrowLeft, faPlus,
@@ -17,3 +18,5 @@ library.add(faBoxesStacked);
 library.add(faBook);
 library.add(faArrowRightFromBracket);
 library.add(faEye);
+
+export default FontAwesomeIcon;
