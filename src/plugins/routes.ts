@@ -203,14 +203,10 @@ const router = createRouter({
    history: createWebHistory()
 });
 
-interface AuthProps {
-   loggued_in: boolean;
-}
-
 router.beforeEach((to, from, next) => {
-   const session:AuthProps = JSON.parse(localStorage.getItem("session") || "") || {
-      loggued_in: false
-   };
+   const session = JSON.parse(localStorage.getItem("session") || `{
+      "loggued_in": false
+   }`);
    store.commit("SET_LOGGUED_IN_DATA", session.loggued_in);
 
    if(!to.name) {
