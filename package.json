@@ -34,8 +34,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/vue-fontawesome": "^3.0.1",
     "axios": "^0.20.0",
-    "bootstrap": "^4.5.0",
-    "bootstrap-vue": "^2.22.0",
     "core-js": "^3.6.5",
     "electron-log": "^4.4.7",
     "electron-updater": "^4.0.0",

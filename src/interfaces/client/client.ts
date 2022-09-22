@@ -1,9 +1,3 @@
-// Axios response
-interface Error {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
 interface Client {
    id: number;
    is_active: number;
@@ -15,6 +9,13 @@ interface Client {
    cellphone: string;
    cellphone2: string|null;
    email: string;
+}
+
+// Axios response
+interface Error {
+   is_error: boolean;
+   message: string|null;
+   no_error: number;
 }
 interface ClientResponse {
    data: Array<Client>;
@@ -29,16 +30,6 @@ interface AxiosResponse {
    statusText: string;
 }
 
-// Props
-interface PropsData {
-   client: Array<Client>;
-   new_client: Array<Client>;
-}
-interface Props {
-   data: PropsData;
-   table: any;
-}
-
 // Window response
 interface WindowResponse {
    id: number;
@@ -48,7 +39,6 @@ interface WindowResponse {
 }
 
 export {
-   Props,
    AxiosResponse,
    WindowResponse,
    Client

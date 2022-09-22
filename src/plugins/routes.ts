@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
-// import Client from "@/views/Client.vue";
+import Client from "@/views/Client.vue";
 // import ClientSee from "@/windows/client/ClientSee.vue";
 // import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
 // import ClientDelete from "@/windows/client/ClientDelete.vue";
@@ -36,14 +36,14 @@ const routes = [
          requiresAuth: true
       }
    },
-   // {
-   //    path: "/client",
-   //    component: Client,
-   //    name: "client",
-   //    meta: {
-   //       requiresAuth: true
-   //    }
-   // },
+   {
+      path: "/client",
+      component: Client,
+      name: "client",
+      meta: {
+         requiresAuth: true
+      }
+   },
    // {
    //    path: "/client-see/:id",
    //    component: ClientSee,
