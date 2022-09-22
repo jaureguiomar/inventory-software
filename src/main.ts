@@ -1,11 +1,11 @@
 import { createApp } from "vue";
+import FontAwesomeIcon from "@/plugins/font-awesome";
+import { Quasar } from "quasar";
 import App from "./App.vue";
 import i18n from "@/plugins/i18n";
 import router from "@/plugins/routes";
 import store, { key } from "@/plugins/store";
-import FontAwesomeIcon from "@/plugins/font-awesome";
-import { Quasar } from "quasar";
-import quasarUserOptions from "@/quasar-user-options";
+import quasarUserOptions from "@/plugins/quasar";
 // Global Template styles
 // import "@/assets/scss/bootstrap-theme.scss";
 import "@/assets/scss/styles.scss";
