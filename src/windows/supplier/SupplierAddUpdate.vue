@@ -1,6 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div class="spinner-loader" v-if="!loaded" key="loader">
+      <div v-if="!loaded" key="loader" class="spinner-loader">
          <div class="spinner-loader-container">
             <div class="spinner-ripple-loader">
                <div class="spinner-ripple-loader-container">
@@ -11,7 +11,7 @@
          </div>
       </div>
 
-      <div class="main-container" v-if="loaded" key="content">
+      <div v-if="loaded" key="content" class="main-container">
          <Banner />
          <Menu>
             <template #left-content>
@@ -21,24 +21,24 @@
          </Menu>
          <Content>
             <template #content>
-               <div class="form-group row" v-if="id &gt; 0">
+               <div v-if="id &gt; 0" class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("supplier.window.field.id") }}:</label>
                   <div class="col-sm-2">
-                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("supplier.window.field.name") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control counter" v-model="data.name.text" v-focus="v-focus" id="name" type="text" placeholder="Enter name" @blur="onNameBlur" @keyup="onNameKeyup" :class="{ 'is-invalid': data.name.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.name.error.is_error">{{ data.name.error.message }}</div>
+                     <input id="name" v-model="data.name.text" v-focus="v-focus" class="form-control counter" type="text" placeholder="Enter name" :class="{ 'is-invalid': data.name.error.is_error }" @blur="onNameBlur" @keyup="onNameKeyup" />
+                     <div v-if="data.name.error.is_error" class="invalid-feedback text-left">{{ data.name.error.message }}</div>
                      <BadgeCounter :value="data.name.text" :maxText="data.name.max_text" :isError="data.name.error.is_error"></BadgeCounter>
                   </div>
                </div>
                <div class="text-center">
                   <button
-                     class="btn btn-primary text-center mr-2"
                      id="add-update-button"
+                     class="btn btn-primary text-center mr-2"
                      type="submit"
                      @click="onAddUpdate"
                   >
@@ -77,13 +77,13 @@ import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
 export default defineComponent({
    name: "supplier-add-update-component",
-   mixins: [defaultMixin],
    components: {
       Banner,
       Menu,
       Content,
       BadgeCounter
    },
+   mixins: [defaultMixin],
    data() {
       return {
          id: -1,

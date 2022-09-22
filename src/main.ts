@@ -4,6 +4,8 @@ import i18n from "@/plugins/i18n";
 import router from "@/plugins/routes";
 import store, { key } from "@/plugins/store";
 import FontAwesomeIcon from "@/plugins/font-awesome";
+import { Quasar } from "quasar";
+import quasarUserOptions from "@/quasar-user-options";
 // Global Template styles
 // import "@/assets/scss/bootstrap-theme.scss";
 import "@/assets/scss/styles.scss";
@@ -13,5 +15,6 @@ createApp(App)
    .use(router)
    .use(store, key)
    .use(i18n)
+   .use(Quasar, quasarUserOptions)
    .component("font-awesome-icon", FontAwesomeIcon)
    .mount("#app");

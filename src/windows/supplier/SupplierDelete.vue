@@ -1,6 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div class="spinner-loader" v-if="!loaded" key="loader">
+      <div v-if="!loaded" key="loader" class="spinner-loader">
          <div class="spinner-loader-container">
             <div class="spinner-ripple-loader">
                <div class="spinner-ripple-loader-container">
@@ -11,7 +11,7 @@
          </div>
       </div>
 
-      <div class="main-container" v-if="loaded" key="content">
+      <div v-if="loaded" key="content" class="main-container">
          <Banner />
          <Menu>
             <template #left-content>
@@ -21,16 +21,16 @@
          </Menu>
          <Content>
             <template #content>
-               <div class="form-group row" v-if="id &gt; 0">
+               <div v-if="id &gt; 0" class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("supplier.window.field.id") }}:</label>
                   <div class="col-sm-2">
-                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("supplier.window.field.name") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control counter" v-model="name" type="text" placeholder="Enter first name" disabled="disabled"/>
+                     <input v-model="name" class="form-control counter" type="text" placeholder="Enter first name" disabled="disabled" />
                   </div>
                </div>
                <div class="text-center">
@@ -66,12 +66,12 @@ import Content from "../../views/layout/Content.vue";
 
 export default defineComponent({
    name: "supplier-delete-component",
-   mixins: [defaultMixin],
    components: {
       Banner,
       Menu,
       Content
    },
+   mixins: [defaultMixin],
    data() {
       return {
          id: -1,

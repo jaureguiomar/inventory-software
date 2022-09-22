@@ -46,14 +46,14 @@
             </b-row>
             <div class="table-responsive">
                <b-table
+                  v-model:sort-by.sync="table.sortBy"
+                  v-model:sort-desc.sync="table.sortDesc"
                   :items="data.product"
                   :fields="table.fields"
                   :current-page="table.currentPage"
                   :per-page="table.perPage"
                   :filter="table.filter"
                   :filter-included-fields="table.filterOn"
-                  v-model:sort-by.sync="table.sortBy"
-                  v-model:sort-desc.sync="table.sortDesc"
                   :sort-direction="table.sortDirection"
                   stacked="md"
                   show-emptya="show-emptya"
@@ -61,8 +61,8 @@
                   :empty-filtered-text="$t('product.table.content.details.empty')"
                   small="small"
                   filter-debounce="600"
-                  @filtered="onFiltered"
                   hover="hover"
+                  @filtered="onFiltered"
                >
                   <template #cell(details)="row">
                      <b-button
@@ -129,8 +129,8 @@
 
                <b-col class="my-1" sm="12" md="12">
                   <b-pagination
-                     class="my-0 customPagination"
                      v-model="table.currentPage"
+                     class="my-0 customPagination"
                      :total-rows="table.totalRows"
                      :per-page="table.perPage"
                      align="right"

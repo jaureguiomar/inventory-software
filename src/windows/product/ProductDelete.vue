@@ -1,6 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div class="spinner-loader" v-if="!loaded" key="loader">
+      <div v-if="!loaded" key="loader" class="spinner-loader">
          <div class="spinner-loader-container">
             <div class="spinner-ripple-loader">
                <div class="spinner-ripple-loader-container">
@@ -11,7 +11,7 @@
          </div>
       </div>
 
-      <div class="main-container" v-if="loaded" key="content">
+      <div v-if="loaded" key="content" class="main-container">
          <Banner />
          <Menu>
             <template #left-content>
@@ -21,40 +21,40 @@
          </Menu>
          <Content>
             <template #content>
-               <div class="form-group row" v-if="id &gt; 0">
+               <div v-if="id &gt; 0" class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.id") }}:</label>
                   <div class="col-sm-2">
-                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.code") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control counter" v-model="code" type="text" placeholder="Enter code" disabled="disabled"/>
+                     <input v-model="code" class="form-control counter" type="text" placeholder="Enter code" disabled="disabled" />
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.name") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="name" type="text" placeholder="Enter name" disabled="disabled"/>
+                     <input v-model="name" class="form-control" type="text" placeholder="Enter name" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.description") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="description" type="text" placeholder="Enter description" disabled="disabled"/>
+                     <input v-model="description" class="form-control" type="text" placeholder="Enter description" disabled="disabled" />
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.buy_price") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="buy_price" type="text" placeholder="Enter buy price" disabled="disabled"/>
+                     <input v-model="buy_price" class="form-control" type="text" placeholder="Enter buy price" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.sale_price") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="sale_price" type="text" placeholder="Enter sale price" disabled="disabled"/>
+                     <input v-model="sale_price" class="form-control" type="text" placeholder="Enter sale price" disabled="disabled" />
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.quantity") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="quantity" type="text" placeholder="Enter quantity" disabled="disabled"/>
+                     <input v-model="quantity" class="form-control" type="text" placeholder="Enter quantity" disabled="disabled" />
                   </div>
                </div>
                <div class="text-center">
@@ -90,12 +90,12 @@ import Content from "../../views/layout/Content.vue";
 
 export default defineComponent({
    name: "product-delete-component",
-   mixins: [defaultMixin],
    components: {
       Banner,
       Menu,
       Content
    },
+   mixins: [defaultMixin],
    data() {
       return {
          id: -1,

@@ -1,6 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div class="spinner-loader" v-if="!loaded" key="loader">
+      <div v-if="!loaded" key="loader" class="spinner-loader">
          <div class="spinner-loader-container">
             <div class="spinner-ripple-loader">
                <div class="spinner-ripple-loader-container">
@@ -11,7 +11,7 @@
          </div>
       </div>
 
-      <div class="main-container" v-if="loaded" key="content">
+      <div v-if="loaded" key="content" class="main-container">
          <Banner />
          <Menu>
             <template #left-content>
@@ -21,58 +21,58 @@
          </Menu>
          <Content>
             <template #content>
-               <div class="form-group row" v-if="id &gt; 0">
+               <div v-if="id &gt; 0" class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.id") }}:</label>
                   <div class="col-sm-2">
-                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.code") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control counter" v-model="data.code.text" v-focus="v-focus" id="code" type="text" placeholder="Enter code" @blur="onCodeBlur" @keyup="onCodeKeyup" :class="{ 'is-invalid': data.code.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.code.error.is_error">{{ data.code.error.message }}</div>
+                     <input id="code" v-model="data.code.text" v-focus="v-focus" class="form-control counter" type="text" placeholder="Enter code" :class="{ 'is-invalid': data.code.error.is_error }" @blur="onCodeBlur" @keyup="onCodeKeyup" />
+                     <div v-if="data.code.error.is_error" class="invalid-feedback text-left">{{ data.code.error.message }}</div>
                      <BadgeCounter :value="data.code.text" :maxText="data.code.max_text" :isError="data.code.error.is_error"></BadgeCounter>
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.name") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="data.name.text" id="name" type="text" placeholder="Enter name" @blur="onNameBlur" @keyup="onNameKeyup" :class="{ 'is-invalid': data.name.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.name.error.is_error">{{ data.name.error.message }}</div>
+                     <input id="name" v-model="data.name.text" class="form-control" type="text" placeholder="Enter name" :class="{ 'is-invalid': data.name.error.is_error }" @blur="onNameBlur" @keyup="onNameKeyup" />
+                     <div v-if="data.name.error.is_error" class="invalid-feedback text-left">{{ data.name.error.message }}</div>
                      <BadgeCounter :value="data.name.text" :maxText="data.name.max_text" :isError="data.name.error.is_error"></BadgeCounter>
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.description") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="data.description.text" id="description" type="text" placeholder="Enter description" @blur="onDescriptionBlur" @keyup="onDescriptionKeyup" :class="{ 'is-invalid': data.description.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.description.error.is_error">{{ data.description.error.message }}</div>
+                     <input id="description" v-model="data.description.text" class="form-control" type="text" placeholder="Enter description" :class="{ 'is-invalid': data.description.error.is_error }" @blur="onDescriptionBlur" @keyup="onDescriptionKeyup" />
+                     <div v-if="data.description.error.is_error" class="invalid-feedback text-left">{{ data.description.error.message }}</div>
                      <BadgeCounter :value="data.description.text" :maxText="data.description.max_text" :isError="data.description.error.is_error"></BadgeCounter>
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.buy_price") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="data.buy_price.text" id="buy-price" type="text" placeholder="Enter buy price" @blur="onBuyPriceBlur" @keyup="onBuyPriceKeyup" :class="{ 'is-invalid': data.buy_price.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.buy_price.error.is_error">{{ data.buy_price.error.message }}</div>
+                     <input id="buy-price" v-model="data.buy_price.text" class="form-control" type="text" placeholder="Enter buy price" :class="{ 'is-invalid': data.buy_price.error.is_error }" @blur="onBuyPriceBlur" @keyup="onBuyPriceKeyup" />
+                     <div v-if="data.buy_price.error.is_error" class="invalid-feedback text-left">{{ data.buy_price.error.message }}</div>
                      <BadgeCounter :value="data.buy_price.text" :maxText="data.buy_price.max_text" :isError="data.buy_price.error.is_error"></BadgeCounter>
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.sale_price") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="data.sale_price.text" id="sale-price" type="text" placeholder="Enter cellphone 2" @blur="onSalePriceBlur" @keyup="onSalePriceKeyup" :class="{ 'is-invalid': data.sale_price.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.sale_price.error.is_error">{{ data.sale_price.error.message }}</div>
+                     <input id="sale-price" v-model="data.sale_price.text" class="form-control" type="text" placeholder="Enter cellphone 2" :class="{ 'is-invalid': data.sale_price.error.is_error }" @blur="onSalePriceBlur" @keyup="onSalePriceKeyup" />
+                     <div v-if="data.sale_price.error.is_error" class="invalid-feedback text-left">{{ data.sale_price.error.message }}</div>
                      <BadgeCounter :value="data.sale_price.text" :maxText="data.sale_price.max_text" :isError="data.sale_price.error.is_error"></BadgeCounter>
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("product.window.field.quantity") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="data.quantity.text" id="quantity" type="text" placeholder="Enter quantity" @blur="onQuantityBlur" @keyup="onQuantityKeyup" :class="{ 'is-invalid': data.quantity.error.is_error }"/>
-                     <div class="invalid-feedback text-left" v-if="data.quantity.error.is_error">{{ data.quantity.error.message }}</div>
+                     <input id="quantity" v-model="data.quantity.text" class="form-control" type="text" placeholder="Enter quantity" :class="{ 'is-invalid': data.quantity.error.is_error }" @blur="onQuantityBlur" @keyup="onQuantityKeyup" />
+                     <div v-if="data.quantity.error.is_error" class="invalid-feedback text-left">{{ data.quantity.error.message }}</div>
                      <BadgeCounter :value="data.quantity.text" :maxText="data.quantity.max_text" :isError="data.quantity.error.is_error"></BadgeCounter>
                   </div>
                </div>
                <div class="text-center">
                   <button
-                     class="btn btn-primary text-center mr-2"
                      id="add-update-button"
+                     class="btn btn-primary text-center mr-2"
                      type="submit"
                      @click="onAddUpdate"
                   >
@@ -111,13 +111,13 @@ import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
 export default defineComponent({
    name: "product-add-update-component",
-   mixins: [defaultMixin],
    components: {
       Banner,
       Menu,
       Content,
       BadgeCounter
    },
+   mixins: [defaultMixin],
    data() {
       return {
          id: -1,

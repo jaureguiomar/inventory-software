@@ -1,6 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div class="spinner-loader" v-if="!loaded" key="loader">
+      <div v-if="!loaded" key="loader" class="spinner-loader">
          <div class="spinner-loader-container">
             <div class="spinner-ripple-loader">
                <div class="spinner-ripple-loader-container">
@@ -11,7 +11,7 @@
          </div>
       </div>
 
-      <div class="main-container" v-if="loaded" key="content">
+      <div v-if="loaded" key="content" class="main-container">
          <Banner />
          <Menu>
             <template #left-content>
@@ -21,40 +21,40 @@
          </Menu>
          <Content>
             <template #content>
-               <div class="form-group row" v-if="id &gt; 0">
+               <div v-if="id &gt; 0" class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.id") }}:</label>
                   <div class="col-sm-2">
-                     <input class="form-control" v-model="id" type="text" disabled="disabled"/>
+                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.first_name") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control counter" v-model="first_name" type="text" placeholder="Enter first name" disabled="disabled"/>
+                     <input v-model="first_name" class="form-control counter" type="text" placeholder="Enter first name" disabled="disabled" />
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.last_name") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="last_name" type="text" placeholder="Enter last name" disabled="disabled"/>
+                     <input v-model="last_name" class="form-control" type="text" placeholder="Enter last name" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.address") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="address" type="text" placeholder="Enter address" disabled="disabled"/>
+                     <input v-model="address" class="form-control" type="text" placeholder="Enter address" disabled="disabled" />
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="cellphone" type="text" placeholder="Enter cellphone" disabled="disabled"/>
+                     <input v-model="cellphone" class="form-control" type="text" placeholder="Enter cellphone" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone2") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="cellphone2" type="text" placeholder="Enter cellphone 2" disabled="disabled"/>
+                     <input v-model="cellphone2" class="form-control" type="text" placeholder="Enter cellphone 2" disabled="disabled" />
                   </div>
                   <label class="col-sm-2 col-form-label">{{ $t("client.window.field.email") }}:</label>
                   <div class="col-sm-4">
-                     <input class="form-control" v-model="email" type="text" placeholder="Enter email" disabled="disabled"/>
+                     <input v-model="email" class="form-control" type="text" placeholder="Enter email" disabled="disabled" />
                   </div>
                </div>
                <div class="text-center">
@@ -90,12 +90,12 @@ import Content from "../../views/layout/Content.vue";
 
 export default defineComponent({
    name: "client-delete-component",
-   mixins: [defaultMixin],
    components: {
       Banner,
       Menu,
       Content
    },
+   mixins: [defaultMixin],
    data() {
       return {
          id: -1,

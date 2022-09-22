@@ -26,16 +26,18 @@ module.exports = {
           }
         ],
         win: {
-          "target": [
-              "nsis"
-          ],
-          // icon: "src/assets/img/inventory-software-icon.ico",
-        },
-        // nsis: {
-        //   "installerIcon": "src/assets/img/inventory-software-icon.ico",
-        //   "uninstallerIcon": "src/assets/img/inventory-software-icon.ico"
-        // }
+          target: [
+            "nsis"
+          ]
+        }
       }
+    },
+    quasar: {
+      importStrategy: "kebab",
+      rtlSupport: false
     }
-  }
+  },
+  transpileDependencies: [
+    "quasar"
+  ]
 };
