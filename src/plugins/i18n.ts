@@ -1,7 +1,7 @@
-import { createI18n } from "vue-i18n/index";
+import { createI18n } from "vue-i18n";
 
-// import { useI18n } from "vue-i18n";
 const i18n = createI18n({
+   legacy: false,
    locale: "en",
    allowComposition: true,
    messages: {
