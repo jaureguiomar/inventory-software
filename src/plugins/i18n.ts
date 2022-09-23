@@ -1,4 +1,4 @@
-import { createI18n } from "vue-i18n";
+import { createI18n } from "vue-i18n/index";
 
 const i18n = createI18n({
    legacy: false,
@@ -18,6 +18,7 @@ const i18n = createI18n({
                field: {
                   id: "Id Client",
                   created: "Created",
+                  updated: "Updated",
                   first_name: "First Name",
                   last_name: "Last Name",
                   show_details: "Show details",

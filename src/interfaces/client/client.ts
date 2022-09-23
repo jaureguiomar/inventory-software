@@ -21,14 +21,17 @@ interface ClientResponse {
    data: Array<Client>;
    error: Error;
 }
-interface AxiosResponse {
-   data: ClientResponse;
-   config: any;
-   headers: any;
-   request: any;
-   status: number;
-   statusText: string;
-}
+// interface AxiosResponse {
+//    data: ClientResponse;
+//    config: any;
+//    headers: any;
+//    request: any;
+//    status: number;
+//    statusText: string;
+// }
+// interface Response {
+//    response: AxiosResponse;
+// }
 
 // Window response
 interface WindowResponse {
@@ -39,7 +42,7 @@ interface WindowResponse {
 }
 
 export {
-   AxiosResponse,
+   ClientResponse,
    WindowResponse,
    Client
 };

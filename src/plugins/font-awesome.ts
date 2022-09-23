@@ -4,7 +4,7 @@ import {
    faUsers, faArrowLeft, faPlus,
    faXmark, faPenToSquare, faArrowsRotate,
    faTruckField, faBoxesStacked, faBook,
-   faArrowRightFromBracket, faEye
+   faArrowRightFromBracket, faEye, faSearch
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faUsers);
@@ -18,5 +18,6 @@ library.add(faBoxesStacked);
 library.add(faBook);
 library.add(faArrowRightFromBracket);
 library.add(faEye);
+library.add(faSearch);
 
 export default FontAwesomeIcon;
