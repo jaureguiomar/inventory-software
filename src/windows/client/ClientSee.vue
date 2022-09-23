@@ -15,46 +15,46 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p>{{ $t("client.window.see.title") }}</p>
+               <p>{{ t("client.window.see.title") }}</p>
             </template>
-            <template #subtitle>{{ $t("client.window.see.subtitle") }}</template>
+            <template #subtitle>{{ t("client.window.see.subtitle") }}</template>
          </Menu>
          <Content>
             <template #content>
-               <div v-if="id &gt; 0" class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.id") }}:</label>
+               <div v-if="id > 0" class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.id") }}:</label>
                   <div class="col-sm-2">
-                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
+                     <input v-model="client.id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.first_name") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.first_name") }}:</label>
                   <div class="col-sm-4">
-                     <input v-model="first_name" class="form-control counter" type="text" placeholder="Enter first name" disabled="disabled" />
+                     <input v-model="client.first_name" class="form-control counter" type="text" placeholder="Enter first name" disabled="disabled" />
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.last_name") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.last_name") }}:</label>
                   <div class="col-sm-4">
-                     <input v-model="last_name" class="form-control" type="text" placeholder="Enter last name" disabled="disabled" />
-                  </div>
-               </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.address") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="address" class="form-control" type="text" placeholder="Enter address" disabled="disabled" />
-                  </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="cellphone" class="form-control" type="text" placeholder="Enter cellphone" disabled="disabled" />
+                     <input v-model="client.last_name" class="form-control" type="text" placeholder="Enter last name" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone2") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.address") }}:</label>
                   <div class="col-sm-4">
-                     <input v-model="cellphone2" class="form-control" type="text" placeholder="Enter cellphone 2" disabled="disabled" />
+                     <input v-model="client.address" class="form-control" type="text" placeholder="Enter address" disabled="disabled" />
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.email") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.cellphone") }}:</label>
                   <div class="col-sm-4">
-                     <input v-model="email" class="form-control" type="text" placeholder="Enter email" disabled="disabled" />
+                     <input v-model="client.cellphone" class="form-control" type="text" placeholder="Enter cellphone" disabled="disabled" />
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.cellphone2") }}:</label>
+                  <div class="col-sm-4">
+                     <input v-model="client.cellphone2" class="form-control" type="text" placeholder="Enter cellphone 2" disabled="disabled" />
+                  </div>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.email") }}:</label>
+                  <div class="col-sm-4">
+                     <input v-model="client.email" class="form-control" type="text" placeholder="Enter email" disabled="disabled" />
                   </div>
                </div>
                <div class="text-center">
@@ -63,7 +63,7 @@
                      type="clear"
                      @click="onClose"
                   >
-                     {{ $t("client.window.button.close") }}
+                     {{ t("client.window.button.close") }}
                   </button>
                </div>
             </template>
@@ -73,10 +73,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import mixins from "vue-typed-mixins";
-import defaultMixin from "../../plugins/mixins";
-import { Props, IPCParams } from "../../interfaces/client/client-see";
+import { defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n/index";
+import { Client, IPCParams } from "../../interfaces/client/client-see";
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
@@ -88,43 +87,47 @@ export default defineComponent({
       Menu,
       Content
    },
-   mixins: [defaultMixin],
-   data() {
-      return {
+   setup() {
+      const { t } = useI18n();
+      const client = reactive<Client>({
          id: -1,
          first_name: "",
          last_name: "",
          address: "",
          cellphone: "",
          cellphone2: "",
-         email: "",
-         loaded: false
-      } as Props;
-   },
-   created() {
-      const vue_this = this;
-      window.api.receive("client-module-window-reply", (data:IPCParams) => {
-         vue_this.id = data.id;
-         if(data.data) {
-            vue_this.first_name = data.data.first_name;
-            vue_this.last_name = data.data.last_name;
-            vue_this.address = data.data.address;
-            vue_this.cellphone = data.data.cellphone;
-            vue_this.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
-            vue_this.email = data.data.email;
-         }
-         vue_this.loaded = true;
+         email: ""
       });
-   },
-   methods: {
-      onClose() {
+      const loaded = ref(false);
+
+      window.api.receive("client-module-window-reply", (data:IPCParams) => {
+         client.id = data.id;
+         if(data.data) {
+            client.first_name = data.data.first_name;
+            client.last_name = data.data.last_name;
+            client.address = data.data.address;
+            client.cellphone = data.data.cellphone;
+            client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
+            client.email = data.data.email;
+         }
+         loaded.value = true;
+      });
+
+      const onClose = () => {
          window.api.send("client-module-window-close", {
-            id: this.id,
+            id: client.id,
             data: null,
             result: "closed",
             type: "see"
          });
       }
+
+      return {
+         t,
+         client,
+         loaded,
+         onClose
+      };
    }
 });
 </script>

@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
+import { createRouter, createWebHashHistory, RouteLocationNormalized } from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Client from "@/views/Client.vue";
-// import ClientSee from "@/windows/client/ClientSee.vue";
+import ClientSee from "@/windows/client/ClientSee.vue";
 // import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
 // import ClientDelete from "@/windows/client/ClientDelete.vue";
 // import Supplier from "@/views/Supplier.vue";
@@ -44,14 +44,14 @@ const routes = [
          requiresAuth: true
       }
    },
-   // {
-   //    path: "/client-see/:id",
-   //    component: ClientSee,
-   //    name: "client-see",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
+   {
+      path: "/client-see/:id",
+      component: ClientSee,
+      name: "client-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
    // {
    //    path: "/client-add",
    //    component: ClientAddUpdate,
@@ -200,7 +200,7 @@ const routes = [
 
 const router = createRouter({
    routes: routes,
-   history: createWebHistory()
+   history: createWebHashHistory()
 });
 
 router.beforeEach((to, from, next) => {
