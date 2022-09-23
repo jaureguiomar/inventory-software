@@ -83,7 +83,7 @@
                      <q-btn
                         class="q-mr-sm"
                         color="negative"
-                        label="Remove"
+                        label="Delete"
                         @click="onClientDeleteWindowClick(props.row)"
                      >
                      </q-btn>

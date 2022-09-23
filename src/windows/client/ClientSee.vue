@@ -15,56 +15,98 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p>{{ t("client.window.see.title") }}</p>
+               <p class="q-ma-none">{{ t("client.window.see.title") }}</p>
             </template>
             <template #subtitle>{{ t("client.window.see.subtitle") }}</template>
          </Menu>
          <Content>
             <template #content>
-               <div v-if="id > 0" class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.id") }}:</label>
-                  <div class="col-sm-2">
-                     <input v-model="client.id" class="form-control" type="text" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-if="client.id > 0"
+                        v-model="client.id"
+                        :label="t('client.window.field.id') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter ID"
+                     >
+                     </q-input>
                   </div>
                </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.first_name") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="client.first_name" class="form-control counter" type="text" placeholder="Enter first name" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.first_name"
+                        :label="t('client.window.field.first_name') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter First Name"
+                     >
+                     </q-input>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.last_name") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="client.last_name" class="form-control" type="text" placeholder="Enter last name" disabled="disabled" />
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.last_name"
+                        :label="t('client.window.field.last_name') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Last Name"
+                     >
+                     </q-input>
                   </div>
                </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.address") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="client.address" class="form-control" type="text" placeholder="Enter address" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.address"
+                        :label="t('client.window.field.address') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Address"
+                     >
+                     </q-input>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.cellphone") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="client.cellphone" class="form-control" type="text" placeholder="Enter cellphone" disabled="disabled" />
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.cellphone"
+                        :label="t('client.window.field.cellphone') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Cellphone"
+                     >
+                     </q-input>
                   </div>
                </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.cellphone2") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="client.cellphone2" class="form-control" type="text" placeholder="Enter cellphone 2" disabled="disabled" />
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.cellphone2"
+                        :label="t('client.window.field.cellphone2') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Cellphone 2"
+                     >
+                     </q-input>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.email") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="client.email" class="form-control" type="text" placeholder="Enter email" disabled="disabled" />
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.email"
+                        :label="t('client.window.field.email') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Email"
+                     >
+                     </q-input>
                   </div>
                </div>
                <div class="text-center">
-                  <button
-                     class="btn btn-info text-center"
-                     type="clear"
+                  <q-btn
+                     color="primary"
+                     :label="t('client.window.button.close')"
                      @click="onClose"
                   >
-                     {{ t("client.window.button.close") }}
-                  </button>
+                  </q-btn>
                </div>
             </template>
          </Content>

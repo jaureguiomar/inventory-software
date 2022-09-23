@@ -15,63 +15,105 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p>{{ $t("client.window.delete.title") }}</p>
+               <p class="q-ma-none">{{ $t("client.window.delete.title") }}</p>
             </template>
             <template #subtitle>{{ $t("client.window.delete.subtitle") }}</template>
          </Menu>
          <Content>
             <template #content>
-               <div v-if="id &gt; 0" class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.id") }}:</label>
-                  <div class="col-sm-2">
-                     <input v-model="id" class="form-control" type="text" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-if="client.id > 0"
+                        v-model="client.id"
+                        :label="t('client.window.field.id') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter ID"
+                     >
+                     </q-input>
                   </div>
                </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.first_name") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="first_name" class="form-control counter" type="text" placeholder="Enter first name" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.first_name"
+                        :label="t('client.window.field.first_name') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter First Name"
+                     >
+                     </q-input>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.last_name") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="last_name" class="form-control" type="text" placeholder="Enter last name" disabled="disabled" />
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.last_name"
+                        :label="t('client.window.field.last_name') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Last Name"
+                     >
+                     </q-input>
                   </div>
                </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.address") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="address" class="form-control" type="text" placeholder="Enter address" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.address"
+                        :label="t('client.window.field.address') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Address"
+                     >
+                     </q-input>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="cellphone" class="form-control" type="text" placeholder="Enter cellphone" disabled="disabled" />
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.cellphone"
+                        :label="t('client.window.field.cellphone') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Cellphone"
+                     >
+                     </q-input>
                   </div>
                </div>
-               <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone2") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="cellphone2" class="form-control" type="text" placeholder="Enter cellphone 2" disabled="disabled" />
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.cellphone2"
+                        :label="t('client.window.field.cellphone2') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Cellphone 2"
+                     >
+                     </q-input>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.email") }}:</label>
-                  <div class="col-sm-4">
-                     <input v-model="email" class="form-control" type="text" placeholder="Enter email" disabled="disabled" />
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.email"
+                        :label="t('client.window.field.email') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter Email"
+                     >
+                     </q-input>
                   </div>
                </div>
                <div class="text-center">
-                  <button
-                     class="btn btn-danger text-center mr-2"
-                     type="submit"
+                  <q-btn
+                     class="q-mr-sm"
+                     color="negative"
+                     :label="t('client.window.delete.button.delete')"
                      @click="onDelete"
                   >
-                     {{ $t("client.window.delete.button.delete") }}
-                  </button>
-                  <button
-                     class="btn btn-info text-center"
-                     type="clear"
+                  </q-btn>
+                  <q-btn
+                     color="primary"
+                     :label="t('client.window.button.close')"
                      @click="onClose"
                   >
-                     {{ $t("client.window.button.close") }}
-                  </button>
+                  </q-btn>
                </div>
             </template>
          </Content>
@@ -80,10 +122,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { defineComponent } from "vue";
-import mixins from "vue-typed-mixins";
-import defaultMixin from "../../plugins/mixins";
-import { Props, IPCParams } from "../../interfaces/client/client-delete";
+import axios from "axios";
+import { defineComponent, ref, reactive } from "vue";
+import { useI18n } from "vue-i18n/index";
+import { Client, ClientResponse, IPCParams } from "../../interfaces/client/client-delete";
+import Swal from "sweetalert2";
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
@@ -95,82 +138,87 @@ export default defineComponent({
       Menu,
       Content
    },
-   mixins: [defaultMixin],
-   data() {
-      return {
+   setup() {
+      const { t } = useI18n();
+      const client = reactive<Client>({
          id: -1,
          first_name: "",
          last_name: "",
          address: "",
          cellphone: "",
          cellphone2: "",
-         email: "",
-         loaded: false
-      } as Props;
-   },
-   created() {
-      const vue_this = this;
-      window.api.receive("client-module-window-reply", (data:IPCParams) => {
-         vue_this.id = data.id;
-         if(data.data) {
-            vue_this.first_name = data.data.first_name;
-            vue_this.last_name = data.data.last_name;
-            vue_this.address = data.data.address;
-            vue_this.cellphone = data.data.cellphone;
-            vue_this.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
-            vue_this.email = data.data.email;
-         }
-         vue_this.loaded = true;
+         email: ""
       });
-   },
-   methods: {
-      async onDelete() {
-         let response = await Vue.prototype.$http.delete("client/v3/delete.php", {
+      const loaded = ref(false);
+
+      window.api.receive("client-module-window-reply", (data:IPCParams) => {
+         client.id = data.id;
+         if(data.data) {
+            client.first_name = data.data.first_name;
+            client.last_name = data.data.last_name;
+            client.address = data.data.address;
+            client.cellphone = data.data.cellphone;
+            client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
+            client.email = data.data.email;
+         }
+         loaded.value = true;
+      });
+
+      const onDelete = async() => {
+         let response = await axios.delete<ClientResponse>("client/v3/delete.php", {
             params: {
                field: "id",
-               data: this.id
+               data: client.id
             },
          });
          if(response) {
             if(response.data.error.is_error) {
-               this.$fire({
+               Swal.fire({
                   title: "Error",
-                  text: this.$t("global.default_error") as string,
-                  type: "error"
+                  text: t("global.default_error"),
+                  icon: "error"
                });
                return;
             }
          } else {
-            this.$fire({
+            Swal.fire({
                title: "Error",
-               text: this.$t("global.default_error") as string,
-               type: "error"
+               text: t("global.default_error"),
+               icon: "error"
             });
             return;
          }
 
-         const vue_this = this;
          window.api.send("client-module-window-dialog", {
             type: "delete",
             message: "The client has been deleted properly"
          });
          window.api.receive("client-module-window-dialog-reply", () => {
             window.api.send("client-module-window-close", {
-               id: vue_this.id,
+               id: client.id,
                data: null,
                result: "success",
                type: "delete"
             });
          });
-      },
-      onClose() {
+      };
+
+      const onClose = () => {
          window.api.send("client-module-window-close", {
-            id: this.id,
+            id: client.id,
             data: null,
             result: "closed",
             type: "delete"
          });
-      },
+      };
+
+      return {
+         t,
+         client,
+         loaded,
+         onDelete,
+         onClose
+      }
    }
 });
 </script>

@@ -1,10 +1,10 @@
-import { createRouter, createWebHashHistory, RouteLocationNormalized } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Client from "@/views/Client.vue";
 import ClientSee from "@/windows/client/ClientSee.vue";
 // import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
-// import ClientDelete from "@/windows/client/ClientDelete.vue";
+import ClientDelete from "@/windows/client/ClientDelete.vue";
 // import Supplier from "@/views/Supplier.vue";
 // import SupplierSee from "@/windows/supplier/SupplierSee.vue";
 // import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
@@ -68,14 +68,14 @@ const routes = [
    //       requiresAuth: false
    //    }
    // },
-   // {
-   //    path: "/client-delete/:id",
-   //    component: ClientDelete,
-   //    name: "client-delete",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
+   {
+      path: "/client-delete/:id",
+      component: ClientDelete,
+      name: "client-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
    // {
    //    path: "/supplier",
    //    component: Supplier,
