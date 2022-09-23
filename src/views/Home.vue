@@ -54,7 +54,7 @@
       </Content>
       <Content>
          <template #content>
-            <h1>Charts here!</h1>
+            <h2 class="q-ma-none">Charts here!</h2>
          </template>
       </Content>
    </div>
