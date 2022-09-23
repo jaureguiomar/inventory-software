@@ -3,16 +3,16 @@
       <Banner />
       <Menu>
          <template #left-content>
-            <router-link to="/">
+            <router-link class="q-mr-xs text-white" to="/">
                <font-awesome-icon icon="fa-solid fa-arrow-left"></font-awesome-icon>
             </router-link>
-            <p>{{ t("client.title") }}</p>
+            <p class="q-ma-none">{{ t("client.title") }}</p>
          </template>
          <template #right-content>
-            <a href="#_" @click="onClientAddWindowClick">
+            <a class="q-mr-sm text-white" href="#_" @click="onClientAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
-            <a href="#_" @click="onRefreshData">
+            <a class="text-white" href="#_" @click="onRefreshData">
                <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
             </a>
          </template>

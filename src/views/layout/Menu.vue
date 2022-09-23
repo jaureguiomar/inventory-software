@@ -52,28 +52,29 @@ export default defineComponent({
          &:hover
             background-position: left
          .left-content
+            margin-left: 10px
             display: flex
             flex-direction: row
             align-items: center
-            p
-               margin: 0
-               padding: 0
-               margin-left: 5px
-            a
-               margin-left: 10px
-               color: #edf5e1
-               transition: 0.3s
-               &:hover
-                  color: #5cdb94
+            // p
+            //    margin: 0
+            //    padding: 0
+            //    margin-left: 5px
+            // a
+            //    margin-left: 10px
+            //    color: #edf5e1
+            //    transition: 0.3s
+            //    &:hover
+            //       color: #5cdb94
          .right-content
             margin-right: 20px
-            a
-               color: #edf5e1
-               transition: 0.3s
-               &:hover
-                  color: #5cdb94
-               &:not(:last-child)
-                  margin-right: 20px
+            // a
+            //    color: #edf5e1
+            //    transition: 0.3s
+            //    &:hover
+            //       color: #5cdb94
+            //    &:not(:last-child)
+            //       margin-right: 20px
       .subtitle
          font-size: 19px
          color: #05386b
