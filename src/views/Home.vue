@@ -110,4 +110,20 @@ export default defineComponent({
                h6
                   margin: 0
                   padding: 0
+
+   @media screen and (max-width: 1340px)
+      .indicators
+         .indicator-item
+            width: 250px
+   @media screen and (max-width: 1160px)
+      .indicators
+         flex-direction: column
+         .indicator-item
+            width: 70%
+            &:not(:last-child)
+               margin-bottom: 20px
+   @media screen and (max-width: 600px)
+      .indicators
+         .indicator-item
+            width: 100%
 </style>
