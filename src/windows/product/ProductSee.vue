@@ -1,134 +1,164 @@
 <template>
    <transition-group name="list" tag="div">
-      <div v-if="!loaded" key="loader" class="spinner-loader">
-         <div class="spinner-loader-container">
-            <div class="spinner-ripple-loader">
-               <div class="spinner-ripple-loader-container">
-                  <div></div>
-                  <div></div>
-               </div>
-            </div>
-         </div>
-      </div>
+      <Loader key="loader" :loaded="loaded" />
 
       <div v-if="loaded" key="content" class="main-container">
-      <Banner />
-      <Menu>
-         <template #left-content>
-            <p>{{ $t("product.window.see.title") }}</p>
-         </template>
-         <template #subtitle>{{ $t("product.window.see.subtitle") }}</template>
-      </Menu>
-      <Content>
-         <template #content>
-            <div v-if="id &gt; 0" class="form-group row">
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.id") }}:</label>
-               <div class="col-sm-2">
-                  <input v-model="id" class="form-control" type="text" disabled="disabled" />
+         <Banner />
+         <Menu>
+            <template #left-content>
+               <p class="q-ma-none">{{ t("product.window.see.title") }}</p>
+            </template>
+            <template #subtitle>{{ t("product.window.see.subtitle") }}</template>
+         </Menu>
+
+         <Content>
+            <template #content>
+               <div class="row">
+                  <div class="col-md-2 col-12">
+                     <q-input
+                        v-if="product.id > 0"
+                        v-model="product.id"
+                        :label="t('product.window.field.id') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
                </div>
-            </div>
-            <div class="form-group row">
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.code") }}:</label>
-               <div class="col-sm-4">
-                  <input v-model="code" class="form-control counter" type="text" placeholder="Enter code" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.code"
+                        :label="t('product.window.field.code') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.name"
+                        :label="t('product.window.field.name') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
                </div>
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.name") }}:</label>
-               <div class="col-sm-4">
-                  <input v-model="name" class="form-control" type="text" placeholder="Enter name" disabled="disabled" />
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.description"
+                        :label="t('product.window.field.description') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.buy_price"
+                        :label="t('product.window.field.buy_price') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
                </div>
-            </div>
-            <div class="form-group row">
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.description") }}:</label>
-               <div class="col-sm-4">
-                  <input v-model="description" class="form-control" type="text" placeholder="Enter description" disabled="disabled" />
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.sale_price"
+                        :label="t('product.window.field.sale_price') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.quantity"
+                        :label="t('product.window.field.quantity') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
                </div>
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.buy_price") }}:</label>
-               <div class="col-sm-4">
-                  <input v-model="buy_price" class="form-control" type="text" placeholder="Enter buy price" disabled="disabled" />
+               <div class="text-center">
+                  <q-btn
+                     color="primary"
+                     :label="t('product.window.button.close')"
+                     @click="onClose"
+                  >
+                  </q-btn>
                </div>
-            </div>
-            <div class="form-group row">
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.sale_price") }}:</label>
-               <div class="col-sm-4">
-                  <input v-model="sale_price" class="form-control" type="text" placeholder="Enter sale price" disabled="disabled" />
-               </div>
-               <label class="col-sm-2 col-form-label">{{ $t("product.window.field.quantity") }}:</label>
-               <div class="col-sm-4">
-                  <input v-model="quantity" class="form-control" type="text" placeholder="Enter quantity" disabled="disabled" />
-               </div>
-            </div>
-            <div class="text-center">
-               <button
-                  class="btn btn-info text-center"
-                  type="clear"
-                  @click="onClose"
-               >
-                  {{ $t("product.window.button.close") }}
-               </button>
-            </div>
-         </template>
-      </Content>
+            </template>
+         </Content>
       </div>
    </transition-group>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import mixins from "vue-typed-mixins";
-import defaultMixin from "../../plugins/mixins";
-import { Props, IPCParams } from "../../interfaces/product/product-see";
-import Banner from "../../views/layout/Banner.vue";
-import Menu from "../../views/layout/Menu.vue";
-import Content from "../../views/layout/Content.vue";
+import { defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n/index";
+import { Product, IPCParams } from "@/interfaces/product/product-see";
+import Banner from "@/views/layout/Banner.vue";
+import Menu from "@/views/layout/Menu.vue";
+import Content from "@/views/layout/Content.vue";
+import Loader from "@/views/components/Loader.vue";
 
 export default defineComponent({
    name: "product-see-component",
    components: {
       Banner,
       Menu,
-      Content
+      Content,
+      Loader
    },
-   mixins: [defaultMixin],
-   data() {
-      return {
+   setup() {
+      const { t } = useI18n();
+      const product = reactive<Product>({
          id: -1,
          code: "",
          name: "",
          description: "",
          buy_price: "",
          sale_price: "",
-         quantity: "",
-         loaded: false
-      } as Props;
-   },
-   created() {
-      const vue_this = this;
-      window.api.receive("product-module-window-reply", (data:IPCParams) => {
-         vue_this.id = data.id;
-         if(data.data) {
-            vue_this.code = data.data.code;
-            vue_this.name = data.data.name;
-            vue_this.description = data.data.description;
-            vue_this.buy_price = data.data.buy_price;
-            vue_this.sale_price = data.data.sale_price;
-            vue_this.quantity = data.data.quantity.toString();
-         }
-         vue_this.loaded = true;
+         quantity: 0
       });
-   },
-   methods: {
-      onClose() {
+      const loaded = ref(false);
+
+      window.api.receive("product-module-window-reply", (data:IPCParams) => {
+         product.id = data.id;
+         if(data.data) {
+            product.code = data.data.code;
+            product.name = data.data.name;
+            product.description = (data.data.description) ? data.data.description : "";
+            product.buy_price = data.data.buy_price;
+            product.sale_price = data.data.sale_price;
+            product.quantity = data.data.quantity;
+         }
+         loaded.value = true;
+      });
+
+      const onClose = () => {
          window.api.send("product-module-window-close", {
-            id: this.id,
+            id: product.id,
             data: null,
             result: "closed",
             type: "see"
          });
       }
+
+      return {
+         t,
+         product,
+         loaded,
+         onClose
+      };
    }
 });
 </script>
 
-<style lang="sass" scoped>
-   @import "../../assets/scss/loader.scss"
-</style>
+<style lang="sass" scoped></style>

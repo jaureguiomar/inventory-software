@@ -10,9 +10,9 @@ import SupplierSee from "@/windows/supplier/SupplierSee.vue";
 import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
 import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
 import Product from "@/views/Product.vue";
-// import ProductSee from "@/windows/product/ProductSee.vue";
-// import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
-// import ProductDelete from "@/windows/product/ProductDelete.vue";
+import ProductSee from "@/windows/product/ProductSee.vue";
+import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
+import ProductDelete from "@/windows/product/ProductDelete.vue";
 import Category from "@/views/Category.vue";
 import CategorySee from "@/windows/category/CategorySee.vue";
 import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
@@ -124,38 +124,38 @@ const routes = [
          requiresAuth: true
       }
    },
-   // {
-   //    path: "/product-see/:id",
-   //    component: ProductSee,
-   //    name: "product-see",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/product-add",
-   //    component: ProductAddUpdate,
-   //    name: "product-add",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/product-update/:id",
-   //    component: ProductAddUpdate,
-   //    name: "product-update",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/product-delete/:id",
-   //    component: ProductDelete,
-   //    name: "product-delete",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
+   {
+      path: "/product-see/:id",
+      component: ProductSee,
+      name: "product-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/product-add",
+      component: ProductAddUpdate,
+      name: "product-add",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/product-update/:id",
+      component: ProductAddUpdate,
+      name: "product-update",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/product-delete/:id",
+      component: ProductDelete,
+      name: "product-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
    {
       path: "/category",
       component: Category,
