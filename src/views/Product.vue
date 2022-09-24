@@ -3,154 +3,119 @@
       <Banner />
       <Menu>
          <template #left-content>
-            <router-link to="/">
+            <router-link class="q-mr-xs text-white" to="/">
                <font-awesome-icon icon="fa-solid fa-arrow-left"></font-awesome-icon>
             </router-link>
-            <p>{{ $t("product.title") }}</p>
+            <p class="q-ma-none">{{ t("product.title") }}</p>
          </template>
          <template #right-content>
-            <a href="#_" @click="onProductAddWindowClick">
+            <a class="q-mr-sm text-white cursor-pointer" @click="onProductAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
-            <a href="#_" @click="onRefreshData">
+            <a class="text-white cursor-pointer" @click="onRefreshData">
                <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
             </a>
          </template>
          <template #subtitle>
-            {{ $t("product.subtitle") }}
+            {{ t("product.subtitle") }}
          </template>
       </Menu>
 
       <Content>
          <template #content>
-            <b-row>
-               <b-col class="mb-2" lg="6">
-                  <b-form-input
-                     id="filter-input"
-                     v-model="table.filter"
-                     type="search"
-                     size="sm"
-                     :placeholder="$t('product.table.search')"
-                  >
-                  </b-form-input>
-               </b-col>
-               <b-col class="mb-2" lg="6">
-                  <b-form-select
-                     id="per-page-select"
-                     v-model="table.perPage"
-                     :options="table.pageOptions"
-                     size="sm"
-                  >
-                  </b-form-select>
-               </b-col>
-            </b-row>
-            <div class="table-responsive">
-               <b-table
-                  v-model:sort-by.sync="table.sortBy"
-                  v-model:sort-desc.sync="table.sortDesc"
-                  :items="data.product"
-                  :fields="table.fields"
-                  :current-page="table.currentPage"
-                  :per-page="table.perPage"
-                  :filter="table.filter"
-                  :filter-included-fields="table.filterOn"
-                  :sort-direction="table.sortDirection"
-                  stacked="md"
-                  show-emptya="show-emptya"
-                  :empty-text="$t('product.table.content.details.empty')"
-                  :empty-filtered-text="$t('product.table.content.details.empty')"
-                  small="small"
-                  filter-debounce="600"
-                  hover="hover"
-                  @filtered="onFiltered"
-               >
-                  <template #cell(details)="row">
-                     <b-button
-                        class="mr-2"
-                        variant="primary"
-                        size="sm"
-                        @click="row.toggleDetails"
-                     >
-                        {{ row.detailsShowing ? $t("product.table.content.details.hide_details") : $t("product.table.content.details.show_details") }}
-                     </b-button>
-                  </template>
-                  <template #row-details="row">
-                     <b-card>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.id") }}:</b></b-col>
-                           <b-col>{{ row.item.id }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.created") }}:</b></b-col>
-                           <b-col>{{ (row.item.created) ? getFormattedDateString(row.item.created, 0, 0, true) : "---" }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.updated") }}:</b></b-col>
-                           <b-col>{{ (row.item.updated) ? getFormattedDateString(row.item.updated, 0, 0, true) : "---" }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.code") }}:</b></b-col>
-                           <b-col>{{ row.item.code }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.name") }}:</b></b-col>
-                           <b-col>{{ row.item.name }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.description") }}:</b></b-col>
-                           <b-col>{{ row.item.description }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.buy_price") }}:</b></b-col>
-                           <b-col>{{ row.item.buy_price }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.sale_price") }}:</b></b-col>
-                           <b-col>{{ row.item.sale_price }}</b-col>
-                        </b-row>
-                        <b-row class="mb-1">
-                           <b-col class="text-sm-right" sm="3"><b>{{ $t("product.table.content.quantity") }}:</b></b-col>
-                           <b-col>{{ row.item.quantity }}</b-col>
-                        </b-row>
-                     </b-card>
-                  </template>
-                  <template #cell(actions)="row">
-                     <a class="btn btn-success mr-2" style="color: white;" href="#_" @click="onProductSeeWindowClick(row.item)">
-                        <font-awesome-icon icon="fa-solid fa-eye"></font-awesome-icon>
-                     </a>
-                     <a class="btn btn-primary mr-2" href="#_" @click="onProductUpdateWindowClick(row.item)">
-                        <font-awesome-icon icon="fa-solid fa-pen-to-square"></font-awesome-icon>
-                     </a>
-                     <a class="btn btn-danger" href="#_" @click="onProductDeleteWindowClick(row.item)">
-                        <font-awesome-icon icon="fa-solid fa-xmark"></font-awesome-icon>
-                     </a>
-                  </template>
-               </b-table>
+            <q-table
+               title="Product List"
+               :rows="product"
+               :columns="productColumns"
+               :no-data-label="t('product.table.content.details.empty')"
+               :no-results-label="t('product.table.content.details.empty')"
+               separator="vertical"
+               virtual-scroll
+               :virtual-scroll-sticky-size-start="48"
+               row-key="name"
+               :visible-columns="productVisibleColumns"
+               :pagination="productPagination"
+               :filter="productFilter"
+            >
+               <template #top>
+                  <h6 class="q-ma-none q-mr-md">Product List</h6>
+                  <q-input v-model="productFilter" dense debounce="300" placeholder="Search">
+                     <template #append>
+                        <font-awesome-icon icon="fa-solid fa-search" size="1x" />
+                     </template>
+                  </q-input>
 
-               <b-col class="my-1" sm="12" md="12">
-                  <b-pagination
-                     v-model="table.currentPage"
-                     class="my-0 customPagination"
-                     :total-rows="table.totalRows"
-                     :per-page="table.perPage"
-                     align="right"
-                     size="sm"
+                  <q-space></q-space>
+
+                  <q-select
+                     v-model="productVisibleColumns"
+                     multiple
+                     outlined
+                     dense
+                     options-dense
+                     :display-value="$q.lang.table.columns"
+                     emit-value
+                     map-options
+                     :options="productColumns"
+                     option-value="name"
+                     options-cover
+                     style="min-width: 150px"
                   >
-                  </b-pagination>
-               </b-col>
-            </div>
+                  </q-select>
+               </template>
+
+               <template #body-cell-actions="props">
+                  <q-td :props="props">
+                     <q-btn
+                        class="q-mr-sm"
+                        color="primary"
+                        label="See"
+                        @click="onClienSeeWindowClick(props.row)"
+                     >
+                     </q-btn>
+                     <q-btn
+                        class="q-mr-sm"
+                        color="secondary"
+                        label="Update"
+                        @click="onProductUpdateWindowClick(props.row)"
+                     >
+                     </q-btn>
+                     <q-btn
+                        class="q-mr-sm"
+                        color="negative"
+                        label="Delete"
+                        @click="onProductDeleteWindowClick(props.row)"
+                     >
+                     </q-btn>
+                  </q-td>
+               </template>
+
+               <template #no-data="{ icon, message, filter }">
+                  <div class="full-width row flex-center q-gutter-sm">
+                     <span>
+                        {{ message }}
+                     </span>
+                     <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon"></q-icon>
+                  </div>
+               </template>
+            </q-table>
          </template>
       </Content>
    </div>
 </template>
 
 <script lang="ts">
-import Vue, { defineComponent } from "vue";
-import { mapGetters } from "vuex";
-import { Props, AxiosResponse, WindowResponse, Product } from "../interfaces/product/product";
-import Banner from "../views/layout/Banner.vue";
-import Menu from "../views/layout/Menu.vue";
-import Content from "../views/layout/Content.vue";
+import axios from "axios";
+import { defineComponent, ref, computed, reactive } from "vue"
+import { ProductResponse, WindowResponse, Product } from "../interfaces/product/product";
+import { useI18n } from "vue-i18n/index";
+import { useStore } from "vuex";
+import Swal from "sweetalert2";
+import { key } from "@/plugins/store";
+import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
+import Banner from "@/views/layout/Banner.vue";
+import Menu from "@/views/layout/Menu.vue";
+import Content from "@/views/layout/Content.vue";
 
 export default defineComponent({
    name: "product-component",
@@ -159,208 +124,154 @@ export default defineComponent({
       Menu,
       Content
    },
-   data() {
-      return {
-         data: {
-            product: [],
-            new_product: {}
-         },
-         table: {
-            selected: -1,
-            fields: [
-               {
-                  key: "id",
-                  label: this.$t("product.table.field.id"),
-                  sortable: true,
-                  sortDirection: "desc",
-                  class: "text-center"
-               },
-               {
-                  key: "created",
-                  label: this.$t("product.table.field.created"),
-                  sortable: false,
-                  sortByFormatted: true,
-                  filterByFormatted: true,
-                  class: "text-center",
-                  formatter: (date:string) => {
-                     let new_date:string|number = date;
-                     if(new_date) {
-                        const splitted_date = date.split("-");
-                        if(splitted_date.length === 3) {
-                           let day:string|number = parseInt(splitted_date[2]);
-                           let month:string|number = parseInt(splitted_date[1]);
-                           const year:number = parseInt(splitted_date[0]);
-                           if(day < 10)
-                              day = "0" + 10;
-                           switch(month) {
-                              case 1: month = "January"; break;
-                              case 2: month = "February"; break;
-                              case 3: month = "March"; break;
-                              case 4: month = "April"; break;
-                              case 5: month = "May"; break;
-                              case 6: month = "June"; break;
-                              case 7: month = "July"; break;
-                              case 8: month = "August"; break;
-                              case 9: month = "September"; break;
-                              case 10: month = "October"; break;
-                              case 11: month = "November"; break;
-                              case 12: month = "December"; break;
-                           }
-                           new_date = day + "/" + month + "/" + year;
-                        }
-                     } else {
-                        new_date = "----";
-                     }
-                     return new_date;
-                  }
-               },
-               {
-                  key: "code",
-                  label: this.$t("product.table.field.code"),
-                  sortable: true,
-                  class: "text-center"
-               },
-               {
-                  key: "name",
-                  label: this.$t("product.table.field.name"),
-                  sortable: true,
-                  class: "text-center"
-               },
-               {
-                  key: "sale_price",
-                  label: this.$t("product.table.field.sale_price"),
-                  sortable: true,
-                  class: "text-center"
-               },
-               {
-                  key: "buy_price",
-                  label: this.$t("product.table.field.buy_price"),
-                  sortable: true,
-                  class: "text-center"
-               },
-               {
-                  key: "details",
-                  label: this.$t("product.table.field.show_details"),
-                  sortable: true,
-                  class: "text-center"
-               },
-               {
-                  key: "actions",
-                  label: this.$t("product.table.field.actions"),
-                  sortable: false,
-                  class: "text-center"
-               }
-            ],
-            totalRows: 1,
-            currentPage: 1,
-            perPage: 5,
-            pageOptions: [
-               5, 10, 15,
-               { value: 100, text: "Show all" }
-            ],
-            sortBy: "id",
-            sortDesc: true,
-            sortDirection: "desc",
-            filter: null,
-            filterOn: []
-         }
-      } as unknown as Props
-   },
-   computed: {
-      ...mapGetters([
-         "getProductLoadedReply"
-      ])
-   },
-   created() {
-      this.onRefreshData();
-
-      if(!this.getProductLoadedReply) {
-         const vue_this = this;
-         window.api.receive("main-window-product-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     vue_this.data.product.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < vue_this.data.product.length; i++) {
-                     const curr_product = vue_this.data.product[i];
-                     if(curr_product.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index > 0) {
-                     if(data.data) {
-                        vue_this.data.product[finded_index].id = data.data.id;
-                        vue_this.data.product[finded_index].is_active = data.data.is_active;
-                        vue_this.data.product[finded_index].created = data.data.created;
-                        vue_this.data.product[finded_index].updated = data.data.updated;
-                        vue_this.data.product[finded_index].code = data.data.code;
-                        vue_this.data.product[finded_index].name = data.data.name;
-                        vue_this.data.product[finded_index].description = data.data.description;
-                        vue_this.data.product[finded_index].buy_price = data.data.buy_price;
-                        vue_this.data.product[finded_index].sale_price = data.data.sale_price;
-                        vue_this.data.product[finded_index].quantity = data.data.quantity;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < vue_this.data.product.length; i++) {
-                     const curr_product = vue_this.data.product[i];
-                     if(curr_product.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index > 0)
-                     vue_this.data.product.splice(finded_index, 1);
-               }
+   setup() {
+      const { t } = useI18n();
+      const store = useStore(key);
+      const product = ref<Product[]>([]);
+      const productVisibleColumns = ref<Array<string>>([
+         "id", "created", "updated", "code", "name", "description",
+         "buy_price", "sale_price", "quantity", "actions"
+      ]);
+      const productFilter = ref("");
+      const productPagination = reactive({
+         sortBy: "desc",
+         descending: false,
+         page: 1,
+         rowsPerPage: 5
+         // rowsNumber: xx if getting data from a server
+      });
+      const productColumns:Array<any> = [
+         {
+            name: "id",
+            // required: true,
+            label: t("product.table.field.id"),
+            align: "center",
+            field: "id",
+            sortable: true,
+            sort: (id:string) => {
+               return parseInt(id);
+            },
+            format: (id:string) => {
+               return "#" + id;
             }
-         });
-         this.$store.commit("SET_PRODUCT_LOADED_REPLY", true);
-      }
-   },
-   methods: {
-      onRefreshData() {
-         const vue_this = this;
-         this.data.product = [];
+         },
+         {
+            name: "created",
+            label: t("product.table.field.created"),
+            align: "center",
+            field: "created",
+            sortable: true,
+            format: (date:string) => {
+               return getFormattedDateString(date);
+            }
+         },
+         {
+            name: "updated",
+            label: t("product.table.field.updated"),
+            align: "center",
+            field: "updated",
+            sortable: true,
+            format: (date:string) => {
+               return getFormattedDateString(date);
+            }
+         },
+         {
+            name: "code",
+            label: t("product.table.field.code"),
+            align: "center",
+            field: "code",
+            sortable: true
+         },
+         {
+            name: "name",
+            label: t("product.table.field.name"),
+            align: "center",
+            field: "name",
+            sortable: true
+         },
+         {
+            name: "description",
+            label: t("product.table.field.description"),
+            align: "center",
+            field: "description",
+            sortable: true
+         },
+         {
+            name: "buy_price",
+            label: t("product.table.field.buy_price"),
+            align: "center",
+            field: "buy_price",
+            sortable: true,
+            format: (buy_price:string) => {
+               return "$" + buy_price;
+            }
+         },
+         {
+            name: "sale_price",
+            label: t("product.table.field.sale_price"),
+            align: "center",
+            field: "sale_price",
+            sortable: true,
+            format: (sale_price:string) => {
+               return "$" + sale_price;
+            }
+         },
+         {
+            name: "quantity",
+            label: t("product.table.field.quantity"),
+            align: "center",
+            field: "quantity",
+            sortable: true
+         },
+         {
+            name: "actions",
+            label: t("product.table.field.actions"),
+            align: "center",
+            sortable: true
+         }
+      ];
 
-         Vue.prototype.$http.get("product/v3/select-all.php")
-            .then(function (response:AxiosResponse) {
+      const getProductLoadedReply = computed(() => {
+         return store.getters["getProductLoadedReply"];
+      });
+
+      const onRefreshData = () => {
+         product.value = [];
+
+         axios.get<ProductResponse>("http://127.0.0.1/inventory-software-api/api/product/v3/select-all.php")
+            .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
-                     const data = response.data;
-                     vue_this.data.product = data.data;
-                     vue_this.table.totalRows = data.data.length;
+                     const data = response.data.data;
+                     product.value = data;
                   } else {
-                     vue_this.$fire({
+                     Swal.fire({
                         title: "Error",
-                        text: vue_this.$t("global.default_error") as string,
-                        type: "error"
+                        text: t("global.default_error"),
+                        icon: "error"
                      });
                   }
                } else {
-                  vue_this.$fire({
+                  Swal.fire({
                      title: "Error",
-                     text: vue_this.$t("global.default_error") as string,
-                     type: "error"
+                     text: t("global.default_error"),
+                     icon: "error"
                   });
                }
             });
-      },
-      onProductAddWindowClick() {
+      };
+      const onProductAddWindowClick = () => {
          window.api.send("product-module-window", {
             id: -1,
             type: "add",
             content: {
-               title: this.$t("product.window.add.title"),
-               description: this.$t("product.window.add.subtitle")
+               title: t("product.window.add.title"),
+               description: t("product.window.add.subtitle")
             },
             data: null
          });
-      },
-      onProductSeeWindowClick(item:Product) {
+      };
+      const onClienSeeWindowClick = (item:Product) => {
          window.api.send("product-module-window", {
             id: item.id,
             type: "see",
@@ -373,14 +284,14 @@ export default defineComponent({
                quantity: item.quantity
             }
          });
-      },
-      onProductUpdateWindowClick(item:Product) {
+      };
+      const onProductUpdateWindowClick = (item:Product) => {
          window.api.send("product-module-window", {
             id: item.id,
             type: "update",
             content: {
-               title: this.$t("product.window.update.title"),
-               description: this.$t("product.window.update.subtitle")
+               title: t("product.window.update.title"),
+               description: t("product.window.update.subtitle")
             },
             data: {
                code: item.code,
@@ -391,8 +302,8 @@ export default defineComponent({
                quantity: item.quantity
             }
          });
-      },
-      onProductDeleteWindowClick(item:Product) {
+      };
+      const onProductDeleteWindowClick = (item:Product) => {
          window.api.send("product-module-window", {
             id: item.id,
             type: "delete",
@@ -405,77 +316,70 @@ export default defineComponent({
                quantity: item.quantity
             }
          });
-      },
-      onFiltered(filteredItems) {
-        this.table.totalRows = filteredItems.length;
-        this.table.currentPage = 1;
-      },
-      // onRowClick(selected_data) {
-      //    console.error("---");
-      //    console.log("selected_data", selected_data);
-      // },
-      ///////////////
-      // Functions //
-      getFormattedDate(date:Date) {
-         let day:number|string = date.getDate();
-         let month:number|string = (date.getMonth() + 1);
-         let year:number|string = date.getFullYear();
+      };
 
-         if(day < 10)
-            day = "0" + day;
-         if(month < 10)
-            month = "0" + month;
-
-         return year + "-" + month + "-" + day;
-      },
-      getFormattedDateString(date:string, type:number=0, format:number=0, time=false) {
-         let new_date = date;
-         if(new_date) {
-            const splitted_date = date.split("-");
-            const splitted_time = date.split(" ");
-            if(splitted_date.length === 3) {
-               let day:number|string = parseInt(splitted_date[2]);
-               let month:number|string = parseInt(splitted_date[1]);
-               const year:number = parseInt(splitted_date[0]);
-
-               if(day < 10)
-                  day = "0" + day;
-
-               if(type === 0) {
-                  switch(month) {
-                     case 1: month = "January"; break;
-                     case 2: month = "February"; break;
-                     case 3: month = "March"; break;
-                     case 4: month = "April"; break;
-                     case 5: month = "May"; break;
-                     case 6: month = "June"; break;
-                     case 7: month = "July"; break;
-                     case 8: month = "August"; break;
-                     case 9: month = "September"; break;
-                     case 10: month = "October"; break;
-                     case 11: month = "November"; break;
-                     case 12: month = "December"; break;
+      onRefreshData();
+      if(!getProductLoadedReply) {
+         window.api.receive("main-window-product-module-reply", (data:WindowResponse) => {
+            if(data.result === "success") {
+               if(data.type === "add") {
+                  if(data.data)
+                     product.value.push(data.data);
+               } else if(data.type === "update") {
+                  let finded_index = -1;
+                  for(let i = 0; i < product.value.length; i++) {
+                     const curr_product = product.value[i];
+                     if(curr_product.id == data.id) {
+                        finded_index = i;
+                        break;
+                     }
                   }
-               } else {
-                  if(month < 10)
-                     month = "0" + month;
-               }
-
-               if(format === 0)
-                  new_date = day + "/" + month + "/" + year;
-               else if(format === 1)
-                  new_date = year + "-" + month + "-" + day;
-
-               if(time) {
-                  const time = splitted_time[1];
-                  new_date += " ";
-                  new_date += time;
+                  if(finded_index > 0) {
+                     if(data.data) {
+                        product.value[finded_index].id = data.data.id;
+                        product.value[finded_index].is_active = data.data.is_active;
+                        product.value[finded_index].created = data.data.created;
+                        product.value[finded_index].updated = data.data.updated;
+                        product.value[finded_index].code = data.data.code;
+                        product.value[finded_index].name = data.data.name;
+                        product.value[finded_index].description = data.data.description;
+                        product.value[finded_index].buy_price = data.data.buy_price;
+                        product.value[finded_index].sale_price = data.data.sale_price;
+                        product.value[finded_index].quantity = data.data.quantity;
+                     }
+                  }
+               } else if(data.type === "delete") {
+                  let finded_index = -1;
+                  for(let i = 0; i < product.value.length; i++) {
+                     const curr_product = product.value[i];
+                     if(curr_product.id == data.id) {
+                        finded_index = i;
+                        break;
+                     }
+                  }
+                  if(finded_index > 0)
+                     product.value.splice(finded_index, 1);
                }
             }
-         } else {
-            new_date = "----";
-         }
-         return new_date;
+         });
+         store.commit("SET_CLIENT_LOADED_REPLY", true);
+      }
+
+      return {
+         t,
+         product,
+         productVisibleColumns,
+         productColumns,
+         productFilter,
+         productPagination,
+         getProductLoadedReply,
+         onRefreshData,
+         onProductAddWindowClick,
+         onClienSeeWindowClick,
+         onProductUpdateWindowClick,
+         onProductDeleteWindowClick,
+         getFormattedDate,
+         getFormattedDateString
       }
    }
 });

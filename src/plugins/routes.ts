@@ -9,7 +9,7 @@ import Supplier from "@/views/Supplier.vue";
 // import SupplierSee from "@/windows/supplier/SupplierSee.vue";
 // import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
 // import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
-// import Product from "@/views/Product.vue";
+import Product from "@/views/Product.vue";
 // import ProductSee from "@/windows/product/ProductSee.vue";
 // import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
 // import ProductDelete from "@/windows/product/ProductDelete.vue";
@@ -116,14 +116,14 @@ const routes = [
    //       requiresAuth: false
    //    }
    // },
-   // {
-   //    path: "/product",
-   //    component: Product,
-   //    name: "product",
-   //    meta: {
-   //       requiresAuth: true
-   //    }
-   // },
+   {
+      path: "/product",
+      component: Product,
+      name: "product",
+      meta: {
+         requiresAuth: true
+      }
+   },
    // {
    //    path: "/product-see/:id",
    //    component: ProductSee,
