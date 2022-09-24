@@ -13,6 +13,7 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 // import USB from "escpos-usb";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+const app_port = getAppPort();
 // let icon_path = "";
 // let rootDir = app.getAppPath();
 // const last = path.basename(rootDir);
@@ -89,6 +90,26 @@ async function createWindow() {
    autoUpdater.autoDownload = true;
    autoUpdater.checkForUpdates();
    autoUpdater.quitAndInstall();
+}
+function getAppPort() {
+   const server_url = (process.env.WEBPACK_DEV_SERVER_URL) ? process.env.WEBPACK_DEV_SERVER_URL : "";
+   const splitted_server_url = server_url.split(":");
+   let port = -1;
+   if(splitted_server_url.length === 3) {
+      const dots = splitted_server_url[2];
+      const splitted_dots = dots.split("/");
+      if(splitted_dots.length === 2)
+         port = parseInt(splitted_dots[0]);
+   }
+   return port;
+}
+function buildAppRoute() {
+   let route = "";
+   if(process.env.NODE_ENV === "development")
+      route = `http://localhost:${ app_port }/#`;
+   else
+      `file://${__dirname}/index.html#`;
+   return route;
 }
 
 app.on("window-all-closed", () => {
@@ -184,13 +205,13 @@ ipcMain.on("client-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/client-add" : `file://${__dirname}/index.html#/client-add`;
+         setURL = buildAppRoute() + "/client-add";
       else if(data.type === "update")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-update/${data.id}` : `file://${__dirname}/index.html#/client-update/${data.id}`;
+         setURL = buildAppRoute() + `/client-update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-delete/${data.id}` : `file://${__dirname}/index.html#/client-delete/${data.id}`;
+         setURL = buildAppRoute() + `/client-delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/client-see/${data.id}` : `file://${__dirname}/index.html#/client-see/${data.id}`;
+         setURL = buildAppRoute() + `/client-see/${ data.id }`;
 
       window.client[data.type].loadURL(setURL);
       window.client[data.type].show();
@@ -243,13 +264,13 @@ ipcMain.on("supplier-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/supplier-add" : `file://${__dirname}/index.html#/supplier-add`;
+         setURL = buildAppRoute() + "/supplier-add";
       else if(data.type === "update")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-update/${data.id}` : `file://${__dirname}/index.html#/supplier-update/${data.id}`;
+         setURL = buildAppRoute() + `/supplier-update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-delete/${data.id}` : `file://${__dirname}/index.html#/supplier-delete/${data.id}`;
+         setURL = buildAppRoute() + `/supplier-delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/supplier-see/${data.id}` : `file://${__dirname}/index.html#/supplier-see/${data.id}`;
+         setURL = buildAppRoute() + `/supplier-see/${ data.id }`;
 
       window.supplier[data.type].loadURL(setURL);
       window.supplier[data.type].show();
@@ -302,13 +323,13 @@ ipcMain.on("product-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/product-add" : `file://${__dirname}/index.html#/product-add`;
+         setURL = buildAppRoute() + "/product-add";
       else if(data.type === "update")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-update/${data.id}` : `file://${__dirname}/index.html#/product-update/${data.id}`;
+         setURL = buildAppRoute() + `/product-update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-delete/${data.id}` : `file://${__dirname}/index.html#/product-delete/${data.id}`;
+         setURL = buildAppRoute() + `/product-delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/product-see/${data.id}` : `file://${__dirname}/index.html#/product-see/${data.id}`;
+         setURL = buildAppRoute() + `/product-see/${ data.id }`;
 
       window.product[data.type].loadURL(setURL);
       window.product[data.type].show();
@@ -361,13 +382,13 @@ ipcMain.on("category-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = process.env.NODE_ENV === "development" ? "http://localhost:8080/#/category-add" : `file://${__dirname}/index.html#/category-add`;
+         setURL = buildAppRoute() + "/category-add";
       else if(data.type === "update")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/category-update/${data.id}` : `file://${__dirname}/index.html#/category-update/${data.id}`;
+         setURL = buildAppRoute() + `/category-update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/category-delete/${data.id}` : `file://${__dirname}/index.html#/category-delete/${data.id}`;
+         setURL = buildAppRoute() + `/category-delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = process.env.NODE_ENV === "development" ? `http://localhost:8080/#/category-see/${data.id}` : `file://${__dirname}/index.html#/category-see/${data.id}`;
+         setURL = buildAppRoute() + `/category-see/${ data.id }`;
 
       window.category[data.type].loadURL(setURL);
       window.category[data.type].show();
