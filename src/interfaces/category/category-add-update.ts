@@ -1,11 +1,13 @@
+interface Category {
+   name: string;
+}
+
 // IPC params
 interface Content {
    title: string;
    description: string;
 }
-interface Category {
-   name: string;
-}
+
 interface IPCParams {
    id: number;
    type: string;
@@ -23,15 +25,15 @@ interface InputFields {
    max_text: number;
    error: InputErrorField;
 }
-interface CategoryProps {
+interface CategoryField {
    name: InputFields;
 }
-interface Props {
+
+// Page
+interface Page {
    id: number;
    type: string;
    content: Content;
-   data: CategoryProps;
-   loaded: boolean;
 }
 
 // Axios response
@@ -40,34 +42,15 @@ interface Error {
    message: string|null;
    no_error: number;
 }
-interface Category {
-   id: number;
-   is_active: number;
-   created: Date;
-   updated: Date;
-   name: string;
-}
-interface CategorySubResponse {
-   data: Category;
-   message: string;
-   ok: boolean;
-}
 interface CategoryResponse {
-   data: CategorySubResponse;
+   data: Category;
    error: Error;
-}
-interface AxiosResponse {
-   data: CategoryResponse;
-   config: any;
-   headers: any;
-   request: any;
-   status: number;
-   statusText: string;
 }
 
 export {
-   Props,
+   Page,
+   CategoryField,
    IPCParams,
-   AxiosResponse,
-   Category
+   Category,
+   CategoryResponse
 };

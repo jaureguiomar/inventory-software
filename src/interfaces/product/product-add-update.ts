@@ -1,16 +1,18 @@
-// IPC params
-interface Content {
-   title: string;
-   description: string;
-}
 interface Product {
    code: string;
    name: string;
    description: string;
    buy_price: string;
    sale_price: string;
-   quantity: string;
+   quantity: number;
 }
+
+// IPC params
+interface Content {
+   title: string;
+   description: string;
+}
+
 interface IPCParams {
    id: number;
    type: string;
@@ -28,7 +30,7 @@ interface InputFields {
    max_text: number;
    error: InputErrorField;
 }
-interface ProductProps {
+interface ProductField {
    code: InputFields;
    name: InputFields;
    description: InputFields;
@@ -36,12 +38,12 @@ interface ProductProps {
    sale_price: InputFields;
    quantity: InputFields;
 }
-interface Props {
+
+// Page
+interface Page {
    id: number;
    type: string;
    content: Content;
-   data: ProductProps;
-   loaded: boolean;
 }
 
 // Axios response
@@ -50,39 +52,15 @@ interface Error {
    message: string|null;
    no_error: number;
 }
-interface Product {
-   id: number;
-   is_active: number;
-   created: Date;
-   updated: Date;
-   code: string;
-   name: string;
-   description: string;
-   bbuy_price: string;
-   sale_price: string;
-   quantity: string;
-}
-interface ProductSubResponse {
-   data: Product;
-   message: string;
-   ok: boolean;
-}
 interface ProductResponse {
-   data: ProductSubResponse;
+   data: Product;
    error: Error;
-}
-interface AxiosResponse {
-   data: ProductResponse;
-   config: any;
-   headers: any;
-   request: any;
-   status: number;
-   statusText: string;
 }
 
 export {
-   Props,
+   Page,
+   ProductField,
    IPCParams,
-   AxiosResponse,
-   Product
+   Product,
+   ProductResponse
 };
