@@ -70,7 +70,7 @@
                         class="q-mr-sm"
                         color="primary"
                         label="See"
-                        @click="onClienSeeWindowClick(props.row)"
+                        @click="onClientSeeWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
@@ -234,7 +234,7 @@ export default defineComponent({
             data: null
          });
       };
-      const onClienSeeWindowClick = (item:Client) => {
+      const onClientSeeWindowClick = (item:Client) => {
          window.api.send("client-module-window", {
             id: item.id,
             type: "see",
@@ -338,7 +338,7 @@ export default defineComponent({
          getClientLoadedReply,
          onRefreshData,
          onClientAddWindowClick,
-         onClienSeeWindowClick,
+         onClientSeeWindowClick,
          onClientUpdateWindowClick,
          onClientDeleteWindowClick,
          getFormattedDate,

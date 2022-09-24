@@ -89,6 +89,7 @@ const i18n = createI18n({
                search: "Search...",
                field: {
                   id: "Id Supplier",
+                  updated: "Updated",
                   created: "Created",
                   name: "Name",
                   show_details: "Show details",
@@ -150,6 +151,7 @@ const i18n = createI18n({
                field: {
                   id: "Id Product",
                   created: "Created",
+                  updated: "Updated",
                   code: "Code",
                   name: "Name",
                   description: "Description",
@@ -225,6 +227,7 @@ const i18n = createI18n({
                field: {
                   id: "Id Category",
                   created: "Created",
+                  updated: "Updated",
                   name: "Name",
                   show_details: "Show details",
                   actions: "Actions"

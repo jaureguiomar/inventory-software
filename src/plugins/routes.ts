@@ -5,7 +5,7 @@ import Client from "@/views/Client.vue";
 import ClientSee from "@/windows/client/ClientSee.vue";
 import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
 import ClientDelete from "@/windows/client/ClientDelete.vue";
-// import Supplier from "@/views/Supplier.vue";
+import Supplier from "@/views/Supplier.vue";
 // import SupplierSee from "@/windows/supplier/SupplierSee.vue";
 // import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
 // import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
@@ -76,14 +76,14 @@ const routes = [
          requiresAuth: false
       }
    },
-   // {
-   //    path: "/supplier",
-   //    component: Supplier,
-   //    name: "supplier",
-   //    meta: {
-   //       requiresAuth: true
-   //    }
-   // },
+   {
+      path: "/supplier",
+      component: Supplier,
+      name: "supplier",
+      meta: {
+         requiresAuth: true
+      }
+   },
    // {
    //    path: "/supplier-see/:id",
    //    component: SupplierSee,
