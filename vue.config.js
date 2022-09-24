@@ -3,11 +3,11 @@ module.exports = {
     electronBuilder: {
       // externals: ["escpos", "escpos-usb"],
       preload: {
-        preload: "src/preload.ts",
-        preloadClient: "src/preloadClient.ts",
-        preloadSupplier: "src/preloadSupplier.ts",
-        preloadProduct: "src/preloadProduct.ts",
-        preloadCategory: "src/preloadCategory.ts"
+        preload: "src/preload/preload.ts",
+        preloadClient: "src/preload/preloadClient.ts",
+        preloadSupplier: "src/preload/preloadSupplier.ts",
+        preloadProduct: "src/preload/preloadProduct.ts",
+        preloadCategory: "src/preload/preloadCategory.ts"
       },
       builderOptions: {
         extraResources: [
