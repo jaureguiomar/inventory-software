@@ -45,6 +45,11 @@
                         v-model="field.last_name.text"
                         :label="t('client.window.field.last_name') + ':'"
                         type="text"
+                        bottom-slots
+                        :error="field.last_name.error.is_error"
+                        :error-message="field.last_name.error.message"
+                        @blur="onLastNameBlur"
+                        @keyup="onLastNameKeyup"
                      >
                      </q-input>
                   </div>
@@ -55,6 +60,11 @@
                         v-model="field.address.text"
                         :label="t('client.window.field.address') + ':'"
                         type="text"
+                        bottom-slots
+                        :error="field.address.error.is_error"
+                        :error-message="field.address.error.message"
+                        @blur="onAddressBlur"
+                        @keyup="onAddressKeyup"
                      >
                      </q-input>
                   </div>
@@ -63,6 +73,11 @@
                         v-model="field.cellphone.text"
                         :label="t('client.window.field.cellphone') + ':'"
                         type="text"
+                        bottom-slots
+                        :error="field.cellphone.error.is_error"
+                        :error-message="field.cellphone.error.message"
+                        @blur="onCellphoneBlur"
+                        @keyup="onCellphoneKeyup"
                      >
                      </q-input>
                   </div>
@@ -82,6 +97,11 @@
                         :label="t('client.window.field.email') + ':'"
                         type="text"
                         hint="Valid Email format"
+                        bottom-slots
+                        :error="field.email.error.is_error"
+                        :error-message="field.email.error.message"
+                        @blur="onEmailBlur"
+                        @keyup="onEmailKeyup"
                      >
                      </q-input>
                   </div>
