@@ -9,10 +9,10 @@
             <p class="q-ma-none">{{ t("client.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white" href="#_" @click="onClientAddWindowClick">
+            <a class="q-mr-sm text-white cursor-pointer" @click="onClientAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
-            <a class="text-white" href="#_" @click="onRefreshData">
+            <a class="text-white cursor-pointer" @click="onRefreshData">
                <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
             </a>
          </template>
@@ -108,14 +108,14 @@
 import axios from "axios";
 import { defineComponent, ref, computed, reactive } from "vue"
 import { ClientResponse, WindowResponse, Client } from "../interfaces/client/client";
-import Banner from "../views/layout/Banner.vue";
-import Menu from "../views/layout/Menu.vue";
-import Content from "../views/layout/Content.vue";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
+import Banner from "../views/layout/Banner.vue";
+import Menu from "../views/layout/Menu.vue";
+import Content from "../views/layout/Content.vue";
 
 export default defineComponent({
    name: "client-component",

@@ -3,7 +3,7 @@ import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Client from "@/views/Client.vue";
 import ClientSee from "@/windows/client/ClientSee.vue";
-// import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
+import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
 import ClientDelete from "@/windows/client/ClientDelete.vue";
 // import Supplier from "@/views/Supplier.vue";
 // import SupplierSee from "@/windows/supplier/SupplierSee.vue";
@@ -52,22 +52,22 @@ const routes = [
          requiresAuth: false
       }
    },
-   // {
-   //    path: "/client-add",
-   //    component: ClientAddUpdate,
-   //    name: "client-add",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/client-update/:id",
-   //    component: ClientAddUpdate,
-   //    name: "client-update",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
+   {
+      path: "/client-add",
+      component: ClientAddUpdate,
+      name: "client-add",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/client-update/:id",
+      component: ClientAddUpdate,
+      name: "client-update",
+      meta: {
+         requiresAuth: false
+      }
+   },
    {
       path: "/client-delete/:id",
       component: ClientDelete,

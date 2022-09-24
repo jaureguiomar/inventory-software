@@ -59,6 +59,44 @@ export const getFormattedDateString = (date:string, type:number=0, format:number
    return new_date;
 };
 
+export const enterKeyNavigation = (e:KeyboardEvent, inputAfter:string, inputBefore:string) => {
+   if(e.keyCode === 13) {
+      if(e.shiftKey) {
+         if(inputBefore) {
+            const input = document.getElementById(inputBefore) as any;
+            input.focus();
+         }
+      } else {
+         const input = document.getElementById(inputAfter) as any;
+         input.focus();
+      }
+   }
+};
+
+export const validateField = (value:string, field:string, dataKey:string, newValidation:Function|any) => {
+   let is_error = false;
+
+   if(value === "") {
+      [dataKey][field].error.is_error = true;
+      [dataKey][field].error.message = "This field is required";
+      is_error = true;
+   } else {
+      [dataKey][field].error.is_error = false;
+      [dataKey][field].error.message = "";
+   }
+
+   if(!is_error && typeof(newValidation) == "function") {
+      const message_error = newValidation();
+      if(message_error) {
+         [dataKey][field].error.is_error = true;
+         [dataKey][field].error.message = message_error;
+         is_error = true;
+      }
+   }
+
+   return is_error;
+};
+
 // export const setField = (isError:boolean, field:string, dataKey:string, message:string) => {
 //    this[dataKey][field].error.is_error = isError;
 //    if(isError)

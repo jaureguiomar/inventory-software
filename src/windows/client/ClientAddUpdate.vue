@@ -15,26 +15,106 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p>{{ content.title }}</p>
+               <p class="q-ma-none">{{ page.content.title }}</p>
             </template>
-            <template #subtitle>{{ content.description }}</template>
+            <template #subtitle>{{ page.content.description }}</template>
          </Menu>
          <Content>
             <template #content>
-               <div v-if="id &gt; 0" class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.id") }}:</label>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-if="page.id > 0"
+                        v-model="page.id"
+                        :label="t('client.window.field.id') + ':'"
+                        type="text"
+                        readonly
+                        placeholder="Enter ID"
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <!-- hint="Some hint here!" -->
+                     <q-input
+                        v-model="field.first_name.text"
+                        class="counter"
+                        :label="t('client.window.field.first_name') + ':'"
+                        type="text"
+                        placeholder="Enter First Name"
+                        bottom-slots
+                        :error="field.first_name.error.is_error"
+                        :error-message="field.first_name.error.message"
+                        @blur="onFirstNameBlur"
+                        @keyup="onFirstNameKeyup"
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="field.last_name.text"
+                        :label="t('client.window.field.last_name') + ':'"
+                        type="text"
+                        placeholder="Enter Last Name"
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="field.address.text"
+                        :label="t('client.window.field.address') + ':'"
+                        type="text"
+                        placeholder="Enter Address"
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="field.cellphone.text"
+                        :label="t('client.window.field.cellphone') + ':'"
+                        type="text"
+                        placeholder="Enter Cellphone"
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="field.cellphone2.text"
+                        :label="t('client.window.field.cellphone2') + ':'"
+                        type="text"
+                        placeholder="Enter Cellphone 2"
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="field.email.text"
+                        :label="t('client.window.field.email') + ':'"
+                        type="text"
+                        placeholder="Enter Email"
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <!-- <div v-if="id &gt; 0" class="form-group row">
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.id") }}:</label>
                   <div class="col-sm-2">
                      <input v-model="id" class="form-control" type="text" disabled="disabled" />
                   </div>
                </div>
                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.first_name") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.first_name") }}:</label>
                   <div class="col-sm-4">
                      <input id="first-name" v-model="data.first_name.text" v-focus="v-focus" class="form-control counter" type="text" placeholder="Enter first name" :class="{ 'is-invalid': data.first_name.error.is_error }" @blur="onFirstNameBlur" @keyup="onFirstNameKeyup" />
                      <div v-if="data.first_name.error.is_error" class="invalid-feedback text-left">{{ data.first_name.error.message }}</div>
                      <BadgeCounter :value="data.first_name.text" :maxText="data.first_name.max_text" :isError="data.first_name.error.is_error"></BadgeCounter>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.last_name") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.last_name") }}:</label>
                   <div class="col-sm-4">
                      <input id="last-name" v-model="data.last_name.text" class="form-control" type="text" placeholder="Enter last name" :class="{ 'is-invalid': data.last_name.error.is_error }" @blur="onLastNameBlur" @keyup="onLastNameKeyup" />
                      <div v-if="data.last_name.error.is_error" class="invalid-feedback text-left">{{ data.last_name.error.message }}</div>
@@ -42,13 +122,13 @@
                   </div>
                </div>
                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.address") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.address") }}:</label>
                   <div class="col-sm-4">
                      <input id="address" v-model="data.address.text" class="form-control" type="text" placeholder="Enter address" :class="{ 'is-invalid': data.address.error.is_error }" @blur="onAddressBlur" @keyup="onAddressKeyup" />
                      <div v-if="data.address.error.is_error" class="invalid-feedback text-left">{{ data.address.error.message }}</div>
                      <BadgeCounter :value="data.address.text" :maxText="data.address.max_text" :isError="data.address.error.is_error"></BadgeCounter>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.cellphone") }}:</label>
                   <div class="col-sm-4">
                      <input id="cellphone" v-model="data.cellphone.text" class="form-control" type="text" placeholder="Enter cellphone" :class="{ 'is-invalid': data.cellphone.error.is_error }" @blur="onCellphoneBlur" @keyup="onCellphoneKeyup" />
                      <div v-if="data.cellphone.error.is_error" class="invalid-feedback text-left">{{ data.cellphone.error.message }}</div>
@@ -56,13 +136,13 @@
                   </div>
                </div>
                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.cellphone2") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.cellphone2") }}:</label>
                   <div class="col-sm-4">
                      <input id="cellphone2" v-model="data.cellphone2.text" class="form-control" type="text" placeholder="Enter cellphone 2" :class="{ 'is-invalid': data.cellphone2.error.is_error }" />
                      <div v-if="data.cellphone2.error.is_error" class="invalid-feedback text-left">{{ data.cellphone2.error.message }}</div>
                      <BadgeCounter :value="data.cellphone2.text" :maxText="data.cellphone2.max_text" :isError="data.cellphone2.error.is_error"></BadgeCounter>
                   </div>
-                  <label class="col-sm-2 col-form-label">{{ $t("client.window.field.email") }}:</label>
+                  <label class="col-sm-2 col-form-label">{{ t("client.window.field.email") }}:</label>
                   <div class="col-sm-4">
                      <input id="email" v-model="data.email.text" class="form-control" type="text" placeholder="Enter email" :class="{ 'is-invalid': data.email.error.is_error }" @blur="onEmailBlur" @keyup="onEmailKeyup" />
                      <div v-if="data.email.error.is_error" class="invalid-feedback text-left">{{ data.email.error.message }}</div>
@@ -76,23 +156,23 @@
                      type="submit"
                      @click="onAddUpdate"
                   >
-                     {{ (id <= 0) ? $t("client.window.add.button.add") : $t("client.window.update.button.update") }}
+                     {{ (id <= 0) ? t("client.window.add.button.add") : t("client.window.update.button.update") }}
                   </button>
                   <button
                      class="btn btn-danger text-center mr-2"
                      type="clear"
                      @click="onClear"
                   >
-                     {{ $t("client.window.button.clear") }}
+                     {{ t("client.window.button.clear") }}
                   </button>
                   <button
                      class="btn btn-info text-center"
                      type="clear"
                      @click="onClose"
                   >
-                     {{ $t("client.window.button.close") }}
+                     {{ t("client.window.button.close") }}
                   </button>
-               </div>
+               </div> -->
             </template>
          </Content>
       </div>
@@ -100,117 +180,114 @@
 </template>
 
 <script lang="ts">
-import Vue, { defineComponent } from "vue";
-import mixins from "vue-typed-mixins";
-import defaultMixin from "../../plugins/mixins";
-import { Props, IPCParams, AxiosResponse, Client } from "../../interfaces/client/client-add-update";
+import axios from "axios";
+import { defineComponent, reactive, ref } from "vue";
+import { IPCParams, Page, ClientField, ClientResponse, Client } from "../../interfaces/client/client-add-update";
+import { useI18n } from "vue-i18n/index";
+import Swal from "sweetalert2";
+import { validateField, enterKeyNavigation } from "@/plugins/mixins";
 import Banner from "../../views/layout/Banner.vue";
 import Menu from "../../views/layout/Menu.vue";
 import Content from "../../views/layout/Content.vue";
-import BadgeCounter from "../../views/components/BadgeCounter.vue";
 
 export default defineComponent({
    name: "client-add-update-component",
    components: {
       Banner,
       Menu,
-      Content,
-      BadgeCounter
+      Content
    },
-   mixins: [defaultMixin],
-   data() {
-      return {
+   setup() {
+      const { t } = useI18n();
+      const page = reactive<Page>({
          id: -1,
          type: "",
          content: {
             title: "",
             description: ""
-         },
-         data: {
-            first_name: {
-               text: "",
-               max_text: 70,
-               error: {
-                  is_error: false,
-                  message: ""
-               }
-            },
-            last_name: {
-               text: "",
-               max_text: 70,
-               error: {
-                  is_error: false,
-                  message: ""
-               }
-            },
-            address: {
-               text: "",
-               max_text: 160,
-               error: {
-                  is_error: false,
-                  message: ""
-               }
-            },
-            cellphone: {
-               text: "",
-               max_text: 20,
-               error: {
-                  is_error: false,
-                  message: ""
-               }
-            },
-            cellphone2: {
-               text: "",
-               max_text: 20,
-               error: {
-                  is_error: false,
-                  message: ""
-               }
-            },
-            email: {
-               text: "",
-               max_text: 100,
-               error: {
-                  is_error: false,
-                  message: ""
-               }
+         }
+      });
+      const field = reactive<ClientField>({
+         first_name: {
+            text: "",
+            max_text: 70,
+            error: {
+               is_error: false,
+               message: ""
             }
          },
-         loaded: false
-      } as Props;
-   },
-   created() {
-      const vue_this = this;
-      window.api.receive("client-module-window-reply", (data:IPCParams) => {
-         vue_this.id = data.id;
-         vue_this.type = data.type;
-         vue_this.content = data.content;
-         if(data.data) {
-            vue_this.data.first_name.text = data.data.first_name;
-            vue_this.data.last_name.text = data.data.last_name;
-            vue_this.data.address.text = data.data.address;
-            vue_this.data.cellphone.text = data.data.cellphone;
-            vue_this.data.cellphone2.text = (data.data.cellphone2) ? data.data.cellphone2 : "";
-            vue_this.data.email.text = data.data.email;
+         last_name: {
+            text: "",
+            max_text: 70,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         },
+         address: {
+            text: "",
+            max_text: 160,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         },
+         cellphone: {
+            text: "",
+            max_text: 20,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         },
+         cellphone2: {
+            text: "",
+            max_text: 20,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         },
+         email: {
+            text: "",
+            max_text: 100,
+            error: {
+               is_error: false,
+               message: ""
+            }
          }
-         vue_this.loaded = true;
       });
-   },
-   methods: {
-      async onAddUpdate() {
-         this.data.first_name.text = this.data.first_name.text.trim();
-         this.data.last_name.text = this.data.last_name.text.trim();
-         this.data.address.text = this.data.address.text.trim();
-         this.data.cellphone.text = this.data.cellphone.text.trim();
-         this.data.cellphone2.text = this.data.cellphone2.text.trim();
-         this.data.email.text = this.data.email.text.trim();
+      const loaded = ref(false);
 
-         let first_name = this.data.first_name.text;
-         let last_name = this.data.last_name.text;
-         let address = this.data.address.text;
-         let cellphone = this.data.cellphone.text;
-         // let cellphone2 = this.data.cellphone2.text;
-         let email = this.data.email.text;
+      window.api.receive("client-module-window-reply", (data:IPCParams) => {
+         page.id = data.id;
+         page.type = data.type;
+         page.content = data.content;
+         if(data.data) {
+            field.first_name.text = data.data.first_name;
+            field.last_name.text = data.data.last_name;
+            field.address.text = data.data.address;
+            field.cellphone.text = data.data.cellphone;
+            field.cellphone2.text = (data.data.cellphone2) ? data.data.cellphone2 : "";
+            field.email.text = data.data.email;
+         }
+         loaded.value = true;
+      });
+
+      const onAddUpdate = async() => {
+         field.first_name.text = field.first_name.text.trim();
+         field.last_name.text = field.last_name.text.trim();
+         field.address.text = field.address.text.trim();
+         field.cellphone.text = field.cellphone.text.trim();
+         field.cellphone2.text = field.cellphone2.text.trim();
+         field.email.text = field.email.text.trim();
+
+         let first_name = field.first_name.text;
+         let last_name = field.last_name.text;
+         let address = field.address.text;
+         let cellphone = field.cellphone.text;
+         // let cellphone2 = field.cellphone2.text;
+         let email = field.email.text;
          let error_first_name = false;
          let error_last_name = false;
          let error_address = false;
@@ -218,261 +295,265 @@ export default defineComponent({
          // let error_cellphone2 = false;
          let error_email = false;
 
-         error_first_name = this.validateFirstName(first_name);
-         error_last_name = this.validateLastName(last_name);
-         error_address = this.validateAddress(address);
-         error_cellphone = this.validateCellphone(cellphone);
-         // error_cellphone2 = this.validateCellphone2(cellphone2);
-         error_email = this.validateEmail(email);
+         error_first_name = validateFirstName(first_name);
+         error_last_name = validateLastName(last_name);
+         error_address = validateAddress(address);
+         error_cellphone = validateCellphone(cellphone);
+         // error_cellphone2 = validateCellphone2(cellphone2);
+         error_email = validateEmail(email);
 
          if(error_first_name || error_last_name || error_address || error_cellphone || error_email)
             return;
 
          let data:Client|null = null;
-         if(this.id <= 0) {
-            let response:AxiosResponse = await Vue.prototype.$http.put("client/v3/create.php", {
-               first_name: this.data.first_name.text,
-               last_name: this.data.last_name.text,
-               address: this.data.address.text,
-               cellphone: this.data.cellphone.text,
-               cellphone2: this.data.cellphone2.text,
-               email: this.data.email.text
+         if(page.id <= 0) {
+            let response = await axios.put<ClientResponse>("client/v3/create.php", {
+               first_name: field.first_name.text,
+               last_name: field.last_name.text,
+               address: field.address.text,
+               cellphone: field.cellphone.text,
+               cellphone2: field.cellphone2.text,
+               email: field.email.text
             });
             if(response) {
                if(!response.data.error.is_error) {
-                  data = response.data.data.data;
+                  data = response.data.data;
                } else {
-                  this.$fire({
+                  Swal.fire({
                      title: "Error",
-                     text: this.$t("global.default_error") as string,
-                     type: "error"
+                     text: t("global.default_error"),
+                     icon: "error"
                   });
                   return;
                }
             } else {
-               this.$fire({
+               Swal.fire({
                   title: "Error",
-                  text: this.$t("global.default_error") as string,
-                  type: "error"
+                  text: t("global.default_error"),
+                  icon: "error"
                });
                return;
             }
          } else {
-            let response:AxiosResponse = await Vue.prototype.$http.post("client/v3/update.php", {
-               id: this.id,
-               first_name: this.data.first_name.text,
-               last_name: this.data.last_name.text,
-               address: this.data.address.text,
-               cellphone: this.data.cellphone.text,
-               cellphone2: this.data.cellphone2.text,
-               email: this.data.email.text
+            let response = await axios.post<ClientResponse>("client/v3/update.php", {
+               id: page.id,
+               first_name: field.first_name.text,
+               last_name: field.last_name.text,
+               address: field.address.text,
+               cellphone: field.cellphone.text,
+               cellphone2: field.cellphone2.text,
+               email: field.email.text
             });
             if(response) {
                if(!response.data.error.is_error) {
-                  data = response.data.data.data;
+                  data = response.data.data;
                } else {
-                  this.$fire({
+                  Swal.fire({
                      title: "Error",
-                     text: this.$t("global.default_error") as string,
-                     type: "error"
+                     text: t("global.default_error"),
+                     icon: "error"
                   });
                   return;
                }
             } else {
-               this.$fire({
-                  title: "Error",
-                  text: this.$t("global.default_error") as string,
-                  type: "error"
-               });
+               Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
                return;
             }
          }
 
-         const vue_this = this;
          let message = "";
-         if(this.type === "add")
+         if(page.type === "add")
             message = "The client has been added properly";
-         else if(this.type === "update")
+         else if(page.type === "update")
             message = "The client has been updated properly";
-
          window.api.send("client-module-window-dialog", {
-            type: this.type,
+            type: page.type,
             message: message
          });
          window.api.receive("client-module-window-dialog-reply", () => {
             window.api.send("client-module-window-close", {
-               id: vue_this.id,
+               id: page.id,
                data: data,
                result: "success",
-               type: vue_this.type
+               type: page.type
             });
          });
-      },
-      onClear() {
-         this.clearForm();
-      },
-      onClose() {
-         const vue_this = this;
+      };
+      const onClear = () => {
+         clearForm();
+      };
+      const onClose = () => {
          window.api.send("client-module-window-close", {
-            id: this.id,
+            id: page.id,
             data: null,
             result: "closed",
-            type: vue_this.type
+            type: page.type
          });
-      },
-      clearForm() {
-         this.data.first_name.text = "";
-         this.data.first_name.error.is_error = false;
-         this.data.first_name.error.message = "";
+      };
+      const clearForm = () => {
+         field.first_name.text = "";
+         field.first_name.error.is_error = false;
+         field.first_name.error.message = "";
 
-         this.data.last_name.text = "";
-         this.data.last_name.error.is_error = false;
-         this.data.last_name.error.message = "";
+         field.last_name.text = "";
+         field.last_name.error.is_error = false;
+         field.last_name.error.message = "";
 
-         this.data.address.text = "";
-         this.data.address.error.is_error = false;
-         this.data.address.error.message = "";
+         field.address.text = "";
+         field.address.error.is_error = false;
+         field.address.error.message = "";
 
-         this.data.cellphone.text = "";
-         this.data.cellphone.error.is_error = false;
-         this.data.cellphone.error.message = "";
+         field.cellphone.text = "";
+         field.cellphone.error.is_error = false;
+         field.cellphone.error.message = "";
 
-         this.data.cellphone2.text = "";
-         this.data.cellphone2.error.is_error = false;
-         this.data.cellphone2.error.message = "";
+         field.cellphone2.text = "";
+         field.cellphone2.error.is_error = false;
+         field.cellphone2.error.message = "";
 
-         this.data.email.text = "";
-         this.data.email.error.is_error = false;
-         this.data.email.error.message = "";
-      },
+         field.email.text = "";
+         field.email.error.is_error = false;
+         field.email.error.message = "";
+      };
       /////////////////
       // Blur Events //
-      onFirstNameBlur() {
-         let value = this.data.first_name.text;
-         this.validateFirstName(value);
-      },
-      onLastNameBlur() {
-         let value = this.data.last_name.text;
-         this.validateLastName(value);
-      },
-      onAddressBlur() {
-         let value = this.data.address.text;
-         this.validateAddress(value);
-      },
-      onCellphoneBlur() {
-         let value = this.data.cellphone.text;
-         this.validateCellphone(value);
-      },
-      // onCellphone2Blur() {
-      //    let value = this.data.cellphone2.text;
-      //    this.validateCellphone2(value);
-      // },
-      onEmailBlur() {
-         let value = this.data.email.text;
-         this.validateEmail(value);
-      },
+      const onFirstNameBlur = () => {
+         let value = field.first_name.text;
+         validateFirstName(value);
+      };
+      const onLastNameBlur = () => {
+         let value = field.last_name.text;
+         validateLastName(value);
+      };
+      const onAddressBlur = () => {
+         let value = field.address.text;
+         validateAddress(value);
+      };
+      const onCellphoneBlur = () => {
+         let value = field.cellphone.text;
+         validateCellphone(value);
+      };
+      // const onCellphone2Blur = () => {
+      //    let value = field.cellphone2.text;
+      //    validateCellphone2(value);
+      // };
+      const onEmailBlur = () => {
+         let value = field.email.text;
+         validateEmail(value);
+      };
       /////////////////////
       // Keypress Events //
-      onFirstNameKeyup(e) {
-         let value = this.data.first_name.text;
-         this.validateFirstName(value);
-         this.enterKeyNavigation(e, "last-name", "");
-      },
-      onLastNameKeyup(e) {
-         let value = this.data.last_name.text;
-         this.validateLastName(value);
-         this.enterKeyNavigation(e, "address", "first-name");
-      },
-      onAddressKeyup(e) {
-         let value = this.data.address.text;
-         this.validateAddress(value);
-         this.enterKeyNavigation(e, "cellphone", "last-name");
-      },
-      onCellphoneKeyup(e) {
-         let value = this.data.cellphone.text;
-         this.validateCellphone(value);
-         this.enterKeyNavigation(e, "cellphone2", "address");
-      },
-      // onCellphone2Keyup(e) {
-      //    let value = this.data.cellphone2.text;
-      //    this.validateCellphone2(value);
-      //    this.enterKeyNavigation(e, "email", "cellphone");
-      // },
-      onEmailKeyup(e) {
-         let value = this.data.email.text;
-         this.validateEmail(value);
-         this.enterKeyNavigation(e, "add-update-button", "cellphone2");
-      },
+      const onFirstNameKeyup = (e:KeyboardEvent) => {
+         let value = field.first_name.text;
+         validateFirstName(value);
+         enterKeyNavigation(e, "last-name", "");
+      };
+      const onLastNameKeyup = (e:KeyboardEvent) => {
+         let value = field.last_name.text;
+         validateLastName(value);
+         enterKeyNavigation(e, "address", "first-name");
+      };
+      const onAddressKeyup = (e:KeyboardEvent) => {
+         let value = field.address.text;
+         validateAddress(value);
+         enterKeyNavigation(e, "cellphone", "last-name");
+      };
+      const onCellphoneKeyup = (e:KeyboardEvent) => {
+         let value = field.cellphone.text;
+         validateCellphone(value);
+         enterKeyNavigation(e, "cellphone2", "address");
+      };
+      // const onCellphone2Keyup = (e:KeyboardEvent) => {
+      //    let value = field.cellphone2.text;
+      //    validateCellphone2(value);
+      //    enterKeyNavigation(e, "email", "cellphone");
+      // };
+      const onEmailKeyup = (e:KeyboardEvent) => {
+         let value = field.email.text;
+         validateEmail(value);
+         enterKeyNavigation(e, "add-update-button", "cellphone2");
+      };
       ////////////////
       // Validators //
-      validateFirstName(firstName:string) {
+      const validateFirstName = (firstName:string) => {
          let error = false;
-         error = this.validateField(firstName, "first_name", "data", () => {
-            if(this.data.first_name.text.length <= this.data.first_name.max_text)
+         error = validateField(firstName, "first_name", "field", () => {
+            if(field.first_name.text.length <= field.first_name.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
          return error;
-      },
-      validateLastName(lastName:string) {
+      };
+      const validateLastName = (lastName:string) => {
          let error = false;
-         error = this.validateField(lastName, "last_name", "data", () => {
-            if(this.data.last_name.text.length <= this.data.last_name.max_text)
+         error = validateField(lastName, "last_name", "data", () => {
+            if(field.last_name.text.length <= field.last_name.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
          return error;
-      },
-      validateAddress(address:string) {
+      };
+      const validateAddress = (address:string) => {
          let error = false;
-         error = this.validateField(address, "address", "data", () => {
-            if(this.data.address.text.length <= this.data.address.max_text)
+         error = validateField(address, "address", "data", () => {
+            if(field.address.text.length <= field.address.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
          return error;
-      },
-      validateCellphone(cellphone:string) {
+      };
+      const validateCellphone = (cellphone:string)  =>{
          let error = false;
-         error = this.validateField(cellphone, "cellphone", "data", () => {
-            if(this.data.cellphone.text.length <= this.data.cellphone.max_text)
+         error = validateField(cellphone, "cellphone", "data", () => {
+            if(field.cellphone.text.length <= field.cellphone.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
          return error;
-      },
-      // validateCellphone2(cellphone2:string) {
+      };
+      // const validateCellphone2 = (cellphone2:string) => {
       //    let error = false;
-      //    error = this.validateField(cellphone2, "cellphone2", "data", () => {
-      //       if(this.data.cellphone2.text.length <= this.data.cellphone2.max_text)
+      //    error = validateField(cellphone2, "cellphone2", "data", () => {
+      //       if(field.cellphone2.text.length <= field.cellphone2.max_text)
       //          return null;
       //       return "This field has exceeded the length limit";
       //    });
       //    return error;
-      // },
-      validateEmail(email:string) {
+      // };
+      const validateEmail = (email:string) => {
          let error = false;
-         error = this.validateField(email, "email", "data", () => {
-            if(this.data.email.text.length <= this.data.email.max_text)
+         error = validateField(email, "email", "data", () => {
+            if(field.email.text.length <= field.email.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
          return error;
-      },
-      ///////////////
-      // Functions //
-      enterKeyNavigation(e, inputAfter:string, inputBefore:string) {
-         if(e.keyCode === 13) {
-            if(e.shiftKey) {
-               if(inputBefore) {
-                  const input = document.getElementById(inputBefore) as any;
-                  input.focus();
-               }
-            } else {
-               const input = document.getElementById(inputAfter) as any;
-               input.focus();
-            }
-         }
+      };
+
+      return {
+         t,
+         page,
+         field,
+         loaded,
+         onAddUpdate,
+         onClear,
+         onClose,
+         onFirstNameBlur,
+         onLastNameBlur,
+         onAddressBlur,
+         onCellphoneBlur,
+         // onCellphone2Blur,
+         onEmailBlur,
+         onFirstNameKeyup,
+         onLastNameKeyup,
+         onAddressKeyup,
+         onCellphoneKeyup,
+         // onCellphone2Keyup,
+         onEmailKeyup,
       }
    }
 });
