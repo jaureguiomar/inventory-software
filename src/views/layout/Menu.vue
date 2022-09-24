@@ -78,4 +78,14 @@ export default defineComponent({
       .subtitle
          font-size: 19px
          color: #05386b
+
+   @media screen and (max-width: 360px)
+      .menu
+         .title
+            flex-direction: column
+            .left-content
+               margin: 0
+            .right-content
+               margin: 0
+         .subtitle
 </style>
