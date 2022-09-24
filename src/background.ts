@@ -108,7 +108,7 @@ function buildAppRoute() {
    if(process.env.NODE_ENV === "development")
       route = `http://localhost:${ app_port }/#`;
    else
-      `file://${__dirname}/index.html#`;
+      route = `file://${__dirname}/index.html#`;
    return route;
 }
 
