@@ -1,5 +1,11 @@
 <template>
    <div class="menu-home">
+      <router-link to="/sale">
+         <div class="top">
+            <font-awesome-icon icon="fa-solid fa-cart-shopping" size="4x" />
+         </div>
+         <div class="bottom">Sale</div>
+      </router-link>
       <router-link to="/client">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-users" size="4x" />

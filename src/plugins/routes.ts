@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
+import Sale from "@/views/Sale.vue";
 import Client from "@/views/Client.vue";
 import ClientSee from "@/windows/client/ClientSee.vue";
 import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
@@ -40,6 +41,14 @@ const routes = [
       path: "/client",
       component: Client,
       name: "client",
+      meta: {
+         requiresAuth: true
+      }
+   },
+   {
+      path: "/sale",
+      component: Sale,
+      name: "sale",
       meta: {
          requiresAuth: true
       }
