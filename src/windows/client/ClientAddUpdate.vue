@@ -1,15 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div v-if="!loaded" key="loader" class="spinner-loader">
-         <div class="spinner-loader-container">
-            <div class="spinner-ripple-loader">
-               <div class="spinner-ripple-loader-container">
-                  <div></div>
-                  <div></div>
-               </div>
-            </div>
-         </div>
-      </div>
+      <Loader key="loader" :loaded="loaded" />
 
       <div v-if="loaded" key="content" class="main-container">
          <Banner />
@@ -19,17 +10,17 @@
             </template>
             <template #subtitle>{{ page.content.description }}</template>
          </Menu>
+
          <Content>
             <template #content>
                <div class="row">
-                  <div class="col-md-6 col-12">
+                  <div class="col-md-2 col-12">
                      <q-input
                         v-if="page.id > 0"
                         v-model="page.id"
                         :label="t('client.window.field.id') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter ID"
                      >
                      </q-input>
                   </div>
@@ -41,7 +32,6 @@
                         class="counter"
                         :label="t('client.window.field.first_name') + ':'"
                         type="text"
-                        placeholder="Enter First Name"
                         bottom-slots
                         :error="field.first_name.error.is_error"
                         :error-message="field.first_name.error.message"
@@ -55,7 +45,6 @@
                         v-model="field.last_name.text"
                         :label="t('client.window.field.last_name') + ':'"
                         type="text"
-                        placeholder="Enter Last Name"
                      >
                      </q-input>
                   </div>
@@ -66,7 +55,6 @@
                         v-model="field.address.text"
                         :label="t('client.window.field.address') + ':'"
                         type="text"
-                        placeholder="Enter Address"
                      >
                      </q-input>
                   </div>
@@ -75,18 +63,16 @@
                         v-model="field.cellphone.text"
                         :label="t('client.window.field.cellphone') + ':'"
                         type="text"
-                        placeholder="Enter Cellphone"
                      >
                      </q-input>
                   </div>
                </div>
-               <div class="row">
+               <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.cellphone2.text"
                         :label="t('client.window.field.cellphone2') + ':'"
                         type="text"
-                        placeholder="Enter Cellphone 2"
                      >
                      </q-input>
                   </div>
@@ -95,11 +81,32 @@
                         v-model="field.email.text"
                         :label="t('client.window.field.email') + ':'"
                         type="text"
-                        placeholder="Enter Email"
                         hint="Valid Email format"
                      >
                      </q-input>
                   </div>
+               </div>
+               <div class="text-center">
+                  <q-btn
+                     class="q-mr-sm"
+                     color="primary"
+                     :label="(page.id <= 0) ? t('client.window.add.button.add') : t('client.window.update.button.update')"
+                     @click="onAddUpdate"
+                  >
+                  </q-btn>
+                  <q-btn
+                     class="q-mr-sm"
+                     color="info"
+                     :label="t('client.window.button.clear')"
+                     @click="onClear"
+                  >
+                  </q-btn>
+                  <q-btn
+                     color="negative"
+                     :label="t('client.window.button.close')"
+                     @click="onClose"
+                  >
+                  </q-btn>
                </div>
                <!-- <div v-if="id &gt; 0" class="form-group row">
                   <label class="col-sm-2 col-form-label">{{ t("client.window.field.id") }}:</label>
@@ -182,20 +189,22 @@
 <script lang="ts">
 import axios from "axios";
 import { defineComponent, reactive, ref } from "vue";
-import { IPCParams, Page, ClientField, ClientResponse, Client } from "../../interfaces/client/client-add-update";
+import { IPCParams, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client-add-update";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import { validateField, enterKeyNavigation } from "@/plugins/mixins";
-import Banner from "../../views/layout/Banner.vue";
-import Menu from "../../views/layout/Menu.vue";
-import Content from "../../views/layout/Content.vue";
+import Banner from "@/views/layout/Banner.vue";
+import Menu from "@/views/layout/Menu.vue";
+import Content from "@/views/layout/Content.vue";
+import Loader from "@/views/components/Loader.vue";
 
 export default defineComponent({
    name: "client-add-update-component",
    components: {
       Banner,
       Menu,
-      Content
+      Content,
+      Loader
    },
    setup() {
       const { t } = useI18n();
@@ -565,6 +574,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="sass" scoped>
-   @import "../../assets/scss/loader.scss"
-</style>
+<style lang="sass" scoped></style>

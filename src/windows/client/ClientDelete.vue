@@ -1,15 +1,6 @@
 <template>
    <transition-group name="list" tag="div">
-      <div v-if="!loaded" key="loader" class="spinner-loader">
-         <div class="spinner-loader-container">
-            <div class="spinner-ripple-loader">
-               <div class="spinner-ripple-loader-container">
-                  <div></div>
-                  <div></div>
-               </div>
-            </div>
-         </div>
-      </div>
+      <Loader key="loader" :loaded="loaded" />
 
       <div v-if="loaded" key="content" class="main-container">
          <Banner />
@@ -19,17 +10,17 @@
             </template>
             <template #subtitle>{{ $t("client.window.delete.subtitle") }}</template>
          </Menu>
+
          <Content>
             <template #content>
                <div class="row">
-                  <div class="col-md-6 col-12">
+                  <div class="col-md-2 col-12">
                      <q-input
                         v-if="client.id > 0"
                         v-model="client.id"
                         :label="t('client.window.field.id') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter ID"
                      >
                      </q-input>
                   </div>
@@ -41,7 +32,6 @@
                         :label="t('client.window.field.first_name') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter First Name"
                      >
                      </q-input>
                   </div>
@@ -51,7 +41,6 @@
                         :label="t('client.window.field.last_name') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter Last Name"
                      >
                      </q-input>
                   </div>
@@ -63,7 +52,6 @@
                         :label="t('client.window.field.address') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter Address"
                      >
                      </q-input>
                   </div>
@@ -73,7 +61,6 @@
                         :label="t('client.window.field.cellphone') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter Cellphone"
                      >
                      </q-input>
                   </div>
@@ -85,7 +72,6 @@
                         :label="t('client.window.field.cellphone2') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter Cellphone 2"
                      >
                      </q-input>
                   </div>
@@ -95,7 +81,6 @@
                         :label="t('client.window.field.email') + ':'"
                         type="text"
                         readonly
-                        placeholder="Enter Email"
                      >
                      </q-input>
                   </div>
@@ -125,18 +110,20 @@
 import axios from "axios";
 import { defineComponent, ref, reactive } from "vue";
 import { useI18n } from "vue-i18n/index";
-import { Client, ClientResponse, IPCParams } from "../../interfaces/client/client-delete";
+import { Client, ClientResponse, IPCParams } from "@/interfaces/client/client-delete";
 import Swal from "sweetalert2";
-import Banner from "../../views/layout/Banner.vue";
-import Menu from "../../views/layout/Menu.vue";
-import Content from "../../views/layout/Content.vue";
+import Banner from "@/views/layout/Banner.vue";
+import Menu from "@/views/layout/Menu.vue";
+import Content from "@/views/layout/Content.vue";
+import Loader from "@/views/components/Loader.vue";
 
 export default defineComponent({
    name: "client-delete-component",
    components: {
       Banner,
       Menu,
-      Content
+      Content,
+      Loader
    },
    setup() {
       const { t } = useI18n();
@@ -223,6 +210,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="sass" scoped>
-   @import "../../assets/scss/loader.scss"
-</style>
+<style lang="sass" scoped></style>

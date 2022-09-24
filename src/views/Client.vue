@@ -113,9 +113,9 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
-import Banner from "../views/layout/Banner.vue";
-import Menu from "../views/layout/Menu.vue";
-import Content from "../views/layout/Content.vue";
+import Banner from "@/views/layout/Banner.vue";
+import Menu from "@/views/layout/Menu.vue";
+import Content from "@/views/layout/Content.vue";
 
 export default defineComponent({
    name: "client-component",
