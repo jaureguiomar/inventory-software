@@ -14,9 +14,9 @@ import Product from "@/views/Product.vue";
 // import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
 // import ProductDelete from "@/windows/product/ProductDelete.vue";
 import Category from "@/views/Category.vue";
-// import CategorySee from "@/windows/category/CategorySee.vue";
-// import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
-// import CategoryDelete from "@/windows/category/CategoryDelete.vue";
+import CategorySee from "@/windows/category/CategorySee.vue";
+import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
+import CategoryDelete from "@/windows/category/CategoryDelete.vue";
 import store from "./store";
 
 const routes = [
@@ -164,38 +164,38 @@ const routes = [
          requiresAuth: true
       }
    },
-   // {
-   //    path: "/category-see/:id",
-   //    component: CategorySee,
-   //    name: "category-see",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/category-add",
-   //    component: CategoryAddUpdate,
-   //    name: "category-add",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/category-update/:id",
-   //    component: CategoryAddUpdate,
-   //    name: "category-update",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/category-delete/:id",
-   //    component: CategoryDelete,
-   //    name: "category-delete",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // }
+   {
+      path: "/category-see/:id",
+      component: CategorySee,
+      name: "category-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/category-add",
+      component: CategoryAddUpdate,
+      name: "category-add",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/category-update/:id",
+      component: CategoryAddUpdate,
+      name: "category-update",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/category-delete/:id",
+      component: CategoryDelete,
+      name: "category-delete",
+      meta: {
+         requiresAuth: false
+      }
+   }
 ];
 
 const router = createRouter({

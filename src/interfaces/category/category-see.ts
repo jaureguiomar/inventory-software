@@ -1,4 +1,4 @@
-interface Client {
+interface Category {
    id: number;
    name: string;
 }
@@ -7,10 +7,10 @@ interface Client {
 interface IPCParams {
    id: number;
    type: string;
-   data: Client;
+   data: Category;
 }
 
 export {
-   Client,
+   Category,
    IPCParams
 };
