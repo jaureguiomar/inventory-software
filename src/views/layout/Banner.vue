@@ -47,6 +47,8 @@ export default defineComponent({
    @media screen and (max-width: 360px)
       .banner
          flex-direction: column
+         .logo
+            margin: 0
          .text
             margin-top: 10px
 </style>
