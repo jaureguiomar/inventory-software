@@ -107,11 +107,11 @@
 </template>
 
 <script lang="ts">
-import axios from "axios";
 import { defineComponent, ref, reactive } from "vue";
 import { useI18n } from "vue-i18n/index";
 import { Product, ProductResponse, IPCParams } from "@/interfaces/product/product-delete";
 import Swal from "sweetalert2";
+import axios from "@/plugins/axios";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";

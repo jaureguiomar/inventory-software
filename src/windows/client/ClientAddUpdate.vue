@@ -135,12 +135,12 @@
 </template>
 
 <script lang="ts">
-import axios from "axios";
 import { defineComponent, reactive, ref } from "vue";
 import { IPCParams, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client-add-update";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import { validateField, enterKeyNavigation } from "@/plugins/mixins";
+import axios from "@/plugins/axios";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
