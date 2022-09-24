@@ -6,9 +6,9 @@ import ClientSee from "@/windows/client/ClientSee.vue";
 import ClientAddUpdate from "@/windows/client/ClientAddUpdate.vue";
 import ClientDelete from "@/windows/client/ClientDelete.vue";
 import Supplier from "@/views/Supplier.vue";
-// import SupplierSee from "@/windows/supplier/SupplierSee.vue";
-// import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
-// import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
+import SupplierSee from "@/windows/supplier/SupplierSee.vue";
+import SupplierAddUpdate from "@/windows/supplier/SupplierAddUpdate.vue";
+import SupplierDelete from "@/windows/supplier/SupplierDelete.vue";
 import Product from "@/views/Product.vue";
 // import ProductSee from "@/windows/product/ProductSee.vue";
 // import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
@@ -84,38 +84,38 @@ const routes = [
          requiresAuth: true
       }
    },
-   // {
-   //    path: "/supplier-see/:id",
-   //    component: SupplierSee,
-   //    name: "supplier-see",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/supplier-add",
-   //    component: SupplierAddUpdate,
-   //    name: "supplier-add",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/supplier-update/:id",
-   //    component: SupplierAddUpdate,
-   //    name: "supplier-update",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
-   // {
-   //    path: "/supplier-delete/:id",
-   //    component: SupplierDelete,
-   //    name: "supplier-delete",
-   //    meta: {
-   //       requiresAuth: false
-   //    }
-   // },
+   {
+      path: "/supplier-see/:id",
+      component: SupplierSee,
+      name: "supplier-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/supplier-add",
+      component: SupplierAddUpdate,
+      name: "supplier-add",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/supplier-update/:id",
+      component: SupplierAddUpdate,
+      name: "supplier-update",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/supplier-delete/:id",
+      component: SupplierDelete,
+      name: "supplier-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
    {
       path: "/product",
       component: Product,
