@@ -105,12 +105,12 @@
 </template>
 
 <script lang="ts">
-import axios from "axios";
 import { defineComponent, ref, computed, reactive } from "vue"
 import { SupplierResponse, WindowResponse, Supplier } from "../interfaces/supplier/supplier";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
+import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
 import Banner from "@/views/layout/Banner.vue";
@@ -194,7 +194,7 @@ export default defineComponent({
       const onRefreshData = () => {
          supplier.value = [];
 
-         axios.get<SupplierResponse>("http://127.0.0.1/inventory-software-api/api/supplier/v3/select-all.php")
+         axios.get<SupplierResponse>("supplier/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
