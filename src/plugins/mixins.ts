@@ -73,28 +73,29 @@ export const enterKeyNavigation = (e:KeyboardEvent, inputAfter:string, inputBefo
    }
 };
 
-export const validateField = (value:string, field:string, dataKey:string, newValidation:Function|any) => {
-   let is_error = false;
+export const validateField = (value:string, newValidation:Function|any) => {
+   const result = {
+      error: false,
+      message: ""
+   };
 
    if(value === "") {
-      [dataKey][field].error.is_error = true;
-      [dataKey][field].error.message = "This field is required";
-      is_error = true;
+      result.error = true;
+      result.message = "This field is required";
    } else {
-      [dataKey][field].error.is_error = false;
-      [dataKey][field].error.message = "";
+      result.error = false;
+      result.message = "";
    }
 
-   if(!is_error && typeof(newValidation) == "function") {
+   if(!result.error && typeof(newValidation) == "function") {
       const message_error = newValidation();
       if(message_error) {
-         [dataKey][field].error.is_error = true;
-         [dataKey][field].error.message = message_error;
-         is_error = true;
+         result.error = true;
+         result.message = message_error;
       }
    }
 
-   return is_error;
+   return result;
 };
 
 // export const setField = (isError:boolean, field:string, dataKey:string, message:string) => {

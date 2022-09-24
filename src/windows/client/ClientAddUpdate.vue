@@ -36,7 +36,6 @@
                </div>
                <div class="row">
                   <div class="col-md-6 col-12">
-                     <!-- hint="Some hint here!" -->
                      <q-input
                         v-model="field.first_name.text"
                         class="counter"
@@ -97,6 +96,7 @@
                         :label="t('client.window.field.email') + ':'"
                         type="text"
                         placeholder="Enter Email"
+                        hint="Valid Email format"
                      >
                      </q-input>
                   </div>
@@ -480,58 +480,64 @@ export default defineComponent({
       ////////////////
       // Validators //
       const validateFirstName = (firstName:string) => {
-         let error = false;
-         error = validateField(firstName, "first_name", "field", () => {
+         let result = validateField(firstName, () => {
             if(field.first_name.text.length <= field.first_name.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
-         return error;
+         field.first_name.error.is_error = result.error;
+         field.first_name.error.message = result.message;
+         return result.error;
       };
       const validateLastName = (lastName:string) => {
-         let error = false;
-         error = validateField(lastName, "last_name", "data", () => {
+         let result = validateField(lastName, () => {
             if(field.last_name.text.length <= field.last_name.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
-         return error;
+         field.last_name.error.is_error = result.error;
+         field.last_name.error.message = result.message;
+         return result.error;
       };
       const validateAddress = (address:string) => {
-         let error = false;
-         error = validateField(address, "address", "data", () => {
+         let result = validateField(address, () => {
             if(field.address.text.length <= field.address.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
-         return error;
+         field.address.error.is_error = result.error;
+         field.address.error.message = result.message;
+         return result.error;
       };
       const validateCellphone = (cellphone:string)  =>{
-         let error = false;
-         error = validateField(cellphone, "cellphone", "data", () => {
+         let result = validateField(cellphone, () => {
             if(field.cellphone.text.length <= field.cellphone.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
-         return error;
+         field.cellphone.error.is_error = result.error;
+         field.cellphone.error.message = result.message;
+         return result.error;
       };
       // const validateCellphone2 = (cellphone2:string) => {
-      //    let error = false;
-      //    error = validateField(cellphone2, "cellphone2", "data", () => {
+      //    let result = validateField(cellphone2, () => {
       //       if(field.cellphone2.text.length <= field.cellphone2.max_text)
       //          return null;
       //       return "This field has exceeded the length limit";
       //    });
-      //    return error;
+      //    field.cellphone2.error.is_error = result.error;
+      //    field.cellphone2.error.message = result.message;
+      //    return result.error;
       // };
       const validateEmail = (email:string) => {
-         let error = false;
-         error = validateField(email, "email", "data", () => {
+         let result = validateField(email, () => {
             if(field.email.text.length <= field.email.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
-         return error;
+         field.email.error.is_error = result.error;
+         field.email.error.message = result.message;
+         return result.error;
       };
 
       return {
