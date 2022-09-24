@@ -99,4 +99,9 @@ export default defineComponent({
             h2
                margin: 0
                padding: 0
+
+   @media screen and (max-width: 560px)
+      .login
+         .login-container
+            width: calc(100% - 20px)
 </style>

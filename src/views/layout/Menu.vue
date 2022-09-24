@@ -87,5 +87,4 @@ export default defineComponent({
                margin: 0
             .right-content
                margin: 0
-         .subtitle
 </style>
