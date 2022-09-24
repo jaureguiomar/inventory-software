@@ -43,4 +43,10 @@ export default defineComponent({
          &:hover
             cursor: pointer
             background: #05386b
+
+   @media screen and (max-width: 360px)
+      .banner
+         flex-direction: column
+         .text
+            margin-top: 10px
 </style>
