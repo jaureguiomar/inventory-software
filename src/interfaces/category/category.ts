@@ -1,9 +1,3 @@
-// Axios response
-interface Error {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
 interface Category {
    id: number;
    is_active: number;
@@ -11,27 +5,16 @@ interface Category {
    updated: Date;
    name: string;
 }
+
+// Axios response
+interface Error {
+   is_error: boolean;
+   message: string|null;
+   no_error: number;
+}
 interface CategoryResponse {
    data: Array<Category>;
    error: Error;
-}
-interface AxiosResponse {
-   data: CategoryResponse;
-   config: any;
-   headers: any;
-   request: any;
-   status: number;
-   statusText: string;
-}
-
-// Props
-interface PropsData {
-   category: Array<Category>;
-   new_category: Array<Category>;
-}
-interface Props {
-   data: PropsData;
-   table: any;
 }
 
 // Window response
@@ -43,8 +26,7 @@ interface WindowResponse {
 }
 
 export {
-   Props,
-   AxiosResponse,
-   WindowResponse,
-   Category
+   Category,
+   CategoryResponse,
+   WindowResponse
 };

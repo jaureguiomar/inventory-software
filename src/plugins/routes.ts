@@ -13,7 +13,7 @@ import Supplier from "@/views/Supplier.vue";
 // import ProductSee from "@/windows/product/ProductSee.vue";
 // import ProductAddUpdate from "@/windows/product/ProductAddUpdate.vue";
 // import ProductDelete from "@/windows/product/ProductDelete.vue";
-// import Category from "@/views/Category.vue";
+import Category from "@/views/Category.vue";
 // import CategorySee from "@/windows/category/CategorySee.vue";
 // import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
 // import CategoryDelete from "@/windows/category/CategoryDelete.vue";
@@ -156,14 +156,14 @@ const routes = [
    //       requiresAuth: false
    //    }
    // },
-   // {
-   //    path: "/category",
-   //    component: Category,
-   //    name: "category",
-   //    meta: {
-   //       requiresAuth: true
-   //    }
-   // },
+   {
+      path: "/category",
+      component: Category,
+      name: "category",
+      meta: {
+         requiresAuth: true
+      }
+   },
    // {
    //    path: "/category-see/:id",
    //    component: CategorySee,
