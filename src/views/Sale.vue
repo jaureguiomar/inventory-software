@@ -359,7 +359,6 @@ export default defineComponent({
             text-align: right
             // margin-bottom: 10px
             // button
-
    .totals-main-container
       display: flex
       flex-direction: row
@@ -383,4 +382,21 @@ export default defineComponent({
             margin-bottom: 5px
          .text
             text-align: right
+
+   // @media screen and (max-width: 560px)
+   //    .sale
+   //       .sale-favorite
+   //          .sale-favorite-title
+   //       .sale-content
+   //          .sale-indicators
+   //             .sale-indicator-item
+   //                .sale-indicator-item-top
+   //                .sale-indicator-item-bottom
+   //          .sale-options1
+   //          .sale-data
+   //          .sale-options2
+   //    .totals-main-container
+   //       .totals-container
+   //          .title
+   //          .text
 </style>
