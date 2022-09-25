@@ -52,8 +52,10 @@ export default defineComponent({
          onLogin();
       };
       const onLogin = () => {
-         // axios.get<UserResponse>("user/v3/login.php")
-         //    .then((response) => {
+         // axios.post<UserResponse>("user/v3/login.php", {
+         //    username: email.value,
+         //    password: password.value
+         // }).then((response) => {
          //       if(response) {
          //          if(!response.data.error.is_error) {
          //             localStorage.setItem("session", JSON.stringify({
