@@ -33,6 +33,8 @@
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+// import Swal from "sweetalert2";
+// import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
 
 export default defineComponent({
@@ -50,6 +52,31 @@ export default defineComponent({
          onLogin();
       };
       const onLogin = () => {
+         // axios.get<UserResponse>("user/v3/login.php")
+         //    .then((response) => {
+         //       if(response) {
+         //          if(!response.data.error.is_error) {
+         //             localStorage.setItem("session", JSON.stringify({
+         //                loggued_in: true
+         //             }));
+         //             store.commit("SET_LOGGUED_IN_DATA", true);
+         //             router.push({ name: "home" });
+         //          } else {
+         //             Swal.fire({
+         //                title: "Error",
+         //                text: t("global.default_error"),
+         //                icon: "error"
+         //             });
+         //          }
+         //       } else {
+         //          Swal.fire({
+         //             title: "Error",
+         //             text: t("global.default_error"),
+         //             icon: "error"
+         //          });
+         //       }
+         //    });
+
          localStorage.setItem("session", JSON.stringify({
             loggued_in: true
          }));
