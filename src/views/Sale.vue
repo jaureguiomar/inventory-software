@@ -383,20 +383,80 @@ export default defineComponent({
          .text
             text-align: right
 
-   // @media screen and (max-width: 560px)
-   //    .sale
-   //       .sale-favorite
-   //          .sale-favorite-title
-   //       .sale-content
-   //          .sale-indicators
-   //             .sale-indicator-item
-   //                .sale-indicator-item-top
-   //                .sale-indicator-item-bottom
-   //          .sale-options1
-   //          .sale-data
-   //          .sale-options2
-   //    .totals-main-container
-   //       .totals-container
-   //          .title
-   //          .text
+   @media screen and (max-width: 1198px)
+      .sale
+         .sale-favorite
+            min-height: 665px
+            max-height: 665px
+      //       .sale-favorite-title
+      //    .sale-content
+      //       .sale-indicators
+      //          .sale-indicator-item
+      //             .sale-indicator-item-top
+      //             .sale-indicator-item-bottom
+      //       .sale-options1
+      //       .sale-data
+      //       .sale-options2
+      // .totals-main-container
+      //    .totals-container
+      //       .title
+      //       .text
+   @media screen and (max-width: 932px)
+      .sale
+         align-items: center
+         justify-content: center
+         flex-direction: column
+         padding: 20px
+         .sale-favorite
+            width: 100%
+            margin-bottom: 20px
+            min-height: 400px
+            max-height: 400px
+            .sale-favorite-title
+         .sale-content
+            width: 100%
+            // .sale-indicators
+            //    .sale-indicator-item
+            //       .sale-indicator-item-top
+            //       .sale-indicator-item-bottom
+            .sale-options1
+               text-align: center
+            .sale-data
+            .sale-options2
+               text-align: center
+      // .totals-main-container
+      //    .totals-container
+      //       .title
+      //       .text
+   @media screen and (max-width: 729px)
+      .sale
+         // .sale-favorite
+         //    .sale-favorite-title
+         .sale-content
+            .sale-indicators
+               flex-direction: column
+               margin-bottom: 20px
+               .sale-indicator-item
+                  width: 100%
+                  padding: 20px
+                  background: magenta
+                  border: 1px solid #ccc
+                  border-radius: 4px
+                  color: #000
+                  background-color: #fff
+                  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%)
+                  &:not(:last-child)
+                     border-right: none
+                     margin-bottom: 10px
+                  .sale-indicator-item-top
+                     text-align: center
+                  .sale-indicator-item-bottom
+                     text-align: center
+      //       .sale-options1
+      //       .sale-data
+      //       .sale-options2
+      // .totals-main-container
+      //    .totals-container
+      //       .title
+      //       .text
 </style>
