@@ -113,10 +113,13 @@ export default defineComponent({
          text-align: center
          border: 1px solid #ccc
          padding: 60px 40px
-         background: #edf5e1
-         border-radius: 10px
-         box-shadow: 5px 5px #379683
+         transition: 0.3s
          color: #05386b
+         border-radius: 4px
+         background: #fff
+         box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%)
+         &:hover
+            box-shadow: 5px 5px #379683
          .title
             font-size: 45px
             font-weight: bold

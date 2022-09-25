@@ -21,9 +21,7 @@ export default defineComponent({
       height: auto
       display: block
       background: #05386b
-      color: #edf5e1
       padding: 40px
-      border-radius: 10px
       display: flex
       flex-direction: row
       align-items: center
@@ -31,11 +29,14 @@ export default defineComponent({
       font-weight: bold
       margin-bottom: 10px
       transition: 0.3s
+      border-radius: 4px
+      color: white
+      box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%)
       &:hover
          box-shadow: 5px 5px #379683
       .logo
          background: #5cdb94
-         color: #edf5e1
+         color: white
          padding: 20px
          border-radius: 10px
          margin-right: 20px

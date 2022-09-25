@@ -72,7 +72,6 @@ export default defineComponent({
       height: auto
       display: block
       background: #edf5e1
-      border-radius: 10px
       padding: 20px 40px
       margin-bottom: 10px
       transition: 0.3s
@@ -80,18 +79,25 @@ export default defineComponent({
       display: flex
       flex-direction: row
       align-items: center
+      border-radius: 4px
+      color: #000
+      background-color: #fff
+      box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%)
+      &:hover
+         box-shadow: 5px 5px #379683
       a
          display: inline-block
          border: 1px solid #05386b
          text-align: center
          padding: 17px
          color: #05386b
-         border-radius: 17px
+         border-radius: 4px
          transition: 0.3s
          // width: 160px
+         box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%)
          &:hover
             background: #05386b
-            color: #5cdb94
+            color: white
          &:not(:first-child)
             margin-left: 17px
          // .top

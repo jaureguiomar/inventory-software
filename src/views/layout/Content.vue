@@ -23,9 +23,12 @@ export default defineComponent({
       height: auto
       display: block
       background: #edf5e1
-      border-radius: 10px
       transition: 0.3s
       margin-bottom: 10px
+      border-radius: 4px
+      color: #000
+      background: #fff
+      box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%)
       &:hover
          box-shadow: 5px 5px #379683
       label
@@ -34,8 +37,8 @@ export default defineComponent({
       .border-top
          background: #05386b
          height: 20px
-         border-start-start-radius: 10px
-         border-start-end-radius: 10px
+         border-start-start-radius: 4px
+         border-start-end-radius: 4px
       .content-container
          padding: 40px 36px
 </style>
