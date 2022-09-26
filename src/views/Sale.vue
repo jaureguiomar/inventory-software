@@ -78,23 +78,50 @@
                      </div>
                   </div>
                   <div class="sale-options1">
-                     <q-btn
-                        class="q-mr-sm"
-                        color="primary"
-                        label="History"
-                     >
-                     </q-btn>
-                     <q-btn
-                        class="q-mr-sm"
-                        color="primary"
-                        label="Sales"
-                     >
-                     </q-btn>
-                     <q-btn
-                        color="primary"
-                        label="Buys"
-                     >
-                     </q-btn>
+                     <div class="options1-left">
+                        <q-btn
+                           color="primary"
+                           label="Product List"
+                        >
+                        </q-btn>
+                     </div>
+                     <div class="options1-middle">
+                        <!-- :itemProjection="itemProjectionFunction"
+                        @selectItem="selectItemEventHandler"
+                        @onInput="onInputEventHandler"
+                        @onFocus="onFocusEventHandler"
+                        @onBlur="onBlurEventHandler" -->
+                        <vue3-simple-typeahead
+                           id="typeahead_id"
+                           placeholder="Barcode..."
+                           :items="['One','Two','Three', 'Fourth']"
+                           :minInputLength="1"
+                           class="q-pa-sm rounded-borders text-weight-bold no-outline shadow-1"
+                        >
+                           <template #list-item-text="slot">
+                              number.- {{ slot.item }}
+                           </template>
+                        </vue3-simple-typeahead>
+                     </div>
+                     <div class="options1-right">
+                        <q-btn
+                           class="q-mr-sm"
+                           color="primary"
+                           label="History"
+                        >
+                        </q-btn>
+                        <q-btn
+                           class="q-mr-sm"
+                           color="primary"
+                           label="Sales"
+                        >
+                        </q-btn>
+                        <q-btn
+                           color="primary"
+                           label="Buys"
+                        >
+                        </q-btn>
+                     </div>
                   </div>
                   <div class="sale-data">
                      <q-table
@@ -156,7 +183,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance } from "vue"
+import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount } from "vue"
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -292,8 +319,32 @@ export default defineComponent({
          }
       ];
 
+      onMounted(() => {
+         const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
+         typeaheadIdInput.addEventListener("keypress", typeaheadInputKeypress);
+      });
+      onBeforeUnmount(() => {
+         const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
+         typeaheadIdInput.removeEventListener("keypress", typeaheadInputKeypress);
+      });
+
+      const typeaheadInputKeypress = (e:KeyboardEvent) => {
+         let keyCode = e.keyCode ? e.keyCode : e.which;
+         if(keyCode === 13) {
+            const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
+            console.log("barcode", typeaheadIdInput.value);
+
+            setTimeout(() => {
+               typeaheadIdInput.value = "";
+            }, 100);
+         }
+      }
       const onBarcodeScanned = (barcode:string) => {
-         console.log("barcode", barcode);
+         const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
+         typeaheadIdInput.value = barcode;
+         typeaheadIdInput.dispatchEvent(new KeyboardEvent("keypress", {
+            keyCode: 13
+         }));
       }
       barcodeScanner.init(onBarcodeScanned);
 
@@ -352,10 +403,16 @@ export default defineComponent({
                   font-weight: bold
          .sale-options1
             width: 100%
-            display: block
-            text-align: right
+            height: auto
+            display: flex
+            flex-direction: row
+            align-items: center
+            justify-content: space-between
             margin-bottom: 10px
-            // button
+            .options1-middle
+               .simple-typeahead
+                  input
+                     padding: 20px !important
          .sale-data
             margin-bottom: 10px
             // table
@@ -458,7 +515,14 @@ export default defineComponent({
                      text-align: center
                   .sale-indicator-item-bottom
                      text-align: center
-      //       .sale-options1
+            .sale-options1
+               flex-direction: column
+               .options1-left
+                  margin-bottom: 10px
+               .options1-middle
+                  margin-bottom: 10px
+                  // .simple-typeahead
+                  //    input
       //       .sale-data
       //       .sale-options2
       // .totals-main-container
