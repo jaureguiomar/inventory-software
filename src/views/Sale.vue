@@ -87,6 +87,7 @@
                         <q-btn
                            color="primary"
                            label="Product List"
+                           @click="onDisplayProductList"
                         >
                         </q-btn>
                      </div>
@@ -191,10 +192,12 @@
 import axios from "@/plugins/axios";
 import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
+import { useQuasar } from "quasar";
 import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount } from "vue";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
+import ProductListDialog from "@/views/components/ProductListDialog.vue";
 import { ProductResponse } from "@/interfaces/product/product";
 
 export default defineComponent({
@@ -207,6 +210,7 @@ export default defineComponent({
    setup() {
       const _instance = getCurrentInstance();
       const { t } = useI18n();
+      const $q = useQuasar();
       const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
       const columns = [
       {
@@ -378,7 +382,16 @@ export default defineComponent({
                   });
                }
             });
-      }
+      };
+      const onDisplayProductList = () => {
+         $q.dialog({
+            component: ProductListDialog,
+            componentProps: {}
+         }).onOk((payload:any) => {
+            console.log("OK");
+            console.log("payload", payload);
+         });
+      };
 
       barcodeScanner.init(onBarcodeScanned);
       onRefreshProducts();
@@ -386,7 +399,8 @@ export default defineComponent({
       return {
          columns,
          rows,
-         onRefreshProducts
+         onRefreshProducts,
+         onDisplayProductList
       };
    }
 });
