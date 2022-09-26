@@ -11,6 +11,11 @@
          <template #subtitle>
             Sales that the user will do in the system
          </template>
+         <template #right-content>
+            <a class="text-white cursor-pointer" @click="onRefreshProducts">
+               <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
+            </a>
+         </template>
       </Menu>
 
       <Content>
@@ -183,10 +188,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount } from "vue"
+import axios from "@/plugins/axios";
+import Swal from "sweetalert2";
+import { useI18n } from "vue-i18n/index";
+import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount } from "vue";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
+import { ProductResponse } from "@/interfaces/product/product";
 
 export default defineComponent({
    name: "sale-component",
@@ -197,6 +206,7 @@ export default defineComponent({
    },
    setup() {
       const _instance = getCurrentInstance();
+      const { t } = useI18n();
       const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
       const columns = [
       {
@@ -338,19 +348,45 @@ export default defineComponent({
                typeaheadIdInput.value = "";
             }, 100);
          }
-      }
+      };
       const onBarcodeScanned = (barcode:string) => {
          const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
          typeaheadIdInput.value = barcode;
          typeaheadIdInput.dispatchEvent(new KeyboardEvent("keypress", {
             keyCode: 13
          }));
+      };
+      const onRefreshProducts = () => {
+         axios.get<ProductResponse>("product/v3/select-all.php")
+            .then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     console.log("data", data);
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            });
       }
+
       barcodeScanner.init(onBarcodeScanned);
+      onRefreshProducts();
 
       return {
          columns,
-         rows
+         rows,
+         onRefreshProducts
       };
    }
 });
