@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import FontAwesomeIcon from "@/plugins/font-awesome";
+import VueBarcodeScanner from "vue3-barcode-scanner";
 import { Quasar } from "quasar";
 import App from "./App.vue";
 import i18n from "@/plugins/i18n";
@@ -15,6 +16,7 @@ createApp(App)
    .use(router)
    .use(store, key)
    .use(i18n)
+   .use(VueBarcodeScanner)
    .use(Quasar, quasarUserOptions)
    .component("font-awesome-icon", FontAwesomeIcon)
    .mount("#app");

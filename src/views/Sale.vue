@@ -156,7 +156,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, getCurrentInstance } from "vue"
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -169,6 +169,8 @@ export default defineComponent({
       Content
    },
    setup() {
+      const _instance = getCurrentInstance();
+      const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
       const columns = [
       {
          name: 'name',
@@ -186,7 +188,7 @@ export default defineComponent({
          { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
          { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
          { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ]
+      ];
       const rows = [
          {
             name: 'Frozen Yogurt',
@@ -288,7 +290,12 @@ export default defineComponent({
             calcium: '12%',
             iron: '6%'
          }
-      ]
+      ];
+
+      const onBarcodeScanned = (barcode:string) => {
+         console.log("barcode", barcode);
+      }
+      barcodeScanner.init(onBarcodeScanned);
 
       return {
          columns,
@@ -411,7 +418,7 @@ export default defineComponent({
             margin-bottom: 20px
             min-height: 400px
             max-height: 400px
-            .sale-favorite-title
+            // .sale-favorite-title
          .sale-content
             width: 100%
             // .sale-indicators
@@ -420,7 +427,7 @@ export default defineComponent({
             //       .sale-indicator-item-bottom
             .sale-options1
                text-align: center
-            .sale-data
+            // .sale-data
             .sale-options2
                text-align: center
       // .totals-main-container
