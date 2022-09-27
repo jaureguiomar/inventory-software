@@ -13,7 +13,7 @@
                separator="vertical"
                virtual-scroll
                :virtual-scroll-sticky-size-start="48"
-               row-key="name"
+               row-key="id"
                :visible-columns="productVisibleColumns"
                :pagination="productPagination"
                :filter="productFilter"

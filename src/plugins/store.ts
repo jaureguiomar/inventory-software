@@ -15,6 +15,8 @@ interface Product {
    buy_price: string;
    sale_price: string;
    quantity: number;
+   sale_quantity: number;
+   sale_total: string;
 }
 interface SaleInterface {
    product: Array<Product>;

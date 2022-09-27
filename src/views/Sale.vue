@@ -131,11 +131,66 @@
                   </div>
                   <div class="sale-data">
                      <q-table
-                        title="Treats"
-                        :rows="rows"
-                        :columns="columns"
-                        row-key="name"
+                        title="Sale"
+                        :rows="getSaleProductReply"
+                        :columns="saleColumns"
+                        :no-data-label="t('client.table.content.details.empty')"
+                        :no-results-label="t('client.table.content.details.empty')"
+                        separator="vertical"
+                        virtual-scroll
+                        :virtual-scroll-sticky-size-start="48"
+                        row-key="id"
+                        :visible-columns="saleVisibleColumns"
+                        :filter="saleFilter"
                      >
+                        <template #top>
+                           <h6 class="q-ma-none q-mr-md">Sale</h6>
+                           <q-input v-model="saleFilter" dense debounce="300" placeholder="Search">
+                              <template #append>
+                                 <font-awesome-icon icon="fa-solid fa-search" size="1x" />
+                              </template>
+                           </q-input>
+
+                           <q-space></q-space>
+
+                           <q-select
+                              v-model="saleVisibleColumns"
+                              multiple
+                              outlined
+                              dense
+                              options-dense
+                              :display-value="$q.lang.table.columns"
+                              emit-value
+                              map-options
+                              :options="saleColumns"
+                              option-value="name"
+                              options-cover
+                              style="min-width: 150px"
+                           >
+                           </q-select>
+                        </template>
+
+                        <template #body-cell-actions="props">
+                           <q-td :props="props">
+                              <q-btn
+                                 class="q-mr-sm"
+                                 color="negative"
+                                 label="Delete"
+                                 @click="onClientDeleteWindowClick(props.row)"
+                              >
+                              </q-btn>
+                           </q-td>
+                        </template>
+
+                        <template #no-data="{ icon, message, filter }">
+                           <div class="full-width row flex-center q-gutter-sm">
+                              <span>
+                                 {{ message }}
+                              </span>
+                              <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon"></q-icon>
+                           </div>
+                        </template>
+
                         <template #bottom-row>
                            <q-tr>
                               <q-td colspan="100%">
@@ -193,7 +248,12 @@ import axios from "@/plugins/axios";
 import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
 import { useQuasar } from "quasar";
-import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount, ref } from "vue";
+import { useStore } from "vuex";
+import {
+   defineComponent, getCurrentInstance, onMounted,
+   onBeforeUnmount, ref, computed
+} from "vue";
+import { key } from "@/plugins/store";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -210,131 +270,65 @@ export default defineComponent({
    setup() {
       const _instance = getCurrentInstance();
       const { t } = useI18n();
+      const store = useStore(key);
       const $q = useQuasar();
       const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
       const all_products = ref<Product[]>([]);
-      const columns = [
-      {
-         name: 'name',
-         required: true,
-         label: 'Dessert (100g serving)',
-         align: 'left',
-         field: row => row.name,
-         format: val => `${val}`,
-         sortable: true
-      },
-         { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-         { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-         { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-         { name: 'protein', label: 'Protein (g)', field: 'protein' },
-         { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-         { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-         { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ];
-      const rows = [
+      const saleFilter = ref("");
+      const saleVisibleColumns = ref<Array<string>>([ "code", "name", "sale_price", "sale_quantity", "sale_total", "actions" ]);
+      const saleColumns:Array<any> = [
          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            sodium: 87,
-            calcium: '14%',
-            iron: '1%'
+            name: "code",
+            label: t("product.table.field.code"),
+            align: "center",
+            field: "code",
+            sortable: true
          },
          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            sodium: 129,
-            calcium: '8%',
-            iron: '1%'
+            name: "name",
+            label: t("product.table.field.name"),
+            align: "center",
+            field: "name",
+            sortable: true
          },
          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            sodium: 337,
-            calcium: '6%',
-            iron: '7%'
+            name: "sale_price",
+            label: t("product.table.field.sale_price"),
+            align: "center",
+            field: "sale_price",
+            sortable: true,
+            format: (sale_price:string) => {
+               return "$" + sale_price;
+            }
          },
          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            sodium: 413,
-            calcium: '3%',
-            iron: '8%'
+            name: "sale_quantity",
+            label: t("product.table.field.quantity"),
+            align: "center",
+            field: "sale_quantity",
+            sortable: true
          },
          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            sodium: 327,
-            calcium: '7%',
-            iron: '16%'
+            name: "sale_total",
+            label: "Total",
+            align: "center",
+            field: "sale_total",
+            sortable: true,
+            format: (sale_total:string) => {
+               return "$" + sale_total;
+            }
          },
          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            sodium: 50,
-            calcium: '0%',
-            iron: '0%'
-         },
-         {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            sodium: 38,
-            calcium: '0%',
-            iron: '2%'
-         },
-         {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            sodium: 562,
-            calcium: '0%',
-            iron: '45%'
-         },
-         {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            sodium: 326,
-            calcium: '2%',
-            iron: '22%'
-         },
-         {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            sodium: 54,
-            calcium: '12%',
-            iron: '6%'
+            name: "actions",
+            label: t("product.table.field.actions"),
+            align: "center",
+            field: "actions",
+            sortable: true
          }
       ];
 
       onMounted(() => {
+         onRefreshProducts();
          const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
          typeaheadIdInput.addEventListener("keypress", typeaheadInputKeypress);
       });
@@ -392,17 +386,24 @@ export default defineComponent({
                allProducts: all_products.value
             },
          }).onOk((payload:any) => {
-            console.log("OK");
-            console.log("payload", payload);
+            store.commit("ADD_SALE_PRODUCT_REPLY", {
+               ...payload,
+               sale_quantity: 1,
+               sale_total: payload.sale_price
+            });
          });
       };
-
+      const getSaleProductReply = computed(() => {
+         return store.getters["getSaleProductReply"];
+      });
       barcodeScanner.init(onBarcodeScanned);
-      onRefreshProducts();
 
       return {
-         columns,
-         rows,
+         t,
+         saleColumns,
+         saleFilter,
+         saleVisibleColumns,
+         getSaleProductReply,
          onRefreshProducts,
          onDisplayProductList
       };
