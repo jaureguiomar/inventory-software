@@ -193,12 +193,12 @@ import axios from "@/plugins/axios";
 import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
 import { useQuasar } from "quasar";
-import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount } from "vue";
+import { defineComponent, getCurrentInstance, onMounted, onBeforeUnmount, ref } from "vue";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import ProductListDialog from "@/views/components/ProductListDialog.vue";
-import { ProductResponse } from "@/interfaces/product/product";
+import { Product, ProductResponse } from "@/interfaces/product/product";
 
 export default defineComponent({
    name: "sale-component",
@@ -212,6 +212,7 @@ export default defineComponent({
       const { t } = useI18n();
       const $q = useQuasar();
       const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
+      const all_products = ref<Product[]>([]);
       const columns = [
       {
          name: 'name',
@@ -361,12 +362,13 @@ export default defineComponent({
          }));
       };
       const onRefreshProducts = () => {
+         all_products.value = [];
          axios.get<ProductResponse>("product/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
-                     console.log("data", data);
+                     all_products.value = data;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -386,7 +388,9 @@ export default defineComponent({
       const onDisplayProductList = () => {
          $q.dialog({
             component: ProductListDialog,
-            componentProps: {}
+            componentProps: {
+               allProducts: all_products.value
+            },
          }).onOk((payload:any) => {
             console.log("OK");
             console.log("payload", payload);
