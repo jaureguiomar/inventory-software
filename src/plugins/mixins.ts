@@ -1,3 +1,15 @@
+export const findValueBy = (all_data, value, key) => {
+   let finded_index = -1;
+   for(let i = 0; i < all_data.length; i++) {
+      const curr_product = all_data[i];
+      if(curr_product[key] == value) {
+         finded_index = i;
+         break;
+      }
+   }
+   return finded_index;
+};
+
 export const getFormattedDate = (date:Date) => {
    let day:number|string = date.getDate();
    let month:number|string = (date.getMonth() + 1);

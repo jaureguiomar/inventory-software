@@ -1,35 +1,7 @@
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
-
-interface GenericInterface {
-   loaded_reply: boolean;
-}
-interface Product {
-   id: number;
-   is_active: number;
-   created: Date;
-   updated: Date;
-   code: string;
-   name: string;
-   description: string|null;
-   buy_price: string;
-   sale_price: string;
-   quantity: number;
-   sale_quantity: number;
-   sale_total: string;
-}
-interface SaleInterface {
-   product: Array<Product>;
-}
-interface State {
-   loggued_in: boolean;
-   sale: SaleInterface;
-   client: GenericInterface;
-   supplier: GenericInterface;
-   product: GenericInterface;
-   category: GenericInterface;
-}
-export const key: InjectionKey<Store<State>> = Symbol();
+import { State, SaleProduct } from "@/interfaces/store";
+import { findValueBy } from './mixins';
 
 const store = createStore<State>({
    state() {
@@ -76,19 +48,11 @@ const store = createStore<State>({
       SET_LOGGUED_IN_DATA: (state, data) => {
          state.loggued_in = data;
       },
-      SET_SALE_PRODUCT_REPLY: (state, data:Array<Product>) => {
+      SET_SALE_PRODUCT_REPLY: (state, data:Array<SaleProduct>) => {
          state.sale.product = data;
       },
-      ADD_SALE_PRODUCT_REPLY: (state, data:Product) => {
-         let finded_index = -1;
-         for(let i = 0; i < state.sale.product.length; i++) {
-            const curr_product = state.sale.product[i];
-            if(curr_product.id == data.id) {
-               finded_index = i;
-               break;
-            }
-         }
-
+      ADD_SALE_PRODUCT_REPLY: (state, data:SaleProduct) => {
+         const finded_index = findValueBy(state.sale.product, data.id, "id");
          if(finded_index < 0) {
             state.sale.product.push(data);
          } else {
@@ -111,4 +75,5 @@ const store = createStore<State>({
    }
 });
 
+export const key: InjectionKey<Store<State>> = Symbol();
 export default store;

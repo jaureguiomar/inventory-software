@@ -259,6 +259,7 @@ import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import ProductListDialog from "@/views/components/ProductListDialog.vue";
 import { Product, ProductResponse } from "@/interfaces/product/product";
+import { findValueBy } from "@/plugins/mixins";
 
 export default defineComponent({
    name: "sale-component",
@@ -311,15 +312,7 @@ export default defineComponent({
             const barcode = typeaheadIdInput.value;
 
             setTimeout(() => {
-               let finded_index = -1;
-               for(let i = 0; i < all_products.value.length; i++) {
-                  const curr_product = all_products.value[i];
-                  if(curr_product.code == barcode) {
-                     finded_index = i;
-                     break;
-                  }
-               }
-
+               const finded_index = findValueBy(all_products.value, barcode, "code");
                if(finded_index >= 0) {
                   store.commit("ADD_SALE_PRODUCT_REPLY", {
                      ...all_products.value,
