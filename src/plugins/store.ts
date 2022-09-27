@@ -80,7 +80,21 @@ const store = createStore<State>({
          state.sale.product = data;
       },
       ADD_SALE_PRODUCT_REPLY: (state, data:Product) => {
-         state.sale.product.push(data);
+         let finded_index = -1;
+         for(let i = 0; i < state.sale.product.length; i++) {
+            const curr_product = state.sale.product[i];
+            if(curr_product.id == data.id) {
+               finded_index = i;
+               break;
+            }
+         }
+
+         if(finded_index < 0) {
+            state.sale.product.push(data);
+         } else {
+            state.sale.product[finded_index].sale_quantity ++;
+            state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);
+         }
       },
       SET_CLIENT_LOADED_REPLY: (state, data:boolean) => {
          state.client.loaded_reply = data;
