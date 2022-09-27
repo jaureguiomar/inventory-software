@@ -87,7 +87,7 @@
                         <q-btn
                            color="primary"
                            label="Product List"
-                           @click="onDisplayProductList"
+                           @click="onDisplayProductListDialog"
                         >
                         </q-btn>
                      </div>
@@ -268,67 +268,34 @@ export default defineComponent({
       Content
    },
    setup() {
-      const _instance = getCurrentInstance();
       const { t } = useI18n();
       const store = useStore(key);
       const $q = useQuasar();
+      const _instance = getCurrentInstance();
       const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
       const all_products = ref<Product[]>([]);
       const saleFilter = ref("");
       const saleVisibleColumns = ref<Array<string>>([ "code", "name", "sale_price", "sale_quantity", "sale_total", "actions" ]);
       const saleColumns:Array<any> = [
-         {
-            name: "code",
-            label: t("product.table.field.code"),
-            align: "center",
-            field: "code",
-            sortable: true
-         },
-         {
-            name: "name",
-            label: t("product.table.field.name"),
-            align: "center",
-            field: "name",
-            sortable: true
-         },
-         {
-            name: "sale_price",
-            label: t("product.table.field.sale_price"),
-            align: "center",
-            field: "sale_price",
-            sortable: true,
+         { name: "code", label: t("product.table.field.code"), align: "center", field: "code", sortable: true },
+         { name: "name", label: t("product.table.field.name"), align: "center", field: "name", sortable: true },
+         { name: "sale_price", label: t("product.table.field.sale_price"), align: "center", field: "sale_price", sortable: true,
             format: (sale_price:string) => {
                return "$" + sale_price;
             }
          },
-         {
-            name: "sale_quantity",
-            label: t("product.table.field.quantity"),
-            align: "center",
-            field: "sale_quantity",
-            sortable: true
-         },
-         {
-            name: "sale_total",
-            label: "Total",
-            align: "center",
-            field: "sale_total",
-            sortable: true,
+         { name: "sale_quantity", label: t("product.table.field.quantity"), align: "center", field: "sale_quantity", sortable: true },
+         { name: "sale_total", label: "Total", align: "center", field: "sale_total", sortable: true,
             format: (sale_total:string) => {
                return "$" + sale_total;
             }
          },
-         {
-            name: "actions",
-            label: t("product.table.field.actions"),
-            align: "center",
-            field: "actions",
-            sortable: true
-         }
+         { name: "actions", label: t("product.table.field.actions"), align: "center", field: "actions", sortable: true }
       ];
 
       onMounted(() => {
          onRefreshProducts();
+         barcodeScanner.init(onBarcodeScanned);
          const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
          typeaheadIdInput.addEventListener("keypress", typeaheadInputKeypress);
       });
@@ -341,9 +308,31 @@ export default defineComponent({
          let keyCode = e.keyCode ? e.keyCode : e.which;
          if(keyCode === 13) {
             const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
-            console.log("barcode", typeaheadIdInput.value);
+            const barcode = typeaheadIdInput.value;
 
             setTimeout(() => {
+               let finded_index = -1;
+               for(let i = 0; i < all_products.value.length; i++) {
+                  const curr_product = all_products.value[i];
+                  if(curr_product.code == barcode) {
+                     finded_index = i;
+                     break;
+                  }
+               }
+
+               if(finded_index >= 0) {
+                  store.commit("ADD_SALE_PRODUCT_REPLY", {
+                     ...all_products.value,
+                     sale_quantity: 1,
+                     sale_total: all_products.value[finded_index].sale_price
+                  });
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: "Product does not exist",
+                     icon: "error"
+                  });
+               }
                typeaheadIdInput.value = "";
             }, 100);
          }
@@ -379,7 +368,7 @@ export default defineComponent({
                }
             });
       };
-      const onDisplayProductList = () => {
+      const onDisplayProductListDialog = () => {
          $q.dialog({
             component: ProductListDialog,
             componentProps: {
@@ -396,7 +385,6 @@ export default defineComponent({
       const getSaleProductReply = computed(() => {
          return store.getters["getSaleProductReply"];
       });
-      barcodeScanner.init(onBarcodeScanned);
 
       return {
          t,
@@ -405,7 +393,7 @@ export default defineComponent({
          saleVisibleColumns,
          getSaleProductReply,
          onRefreshProducts,
-         onDisplayProductList
+         onDisplayProductListDialog
       };
    }
 });
