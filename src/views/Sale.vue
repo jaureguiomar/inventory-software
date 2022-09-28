@@ -341,7 +341,7 @@ export default defineComponent({
             setTimeout(() => {
                const finded_index = findValueBy(all_products.value, barcode, "code");
                if(finded_index >= 0) {
-                  store.commit("ADD_SALE_PRODUCT_REPLY", all_products.value);
+                  store.commit("ADD_SALE_PRODUCT_REPLY", all_products.value[finded_index]);
                } else {
                   Swal.fire({
                      title: "Error",
