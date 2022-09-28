@@ -54,7 +54,11 @@ const store = createStore<State>({
       ADD_SALE_PRODUCT_REPLY: (state, data:SaleProduct) => {
          const finded_index = findValueBy(state.sale.product, data.id, "id");
          if(finded_index < 0) {
-            state.sale.product.push(data);
+            state.sale.product.push({
+               ...data,
+               sale_quantity: 1,
+               sale_total: data.sale_price
+            });
          } else {
             state.sale.product[finded_index].sale_quantity ++;
             state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);

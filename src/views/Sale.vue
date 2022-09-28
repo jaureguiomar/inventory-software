@@ -314,11 +314,7 @@ export default defineComponent({
             setTimeout(() => {
                const finded_index = findValueBy(all_products.value, barcode, "code");
                if(finded_index >= 0) {
-                  store.commit("ADD_SALE_PRODUCT_REPLY", {
-                     ...all_products.value,
-                     sale_quantity: 1,
-                     sale_total: all_products.value[finded_index].sale_price
-                  });
+                  store.commit("ADD_SALE_PRODUCT_REPLY", all_products.value);
                } else {
                   Swal.fire({
                      title: "Error",
@@ -368,11 +364,7 @@ export default defineComponent({
                allProducts: all_products.value
             },
          }).onOk((payload:any) => {
-            store.commit("ADD_SALE_PRODUCT_REPLY", {
-               ...payload,
-               sale_quantity: 1,
-               sale_total: payload.sale_price
-            });
+            store.commit("ADD_SALE_PRODUCT_REPLY", payload);
          });
       };
       const getSaleProductReply = computed(() => {
