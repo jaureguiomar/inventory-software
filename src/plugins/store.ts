@@ -64,7 +64,7 @@ const store = createStore<State>({
             state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);
          }
       },
-      MINUS_SALE_PRODUCT_QUANTITY: (state, id_product:number|string) => {
+      MINUS_SALE_PRODUCT_QUANTITY: (state, id_product:number) => {
          const finded_index = findValueBy(state.sale.product, id_product, "id");
          if(finded_index >= 0) {
             if(state.sale.product[finded_index].sale_quantity > 1) {
@@ -72,6 +72,11 @@ const store = createStore<State>({
                state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);
             }
          }
+      },
+      REMOVE_SALE_PRODUCT_REPLY: (state, id_product:number) => {
+         const finded_index = findValueBy(state.sale.product, id_product, "id");
+         if(finded_index >= 0)
+            state.sale.product.splice(finded_index, 1);
       },
       SET_CLIENT_LOADED_REPLY: (state, data:boolean) => {
          state.client.loaded_reply = data;

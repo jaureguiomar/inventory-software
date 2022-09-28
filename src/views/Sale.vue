@@ -202,7 +202,7 @@
                                  class="q-mr-sm"
                                  color="negative"
                                  label="Delete"
-                                 @click="onClientDeleteWindowClick(props.row)"
+                                 @click="onProductSaleDelete(props.row.id)"
                               >
                               </q-btn>
                            </q-td>
@@ -406,6 +406,9 @@ export default defineComponent({
                break;
          }
       };
+      const onProductSaleDelete = (id_product:number) => {
+         store.commit("REMOVE_SALE_PRODUCT_REPLY", id_product);
+      };
 
       return {
          t,
@@ -415,7 +418,8 @@ export default defineComponent({
          getSaleProductReply,
          onRefreshProducts,
          onDisplayProductListDialog,
-         onQuantityPlusMinusClick
+         onQuantityPlusMinusClick,
+         onProductSaleDelete
       };
    }
 });
