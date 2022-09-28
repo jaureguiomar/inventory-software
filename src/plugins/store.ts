@@ -28,7 +28,7 @@ const store = createStore<State>({
       getLogguedIn(state) {
          return state.loggued_in;
       },
-      getSaleProductReply(state) {
+      getSaleProduct(state) {
          return state.sale.product;
       },
       getClientLoadedReply(state) {

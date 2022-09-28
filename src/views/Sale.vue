@@ -132,7 +132,7 @@
                   <div class="sale-data">
                      <q-table
                         title="Sale"
-                        :rows="getSaleProductReply"
+                        :rows="getSaleProduct"
                         :columns="saleColumns"
                         :no-data-label="t('client.table.content.details.empty')"
                         :no-results-label="t('client.table.content.details.empty')"
@@ -221,20 +221,20 @@
                            <q-tr>
                               <q-td colspan="100%">
                                  <div class="totals-main-container">
-                                    <div class="totals-container">
+                                    <!-- <div class="totals-container">
                                        <div class="title">
                                           Subtotal:
                                        </div>
                                        <div class="text">
                                           $1,000.66
                                        </div>
-                                    </div>
+                                    </div> -->
                                     <div class="totals-container">
                                        <div class="title">
                                           Total:
                                        </div>
                                        <div class="text">
-                                          $1,250.00
+                                          ${{ calculateTotal }}
                                        </div>
                                     </div>
                                  </div>
@@ -393,9 +393,6 @@ export default defineComponent({
             store.commit("ADD_SALE_PRODUCT_REPLY", payload);
          });
       };
-      const getSaleProductReply = computed(() => {
-         return store.getters["getSaleProductReply"];
-      });
       const onQuantityPlusMinusClick = (product:Product, type:string) => {
          switch(type) {
             case "plus":
@@ -410,12 +407,23 @@ export default defineComponent({
          store.commit("REMOVE_SALE_PRODUCT_REPLY", id_product);
       };
 
+      const getSaleProduct = computed(() => {
+         return store.getters["getSaleProduct"];
+      });
+      const calculateTotal = computed(() => {
+         let total = 0;
+         for(let i = 0; i < getSaleProduct.value.length; i++)
+            total += parseFloat(getSaleProduct.value[i].sale_price) * parseFloat(getSaleProduct.value[i].sale_quantity);
+         return total.toFixed(2);
+      });
+
       return {
          t,
          saleColumns,
          saleFilter,
          saleVisibleColumns,
-         getSaleProductReply,
+         getSaleProduct,
+         calculateTotal,
          onRefreshProducts,
          onDisplayProductListDialog,
          onQuantityPlusMinusClick,
