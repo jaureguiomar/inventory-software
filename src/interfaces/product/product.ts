@@ -1,3 +1,5 @@
+import { Category } from "@/interfaces/category/category";
+
 interface Product {
    id: number;
    is_active: number;
@@ -9,6 +11,8 @@ interface Product {
    buy_price: string;
    sale_price: string;
    quantity: number;
+   category: Category
+   category_id: number;
 }
 
 // Axios response

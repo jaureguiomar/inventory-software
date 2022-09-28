@@ -158,6 +158,7 @@ const i18n = createI18n({
                   buy_price: "Buy Price",
                   sale_price: "Sale Price",
                   quantity: "Quantity",
+                  category: "Category Name",
                   show_details: "Show details",
                   actions: "Actions"
                },

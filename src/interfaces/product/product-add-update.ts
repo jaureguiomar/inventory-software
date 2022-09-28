@@ -25,18 +25,24 @@ interface InputErrorField {
    is_error: boolean;
    message: string;
 }
-interface InputFields {
+interface InputFieldString {
+   text: string;
+   max_text: number;
+   error: InputErrorField;
+}
+interface InputFieldNumber {
    text: string;
    max_text: number;
    error: InputErrorField;
 }
 interface ProductField {
-   code: InputFields;
-   name: InputFields;
-   description: InputFields;
-   buy_price: InputFields;
-   sale_price: InputFields;
-   quantity: InputFields;
+   code: InputFieldString;
+   name: InputFieldString;
+   description: InputFieldString;
+   buy_price: InputFieldString;
+   sale_price: InputFieldString;
+   quantity: InputFieldNumber;
+   category_id: InputFieldNumber;
 }
 
 // Page

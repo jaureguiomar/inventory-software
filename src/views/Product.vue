@@ -106,7 +106,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { ProductResponse, WindowResponse, Product } from "../interfaces/product/product";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -116,6 +115,8 @@ import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
+import { ProductResponse, WindowResponse, Product } from "@/interfaces/product/product";
+import { Category } from "@/interfaces/category/category";
 
 export default defineComponent({
    name: "product-component",
@@ -130,7 +131,7 @@ export default defineComponent({
       const product = ref<Product[]>([]);
       const productVisibleColumns = ref<Array<string>>([
          "id", "created", "updated", "code", "name", "description",
-         "buy_price", "sale_price", "quantity", "actions"
+         "buy_price", "sale_price", "quantity", "category", "actions"
       ]);
       const productFilter = ref("");
       const productPagination = reactive({
@@ -138,7 +139,6 @@ export default defineComponent({
          descending: false,
          page: 1,
          rowsPerPage: 5
-         // rowsNumber: xx if getting data from a server
       });
       const productColumns:Array<any> = [
          {
@@ -148,10 +148,10 @@ export default defineComponent({
             align: "center",
             field: "id",
             sortable: true,
-            sort: (id:string) => {
-               return parseInt(id);
-            },
-            format: (id:string) => {
+            // sort: (id:number) => {
+            //    return parseInt(id);
+            // },
+            format: (id:number) => {
                return "#" + id;
             }
          },
@@ -224,6 +224,16 @@ export default defineComponent({
             sortable: true
          },
          {
+            name: "category",
+            label: t("product.table.field.category"),
+            align: "center",
+            field: "category",
+            sortable: true,
+            format: (category:Category) => {
+               return category.name;
+            }
+         },
+         {
             name: "actions",
             label: t("product.table.field.actions"),
             align: "center",
@@ -243,7 +253,30 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
-                     product.value = data;
+                     let formatted_products:Array<Product> = [];
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_products.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           code: data[i].code,
+                           name: data[i].name,
+                           description: data[i].description,
+                           buy_price: data[i].buy_price,
+                           sale_price: data[i].sale_price,
+                           quantity: Number(data[i].quantity),
+                           category: {
+                              id: Number(data[i].category.id),
+                              is_active: Number(data[i].category.is_active),
+                              created: data[i].category.created,
+                              updated: data[i].category.updated,
+                              name: data[i].category.name
+                           },
+                           category_id: Number(data[i].category_id)
+                        });
+                     }
+                     product.value = formatted_products;
                   } else {
                      Swal.fire({
                         title: "Error",

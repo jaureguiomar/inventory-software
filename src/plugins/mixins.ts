@@ -85,7 +85,7 @@ export const enterKeyNavigation = (e:KeyboardEvent, inputAfter:string, inputBefo
    }
 };
 
-export const validateField = (value:string, newValidation:Function|any) => {
+export const validateField = (value:string, newValidation?:Function|any) => {
    const result = {
       error: false,
       message: ""

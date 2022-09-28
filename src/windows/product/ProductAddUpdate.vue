@@ -63,8 +63,6 @@
                         bottom-slots
                         :error="field.description.error.is_error"
                         :error-message="field.description.error.message"
-                        @blur="onDescriptionBlur"
-                        @keyup="onDescriptionKeyup"
                      >
                      </q-input>
                   </div>
@@ -82,7 +80,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.sale_price.text"
@@ -109,6 +107,31 @@
                         @keyup="onQuantityKeyup"
                      >
                      </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-select
+                        v-model="field.category_id.text"
+                        use-input
+                        input-debounce="0"
+                        label="Category"
+                        :options="categoryOptions"
+                        behavior="menu"
+                        :error="field.category_id.error.is_error"
+                        :error-message="field.category_id.error.message"
+                        @filter="categoryFilter"
+                        @blur="onCategoryIdBlur"
+                        @keyup="onCategoryIdKeyup"
+                     >
+                        <template #no-option>
+                           <q-item>
+                              <q-item-section class="text-grey">
+                              No results
+                              </q-item-section>
+                           </q-item>
+                        </template>
+                     </q-select>
                   </div>
                </div>
                <div class="text-center">
@@ -144,12 +167,13 @@ import { defineComponent, reactive, ref } from "vue";
 import { IPCParams, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product-add-update";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import { validateField, enterKeyNavigation } from "@/plugins/mixins";
+import { validateField, enterKeyNavigation, findValueBy } from "@/plugins/mixins";
 import axios from "@/plugins/axios";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import Loader from "@/views/components/Loader.vue";
+import { Category, CategoryResponse } from "@/interfaces/category/category";
 
 export default defineComponent({
    name: "product-add-update-component",
@@ -161,6 +185,9 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const category = ref<Category[]>([]);
+      const categoryOptions = ref<Array<string>>([]);
+      const categoryFilteredOptions = ref<Array<string>>([]);
       const page = reactive<Page>({
          id: -1,
          type: "",
@@ -217,6 +244,14 @@ export default defineComponent({
                is_error: false,
                message: ""
             }
+         },
+         category_id: {
+            text: "",
+            max_text: 100,
+            error: {
+               is_error: false,
+               message: ""
+            }
          }
       });
       const loaded = ref(false);
@@ -235,6 +270,41 @@ export default defineComponent({
          }
          loaded.value = true;
       });
+      axios.get<CategoryResponse>("category/v3/select-all.php")
+         .then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_categories:Array<Category> = [];
+
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_categories.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name
+                     });
+
+                     categoryOptions.value.push(data[i].name);
+                     categoryFilteredOptions.value.push(data[i].name);
+                  }
+                  category.value = formatted_categories;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         });
 
       const onAddUpdate = async() => {
          field.code.text = field.code.text.trim();
@@ -243,6 +313,7 @@ export default defineComponent({
          field.buy_price.text = field.buy_price.text.trim();
          field.sale_price.text = field.sale_price.text.trim();
          field.quantity.text = field.quantity.text.trim();
+         field.category_id.text = field.quantity.text.trim();
 
          let code = field.code.text;
          let name = field.name.text;
@@ -250,12 +321,14 @@ export default defineComponent({
          let buy_price = field.buy_price.text;
          let sale_price = field.sale_price.text;
          let quantity = field.quantity.text;
+         let category_id = field.category_id.text;
          let error_code = false;
          let error_name = false;
          // let error_description = false;
          let error_buy_price = false;
          let error_sale_price = false;
          let error_quantity = false;
+         let error_category_id = false;
 
          error_code = validateCode(code);
          error_name = validateName(name);
@@ -264,7 +337,18 @@ export default defineComponent({
          error_sale_price = validateSalePrice(sale_price);
          error_quantity = validateQuantity(quantity);
 
-         if(error_code || error_name || error_buy_price || error_sale_price || error_quantity)
+         const finded_index = findValueBy(category.value, field.quantity.text, "name");
+         if(finded_index < 0)
+            error_category_id = true;
+         // if(!error_category_id)
+         //    category_id = category.value[finded_index].id;
+
+         console.error("---");
+         console.log("finded_index", finded_index);
+         console.log("error_category_id", error_category_id);
+         console.log("category_id", category_id);
+
+         if(error_code || error_name || error_buy_price || error_sale_price || error_quantity || error_category_id)
             return;
 
          let data:Product|null = null;
@@ -275,7 +359,8 @@ export default defineComponent({
                description: field.description.text,
                buy_price: field.buy_price.text,
                sale_price: field.sale_price.text,
-               quantity: field.quantity.text
+               quantity: field.quantity.text,
+               category_id: category_id
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -407,6 +492,10 @@ export default defineComponent({
          let value = field.quantity.text;
          validateQuantity(value);
       };
+      const onCategoryIdBlur = () => {
+         let value = field.category_id.text;
+         validateCategoryId(value);
+      };
       /////////////////////
       // Keypress Events //
       const onCodeKeyup = (e:KeyboardEvent) => {
@@ -437,6 +526,11 @@ export default defineComponent({
       const onQuantityKeyup = (e:KeyboardEvent) => {
          let value = field.quantity.text;
          validateQuantity(value);
+         enterKeyNavigation(e, "add-update-button", "cellphone2");
+      };
+      const onCategoryIdKeyup = (e:KeyboardEvent) => {
+         let value = field.category_id.text;
+         validateCategoryId(value);
          enterKeyNavigation(e, "add-update-button", "cellphone2");
       };
       ////////////////
@@ -501,12 +595,31 @@ export default defineComponent({
          field.quantity.error.message = result.message;
          return result.error;
       };
+      const validateCategoryId = (category_id:string) => {
+         let result = validateField(category_id);
+         field.category_id.error.is_error = result.error;
+         field.category_id.error.message = result.message;
+         return result.error;
+      };
+      const categoryFilter = (value:string, update:Function) => {
+         if(value === "") {
+            update(() => {
+               categoryOptions.value = categoryFilteredOptions.value;
+            });
+            return;
+         }
+         update(() => {
+            const needle = value.toLowerCase();
+            categoryOptions.value = categoryFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
+         });
+      }
 
       return {
          t,
          page,
          field,
          loaded,
+         categoryOptions,
          onAddUpdate,
          onClear,
          onClose,
@@ -516,12 +629,15 @@ export default defineComponent({
          onBuyPriceBlur,
          onSalePriceBlur,
          onQuantityBlur,
+         onCategoryIdBlur,
          onCodeKeyup,
          onNameKeyup,
          // onDescriptionKeyup,
          onBuyPriceKeyup,
          onSalePriceKeyup,
          onQuantityKeyup,
+         onCategoryIdKeyup,
+         categoryFilter
       }
    }
 });
