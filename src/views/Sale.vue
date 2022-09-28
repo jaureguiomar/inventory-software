@@ -170,6 +170,32 @@
                            </q-select>
                         </template>
 
+                        <template #body-cell-sale_quantity="props">
+                           <q-td :props="props">
+                              <div class="sale-quantity-container">
+                                 <q-btn
+                                    class="q-mr-sm"
+                                    color="negative"
+                                    label="-"
+                                    @click="onQuantityPlusMinusClick(props.row, 'minus')"
+                                 >
+                                 </q-btn>
+                                 <q-input
+                                    v-model="props.row.sale_quantity"
+                                    class="text-center"
+                                    readonly
+                                 >
+                                 </q-input>
+                                 <q-btn
+                                    class="q-ml-sm"
+                                    color="primary"
+                                    label="+"
+                                    @click="onQuantityPlusMinusClick(props.row, 'plus')"
+                                 >
+                                 </q-btn>
+                              </div>
+                           </q-td>
+                        </template>
                         <template #body-cell-actions="props">
                            <q-td :props="props">
                               <q-btn
@@ -370,6 +396,16 @@ export default defineComponent({
       const getSaleProductReply = computed(() => {
          return store.getters["getSaleProductReply"];
       });
+      const onQuantityPlusMinusClick = (product:Product, type:string) => {
+         switch(type) {
+            case "plus":
+               store.commit("ADD_SALE_PRODUCT_REPLY", product);
+               break;
+            case "minus":
+               store.commit("MINUS_SALE_PRODUCT_QUANTITY", product.id);
+               break;
+         }
+      };
 
       return {
          t,
@@ -378,7 +414,8 @@ export default defineComponent({
          saleVisibleColumns,
          getSaleProductReply,
          onRefreshProducts,
-         onDisplayProductListDialog
+         onDisplayProductListDialog,
+         onQuantityPlusMinusClick
       };
    }
 });
@@ -473,6 +510,11 @@ export default defineComponent({
             margin-bottom: 5px
          .text
             text-align: right
+   .sale-quantity-container
+      display: flex
+      flex-direction: row
+      align-items: center
+      justify-content: center
 
    @media screen and (max-width: 1198px)
       .sale
