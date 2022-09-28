@@ -259,6 +259,7 @@
                      <q-btn
                         color="primary"
                         label="Save sale"
+                        @click="onSaveSale"
                      >
                      </q-btn>
                   </div>
@@ -406,6 +407,22 @@ export default defineComponent({
       const onProductSaleDelete = (id_product:number) => {
          store.commit("REMOVE_SALE_PRODUCT_REPLY", id_product);
       };
+      const onSaveSale = () => {
+         if(getSaleProduct.value.length > 0) {
+            store.commit("SET_SALE_PRODUCT_REPLY", []);
+            Swal.fire({
+               title: "Ok",
+               text: "Thank you, come back soon",
+               icon: "success"
+            });
+         } else {
+            Swal.fire({
+               title: "Error",
+               text: "Theres no products in the sale",
+               icon: "error"
+            });
+         }
+      };
 
       const getSaleProduct = computed(() => {
          return store.getters["getSaleProduct"];
@@ -427,7 +444,8 @@ export default defineComponent({
          onRefreshProducts,
          onDisplayProductListDialog,
          onQuantityPlusMinusClick,
-         onProductSaleDelete
+         onProductSaleDelete,
+         onSaveSale
       };
    }
 });
