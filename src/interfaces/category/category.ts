@@ -18,9 +18,14 @@ interface CategoryResponse {
 }
 
 // Window response
+interface WindowResponseData {
+   data: Category|null;
+   message: string;
+   ok: boolean;
+}
 interface WindowResponse {
    id: number;
-   data: Category|null;
+   data: WindowResponseData;
    result: string;
    type: string;
 }

@@ -260,12 +260,13 @@ export default defineComponent({
       };
 
       onRefreshData();
-      if(!getCategoryLoadedReply) {
+      if(!getCategoryLoadedReply.value) {
          window.api.receive("main-window-category-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     category.value.push(data.data);
+                     if(data.data.data)
+                        category.value.push(data.data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
                   for(let i = 0; i < category.value.length; i++) {
@@ -275,13 +276,13 @@ export default defineComponent({
                         break;
                      }
                   }
-                  if(finded_index > 0) {
-                     if(data.data) {
-                        category.value[finded_index].id = data.data.id;
-                        category.value[finded_index].is_active = data.data.is_active;
-                        category.value[finded_index].created = data.data.created;
-                        category.value[finded_index].updated = data.data.updated;
-                        category.value[finded_index].name = data.data.name;
+                  if(finded_index >= 0) {
+                     if(data.data.data) {
+                        category.value[finded_index].id = data.data.data.id;
+                        category.value[finded_index].is_active = data.data.data.is_active;
+                        category.value[finded_index].created = data.data.data.created;
+                        category.value[finded_index].updated = data.data.data.updated;
+                        category.value[finded_index].name = data.data.data.name;
                      }
                   }
                } else if(data.type === "delete") {
@@ -293,7 +294,7 @@ export default defineComponent({
                         break;
                      }
                   }
-                  if(finded_index > 0)
+                  if(finded_index >= 0)
                      category.value.splice(finded_index, 1);
                }
             }
@@ -308,7 +309,6 @@ export default defineComponent({
          categoryColumns,
          categoryFilter,
          categoryPagination,
-         getCategoryLoadedReply,
          onRefreshData,
          onCategoryAddWindowClick,
          onClienSeeWindowClick,

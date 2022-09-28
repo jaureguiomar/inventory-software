@@ -260,12 +260,13 @@ export default defineComponent({
       };
 
       onRefreshData();
-      if(!getSupplierLoadedReply) {
+      if(!getSupplierLoadedReply.value) {
          window.api.receive("main-window-supplier-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     supplier.value.push(data.data);
+                     if(data.data.data)
+                        supplier.value.push(data.data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
                   for(let i = 0; i < supplier.value.length; i++) {
@@ -275,13 +276,13 @@ export default defineComponent({
                         break;
                      }
                   }
-                  if(finded_index > 0) {
-                     if(data.data) {
-                        supplier.value[finded_index].id = data.data.id;
-                        supplier.value[finded_index].is_active = data.data.is_active;
-                        supplier.value[finded_index].created = data.data.created;
-                        supplier.value[finded_index].updated = data.data.updated;
-                        supplier.value[finded_index].name = data.data.name;
+                  if(finded_index >= 0) {
+                     if(data.data.data) {
+                        supplier.value[finded_index].id = data.data.data.id;
+                        supplier.value[finded_index].is_active = data.data.data.is_active;
+                        supplier.value[finded_index].created = data.data.data.created;
+                        supplier.value[finded_index].updated = data.data.data.updated;
+                        supplier.value[finded_index].name = data.data.data.name;
                      }
                   }
                } else if(data.type === "delete") {
@@ -293,7 +294,7 @@ export default defineComponent({
                         break;
                      }
                   }
-                  if(finded_index > 0)
+                  if(finded_index >= 0)
                      supplier.value.splice(finded_index, 1);
                }
             }
@@ -308,7 +309,6 @@ export default defineComponent({
          supplierColumns,
          supplierFilter,
          supplierPagination,
-         getSupplierLoadedReply,
          onRefreshData,
          onSupplierAddWindowClick,
          onClienSeeWindowClick,

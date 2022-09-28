@@ -23,9 +23,14 @@ interface ClientResponse {
 }
 
 // Window response
+interface WindowResponseData {
+   data: Client|null;
+   message: string;
+   ok: boolean;
+}
 interface WindowResponse {
    id: number;
-   data: Client|null;
+   data: WindowResponseData;
    result: string;
    type: string;
 }

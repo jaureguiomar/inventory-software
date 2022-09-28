@@ -23,9 +23,14 @@ interface ProductResponse {
 }
 
 // Window response
+interface WindowResponseData {
+   data: Product|null;
+   message: string;
+   ok: boolean;
+}
 interface WindowResponse {
    id: number;
-   data: Product|null;
+   data: WindowResponseData;
    result: string;
    type: string;
 }
