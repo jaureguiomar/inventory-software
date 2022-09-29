@@ -204,7 +204,10 @@ export default defineComponent({
             label: t("product.table.field.description"),
             align: "center",
             field: "description",
-            sortable: true
+            sortable: true,
+            format: (description:string) => {
+               return (description) ? description : "N/A";
+            }
          },
          {
             name: "buy_price",
