@@ -285,7 +285,7 @@ import { key } from "@/plugins/store";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import ProductListDialog from "@/views/components/ProductListDialog.vue";
-import { Product, ProductResponse } from "@/interfaces/product/product";
+import { Product, ProductsResponse } from "@/interfaces/product/product";
 import { findValueBy } from "@/plugins/mixins";
 
 export default defineComponent({
@@ -362,7 +362,7 @@ export default defineComponent({
       };
       const onRefreshProducts = () => {
          all_products.value = [];
-         axios.get<ProductResponse>("product/v3/select-all.php")
+         axios.get<ProductsResponse>("product/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {

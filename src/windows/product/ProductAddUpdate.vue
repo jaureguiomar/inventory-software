@@ -28,6 +28,26 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
+                        v-model="product.created"
+                        :label="t('product.window.field.created') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="product.updated"
+                        :label="t('product.window.field.updated') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
                         v-model="field.code.text"
                         class="counter"
                         :label="t('product.window.field.code') + ':'"
@@ -167,16 +187,16 @@ import {
    defineComponent, getCurrentInstance, reactive,
    ref, onMounted
 } from "vue";
-import { IPCParams, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product-add-update";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import { validateField, enterKeyNavigation, findValueBy } from "@/plugins/mixins";
 import axios from "@/plugins/axios";
+import { validateField, enterKeyNavigation, findValueBy, getFormattedDateString } from "@/plugins/mixins";
+import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
+import { Category, CategoryResponse } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import Loader from "@/views/components/Loader.vue";
-import { Category, CategoryResponse } from "@/interfaces/category/category";
 
 export default defineComponent({
    name: "product-add-update-component",
@@ -200,6 +220,26 @@ export default defineComponent({
             title: "",
             description: ""
          }
+      });
+      const product = reactive<Product>({
+         id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
+         code: "",
+         name: "",
+         description: "",
+         buy_price: "",
+         sale_price: "",
+         quantity: 0,
+         category: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+         },
+         category_id: -1,
       });
       const field = reactive<ProductField>({
          code: {
@@ -261,17 +301,31 @@ export default defineComponent({
       });
       const loaded = ref(false);
 
-      window.api.receive("product-module-window-reply", (data:IPCParams) => {
+      window.api.receive("product-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
          page.type = data.type;
          page.content = data.content;
          if(data.data) {
+            product.id = data.data.id;
+            product.is_active = data.data.is_active;
+            product.created = getFormattedDateString(data.data.created);
+            product.updated = getFormattedDateString(data.data.updated);
+            product.code = data.data.code;
+            product.name = data.data.name;
+            product.description = (data.data.description) ? data.data.description : "";
+            product.buy_price = data.data.buy_price;
+            product.sale_price = data.data.sale_price;
+            product.quantity = data.data.quantity;
+            product.category = data.data.category;
+            product.category_id = data.data.category_id;
+
             field.code.text = data.data.code;
             field.name.text = data.data.name;
             field.description.text = (data.data.description) ? data.data.description : "";
             field.buy_price.text = data.data.buy_price;
             field.sale_price.text = data.data.sale_price;
             field.quantity.text = data.data.quantity.toString();
+            field.category_id.text = data.data.category.name;
          }
          loaded.value = true;
       });
@@ -359,6 +413,7 @@ export default defineComponent({
          console.log("finded_index", finded_index);
          console.log("error_category_id", error_category_id);
          console.log("category_id", category_id);
+         console.log("category", category.value);
 
          if(error_code || error_name || error_buy_price || error_sale_price || error_quantity || error_category_id)
             return;
@@ -631,6 +686,7 @@ export default defineComponent({
          page,
          field,
          loaded,
+         product,
          categoryOptions,
          onAddUpdate,
          onClear,

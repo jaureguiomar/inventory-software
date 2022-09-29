@@ -1,8 +1,8 @@
 interface Category {
    id: number;
    is_active: number;
-   created: Date;
-   updated: Date;
+   created: string;
+   updated: string;
    name: string;
 }
 

@@ -112,11 +112,11 @@ import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
+import { ProductsResponse, WindowResponse, Product } from "@/interfaces/product/product";
+import { Category } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
-import { ProductResponse, WindowResponse, Product } from "@/interfaces/product/product";
-import { Category } from "@/interfaces/category/category";
 
 export default defineComponent({
    name: "product-component",
@@ -248,7 +248,7 @@ export default defineComponent({
       const onRefreshData = () => {
          product.value = [];
 
-         axios.get<ProductResponse>("product/v3/select-all.php")
+         axios.get<ProductsResponse>("product/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
@@ -309,12 +309,18 @@ export default defineComponent({
             id: item.id,
             type: "see",
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                code: item.code,
                name: item.name,
                description: item.description,
                buy_price: item.buy_price,
                sale_price: item.sale_price,
-               quantity: item.quantity
+               quantity: item.quantity,
+               category: { ...item.category },
+               category_id: item.category_id
             }
          });
       };
@@ -327,12 +333,18 @@ export default defineComponent({
                description: t("product.window.update.subtitle")
             },
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                code: item.code,
                name: item.name,
                description: item.description,
                buy_price: item.buy_price,
                sale_price: item.sale_price,
-               quantity: item.quantity
+               quantity: item.quantity,
+               category: { ...item.category },
+               category_id: item.category_id
             }
          });
       };
@@ -341,12 +353,18 @@ export default defineComponent({
             id: item.id,
             type: "delete",
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                code: item.code,
                name: item.name,
                description: item.description,
                buy_price: item.buy_price,
                sale_price: item.sale_price,
-               quantity: item.quantity
+               quantity: item.quantity,
+               category: { ...item.category },
+               category_id: item.category_id
             }
          });
       };

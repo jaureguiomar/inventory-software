@@ -207,12 +207,15 @@ const i18n = createI18n({
                },
                field: {
                   id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
                   code: "Code",
                   name: "Name",
                   description: "Description",
                   buy_price: "Buy Price",
                   sale_price: "Sale Price",
                   quantity: "Quantity",
+                  category_name: "Category Name"
                },
                button: {
                   clear: "Clear",
