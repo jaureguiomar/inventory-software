@@ -13,10 +13,9 @@
 
          <Content>
             <template #content>
-               <div class="row">
+               <div v-if="page.id > 0" class="row">
                   <div class="col-md-2 col-12">
                      <q-input
-                        v-if="page.id > 0"
                         v-model="page.id"
                         :label="t('product.window.field.id') + ':'"
                         type="text"
@@ -25,7 +24,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row">
+               <div v-if="page.id > 0" class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="product.created"
@@ -83,6 +82,8 @@
                         bottom-slots
                         :error="field.description.error.is_error"
                         :error-message="field.description.error.message"
+                        @blur="onDescriptionBlur"
+                        @keyup="onDescriptionKeyup"
                      >
                      </q-input>
                   </div>
@@ -379,44 +380,43 @@ export default defineComponent({
          field.buy_price.text = field.buy_price.text.trim();
          field.sale_price.text = field.sale_price.text.trim();
          field.quantity.text = field.quantity.text.trim();
-         field.category_id.text = field.quantity.text.trim();
+         field.category_id.text = field.category_id.text.trim();
 
-         let code = field.code.text;
-         let name = field.name.text;
-         // let description = field.description.text;
-         let buy_price = field.buy_price.text;
-         let sale_price = field.sale_price.text;
-         let quantity = field.quantity.text;
-         let category_id = field.category_id.text;
-         let error_code = false;
-         let error_name = false;
-         // let error_description = false;
-         let error_buy_price = false;
-         let error_sale_price = false;
-         let error_quantity = false;
-         let error_category_id = false;
+         let code:string = field.code.text;
+         let name:string = field.name.text;
+         let description:string = field.description.text;
+         let buy_price:string = field.buy_price.text;
+         let sale_price:string = field.sale_price.text;
+         let quantity:string = field.quantity.text;
+         let category_name:string = field.category_id.text;
+         let category_id:number = -1;
+         let error_code:boolean = false;
+         let error_name:boolean = false;
+         let error_description:boolean = false;
+         let error_buy_price:boolean = false;
+         let error_sale_price:boolean = false;
+         let error_quantity:boolean = false;
+         let error_category_id:boolean = false;
 
          error_code = validateCode(code);
          error_name = validateName(name);
-         // error_description = validateDescription(description);
+         if(description)
+            error_description = validateDescription(description);
          error_buy_price = validateBuyPrice(buy_price);
          error_sale_price = validateSalePrice(sale_price);
          error_quantity = validateQuantity(quantity);
 
-         const finded_index = findValueBy(category.value, field.quantity.text, "name");
+         const finded_index = findValueBy(category.value, category_name, "name");
          if(finded_index < 0)
             error_category_id = true;
-         // if(!error_category_id)
-         //    category_id = category.value[finded_index].id;
-
-         console.error("---");
-         console.log("finded_index", finded_index);
-         console.log("error_category_id", error_category_id);
-         console.log("category_id", category_id);
-         console.log("category", category.value);
+         if(!error_category_id)
+            category_id = category.value[finded_index].id;
 
          if(error_code || error_name || error_buy_price || error_sale_price || error_quantity || error_category_id)
             return;
+         if(description)
+            if(error_description)
+               return;
 
          let data:Product|null = null;
          if(page.id <= 0) {
@@ -456,7 +456,8 @@ export default defineComponent({
                description: field.description.text,
                buy_price: field.buy_price.text,
                sale_price: field.sale_price.text,
-               quantity: field.quantity.text
+               quantity: field.quantity.text,
+               category_id: category_id
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -543,10 +544,15 @@ export default defineComponent({
          let value = field.name.text;
          validateName(value);
       };
-      // const onDescriptionBlur = () => {
-      //    let value = field.description.text;
-      //    validateDescription(value);
-      // };
+      const onDescriptionBlur = () => {
+         let value = field.description.text;
+         if(value) {
+            validateDescription(value);
+         } else {
+            field.description.error.is_error = false;
+            field.description.error.message = "";
+         }
+      };
       const onBuyPriceBlur = () => {
          let value = field.buy_price.text;
          validateBuyPrice(value);
@@ -575,11 +581,16 @@ export default defineComponent({
          validateName(value);
          enterKeyNavigation(e, "address", "first-name");
       };
-      // const onDescriptionKeyup = (e:KeyboardEvent) => {
-      //    let value = field.description.text;
-      //    validateDescription(value);
-      //    enterKeyNavigation(e, "cellphone", "last-name");
-      // };
+      const onDescriptionKeyup = (e:KeyboardEvent) => {
+         let value = field.description.text;
+         if(value) {
+            validateDescription(value);
+         } else {
+            field.description.error.is_error = false;
+            field.description.error.message = "";
+         }
+         enterKeyNavigation(e, "cellphone", "last-name");
+      };
       const onBuyPriceKeyup = (e:KeyboardEvent) => {
          let value = field.buy_price.text;
          validateBuyPrice(value);
@@ -622,16 +633,16 @@ export default defineComponent({
          field.name.error.message = result.message;
          return result.error;
       };
-      // const validateDescription = (description:string) => {
-      //    let result = validateField(description, () => {
-      //       if(field.description.text.length <= field.description.max_text)
-      //          return null;
-      //       return "This field has exceeded the length limit";
-      //    });
-      //    field.description.error.is_error = result.error;
-      //    field.description.error.message = result.message;
-      //    return result.error;
-      // };
+      const validateDescription = (description:string) => {
+         let result = validateField(description, () => {
+            if(field.description.text.length <= field.description.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         field.description.error.is_error = result.error;
+         field.description.error.message = result.message;
+         return result.error;
+      };
       const validateBuyPrice = (buy_price:string)  =>{
          let result = validateField(buy_price, () => {
             if(field.buy_price.text.length <= field.buy_price.max_text)
@@ -693,14 +704,14 @@ export default defineComponent({
          onClose,
          onCodeBlur,
          onNameBlur,
-         // onDescriptionBlur,
+         onDescriptionBlur,
          onBuyPriceBlur,
          onSalePriceBlur,
          onQuantityBlur,
          onCategoryIdBlur,
          onCodeKeyup,
          onNameKeyup,
-         // onDescriptionKeyup,
+         onDescriptionKeyup,
          onBuyPriceKeyup,
          onSalePriceKeyup,
          onQuantityKeyup,

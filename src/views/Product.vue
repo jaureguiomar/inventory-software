@@ -64,6 +64,17 @@
                   </q-select>
                </template>
 
+               <template #body-cell-name="props">
+                  <q-td :props="props">
+                     <div>
+                        {{ props.row.name }}
+                        <q-badge outline align="middle" color="primary">
+                           {{ props.row.category.name }}
+                        </q-badge>
+                     </div>
+                  </q-td>
+               </template>
+
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
@@ -113,7 +124,6 @@ import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
 import { ProductsResponse, WindowResponse, Product } from "@/interfaces/product/product";
-import { Category } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -222,16 +232,6 @@ export default defineComponent({
             align: "center",
             field: "quantity",
             sortable: true
-         },
-         {
-            name: "category",
-            label: t("product.table.field.category"),
-            align: "center",
-            field: "category",
-            sortable: true,
-            format: (category:Category) => {
-               return category.name;
-            }
          },
          {
             name: "actions",
