@@ -163,7 +163,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import {
+   defineComponent, getCurrentInstance, reactive,
+   ref, onMounted
+} from "vue";
 import { IPCParams, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product-add-update";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
@@ -185,6 +188,8 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const _instance = getCurrentInstance();
+      const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
       const category = ref<Category[]>([]);
       const categoryOptions = ref<Array<string>>([]);
       const categoryFilteredOptions = ref<Array<string>>([]);
@@ -305,6 +310,13 @@ export default defineComponent({
                });
             }
          });
+
+      onMounted(() => {
+         barcodeScanner.init(onBarcodeScanned);
+      });
+      const onBarcodeScanned = (barcode:string) => {
+         field.code.text = barcode;
+      };
 
       const onAddUpdate = async() => {
          field.code.text = field.code.text.trim();
@@ -612,7 +624,7 @@ export default defineComponent({
             const needle = value.toLowerCase();
             categoryOptions.value = categoryFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
          });
-      }
+      };
 
       return {
          t,
