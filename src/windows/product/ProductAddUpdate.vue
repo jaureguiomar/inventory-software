@@ -193,7 +193,7 @@ import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { validateField, enterKeyNavigation, findValueBy, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
-import { Category, CategoryResponse } from "@/interfaces/category/category";
+import { Category, CategoryResponse, CategoryResponses } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -330,7 +330,7 @@ export default defineComponent({
          }
          loaded.value = true;
       });
-      axios.get<CategoryResponse>("category/v3/select-all.php")
+      axios.get<CategoryResponses>("category/v3/select-all.php")
          .then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
@@ -418,7 +418,29 @@ export default defineComponent({
             if(error_description)
                return;
 
-         let data:Product|null = null;
+         ///////////////////////
+         // Add / Update Data //
+         let formatted_data:Product = {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            code: "",
+            name: "",
+            description: "",
+            buy_price: "",
+            sale_price: "",
+            quantity: -1,
+            category: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: ""
+            },
+            category_id: -1
+         };
+
          if(page.id <= 0) {
             let response = await axios.put<ProductResponse>("product/v3/create.php", {
                code: field.code.text,
@@ -430,8 +452,29 @@ export default defineComponent({
                category_id: category_id
             });
             if(response) {
+               response.data.data
                if(!response.data.error.is_error) {
-                  data = response.data.data;
+                  const data:Product = response.data.data.data;
+                  formatted_data = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     code: data.code,
+                     name: data.name,
+                     description: data.description,
+                     buy_price: data.buy_price,
+                     sale_price: data.sale_price,
+                     quantity: Number(data.quantity),
+                     category: {
+                        id: -1,
+                        is_active: -1,
+                        created: "",
+                        updated: "",
+                        name: ""
+                     },
+                     category_id: Number(data.category_id)
+                  };
                } else {
                   Swal.fire({
                      title: "Error",
@@ -461,7 +504,27 @@ export default defineComponent({
             });
             if(response) {
                if(!response.data.error.is_error) {
-                  data = response.data.data;
+                  const data:Product = response.data.data.data;
+                  formatted_data = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     code: data.code,
+                     name: data.name,
+                     description: data.description,
+                     buy_price: data.buy_price,
+                     sale_price: data.sale_price,
+                     quantity: Number(data.quantity),
+                     category: {
+                        id: -1,
+                        is_active: -1,
+                        created: "",
+                        updated: "",
+                        name: ""
+                     },
+                     category_id: Number(data.category_id)
+                  };
                } else {
                   Swal.fire({
                      title: "Error",
@@ -480,6 +543,35 @@ export default defineComponent({
             }
          }
 
+         // Get Category
+         let response = await axios.get<CategoryResponse>(`product/v3/select-one.php?id=${ formatted_data.category_id }`);
+         if(response) {
+            if(!response.data.error.is_error) {
+               const data:Category = response.data.data;
+               formatted_data.category = {
+                  id: Number(data.id),
+                  is_active: Number(data.is_active),
+                  created: data.created,
+                  updated: data.updated,
+                  name: data.name
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+               return;
+            }
+         } else {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
+            return;
+         }
+
          let message = "";
          if(page.type === "add")
             message = "The product has been added properly";
@@ -492,7 +584,7 @@ export default defineComponent({
          window.api.receive("product-module-window-dialog-reply", () => {
             window.api.send("product-module-window-close", {
                id: page.id,
-               data: data,
+               data: formatted_data,
                result: "success",
                type: page.type
             });

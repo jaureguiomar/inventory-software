@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { CategoryResponse, WindowResponse, Category } from "@/interfaces/category/category";
+import { CategoryResponses, WindowResponse, Category } from "@/interfaces/category/category";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -194,7 +194,7 @@ export default defineComponent({
       const onRefreshData = () => {
          category.value = [];
 
-         axios.get<CategoryResponse>("category/v3/select-all.php")
+         axios.get<CategoryResponses>("category/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {

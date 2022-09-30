@@ -13,6 +13,10 @@ interface Error {
    no_error: number;
 }
 interface CategoryResponse {
+   data: Category;
+   error: Error;
+}
+interface CategoryResponses {
    data: Array<Category>;
    error: Error;
 }
@@ -33,5 +37,6 @@ interface WindowResponse {
 export {
    Category,
    CategoryResponse,
+   CategoryResponses,
    WindowResponse
 };
