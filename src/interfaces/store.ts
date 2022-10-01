@@ -1,18 +1,10 @@
+import { Product } from "@/interfaces/product/product";
+
 interface GenericInterface {
    loaded_reply: boolean;
 }
 
-interface SaleProduct {
-   id: number;
-   is_active: number;
-   created: Date;
-   updated: Date;
-   code: string;
-   name: string;
-   description: string|null;
-   buy_price: string;
-   sale_price: string;
-   quantity: number;
+interface SaleProduct extends Product {
    sale_quantity: number;
    sale_total: string;
 }

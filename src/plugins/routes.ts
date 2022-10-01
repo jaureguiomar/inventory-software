@@ -18,7 +18,7 @@ import Category from "@/views/Category.vue";
 import CategorySee from "@/windows/category/CategorySee.vue";
 import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
 import CategoryDelete from "@/windows/category/CategoryDelete.vue";
-import store from "./store";
+import store from "@/plugins/store";
 
 const routes = [
    {
