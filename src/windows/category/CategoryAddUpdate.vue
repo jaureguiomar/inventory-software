@@ -25,7 +25,27 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row">
+               <div v-if="page.id > 0" class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="category.created"
+                        :label="t('category.window.field.created') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="category.updated"
+                        :label="t('category.window.field.updated') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.name.text"
@@ -71,11 +91,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { IPCParams, Page, CategoryField, CategoryResponse, Category } from "@/interfaces/category/category-add-update";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import { validateField, enterKeyNavigation } from "@/plugins/mixins";
 import axios from "@/plugins/axios";
+import { validateField, enterKeyNavigation, getFormattedDateString } from "@/plugins/mixins";
+import { IPCParamsContent, Page, CategoryField, CategoryResponse, Category } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -99,6 +119,13 @@ export default defineComponent({
             description: ""
          }
       });
+      const category = reactive<Category>({
+         id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
+         name: ""
+      });
       const field = reactive<CategoryField>({
          name: {
             text: "",
@@ -111,11 +138,16 @@ export default defineComponent({
       });
       const loaded = ref(false);
 
-      window.api.receive("category-module-window-reply", (data:IPCParams) => {
+      window.api.receive("category-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
          page.type = data.type;
          page.content = data.content;
          if(data.data) {
+            category.id = data.data.id;
+            category.is_active = data.data.is_active;
+            category.created = getFormattedDateString(data.data.created);
+            category.updated = getFormattedDateString(data.data.updated);
+
             field.name.text = data.data.name;
          }
          loaded.value = true;
@@ -131,14 +163,30 @@ export default defineComponent({
          if(error_name)
             return;
 
-         let data:Category|null = null;
+         ///////////////////////
+         // Add / Update Data //
+         let formatted_data:Category = {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: ""
+         };
+
          if(page.id <= 0) {
             let response = await axios.put<CategoryResponse>("category/v3/create.php", {
                name: field.name.text
             });
             if(response) {
                if(!response.data.error.is_error) {
-                  data = response.data.data;
+                  const data:Category = response.data.data.data;
+                  formatted_data = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     name: data.name
+                  };
                } else {
                   Swal.fire({
                      title: "Error",
@@ -162,7 +210,14 @@ export default defineComponent({
             });
             if(response) {
                if(!response.data.error.is_error) {
-                  data = response.data.data;
+                  const data:Category = response.data.data.data;
+                  formatted_data = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     name: data.name
+                  };
                } else {
                   Swal.fire({
                      title: "Error",
@@ -193,7 +248,7 @@ export default defineComponent({
          window.api.receive("category-module-window-dialog-reply", () => {
             window.api.send("category-module-window-close", {
                id: page.id,
-               data: data,
+               data: formatted_data,
                result: "success",
                type: page.type
             });
@@ -246,6 +301,7 @@ export default defineComponent({
          page,
          field,
          loaded,
+         category,
          onAddUpdate,
          onClear,
          onClose,

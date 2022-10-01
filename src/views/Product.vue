@@ -81,7 +81,7 @@
                         class="q-mr-sm"
                         color="primary"
                         label="See"
-                        @click="onClienSeeWindowClick(props.row)"
+                        @click="onProductSeeWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
@@ -307,7 +307,7 @@ export default defineComponent({
             data: null
          });
       };
-      const onClienSeeWindowClick = (item:Product) => {
+      const onProductSeeWindowClick = (item:Product) => {
          window.api.send("product-module-window", {
             id: item.id,
             type: "see",
@@ -417,7 +417,7 @@ export default defineComponent({
                }
             }
          });
-         store.commit("SET_CLIENT_LOADED_REPLY", true);
+         store.commit("SET_PRODUCT_LOADED_REPLY", true);
       }
 
       return {
@@ -429,7 +429,7 @@ export default defineComponent({
          productPagination,
          onRefreshData,
          onProductAddWindowClick,
-         onClienSeeWindowClick,
+         onProductSeeWindowClick,
          onProductUpdateWindowClick,
          onProductDeleteWindowClick,
          getFormattedDate,

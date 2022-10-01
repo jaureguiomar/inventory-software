@@ -69,6 +69,8 @@ const i18n = createI18n({
                },
                field: {
                   id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
                   first_name: "First Name",
                   last_name: "Last Name",
                   address: "Address",
@@ -135,6 +137,8 @@ const i18n = createI18n({
                },
                field: {
                   id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
                   name: "Name"
                },
                button: {
@@ -276,6 +280,8 @@ const i18n = createI18n({
                },
                field: {
                   id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
                   name: "Name"
                },
                button: {

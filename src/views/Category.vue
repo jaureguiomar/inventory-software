@@ -70,7 +70,7 @@
                         class="q-mr-sm"
                         color="primary"
                         label="See"
-                        @click="onClienSeeWindowClick(props.row)"
+                        @click="onCategorySeeWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { CategoryResponses, WindowResponse, Category } from "@/interfaces/category/category";
+import { CategoriesResponse, WindowResponse, Category } from "@/interfaces/category/category";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -194,12 +194,22 @@ export default defineComponent({
       const onRefreshData = () => {
          category.value = [];
 
-         axios.get<CategoryResponses>("category/v3/select-all.php")
+         axios.get<CategoriesResponse>("category/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
-                     category.value = data;
+                     let formatted_products:Array<Category> = [];
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_products.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name
+                        });
+                     }
+                     category.value = formatted_products;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -227,11 +237,15 @@ export default defineComponent({
             data: null
          });
       };
-      const onClienSeeWindowClick = (item:Category) => {
+      const onCategorySeeWindowClick = (item:Category) => {
          window.api.send("category-module-window", {
             id: item.id,
             type: "see",
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                name: item.name
             }
          });
@@ -245,6 +259,10 @@ export default defineComponent({
                description: t("category.window.update.subtitle")
             },
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                name: item.name
             }
          });
@@ -254,6 +272,10 @@ export default defineComponent({
             id: item.id,
             type: "delete",
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                name: item.name
             }
          });
@@ -299,7 +321,7 @@ export default defineComponent({
                }
             }
          });
-         store.commit("SET_CLIENT_LOADED_REPLY", true);
+         store.commit("SET_CATEGORY_LOADED_REPLY", true);
       }
 
       return {
@@ -311,7 +333,7 @@ export default defineComponent({
          categoryPagination,
          onRefreshData,
          onCategoryAddWindowClick,
-         onClienSeeWindowClick,
+         onCategorySeeWindowClick,
          onCategoryUpdateWindowClick,
          onCategoryDeleteWindowClick,
          getFormattedDate,

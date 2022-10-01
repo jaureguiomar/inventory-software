@@ -193,7 +193,7 @@ import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { validateField, enterKeyNavigation, findValueBy, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
-import { Category, CategoryResponse, CategoryResponses } from "@/interfaces/category/category";
+import { Category, CategoryResponse, CategoriesResponse } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -330,7 +330,7 @@ export default defineComponent({
          }
          loaded.value = true;
       });
-      axios.get<CategoryResponses>("category/v3/select-all.php")
+      axios.get<CategoriesResponse>("category/v3/select-all.php")
          .then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
@@ -547,7 +547,7 @@ export default defineComponent({
          let response = await axios.get<CategoryResponse>(`product/v3/select-one.php?id=${ formatted_data.category_id }`);
          if(response) {
             if(!response.data.error.is_error) {
-               const data:Category = response.data.data;
+               const data:Category = response.data.data.data;
                formatted_data.category = {
                   id: Number(data.id),
                   is_active: Number(data.is_active),

@@ -1,3 +1,6 @@
+import { InputFieldString } from "@/interfaces/general";
+
+// Main
 interface Category {
    id: number;
    is_active: number;
@@ -6,19 +9,35 @@ interface Category {
    name: string;
 }
 
-// Axios response
-interface Error {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
+// Props
+interface CategoryField {
+   name: InputFieldString;
 }
-interface CategoryResponse {
+
+// IPCParams
+interface IPCParams {
+   id: number;
+   type: string;
    data: Category;
-   error: Error;
 }
-interface CategoryResponses {
-   data: Array<Category>;
-   error: Error;
+
+// IPCParams Content
+interface Content {
+   title: string;
+   description: string;
+}
+interface IPCParamsContent {
+   id: number;
+   type: string;
+   content: Content;
+   data?: Category;
+}
+
+// Page
+interface Page {
+   id: number;
+   type: string;
+   content: Content;
 }
 
 // Window response
@@ -34,9 +53,34 @@ interface WindowResponse {
    type: string;
 }
 
+// Axios response
+interface ResponseOk {
+   data: Category;
+   ok: boolean;
+   message: string;
+}
+interface ResponseError {
+   is_error: boolean;
+   message: string|null;
+   no_error: number;
+}
+interface CategoryResponse {
+   data: ResponseOk;
+   error: ResponseError;
+}
+interface CategoriesResponse {
+   data: Array<Category>;
+   error: ResponseError;
+}
+
 export {
    Category,
+   Content,
+   IPCParams,
+   IPCParamsContent,
    CategoryResponse,
-   CategoryResponses,
-   WindowResponse
+   CategoriesResponse,
+   WindowResponse,
+   Page,
+   CategoryField
 };

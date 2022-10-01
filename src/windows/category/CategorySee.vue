@@ -25,6 +25,26 @@
                      </q-input>
                   </div>
                </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="category.created"
+                        :label="t('category.window.field.created') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="category.updated"
+                        :label="t('category.window.field.updated') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
@@ -53,7 +73,8 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
-import { Category, IPCParams } from "@/interfaces/category/category-see";
+import { getFormattedDateString } from "@/plugins/mixins";
+import { Category, IPCParams } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -71,6 +92,9 @@ export default defineComponent({
       const { t } = useI18n();
       const category = reactive<Category>({
          id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
          name: ""
       });
       const loaded = ref(false);
@@ -78,6 +102,10 @@ export default defineComponent({
       window.api.receive("category-module-window-reply", (data:IPCParams) => {
          category.id = data.id;
          if(data.data) {
+            category.id = data.data.id;
+            category.is_active = data.data.is_active;
+            category.created = getFormattedDateString(data.data.created);
+            category.updated = getFormattedDateString(data.data.updated);
             category.name = data.data.name;
          }
          loaded.value = true;
