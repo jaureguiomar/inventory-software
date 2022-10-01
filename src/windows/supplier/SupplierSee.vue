@@ -25,6 +25,26 @@
                      </q-input>
                   </div>
                </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="supplier.created"
+                        :label="t('supplier.window.field.created') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="supplier.updated"
+                        :label="t('supplier.window.field.updated') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
@@ -53,7 +73,8 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
-import { Supplier, IPCParams } from "@/interfaces/supplier/supplier-see";
+import { getFormattedDateString } from "@/plugins/mixins";
+import { Supplier, IPCParams } from "@/interfaces/supplier/supplier";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -71,6 +92,9 @@ export default defineComponent({
       const { t } = useI18n();
       const supplier = reactive<Supplier>({
          id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
          name: ""
       });
       const loaded = ref(false);
@@ -78,6 +102,10 @@ export default defineComponent({
       window.api.receive("supplier-module-window-reply", (data:IPCParams) => {
          supplier.id = data.id;
          if(data.data) {
+            supplier.id = data.data.id;
+            supplier.is_active = data.data.is_active;
+            supplier.created = getFormattedDateString(data.data.created);
+            supplier.updated = getFormattedDateString(data.data.updated);
             supplier.name = data.data.name;
          }
          loaded.value = true;

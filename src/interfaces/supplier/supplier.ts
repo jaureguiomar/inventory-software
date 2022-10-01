@@ -1,20 +1,43 @@
+import { InputFieldString } from "@/interfaces/general";
+
+// Main
 interface Supplier {
    id: number;
    is_active: number;
-   created: Date;
-   updated: Date;
+   created: string;
+   updated: string;
    name: string;
 }
 
-// Axios response
-interface Error {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
+// Props
+interface SupplierField {
+   name: InputFieldString;
 }
-interface SupplierResponse {
-   data: Array<Supplier>;
-   error: Error;
+
+// IPCParams
+interface IPCParams {
+   id: number;
+   type: string;
+   data: Supplier;
+}
+
+// IPCParams Content
+interface Content {
+   title: string;
+   description: string;
+}
+interface IPCParamsContent {
+   id: number;
+   type: string;
+   content: Content;
+   data?: Supplier;
+}
+
+// Page
+interface Page {
+   id: number;
+   type: string;
+   content: Content;
 }
 
 // Window response
@@ -30,8 +53,34 @@ interface WindowResponse {
    type: string;
 }
 
+// Axios response
+interface ResponseOk {
+   data: Supplier;
+   ok: boolean;
+   message: string;
+}
+interface ResponseError {
+   is_error: boolean;
+   message: string|null;
+   no_error: number;
+}
+interface SupplierResponse {
+   data: ResponseOk;
+   error: ResponseError;
+}
+interface SuppliersResponse {
+   data: Array<Supplier>;
+   error: ResponseError;
+}
+
 export {
    Supplier,
+   Content,
+   IPCParams,
+   IPCParamsContent,
    SupplierResponse,
-   WindowResponse
+   SuppliersResponse,
+   WindowResponse,
+   Page,
+   SupplierField
 };
