@@ -45,7 +45,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.name.text"
@@ -147,7 +147,7 @@ export default defineComponent({
             supplier.is_active = data.data.is_active;
             supplier.created = getFormattedDateString(data.data.created);
             supplier.updated = getFormattedDateString(data.data.updated);
-            supplier.name = getFormattedDateString(data.data.name);
+            supplier.name = data.data.name;
 
             field.name.text = data.data.name;
          }

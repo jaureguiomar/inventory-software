@@ -130,7 +130,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-select
                         v-model="field.category_id.text"

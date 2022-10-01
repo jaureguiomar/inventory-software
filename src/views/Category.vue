@@ -135,7 +135,6 @@ export default defineComponent({
          descending: false,
          page: 1,
          rowsPerPage: 5
-         // rowsNumber: xx if getting data from a server
       });
       const categoryColumns:Array<any> = [
          {
@@ -199,9 +198,9 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
-                     let formatted_products:Array<Category> = [];
+                     let formatted_categories:Array<Category> = [];
                      for(let i = 0; i < data.length; i++) {
-                        formatted_products.push({
+                        formatted_categories.push({
                            id: Number(data[i].id),
                            is_active: Number(data[i].is_active),
                            created: data[i].created,
@@ -209,7 +208,7 @@ export default defineComponent({
                            name: data[i].name
                         });
                      }
-                     category.value = formatted_products;
+                     category.value = formatted_categories;
                   } else {
                      Swal.fire({
                         title: "Error",

@@ -147,7 +147,7 @@ export default defineComponent({
             category.is_active = data.data.is_active;
             category.created = getFormattedDateString(data.data.created);
             category.updated = getFormattedDateString(data.data.updated);
-            category.name = getFormattedDateString(data.data.name);
+            category.name = data.data.name;
 
             field.name.text = data.data.name;
          }

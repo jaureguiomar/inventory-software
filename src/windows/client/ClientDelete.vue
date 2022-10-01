@@ -28,6 +28,26 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
+                        v-model="client.created"
+                        :label="t('client.window.field.created') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.updated"
+                        :label="t('client.window.field.updated') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
                         v-model="client.first_name"
                         :label="t('client.window.field.first_name') + ':'"
                         type="text"
@@ -109,9 +129,10 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
 import { useI18n } from "vue-i18n/index";
-import { Client, ClientResponse, IPCParams } from "@/interfaces/client/client-delete";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
+import { getFormattedDateString } from "@/plugins/mixins";
+import { Client, ClientResponse, IPCParams } from "@/interfaces/client/client";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -129,6 +150,9 @@ export default defineComponent({
       const { t } = useI18n();
       const client = reactive<Client>({
          id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
          first_name: "",
          last_name: "",
          address: "",
@@ -141,6 +165,10 @@ export default defineComponent({
       window.api.receive("client-module-window-reply", (data:IPCParams) => {
          client.id = data.id;
          if(data.data) {
+            client.id = data.data.id;
+            client.is_active = data.data.is_active;
+            client.created = getFormattedDateString(data.data.created);
+            client.updated = getFormattedDateString(data.data.updated);
             client.first_name = data.data.first_name;
             client.last_name = data.data.last_name;
             client.address = data.data.address;

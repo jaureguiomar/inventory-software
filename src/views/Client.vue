@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { ClientResponse, WindowResponse, Client } from "../interfaces/client/client";
+import { ClientsResponse, WindowResponse, Client } from "@/interfaces/client/client";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -201,12 +201,27 @@ export default defineComponent({
       const onRefreshData = () => {
          client.value = [];
 
-         axios.get<ClientResponse>("client/v3/select-all.php")
+         axios.get<ClientsResponse>("client/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
-                     client.value = data;
+                     let formatted_clients:Array<Client> = [];
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_clients.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           first_name: data[i].first_name,
+                           last_name: data[i].last_name,
+                           address: data[i].address,
+                           cellphone: data[i].cellphone,
+                           cellphone2: data[i].cellphone2,
+                           email: data[i].email
+                        });
+                     }
+                     client.value = formatted_clients;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -239,6 +254,10 @@ export default defineComponent({
             id: item.id,
             type: "see",
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                first_name: item.first_name,
                last_name: item.last_name,
                address: item.address,
@@ -257,6 +276,10 @@ export default defineComponent({
                description: t("client.window.update.subtitle")
             },
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                first_name: item.first_name,
                last_name: item.last_name,
                address: item.address,
@@ -271,6 +294,10 @@ export default defineComponent({
             id: item.id,
             type: "delete",
             data: {
+               id: item.id,
+               is_active: item.is_active,
+               created: item.created,
+               updated: item.updated,
                first_name: item.first_name,
                last_name: item.last_name,
                address: item.address,
