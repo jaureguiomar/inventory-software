@@ -282,18 +282,18 @@ export default defineComponent({
          field.cellphone2.text = field.cellphone2.text.trim();
          field.email.text = field.email.text.trim();
 
-         let first_name = field.first_name.text;
-         let last_name = field.last_name.text;
-         let address = field.address.text;
-         let cellphone = field.cellphone.text;
-         // let cellphone2 = field.cellphone2.text;
-         let email = field.email.text;
-         let error_first_name = false;
-         let error_last_name = false;
-         let error_address = false;
-         let error_cellphone = false;
-         // let error_cellphone2 = false;
-         let error_email = false;
+         let first_name:string = field.first_name.text;
+         let last_name:string = field.last_name.text;
+         let address:string = field.address.text;
+         let cellphone:string = field.cellphone.text;
+         // let cellphone2:string = field.cellphone2.text;
+         let email:string = field.email.text;
+         let error_first_name:boolean = false;
+         let error_last_name:boolean = false;
+         let error_address:boolean = false;
+         let error_cellphone:boolean = false;
+         // let error_cellphone2:boolean = false;
+         let error_email:boolean = false;
 
          error_first_name = validateFirstName(first_name);
          error_last_name = validateLastName(last_name);

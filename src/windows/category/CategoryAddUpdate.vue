@@ -157,8 +157,8 @@ export default defineComponent({
       const onAddUpdate = async() => {
          field.name.text = field.name.text.trim();
 
-         let name = field.name.text;
-         let error_name = false;
+         let name:string = field.name.text;
+         let error_name:boolean = false;
 
          error_name = validateName(name);
          if(error_name)
