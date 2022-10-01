@@ -286,8 +286,7 @@ export default defineComponent({
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     if(data.data.data)
-                        supplier.value.push(data.data.data);
+                     supplier.value.push(data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
                   for(let i = 0; i < supplier.value.length; i++) {
@@ -298,12 +297,12 @@ export default defineComponent({
                      }
                   }
                   if(finded_index >= 0) {
-                     if(data.data.data) {
-                        supplier.value[finded_index].id = data.data.data.id;
-                        supplier.value[finded_index].is_active = data.data.data.is_active;
-                        supplier.value[finded_index].created = data.data.data.created;
-                        supplier.value[finded_index].updated = data.data.data.updated;
-                        supplier.value[finded_index].name = data.data.data.name;
+                     if(data.data) {
+                        supplier.value[finded_index].id = data.data.id;
+                        supplier.value[finded_index].is_active = data.data.is_active;
+                        supplier.value[finded_index].created = data.data.created;
+                        supplier.value[finded_index].updated = data.data.updated;
+                        supplier.value[finded_index].name = data.data.name;
                      }
                   }
                } else if(data.type === "delete") {

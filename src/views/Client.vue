@@ -314,8 +314,7 @@ export default defineComponent({
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     if(data.data.data)
-                        client.value.push(data.data.data);
+                     client.value.push(data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
                   for(let i = 0; i < client.value.length; i++) {
@@ -326,17 +325,17 @@ export default defineComponent({
                      }
                   }
                   if(finded_index >= 0) {
-                     if(data.data.data) {
-                        client.value[finded_index].id = data.data.data.id;
-                        client.value[finded_index].is_active = data.data.data.is_active;
-                        client.value[finded_index].created = data.data.data.created;
-                        client.value[finded_index].updated = data.data.data.updated;
-                        client.value[finded_index].first_name = data.data.data.first_name;
-                        client.value[finded_index].last_name = data.data.data.last_name;
-                        client.value[finded_index].address = data.data.data.address;
-                        client.value[finded_index].cellphone = data.data.data.cellphone;
-                        client.value[finded_index].cellphone2 = data.data.data.cellphone2;
-                        client.value[finded_index].email = data.data.data.email;
+                     if(data.data) {
+                        client.value[finded_index].id = data.data.id;
+                        client.value[finded_index].is_active = data.data.is_active;
+                        client.value[finded_index].created = data.data.created;
+                        client.value[finded_index].updated = data.data.updated;
+                        client.value[finded_index].first_name = data.data.first_name;
+                        client.value[finded_index].last_name = data.data.last_name;
+                        client.value[finded_index].address = data.data.address;
+                        client.value[finded_index].cellphone = data.data.cellphone;
+                        client.value[finded_index].cellphone2 = data.data.cellphone2;
+                        client.value[finded_index].email = data.data.email;
                      }
                   }
                } else if(data.type === "delete") {

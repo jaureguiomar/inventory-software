@@ -41,14 +41,9 @@ interface Page {
 }
 
 // Window response
-interface WindowResponseData {
-   data: Supplier|null;
-   message: string;
-   ok: boolean;
-}
 interface WindowResponse {
    id: number;
-   data: WindowResponseData;
+   data: Supplier|null;
    result: string;
    type: string;
 }

@@ -1,16 +1,21 @@
 <template>
    <div class="banner">
-      <div class="logo">{{ $t("banner.inventory") }}</div>
-      <div class="text">{{ $t("banner.system") }}</div>
+      <div class="logo">{{ t("banner.inventory") }}</div>
+      <div class="text">{{ t("banner.system") }}</div>
    </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n/index";
+
 export default defineComponent({
    name: "banner-component",
    setup() {
-      return {};
+      const { t } = useI18n();
+      return {
+         t
+      };
    }
 });
 </script>

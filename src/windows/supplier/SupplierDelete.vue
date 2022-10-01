@@ -6,9 +6,9 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p class="q-ma-none">{{ $t("supplier.window.delete.title") }}</p>
+               <p class="q-ma-none">{{ t("supplier.window.delete.title") }}</p>
             </template>
-            <template #subtitle>{{ $t("supplier.window.delete.subtitle") }}</template>
+            <template #subtitle>{{ t("supplier.window.delete.subtitle") }}</template>
          </Menu>
 
          <Content>

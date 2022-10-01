@@ -378,8 +378,7 @@ export default defineComponent({
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     if(data.data.data)
-                        product.value.push(data.data.data);
+                     product.value.push(data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
                   for(let i = 0; i < product.value.length; i++) {
@@ -390,17 +389,17 @@ export default defineComponent({
                      }
                   }
                   if(finded_index >= 0) {
-                     if(data.data.data) {
-                        product.value[finded_index].id = data.data.data.id;
-                        product.value[finded_index].is_active = data.data.data.is_active;
-                        product.value[finded_index].created = data.data.data.created;
-                        product.value[finded_index].updated = data.data.data.updated;
-                        product.value[finded_index].code = data.data.data.code;
-                        product.value[finded_index].name = data.data.data.name;
-                        product.value[finded_index].description = data.data.data.description;
-                        product.value[finded_index].buy_price = data.data.data.buy_price;
-                        product.value[finded_index].sale_price = data.data.data.sale_price;
-                        product.value[finded_index].quantity = data.data.data.quantity;
+                     if(data.data) {
+                        product.value[finded_index].id = data.data.id;
+                        product.value[finded_index].is_active = data.data.is_active;
+                        product.value[finded_index].created = data.data.created;
+                        product.value[finded_index].updated = data.data.updated;
+                        product.value[finded_index].code = data.data.code;
+                        product.value[finded_index].name = data.data.name;
+                        product.value[finded_index].description = data.data.description;
+                        product.value[finded_index].buy_price = data.data.buy_price;
+                        product.value[finded_index].sale_price = data.data.sale_price;
+                        product.value[finded_index].quantity = data.data.quantity;
                      }
                   }
                } else if(data.type === "delete") {
