@@ -13,10 +13,9 @@
 
          <Content>
             <template #content>
-               <div class="row">
+               <div v-if="page.id > 0" class="row">
                   <div class="col-md-2 col-12">
                      <q-input
-                        v-if="page.id > 0"
                         v-model="page.id"
                         :label="t('client.window.field.id') + ':'"
                         type="text"
