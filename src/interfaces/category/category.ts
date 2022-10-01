@@ -63,6 +63,10 @@ interface CategoryResponse {
    data: ResponseOk;
    error: ResponseError;
 }
+interface CategoryOneResponse {
+   data: Category;
+   error: ResponseError;
+}
 interface CategoriesResponse {
    data: Array<Category>;
    error: ResponseError;
@@ -74,6 +78,7 @@ export {
    IPCParams,
    IPCParamsContent,
    CategoryResponse,
+   CategoryOneResponse,
    CategoriesResponse,
    WindowResponse,
    Page,

@@ -77,6 +77,10 @@ interface ProductResponse {
    data: ResponseOk;
    error: ResponseError;
 }
+interface ProductOneResponse {
+   data: Product;
+   error: ResponseError;
+}
 interface ProductsResponse {
    data: Array<Product>;
    error: ResponseError;
@@ -88,6 +92,7 @@ export {
    IPCParams,
    IPCParamsContent,
    ProductResponse,
+   ProductOneResponse,
    ProductsResponse,
    WindowResponse,
    Page,

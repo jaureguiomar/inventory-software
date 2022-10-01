@@ -73,6 +73,10 @@ interface ClientResponse {
    data: ResponseOk;
    error: ResponseError;
 }
+interface ClientOneResponse {
+   data: Client;
+   error: ResponseError;
+}
 interface ClientsResponse {
    data: Array<Client>;
    error: ResponseError;
@@ -84,6 +88,7 @@ export {
    IPCParams,
    IPCParamsContent,
    ClientResponse,
+   ClientOneResponse,
    ClientsResponse,
    WindowResponse,
    Page,

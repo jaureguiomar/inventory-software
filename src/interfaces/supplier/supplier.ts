@@ -63,6 +63,10 @@ interface SupplierResponse {
    data: ResponseOk;
    error: ResponseError;
 }
+interface SupplierOneResponse {
+   data: Supplier;
+   error: ResponseError;
+}
 interface SuppliersResponse {
    data: Array<Supplier>;
    error: ResponseError;
@@ -74,6 +78,7 @@ export {
    IPCParams,
    IPCParamsContent,
    SupplierResponse,
+   SupplierOneResponse,
    SuppliersResponse,
    WindowResponse,
    Page,
