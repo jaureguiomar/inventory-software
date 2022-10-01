@@ -158,7 +158,7 @@ import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
-import { validateField, enterKeyNavigation, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -484,35 +484,30 @@ export default defineComponent({
       };
       /////////////////////
       // Keypress Events //
-      const onFirstNameKeyup = (e:KeyboardEvent) => {
+      const onFirstNameKeyup = () => {
          let value = field.first_name.text;
          validateFirstName(value);
-         enterKeyNavigation(e, "last-name", "");
       };
-      const onLastNameKeyup = (e:KeyboardEvent) => {
+      const onLastNameKeyup = () => {
          let value = field.last_name.text;
          validateLastName(value);
-         enterKeyNavigation(e, "address", "first-name");
       };
-      const onAddressKeyup = (e:KeyboardEvent) => {
+      const onAddressKeyup = () => {
          let value = field.address.text;
          validateAddress(value);
-         enterKeyNavigation(e, "cellphone", "last-name");
       };
-      const onCellphoneKeyup = (e:KeyboardEvent) => {
+      const onCellphoneKeyup = () => {
          let value = field.cellphone.text;
          validateCellphone(value);
-         enterKeyNavigation(e, "cellphone2", "address");
       };
       // const onCellphone2Keyup = (e:KeyboardEvent) => {
       //    let value = field.cellphone2.text;
       //    validateCellphone2(value);
       //    enterKeyNavigation(e, "email", "cellphone");
       // };
-      const onEmailKeyup = (e:KeyboardEvent) => {
+      const onEmailKeyup = () => {
          let value = field.email.text;
          validateEmail(value);
-         enterKeyNavigation(e, "add-update-button", "cellphone2");
       };
       ////////////////
       // Validators //

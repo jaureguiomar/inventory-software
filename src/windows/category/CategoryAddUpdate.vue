@@ -93,7 +93,7 @@ import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
-import { validateField, enterKeyNavigation, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, CategoryField, CategoryResponse, Category } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -278,10 +278,9 @@ export default defineComponent({
       };
       /////////////////////
       // Keypress Events //
-      const onNameKeyup = (e:KeyboardEvent) => {
+      const onNameKeyup = () => {
          let value = field.name.text;
          validateName(value);
-         enterKeyNavigation(e, "last-name", "");
       };
       ////////////////
       // Validators //

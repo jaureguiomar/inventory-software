@@ -191,7 +191,7 @@ import {
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
-import { validateField, enterKeyNavigation, findValueBy, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
 import { Category, CategoryOneResponse, CategoriesResponse } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
@@ -663,17 +663,15 @@ export default defineComponent({
       };
       /////////////////////
       // Keypress Events //
-      const onCodeKeyup = (e:KeyboardEvent) => {
+      const onCodeKeyup = () => {
          let value = field.code.text;
          validateCode(value);
-         enterKeyNavigation(e, "last-name", "");
       };
-      const onNameKeyup = (e:KeyboardEvent) => {
+      const onNameKeyup = () => {
          let value = field.name.text;
          validateName(value);
-         enterKeyNavigation(e, "address", "first-name");
       };
-      const onDescriptionKeyup = (e:KeyboardEvent) => {
+      const onDescriptionKeyup = () => {
          let value = field.description.text;
          if(value) {
             validateDescription(value);
@@ -681,27 +679,22 @@ export default defineComponent({
             field.description.error.is_error = false;
             field.description.error.message = "";
          }
-         enterKeyNavigation(e, "cellphone", "last-name");
       };
-      const onBuyPriceKeyup = (e:KeyboardEvent) => {
+      const onBuyPriceKeyup = () => {
          let value = field.buy_price.text;
          validateBuyPrice(value);
-         enterKeyNavigation(e, "cellphone2", "address");
       };
-      const onSalePriceKeyup = (e:KeyboardEvent) => {
+      const onSalePriceKeyup = () => {
          let value = field.sale_price.text;
          validateSalePrice(value);
-         enterKeyNavigation(e, "email", "cellphone");
       };
-      const onQuantityKeyup = (e:KeyboardEvent) => {
+      const onQuantityKeyup = () => {
          let value = field.quantity.text;
          validateQuantity(value);
-         enterKeyNavigation(e, "add-update-button", "cellphone2");
       };
-      const onCategoryIdKeyup = (e:KeyboardEvent) => {
+      const onCategoryIdKeyup = () => {
          let value = field.category_id.text;
          validateCategoryId(value);
-         enterKeyNavigation(e, "add-update-button", "cellphone2");
       };
       ////////////////
       // Validators //

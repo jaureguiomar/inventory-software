@@ -71,19 +71,19 @@ export const getFormattedDateString = (date:string, type:number=0, format:number
    return new_date;
 };
 
-export const enterKeyNavigation = (e:KeyboardEvent, inputAfter:string, inputBefore:string) => {
-   if(e.keyCode === 13) {
-      if(e.shiftKey) {
-         if(inputBefore) {
-            const input = document.getElementById(inputBefore) as any;
-            input.focus();
-         }
-      } else {
-         const input = document.getElementById(inputAfter) as any;
-         input.focus();
-      }
-   }
-};
+// export const enterKeyNavigation = (e:KeyboardEvent, inputAfter:string, inputBefore:string) => {
+//    if(e.keyCode === 13) {
+//       if(e.shiftKey) {
+//          if(inputBefore) {
+//             const input = document.getElementById(inputBefore) as any;
+//             input.focus();
+//          }
+//       } else {
+//          const input = document.getElementById(inputAfter) as any;
+//          input.focus();
+//       }
+//    }
+// };
 
 export const validateField = (value:string, newValidation?:Function|any) => {
    const result = {
