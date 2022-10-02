@@ -106,6 +106,11 @@
                         v-model="field.cellphone2.text"
                         :label="t('client.window.field.cellphone2') + ':'"
                         type="text"
+                        bottom-slots
+                        :error="field.cellphone2.error.is_error"
+                        :error-message="field.cellphone2.error.message"
+                        @blur="onCellphone2Blur"
+                        @keyup="onCellphone2Keyup"
                      >
                      </q-input>
                   </div>
@@ -157,7 +162,7 @@ import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
-import { validateField, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -191,7 +196,7 @@ export default defineComponent({
          last_name: "",
          address: "",
          cellphone: "",
-         cellphone2: "",
+         cellphone2: "", // Validate here same as "description" in "products-add-update"
          email: ""
       });
       const field = reactive<ClientField>({
@@ -259,7 +264,7 @@ export default defineComponent({
             client.last_name = data.data.last_name;
             client.address = data.data.address;
             client.cellphone = data.data.cellphone;
-            client.cellphone2 = data.data.cellphone2;
+            client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
             client.email = data.data.email;
 
             field.first_name.text = data.data.first_name;
@@ -284,24 +289,28 @@ export default defineComponent({
          let last_name:string = field.last_name.text;
          let address:string = field.address.text;
          let cellphone:string = field.cellphone.text;
-         // let cellphone2:string = field.cellphone2.text;
+         let cellphone2:string = field.cellphone2.text;
          let email:string = field.email.text;
          let error_first_name:boolean = false;
          let error_last_name:boolean = false;
          let error_address:boolean = false;
          let error_cellphone:boolean = false;
-         // let error_cellphone2:boolean = false;
+         let error_cellphone2:boolean = false;
          let error_email:boolean = false;
 
          error_first_name = validateFirstName(first_name);
          error_last_name = validateLastName(last_name);
          error_address = validateAddress(address);
          error_cellphone = validateCellphone(cellphone);
-         // error_cellphone2 = validateCellphone2(cellphone2);
+         if(cellphone2)
+            error_cellphone2 = validateCellphone2(cellphone2);
          error_email = validateEmail(email);
 
          if(error_first_name || error_last_name || error_address || error_cellphone || error_email)
             return;
+         if(cellphone2)
+            if(error_cellphone2)
+               return;
 
          ///////////////////////
          // Add / Update Data //
@@ -473,10 +482,15 @@ export default defineComponent({
          let value = field.cellphone.text;
          validateCellphone(value);
       };
-      // const onCellphone2Blur = () => {
-      //    let value = field.cellphone2.text;
-      //    validateCellphone2(value);
-      // };
+      const onCellphone2Blur = () => {
+         let value = field.cellphone2.text;
+         if(value) {
+            validateCellphone2(value);
+         } else {
+            field.cellphone2.error.is_error = false;
+            field.cellphone2.error.message = "";
+         }
+      };
       const onEmailBlur = () => {
          let value = field.email.text;
          validateEmail(value);
@@ -499,11 +513,15 @@ export default defineComponent({
          let value = field.cellphone.text;
          validateCellphone(value);
       };
-      // const onCellphone2Keyup = (e:KeyboardEvent) => {
-      //    let value = field.cellphone2.text;
-      //    validateCellphone2(value);
-      //    enterKeyNavigation(e, "email", "cellphone");
-      // };
+      const onCellphone2Keyup = () => {
+         let value = field.cellphone2.text;
+         if(value) {
+            validateCellphone2(value);
+         } else {
+            field.cellphone2.error.is_error = false;
+            field.cellphone2.error.message = "";
+         }
+      };
       const onEmailKeyup = () => {
          let value = field.email.text;
          validateEmail(value);
@@ -550,22 +568,30 @@ export default defineComponent({
          field.cellphone.error.message = result.message;
          return result.error;
       };
-      // const validateCellphone2 = (cellphone2:string) => {
-      //    let result = validateField(cellphone2, () => {
-      //       if(field.cellphone2.text.length <= field.cellphone2.max_text)
-      //          return null;
-      //       return "This field has exceeded the length limit";
-      //    });
-      //    field.cellphone2.error.is_error = result.error;
-      //    field.cellphone2.error.message = result.message;
-      //    return result.error;
-      // };
+      const validateCellphone2 = (cellphone2:string) => {
+         let result = validateField(cellphone2, () => {
+            if(field.cellphone2.text.length <= field.cellphone2.max_text)
+               return null;
+            return "This field has exceeded the length limit";
+         });
+         field.cellphone2.error.is_error = result.error;
+         field.cellphone2.error.message = result.message;
+         return result.error;
+      };
       const validateEmail = (email:string) => {
          let result = validateField(email, () => {
             if(field.email.text.length <= field.email.max_text)
                return null;
             return "This field has exceeded the length limit";
          });
+         if(!result.error) {
+            result = validateField(email, () => {
+               if(formatEmail(field.email.text))
+                  return null;
+               return "You must enter a valid emmail format";
+            });
+         }
+
          field.email.error.is_error = result.error;
          field.email.error.message = result.message;
          return result.error;
@@ -584,13 +610,13 @@ export default defineComponent({
          onLastNameBlur,
          onAddressBlur,
          onCellphoneBlur,
-         // onCellphone2Blur,
+         onCellphone2Blur,
          onEmailBlur,
          onFirstNameKeyup,
          onLastNameKeyup,
          onAddressKeyup,
          onCellphoneKeyup,
-         // onCellphone2Keyup,
+         onCellphone2Keyup,
          onEmailKeyup,
       }
    }

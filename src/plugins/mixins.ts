@@ -71,6 +71,14 @@ export const getFormattedDateString = (date:string, type:number=0, format:number
    return new_date;
 };
 
+export const formatEmail = (value:string) => {
+   return String(value)
+      .toLowerCase()
+      .match(
+         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+};
+
 // export const enterKeyNavigation = (e:KeyboardEvent, inputAfter:string, inputBefore:string) => {
 //    if(e.keyCode === 13) {
 //       if(e.shiftKey) {

@@ -148,7 +148,7 @@ import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
-import { validateField, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/interfaces/user/user";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -483,6 +483,14 @@ export default defineComponent({
                return null;
             return "This field has exceeded the length limit";
          });
+         if(!result.error) {
+            result = validateField(email, () => {
+               if(formatEmail(field.email.text))
+                  return null;
+               return "You must enter a valid emmail format";
+            });
+         }
+
          field.email.error.is_error = result.error;
          field.email.error.message = result.message;
          return result.error;

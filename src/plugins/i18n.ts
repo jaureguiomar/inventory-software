@@ -21,6 +21,10 @@ const i18n = createI18n({
                   updated: "Updated",
                   first_name: "First Name",
                   last_name: "Last Name",
+                  address: "Address",
+                  cellphone: "Cellphone",
+                  cellphone2: "Cellphone 2",
+                  email: "Email",
                   show_details: "Show details",
                   actions: "Actions"
                },

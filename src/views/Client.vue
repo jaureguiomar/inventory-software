@@ -128,7 +128,10 @@ export default defineComponent({
       const { t } = useI18n();
       const store = useStore(key);
       const client = ref<Client[]>([]);
-      const clientVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "first_name", "last_name", "actions" ]);
+      const clientVisibleColumns = ref<Array<string>>([
+         "id", "created", "updated", "first_name", "last_name",
+         "address", "cellphone", "cellphone2", "email", "actions"
+      ]);
       const clientFilter = ref("");
       const clientPagination = reactive({
          sortBy: "desc",
@@ -184,6 +187,37 @@ export default defineComponent({
             label: t("client.table.field.last_name"),
             align: "center",
             field: "last_name",
+            sortable: true
+         },
+         {
+            name: "address",
+            label: t("client.table.field.address"),
+            align: "center",
+            field: "address",
+            sortable: true
+         },
+         {
+            name: "cellphone",
+            label: t("client.table.field.cellphone"),
+            align: "center",
+            field: "cellphone",
+            sortable: true
+         },
+         {
+            name: "cellphone2",
+            label: t("client.table.field.cellphone2"),
+            align: "center",
+            field: "cellphone2",
+            sortable: true,
+            format: (cellphone2:String) => {
+               return (cellphone2) ? cellphone2 : "N/A";
+            }
+         },
+         {
+            name: "email",
+            label: t("client.table.field.email"),
+            align: "center",
+            field: "email",
             sortable: true
          },
          {
