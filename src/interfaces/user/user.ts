@@ -1,0 +1,94 @@
+import { InputFieldString } from "@/interfaces/general";
+
+// Main
+interface User {
+   id: number;
+   is_active: number;
+   created: string;
+   updated: string;
+   username: string;
+   email: string;
+   password: string;
+   first_name: string;
+   last_name: string;
+}
+
+// Props
+interface UserField {
+   username: InputFieldString;
+   email: InputFieldString;
+   password: InputFieldString;
+   first_name: InputFieldString;
+   last_name: InputFieldString;
+}
+
+// IPCParams
+interface IPCParams {
+   id: number;
+   type: string;
+   data: User;
+}
+
+// IPCParams Content
+interface Content {
+   title: string;
+   description: string;
+}
+interface IPCParamsContent {
+   id: number;
+   type: string;
+   content: Content;
+   data?: User;
+}
+
+// Page
+interface Page {
+   id: number;
+   type: string;
+   content: Content;
+}
+
+// Window response
+interface WindowResponse {
+   id: number;
+   data: User|null;
+   result: string;
+   type: string;
+}
+
+// Axios response
+interface ResponseOk {
+   data: User;
+   ok: boolean;
+   message: string;
+}
+interface ResponseError {
+   is_error: boolean;
+   message: string|null;
+   no_error: number;
+}
+interface UserResponse {
+   data: ResponseOk;
+   error: ResponseError;
+}
+interface UserOneResponse {
+   data: User;
+   error: ResponseError;
+}
+interface UsersResponse {
+   data: Array<User>;
+   error: ResponseError;
+}
+
+export {
+   User,
+   Content,
+   IPCParams,
+   IPCParamsContent,
+   UserResponse,
+   UserOneResponse,
+   UsersResponse,
+   WindowResponse,
+   Page,
+   UserField
+};

@@ -21,6 +21,9 @@ const store = createStore<State>({
          },
          category: {
             loaded_reply: false
+         },
+         user: {
+            loaded_reply: false
          }
       }
    },
@@ -42,6 +45,9 @@ const store = createStore<State>({
       },
       getCategoryLoadedReply(state) {
          return state.category.loaded_reply;
+      },
+      getUserLoadedReply(state) {
+         return state.user.loaded_reply;
       }
    },
    mutations: {
@@ -89,6 +95,9 @@ const store = createStore<State>({
       },
       SET_CATEGORY_LOADED_REPLY: (state, data:boolean) => {
          state.category.loaded_reply = data;
+      },
+      SET_USER_LOADED_REPLY: (state, data:boolean) => {
+         state.user.loaded_reply = data;
       }
    }
 });

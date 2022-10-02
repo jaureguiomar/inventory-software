@@ -7,7 +7,8 @@ module.exports = {
         preloadClient: "src/preloads/preloadClient.ts",
         preloadSupplier: "src/preloads/preloadSupplier.ts",
         preloadProduct: "src/preloads/preloadProduct.ts",
-        preloadCategory: "src/preloads/preloadCategory.ts"
+        preloadCategory: "src/preloads/preloadCategory.ts",
+        preloadUser: "src/preloads/preloadUser.ts"
       },
       builderOptions: {
         extraResources: [

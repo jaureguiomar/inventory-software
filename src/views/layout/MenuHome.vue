@@ -30,6 +30,12 @@
          </div>
          <div class="bottom">Categories</div>
       </router-link>
+      <router-link to="/user">
+         <div class="top">
+            <font-awesome-icon icon="fa-solid fa-user-tie" size="4x" />
+         </div>
+         <div class="bottom">Users</div>
+      </router-link>
       <a href="#_" @click="onLogout">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />

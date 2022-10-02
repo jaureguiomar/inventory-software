@@ -20,6 +20,7 @@ interface State {
    supplier: GenericInterface;
    product: GenericInterface;
    category: GenericInterface;
+   user: GenericInterface;
 }
 
 export {

@@ -18,6 +18,10 @@ import Category from "@/views/Category.vue";
 import CategorySee from "@/windows/category/CategorySee.vue";
 import CategoryAddUpdate from "@/windows/category/CategoryAddUpdate.vue";
 import CategoryDelete from "@/windows/category/CategoryDelete.vue";
+import User from "@/views/User.vue";
+import UserSee from "@/windows/user/UserSee.vue";
+import UserAddUpdate from "@/windows/user/UserAddUpdate.vue";
+import UserDelete from "@/windows/user/UserDelete.vue";
 import store from "@/plugins/store";
 
 const routes = [
@@ -201,6 +205,46 @@ const routes = [
       path: "/category-delete/:id",
       component: CategoryDelete,
       name: "category-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user",
+      component: User,
+      name: "user",
+      meta: {
+         requiresAuth: true
+      }
+   },
+   {
+      path: "/user-see/:id",
+      component: UserSee,
+      name: "user-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-add",
+      component: UserAddUpdate,
+      name: "user-add",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-update/:id",
+      component: UserAddUpdate,
+      name: "user-update",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-delete/:id",
+      component: UserDelete,
+      name: "user-delete",
       meta: {
          requiresAuth: false
       }
