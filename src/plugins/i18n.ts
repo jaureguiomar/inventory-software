@@ -353,7 +353,11 @@ const i18n = createI18n({
                   id: "ID",
                   created: "Date Created",
                   updated: "Date Updated",
-                  name: "Name"
+                  username: "Username",
+                  email: "Email",
+                  password: "Password",
+                  first_name: "First Name",
+                  last_name: "Last Name",
                },
                button: {
                   clear: "Clear",

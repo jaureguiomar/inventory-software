@@ -48,7 +48,6 @@
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.first_name.text"
-                        class="counter"
                         :label="t('client.window.field.first_name') + ':'"
                         type="text"
                         bottom-slots

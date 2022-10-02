@@ -6,9 +6,9 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p class="q-ma-none">{{ t("category.window.see.title") }}</p>
+               <p class="q-ma-none">{{ t("user.window.see.title") }}</p>
             </template>
-            <template #subtitle>{{ t("category.window.see.subtitle") }}</template>
+            <template #subtitle>{{ t("user.window.see.subtitle") }}</template>
          </Menu>
 
          <Content>
@@ -16,9 +16,9 @@
                <div class="row">
                   <div class="col-md-2 col-12">
                      <q-input
-                        v-if="category.id > 0"
-                        v-model="category.id"
-                        :label="t('category.window.field.id') + ':'"
+                        v-if="user.id > 0"
+                        v-model="user.id"
+                        :label="t('user.window.field.id') + ':'"
                         type="text"
                         readonly
                      >
@@ -28,8 +28,8 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.created"
-                        :label="t('category.window.field.created') + ':'"
+                        v-model="user.created"
+                        :label="t('user.window.field.created') + ':'"
                         type="text"
                         readonly
                      >
@@ -37,8 +37,48 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.updated"
-                        :label="t('category.window.field.updated') + ':'"
+                        v-model="user.updated"
+                        :label="t('user.window.field.updated') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.username"
+                        :label="t('user.window.field.username') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.email"
+                        :label="t('user.window.field.email') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.password"
+                        :label="t('user.window.field.password') + ':'"
+                        type="password"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.first_name"
+                        :label="t('user.window.field.first_name') + ':'"
                         type="text"
                         readonly
                      >
@@ -48,8 +88,8 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.name"
-                        :label="t('category.window.field.name') + ':'"
+                        v-model="user.last_name"
+                        :label="t('user.window.field.last_name') + ':'"
                         type="text"
                         readonly
                      >
@@ -59,7 +99,7 @@
                <div class="text-center">
                   <q-btn
                      color="primary"
-                     :label="t('category.window.button.close')"
+                     :label="t('user.window.button.close')"
                      @click="onClose"
                   >
                   </q-btn>
@@ -74,14 +114,14 @@
 import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import { getFormattedDateString } from "@/plugins/mixins";
-import { Category, IPCParams } from "@/interfaces/category/category";
+import { User, IPCParams } from "@/interfaces/user/user";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import Loader from "@/views/components/Loader.vue";
 
 export default defineComponent({
-   name: "category-see-component",
+   name: "user-see-component",
    components: {
       Banner,
       Menu,
@@ -90,30 +130,38 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
-      const category = reactive<Category>({
+      const user = reactive<User>({
          id: -1,
          is_active: -1,
          created: "",
          updated: "",
-         name: ""
+         username: "",
+         email: "",
+         password: "",
+         first_name: "",
+         last_name: ""
       });
       const loaded = ref(false);
 
-      window.api.receive("category-module-window-reply", (data:IPCParams) => {
-         category.id = data.id;
+      window.api.receive("user-module-window-reply", (data:IPCParams) => {
+         user.id = data.id;
          if(data.data) {
-            category.id = data.data.id;
-            category.is_active = data.data.is_active;
-            category.created = getFormattedDateString(data.data.created);
-            category.updated = getFormattedDateString(data.data.updated);
-            category.name = data.data.name;
+            user.id = data.data.id;
+            user.is_active = data.data.is_active;
+            user.created = getFormattedDateString(data.data.created);
+            user.updated = getFormattedDateString(data.data.updated);
+            user.username = data.data.username;
+            user.email = data.data.email;
+            user.password = data.data.password;
+            user.first_name = data.data.first_name;
+            user.last_name = data.data.last_name;
          }
          loaded.value = true;
       });
 
       const onClose = () => {
-         window.api.send("category-module-window-close", {
-            id: category.id,
+         window.api.send("user-module-window-close", {
+            id: user.id,
             data: null,
             result: "closed",
             type: "see"
@@ -122,7 +170,7 @@ export default defineComponent({
 
       return {
          t,
-         category,
+         user,
          loaded,
          onClose
       };

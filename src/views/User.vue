@@ -6,10 +6,10 @@
             <router-link class="q-mr-xs text-white" to="/">
                <font-awesome-icon icon="fa-solid fa-arrow-left"></font-awesome-icon>
             </router-link>
-            <p class="q-ma-none">{{ t("category.title") }}</p>
+            <p class="q-ma-none">{{ t("user.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onCategoryAddWindowClick">
+            <a class="q-mr-sm text-white cursor-pointer" @click="onUserAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -17,29 +17,29 @@
             </a>
          </template>
          <template #subtitle>
-            {{ t("category.subtitle") }}
+            {{ t("user.subtitle") }}
          </template>
       </Menu>
 
       <Content>
          <template #content>
             <q-table
-               title="Category List"
-               :rows="category"
-               :columns="categoryColumns"
-               :no-data-label="t('category.table.content.details.empty')"
-               :no-results-label="t('category.table.content.details.empty')"
+               title="User List"
+               :rows="user"
+               :columns="userColumns"
+               :no-data-label="t('user.table.content.details.empty')"
+               :no-results-label="t('user.table.content.details.empty')"
                separator="vertical"
                virtual-scroll
                :virtual-scroll-sticky-size-start="48"
-               row-key="name"
-               :visible-columns="categoryVisibleColumns"
-               :pagination="categoryPagination"
-               :filter="categoryFilter"
+               row-key="id"
+               :visible-columns="userVisibleColumns"
+               :pagination="userPagination"
+               :filter="userFilter"
             >
                <template #top>
-                  <h6 class="q-ma-none q-mr-md">Category List</h6>
-                  <q-input v-model="categoryFilter" dense debounce="300" placeholder="Search">
+                  <h6 class="q-ma-none q-mr-md">User List</h6>
+                  <q-input v-model="userFilter" dense debounce="300" placeholder="Search">
                      <template #append>
                         <font-awesome-icon icon="fa-solid fa-search" size="1x" />
                      </template>
@@ -48,7 +48,7 @@
                   <q-space></q-space>
 
                   <q-select
-                     v-model="categoryVisibleColumns"
+                     v-model="userVisibleColumns"
                      multiple
                      outlined
                      dense
@@ -56,7 +56,7 @@
                      :display-value="$q.lang.table.columns"
                      emit-value
                      map-options
-                     :options="categoryColumns"
+                     :options="userColumns"
                      option-value="name"
                      options-cover
                      style="min-width: 150px"
@@ -70,21 +70,21 @@
                         class="q-mr-sm"
                         color="primary"
                         label="See"
-                        @click="onCategorySeeWindowClick(props.row)"
+                        @click="onUserSeeWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
-                        @click="onCategoryUpdateWindowClick(props.row)"
+                        @click="onUserUpdateWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
-                        @click="onCategoryDeleteWindowClick(props.row)"
+                        @click="onUserDeleteWindowClick(props.row)"
                      >
                      </q-btn>
                   </q-td>
@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { CategoriesResponse, WindowResponse, Category } from "@/interfaces/category/category";
+import { UsersResponse, WindowResponse, User } from "@/interfaces/user/user";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -118,7 +118,7 @@ import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 
 export default defineComponent({
-   name: "category-component",
+   name: "user-component",
    components: {
       Banner,
       Menu,
@@ -127,20 +127,23 @@ export default defineComponent({
    setup() {
       const { t } = useI18n();
       const store = useStore(key);
-      const category = ref<Category[]>([]);
-      const categoryVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "name", "actions" ]);
-      const categoryFilter = ref("");
-      const categoryPagination = reactive({
+      const user = ref<User[]>([]);
+      const userVisibleColumns = ref<Array<string>>([
+         "id", "created", "updated", "username", "email", // "password"
+         "first_name", "last_name", "actions"
+      ]);
+      const userFilter = ref("");
+      const userPagination = reactive({
          sortBy: "desc",
          descending: false,
          page: 1,
          rowsPerPage: 5
       });
-      const categoryColumns:Array<any> = [
+      const userColumns:Array<any> = [
          {
             name: "id",
             // required: true,
-            label: t("category.table.field.id"),
+            label: t("user.table.field.id"),
             align: "center",
             field: "id",
             sortable: true,
@@ -153,7 +156,7 @@ export default defineComponent({
          },
          {
             name: "created",
-            label: t("category.table.field.created"),
+            label: t("user.table.field.created"),
             align: "center",
             field: "created",
             sortable: true,
@@ -163,7 +166,7 @@ export default defineComponent({
          },
          {
             name: "updated",
-            label: t("category.table.field.updated"),
+            label: t("user.table.field.updated"),
             align: "center",
             field: "updated",
             sortable: true,
@@ -172,43 +175,75 @@ export default defineComponent({
             }
          },
          {
-            name: "name",
-            label: t("category.table.field.name"),
+            name: "username",
+            label: t("user.table.field.username"),
             align: "center",
-            field: "name",
+            field: "username",
+            sortable: true
+         },
+         {
+            name: "email",
+            label: t("user.table.field.email"),
+            align: "center",
+            field: "email",
+            sortable: true
+         },
+         // {
+         //    name: "password",
+         //    label: t("user.table.field.password"),
+         //    align: "center",
+         //    field: "password",
+         //    sortable: true
+         // },
+         {
+            name: "first_name",
+            label: t("user.table.field.first_name"),
+            align: "center",
+            field: "first_name",
+            sortable: true
+         },
+         {
+            name: "last_name",
+            label: t("user.table.field.last_name"),
+            align: "center",
+            field: "last_name",
             sortable: true
          },
          {
             name: "actions",
-            label: t("category.table.field.actions"),
+            label: t("user.table.field.actions"),
             align: "center",
             sortable: true
          }
       ];
 
-      const getCategoryLoadedReply = computed(() => {
-         return store.getters["getCategoryLoadedReply"];
+      const getUserLoadedReply = computed(() => {
+         return store.getters["getUserLoadedReply"];
       });
 
       const onRefreshData = () => {
-         category.value = [];
+         user.value = [];
 
-         axios.get<CategoriesResponse>("category/v3/select-all.php")
+         axios.get<UsersResponse>("user/v3/select-all.php")
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
-                     let formatted_categories:Array<Category> = [];
+                     let formatted_users:Array<User> = [];
                      for(let i = 0; i < data.length; i++) {
-                        formatted_categories.push({
+                        formatted_users.push({
                            id: Number(data[i].id),
                            is_active: Number(data[i].is_active),
                            created: data[i].created,
                            updated: data[i].updated,
-                           name: data[i].name
+                           username: data[i].username,
+                           email: data[i].email,
+                           password: data[i].password,
+                           first_name: data[i].first_name,
+                           last_name: data[i].last_name
                         });
                      }
-                     category.value = formatted_categories;
+                     user.value = formatted_users;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -225,19 +260,19 @@ export default defineComponent({
                }
             });
       };
-      const onCategoryAddWindowClick = () => {
-         window.api.send("category-module-window", {
+      const onUserAddWindowClick = () => {
+         window.api.send("user-module-window", {
             id: -1,
             type: "add",
             content: {
-               title: t("category.window.add.title"),
-               description: t("category.window.add.subtitle")
+               title: t("user.window.add.title"),
+               description: t("user.window.add.subtitle")
             },
             data: null
          });
       };
-      const onCategorySeeWindowClick = (item:Category) => {
-         window.api.send("category-module-window", {
+      const onUserSeeWindowClick = (item:User) => {
+         window.api.send("user-module-window", {
             id: item.id,
             type: "see",
             data: {
@@ -245,29 +280,37 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name
+               username: item.username,
+               email: item.email,
+               password: item.password,
+               first_name: item.first_name,
+               last_name: item.last_name
             }
          });
       };
-      const onCategoryUpdateWindowClick = (item:Category) => {
-         window.api.send("category-module-window", {
+      const onUserUpdateWindowClick = (item:User) => {
+         window.api.send("user-module-window", {
             id: item.id,
             type: "update",
             content: {
-               title: t("category.window.update.title"),
-               description: t("category.window.update.subtitle")
+               title: t("user.window.update.title"),
+               description: t("user.window.update.subtitle")
             },
             data: {
                id: item.id,
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name
+               username: item.username,
+               email: item.email,
+               password: item.password,
+               first_name: item.first_name,
+               last_name: item.last_name
             }
          });
       };
-      const onCategoryDeleteWindowClick = (item:Category) => {
-         window.api.send("category-module-window", {
+      const onUserDeleteWindowClick = (item:User) => {
+         window.api.send("user-module-window", {
             id: item.id,
             type: "delete",
             data: {
@@ -275,65 +318,73 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name
+               username: item.username,
+               email: item.email,
+               password: item.password,
+               first_name: item.first_name,
+               last_name: item.last_name
             }
          });
       };
 
       onRefreshData();
-      if(!getCategoryLoadedReply.value) {
-         window.api.receive("main-window-category-module-reply", (data:WindowResponse) => {
+      if(!getUserLoadedReply.value) {
+         window.api.receive("main-window-user-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     category.value.push(data.data);
+                     user.value.push(data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
-                  for(let i = 0; i < category.value.length; i++) {
-                     const curr_category = category.value[i];
-                     if(curr_category.id == data.id) {
+                  for(let i = 0; i < user.value.length; i++) {
+                     const curr_user = user.value[i];
+                     if(curr_user.id == data.id) {
                         finded_index = i;
                         break;
                      }
                   }
                   if(finded_index >= 0) {
                      if(data.data) {
-                        category.value[finded_index].id = data.data.id;
-                        category.value[finded_index].is_active = data.data.is_active;
-                        category.value[finded_index].created = data.data.created;
-                        category.value[finded_index].updated = data.data.updated;
-                        category.value[finded_index].name = data.data.name;
+                        user.value[finded_index].id = data.data.id;
+                        user.value[finded_index].is_active = data.data.is_active;
+                        user.value[finded_index].created = data.data.created;
+                        user.value[finded_index].updated = data.data.updated;
+                        user.value[finded_index].username = data.data.username;
+                        user.value[finded_index].email = data.data.email;
+                        user.value[finded_index].password = data.data.password;
+                        user.value[finded_index].first_name = data.data.first_name;
+                        user.value[finded_index].last_name = data.data.last_name;
                      }
                   }
                } else if(data.type === "delete") {
                   let finded_index = -1;
-                  for(let i = 0; i < category.value.length; i++) {
-                     const curr_category = category.value[i];
-                     if(curr_category.id == data.id) {
+                  for(let i = 0; i < user.value.length; i++) {
+                     const curr_user = user.value[i];
+                     if(curr_user.id == data.id) {
                         finded_index = i;
                         break;
                      }
                   }
                   if(finded_index >= 0)
-                     category.value.splice(finded_index, 1);
+                     user.value.splice(finded_index, 1);
                }
             }
          });
-         store.commit("SET_CATEGORY_LOADED_REPLY", true);
+         store.commit("SET_USER_LOADED_REPLY", true);
       }
 
       return {
          t,
-         category,
-         categoryVisibleColumns,
-         categoryColumns,
-         categoryFilter,
-         categoryPagination,
+         user,
+         userVisibleColumns,
+         userColumns,
+         userFilter,
+         userPagination,
          onRefreshData,
-         onCategoryAddWindowClick,
-         onCategorySeeWindowClick,
-         onCategoryUpdateWindowClick,
-         onCategoryDeleteWindowClick,
+         onUserAddWindowClick,
+         onUserSeeWindowClick,
+         onUserUpdateWindowClick,
+         onUserDeleteWindowClick,
          getFormattedDate,
          getFormattedDateString
       }
