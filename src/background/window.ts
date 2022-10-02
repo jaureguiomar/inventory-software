@@ -42,9 +42,8 @@ export const window = {
    }
 };
 
-///////////////////////////////
-// Listen for ipcMain Events //
-// Client
+////////////
+// Client //
 ipcMain.on("client-module-window", function(e, data) {
    if(!window.client[data.type] || window.client[data.type].isDestroyed()) {
       window.client[data.type] = new BrowserWindow({
@@ -103,7 +102,8 @@ ipcMain.on("client-module-window-close", function(e, data) {
    window.main.webContents.send("main-window-client-module-reply", data);
 });
 
-// Supplier
+//////////////
+// Supplier //
 ipcMain.on("supplier-module-window", function(e, data) {
    if(!window.supplier[data.type] || window.supplier[data.type].isDestroyed()) {
       window.supplier[data.type] = new BrowserWindow({
@@ -162,7 +162,8 @@ ipcMain.on("supplier-module-window-close", function(e, data) {
    window.main.webContents.send("main-window-supplier-module-reply", data);
 });
 
-// Product
+/////////////
+// Product //
 ipcMain.on("product-module-window", function(e, data) {
    if(!window.product[data.type] || window.product[data.type].isDestroyed()) {
       window.product[data.type] = new BrowserWindow({
@@ -221,7 +222,8 @@ ipcMain.on("product-module-window-close", function(e, data) {
    window.main.webContents.send("main-window-product-module-reply", data);
 });
 
-// Category
+//////////////
+// Category //
 ipcMain.on("category-module-window", function(e, data) {
    if(!window.category[data.type] || window.category[data.type].isDestroyed()) {
       window.category[data.type] = new BrowserWindow({
@@ -280,7 +282,8 @@ ipcMain.on("category-module-window-close", function(e, data) {
    window.main.webContents.send("main-window-category-module-reply", data);
 });
 
-// User
+//////////
+// User //
 ipcMain.on("user-module-window", function(e, data) {
    if(!window.user[data.type] || window.user[data.type].isDestroyed()) {
       window.user[data.type] = new BrowserWindow({
@@ -339,7 +342,8 @@ ipcMain.on("user-module-window-close", function(e, data) {
    window.main.webContents.send("main-window-user-module-reply", data);
 });
 
-// User Role
+///////////////
+// User Role //
 ipcMain.on("user-role-module-window", function(e, data) {
    if(!window.user_role[data.type] || window.user_role[data.type].isDestroyed()) {
       window.user_role[data.type] = new BrowserWindow({
@@ -397,9 +401,9 @@ ipcMain.on("user-role-module-window-close", function(e, data) {
    window.user_role[data.type] = null;
    window.main.webContents.send("main-window-user-role-module-reply", data);
 });
-///////////////////////////////////
-///////////////////////////////////
 
+///////////////
+// Functions //
 function getAppPort() {
    const server_url = (process.env.WEBPACK_DEV_SERVER_URL) ? process.env.WEBPACK_DEV_SERVER_URL : "";
    const splitted_server_url = server_url.split(":");
