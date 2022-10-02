@@ -187,7 +187,7 @@ export default defineComponent({
       const field = reactive<UserField>({
          username: {
             text: "",
-            max_text: 70,
+            max_text: 50,
             error: {
                is_error: false,
                message: ""
@@ -195,7 +195,7 @@ export default defineComponent({
          },
          email: {
             text: "",
-            max_text: 70,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""
@@ -203,7 +203,7 @@ export default defineComponent({
          },
          password: {
             text: "",
-            max_text: 70,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""
@@ -211,7 +211,7 @@ export default defineComponent({
          },
          first_name: {
             text: "",
-            max_text: 70,
+            max_text: 50,
             error: {
                is_error: false,
                message: ""
@@ -219,7 +219,7 @@ export default defineComponent({
          },
          last_name: {
             text: "",
-            max_text: 70,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""

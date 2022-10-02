@@ -259,7 +259,7 @@ export default defineComponent({
       const field = reactive<ProductField>({
          code: {
             text: "",
-            max_text: 70,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""
@@ -267,7 +267,7 @@ export default defineComponent({
          },
          name: {
             text: "",
-            max_text: 70,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""
@@ -275,7 +275,7 @@ export default defineComponent({
          },
          description: {
             text: "",
-            max_text: 160,
+            max_text: 170,
             error: {
                is_error: false,
                message: ""
@@ -283,7 +283,7 @@ export default defineComponent({
          },
          buy_price: {
             text: "",
-            max_text: 20,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""
@@ -291,7 +291,7 @@ export default defineComponent({
          },
          sale_price: {
             text: "",
-            max_text: 20,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""

@@ -127,7 +127,7 @@ export default defineComponent({
       const field = reactive<UserRoleField>({
          name: {
             text: "",
-            max_text: 70,
+            max_text: 100,
             error: {
                is_error: false,
                message: ""
