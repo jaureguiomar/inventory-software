@@ -290,6 +290,77 @@ const i18n = createI18n({
                }
             }
          },
+         user: {
+            title: "Users",
+            subtitle: "Description about the users view",
+            table: {
+               search: "Search...",
+               field: {
+                  id: "Id User",
+                  created: "Created",
+                  updated: "Updated",
+                  username: "Username",
+                  email: "Email",
+                  password: "Password",
+                  first_name: "First Name",
+                  last_name: "Last Name",
+                  show_details: "Show details",
+                  actions: "Actions"
+               },
+               content: {
+                  id: "# User",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  username: "Username",
+                  email: "Email",
+                  password: "Password",
+                  first_name: "First Name",
+                  last_name: "Last Name",
+                  details: {
+                     show_details: "Show details",
+                     hide_details: "Hide details",
+                     empty: "Theres no data to display"
+                  }
+               }
+            },
+            window: {
+               add: {
+                  title: "Add User",
+                  subtitle: "The users that will be added for the use of the system",
+                  button: {
+                     add: "Add"
+                  }
+               },
+               update: {
+                  title: "Update User",
+                  subtitle: "The users that will be updated for the use of the system",
+                  button: {
+                     update: "Update"
+                  }
+               },
+               delete: {
+                  title: "Delete User",
+                  subtitle: "The users that will be deleted from the system",
+                  button: {
+                     delete: "Delete",
+                  }
+               },
+               see: {
+                  title: "See User",
+                  subtitle: "The users in the system",
+               },
+               field: {
+                  id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  name: "Name"
+               },
+               button: {
+                  clear: "Clear",
+                  close: "Close"
+               }
+            }
+         },
          global: {
             default_error: "An unexpected error has occurred. Please, try again"
          }
