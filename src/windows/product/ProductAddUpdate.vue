@@ -45,10 +45,9 @@
                   </div>
                </div>
                <div class="row">
-                  <div class="col-md-6 col-12">
+                  <!-- <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.code.text"
-                        class="counter"
                         :label="t('product.window.field.code') + ':'"
                         type="text"
                         bottom-slots
@@ -58,7 +57,7 @@
                         @keyup="onCodeKeyup"
                      >
                      </q-input>
-                  </div>
+                  </div> -->
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.name.text"
@@ -72,8 +71,6 @@
                      >
                      </q-input>
                   </div>
-               </div>
-               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.description.text"
@@ -87,6 +84,8 @@
                      >
                      </q-input>
                   </div>
+               </div>
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.buy_price.text"
@@ -100,8 +99,6 @@
                      >
                      </q-input>
                   </div>
-               </div>
-               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.sale_price.text"
@@ -115,12 +112,13 @@
                      >
                      </q-input>
                   </div>
+               </div>
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.quantity.text"
                         :label="t('product.window.field.quantity') + ':'"
                         type="text"
-                        hint="Valid Email format"
                         bottom-slots
                         :error="field.quantity.error.is_error"
                         :error-message="field.quantity.error.message"
@@ -129,8 +127,6 @@
                      >
                      </q-input>
                   </div>
-               </div>
-               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-select
                         v-model="field.category_id.text"
@@ -153,6 +149,24 @@
                            </q-item>
                         </template>
                      </q-select>
+                  </div>
+               </div>
+               <div class="row q-mb-sm">
+                  <div class="col-md-6 col-12">
+                     <q-checkbox
+                        v-model="hasBarcode"
+                        label="This product has barcode"
+                        @click="onHasBarcodeCheckboxClick"
+                     >
+                     </q-checkbox>
+                  </div>
+                  <div v-if="page.id > 0" class="col-md-6 col-12">
+                     <q-checkbox
+                        v-model="updateBarcode"
+                        label="Update barcode"
+                        :disable="!hasBarcode"
+                     >
+                     </q-checkbox>
                   </div>
                </div>
                <div class="text-center">
@@ -184,10 +198,8 @@
 </template>
 
 <script lang="ts">
-import {
-   defineComponent, getCurrentInstance, reactive,
-   ref, onMounted
-} from "vue";
+import { defineComponent, reactive, ref } from "vue";
+import { useQuasar } from "quasar";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
@@ -198,6 +210,7 @@ import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import Loader from "@/views/components/Loader.vue";
+import AddUpdateDialogVue from "@/windows/product/dialog/AddUpdateDialog.vue";
 
 export default defineComponent({
    name: "product-add-update-component",
@@ -209,8 +222,9 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
-      const _instance = getCurrentInstance();
-      const barcodeScanner = _instance?.appContext.app.config.globalProperties.$barcodeScanner;
+      const $q = useQuasar();
+      const hasBarcode = ref(true);
+      const updateBarcode = ref(false);
       const category = ref<Category[]>([]);
       const categoryOptions = ref<Array<string>>([]);
       const categoryFilteredOptions = ref<Array<string>>([]);
@@ -327,7 +341,12 @@ export default defineComponent({
             field.sale_price.text = data.data.sale_price;
             field.quantity.text = data.data.quantity.toString();
             field.category_id.text = data.data.category.name;
+            if(!field.code.text)
+               hasBarcode.value = false;
          }
+
+         if(page.id <= 0)
+            updateBarcode.value = true;
          loaded.value = true;
       });
       axios.get<CategoriesResponse>("category/v3/select-all.php")
@@ -366,15 +385,8 @@ export default defineComponent({
             }
          });
 
-      onMounted(() => {
-         barcodeScanner.init(onBarcodeScanned);
-      });
-      const onBarcodeScanned = (barcode:string) => {
-         field.code.text = barcode;
-      };
-
       const onAddUpdate = async() => {
-         field.code.text = field.code.text.trim();
+         // field.code.text = field.code.text.trim();
          field.name.text = field.name.text.trim();
          field.description.text = field.description.text.trim();
          field.buy_price.text = field.buy_price.text.trim();
@@ -382,15 +394,15 @@ export default defineComponent({
          field.quantity.text = field.quantity.text.trim();
          field.category_id.text = field.category_id.text.trim();
 
-         let code:string = field.code.text;
+         // let code:string = field.code.text;
          let name:string = field.name.text;
          let description:string = field.description.text;
          let buy_price:string = field.buy_price.text;
          let sale_price:string = field.sale_price.text;
          let quantity:string = field.quantity.text;
          let category_name:string = field.category_id.text;
-         let category_id:number = -1;
-         let error_code:boolean = false;
+         // let category_id:number = -1;
+         // let error_code:boolean = false;
          let error_name:boolean = false;
          let error_description:boolean = false;
          let error_buy_price:boolean = false;
@@ -398,7 +410,7 @@ export default defineComponent({
          let error_quantity:boolean = false;
          let error_category_id:boolean = false;
 
-         error_code = validateCode(code);
+         // error_code = validateCode(code);
          error_name = validateName(name);
          if(description)
             error_description = validateDescription(description);
@@ -406,20 +418,46 @@ export default defineComponent({
          error_sale_price = validateSalePrice(sale_price);
          error_quantity = validateQuantity(quantity);
 
+         // Validate category
          const finded_index = findValueBy(category.value, category_name, "name");
          if(finded_index < 0)
             error_category_id = true;
-         if(!error_category_id)
-            category_id = category.value[finded_index].id;
+         if(error_category_id)
+            error_category_id = validateCategoryId(category_name);
+         // else
+         //    category_id = category.value[finded_index].id;
 
-         if(error_code || error_name || error_buy_price || error_sale_price || error_quantity || error_category_id)
+         if(error_name || error_buy_price || error_sale_price || error_quantity || error_category_id)
             return;
          if(description)
             if(error_description)
                return;
 
-         ///////////////////////
-         // Add / Update Data //
+         if(hasBarcode.value) {
+            if(updateBarcode.value) {
+               $q.dialog({
+                  component: AddUpdateDialogVue,
+                  componentProps: {
+                     type: (page.id <= 0) ? "add" : "update"
+                  },
+               }).onOk(async (payload:string) => {
+                  field.code.text = payload;
+                  field.code.text = field.code.text.trim();
+                  let code:string = field.code.text;
+
+                  if(validateCode(code))
+                     return;
+                  onAddUpdateFunction();
+               });
+            } else {
+               onAddUpdateFunction();
+            }
+         } else {
+            field.code.text = "";
+            onAddUpdateFunction();
+         }
+      };
+      const onAddUpdateFunction = async() => {
          let formatted_data:Product = {
             id: -1,
             is_active: -1,
@@ -441,6 +479,13 @@ export default defineComponent({
             category_id: -1
          };
 
+         // Get "category_id"
+         let category_id = -1;
+         const finded_index = findValueBy(category.value, field.category_id.text, "name");
+         if(finded_index < 0)
+            return;
+         category_id = category.value[finded_index].id;
+
          if(page.id <= 0) {
             let response = await axios.put<ProductResponse>("product/v3/create.php", {
                code: field.code.text,
@@ -452,7 +497,6 @@ export default defineComponent({
                category_id: category_id
             });
             if(response) {
-               response.data.data
                if(!response.data.error.is_error) {
                   const data:Product = response.data.data.data;
                   formatted_data = {
@@ -544,7 +588,7 @@ export default defineComponent({
          }
 
          // Get Category
-         let response = await axios.get<CategoryOneResponse>(`product/v3/select-one.php?id=${ formatted_data.category_id }`);
+         let response = await axios.get<CategoryOneResponse>(`category/v3/select-one.php?id=${ formatted_data.category_id }`);
          if(response) {
             if(!response.data.error.is_error) {
                const data:Category = response.data.data;
@@ -626,12 +670,16 @@ export default defineComponent({
          field.quantity.error.is_error = false;
          field.quantity.error.message = "";
       };
+      const onHasBarcodeCheckboxClick = () => {
+         if(hasBarcode.value)
+            updateBarcode.value = true;
+      };
       /////////////////
       // Blur Events //
-      const onCodeBlur = () => {
-         let value = field.code.text;
-         validateCode(value);
-      };
+      // const onCodeBlur = () => {
+      //    let value = field.code.text;
+      //    validateCode(value);
+      // };
       const onNameBlur = () => {
          let value = field.name.text;
          validateName(value);
@@ -663,10 +711,10 @@ export default defineComponent({
       };
       /////////////////////
       // Keypress Events //
-      const onCodeKeyup = () => {
-         let value = field.code.text;
-         validateCode(value);
-      };
+      // const onCodeKeyup = () => {
+      //    let value = field.code.text;
+      //    validateCode(value);
+      // };
       const onNameKeyup = () => {
          let value = field.name.text;
          validateName(value);
@@ -779,6 +827,8 @@ export default defineComponent({
 
       return {
          t,
+         hasBarcode,
+         updateBarcode,
          page,
          field,
          loaded,
@@ -787,14 +837,15 @@ export default defineComponent({
          onAddUpdate,
          onClear,
          onClose,
-         onCodeBlur,
+         onHasBarcodeCheckboxClick,
+         // onCodeBlur,
          onNameBlur,
          onDescriptionBlur,
          onBuyPriceBlur,
          onSalePriceBlur,
          onQuantityBlur,
          onCategoryIdBlur,
-         onCodeKeyup,
+         // onCodeKeyup,
          onNameKeyup,
          onDescriptionKeyup,
          onBuyPriceKeyup,

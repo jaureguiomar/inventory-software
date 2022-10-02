@@ -190,7 +190,10 @@ export default defineComponent({
             label: t("product.table.field.code"),
             align: "center",
             field: "code",
-            sortable: true
+            sortable: true,
+            format: (code:string) => {
+               return (code) ? code : "N/A";
+            }
          },
          {
             name: "name",
