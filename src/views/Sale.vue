@@ -409,6 +409,7 @@ export default defineComponent({
       };
       const onSaveSale = () => {
          if(getSaleProduct.value.length > 0) {
+            window.api.send("print-sale");
             store.commit("SET_SALE_PRODUCT_REPLY", []);
             Swal.fire({
                title: "Ok",

@@ -1,7 +1,7 @@
 module.exports = {
   pluginOptions: {
     electronBuilder: {
-      // externals: ["escpos", "escpos-usb"],
+      externals: ["escpos", "escpos-usb"],
       preload: {
         preload: "src/preloads/preload.ts",
         preloadClient: "src/preloads/preloadClient.ts",

@@ -6,7 +6,8 @@ contextBridge.exposeInMainWorld(
          const validChannels:Array<string> = [
             "client-module-window", "supplier-module-window",
             "product-module-window", "category-module-window",
-            "user-module-window", "user-role-module-window"
+            "user-module-window", "user-role-module-window",
+            "print-sale"
          ];
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);

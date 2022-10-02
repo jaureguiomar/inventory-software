@@ -38,6 +38,8 @@
     "core-js": "^3.6.5",
     "electron-log": "^4.4.7",
     "electron-updater": "^4.0.0",
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4",
     "node-sass": "^7.0.1",
     "quasar": "^2.0.0",
     "sweetalert2": "^11.4.33",

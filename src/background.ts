@@ -9,8 +9,7 @@ import log from "electron-log";
 import path from "path";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-// import escpos from "escpos";
-// import USB from "escpos-usb";
+import "@/background/printer";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 const app_port = getAppPort();
