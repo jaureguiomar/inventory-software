@@ -2,8 +2,6 @@ import { ipcMain } from "electron";
 import escpos from "escpos";
 escpos.USB = require("escpos-usb");
 
-/////////////
-// Printer //
 ipcMain.on("print-sale", async function(e, data) {
    const device  = new escpos.USB();
    const options = { encoding: "utf8" }
