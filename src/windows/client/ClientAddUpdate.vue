@@ -196,7 +196,7 @@ export default defineComponent({
          last_name: "",
          address: "",
          cellphone: "",
-         cellphone2: "", // Validate here same as "description" in "products-add-update"
+         cellphone2: "",
          email: ""
       });
       const field = reactive<ClientField>({
