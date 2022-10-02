@@ -40,7 +40,7 @@
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-address-book" size="4x" />
          </div>
-         <div class="bottom">User Roles</div>
+         <div class="bottom">Roles</div>
       </router-link>
       <a href="#_" @click="onLogout">
          <div class="top">
