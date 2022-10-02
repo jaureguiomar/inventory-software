@@ -36,6 +36,12 @@
          </div>
          <div class="bottom">Users</div>
       </router-link>
+      <router-link to="/user-role">
+         <div class="top">
+            <font-awesome-icon icon="fa-solid fa-address-book" size="4x" />
+         </div>
+         <div class="bottom">User Roles</div>
+      </router-link>
       <a href="#_" @click="onLogout">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />

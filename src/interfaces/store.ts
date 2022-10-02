@@ -21,6 +21,7 @@ interface State {
    product: GenericInterface;
    category: GenericInterface;
    user: GenericInterface;
+   user_role: GenericInterface;
 }
 
 export {

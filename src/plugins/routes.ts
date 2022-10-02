@@ -22,6 +22,10 @@ import User from "@/views/User.vue";
 import UserSee from "@/windows/user/UserSee.vue";
 import UserAddUpdate from "@/windows/user/UserAddUpdate.vue";
 import UserDelete from "@/windows/user/UserDelete.vue";
+import UserRole from "@/views/UserRole.vue";
+import UserRoleSee from "@/windows/user-role/UserRoleSee.vue";
+import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
+import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import store from "@/plugins/store";
 
 const routes = [
@@ -245,6 +249,46 @@ const routes = [
       path: "/user-delete/:id",
       component: UserDelete,
       name: "user-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-role",
+      component: UserRole,
+      name: "user-role",
+      meta: {
+         requiresAuth: true
+      }
+   },
+   {
+      path: "/user-role-see/:id",
+      component: UserRoleSee,
+      name: "user-role-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-role-add",
+      component: UserRoleAddUpdate,
+      name: "user-role-add",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-role-update/:id",
+      component: UserRoleAddUpdate,
+      name: "user-role-update",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-role-delete/:id",
+      component: UserRoleDelete,
+      name: "user-role-delete",
       meta: {
          requiresAuth: false
       }

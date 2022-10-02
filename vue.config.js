@@ -8,7 +8,8 @@ module.exports = {
         preloadSupplier: "src/preloads/preloadSupplier.ts",
         preloadProduct: "src/preloads/preloadProduct.ts",
         preloadCategory: "src/preloads/preloadCategory.ts",
-        preloadUser: "src/preloads/preloadUser.ts"
+        preloadUser: "src/preloads/preloadUser.ts",
+        preloadUserRole: "src/preloads/preloadUserRole.ts"
       },
       builderOptions: {
         extraResources: [

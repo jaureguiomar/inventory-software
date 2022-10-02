@@ -48,6 +48,12 @@ const window = {
       update: null as any,
       delete: null as any,
       see: null as any
+   },
+   user_role: {
+      add: null as any,
+      update: null as any,
+      delete: null as any,
+      see: null as any
    }
 };
 
@@ -485,6 +491,65 @@ ipcMain.on("user-module-window-close", function(e, data) {
    window.user[data.type].destroy();
    window.user[data.type] = null;
    window.main.webContents.send("main-window-user-module-reply", data);
+});
+
+// User Role
+ipcMain.on("user-role-module-window", function(e, data) {
+   if(!window.user_role[data.type] || window.user_role[data.type].isDestroyed()) {
+      window.user_role[data.type] = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preloadUserRole.js")
+         }
+      });
+      // window.user_role[data.type].removeMenu();
+      window.user_role[data.type].maximize();
+
+      let setURL = "";
+      if(data.type === "add")
+         setURL = buildAppRoute() + "/user-role-add";
+      else if(data.type === "update")
+         setURL = buildAppRoute() + `/user-role-update/${ data.id }`;
+      else if(data.type === "delete")
+         setURL = buildAppRoute() + `/user-role-delete/${ data.id }`;
+      else if(data.type === "see")
+         setURL = buildAppRoute() + `/user-role-see/${ data.id }`;
+
+      window.user_role[data.type].loadURL(setURL);
+      window.user_role[data.type].show();
+      if(!process.env.IS_TEST)
+         window.user_role[data.type].webContents.openDevTools();
+
+      window.user_role[data.type].webContents.once("did-finish-load", function () {
+         window.user_role[data.type].webContents.send("user-role-module-window-reply", data);
+      });
+      window.user_role[data.type].once("close", function () {
+         window.user_role[data.type].destroy();
+         window.user_role[data.type] = null;
+      });
+   } else {
+      window.user_role[data.type].focus();
+   }
+});
+ipcMain.on("user-role-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.user_role[data.type], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: data.message,
+   }).then(() => {
+      e.sender.send("user-role-module-window-dialog-reply");
+   });
+});
+ipcMain.on("user-role-module-window-close", function(e, data) {
+   window.user_role[data.type].destroy();
+   window.user_role[data.type] = null;
+   window.main.webContents.send("main-window-user-role-module-reply", data);
 });
 ///////////////////////////////////
 ///////////////////////////////////

@@ -24,6 +24,9 @@ const store = createStore<State>({
          },
          user: {
             loaded_reply: false
+         },
+         user_role: {
+            loaded_reply: false
          }
       }
    },
@@ -48,6 +51,9 @@ const store = createStore<State>({
       },
       getUserLoadedReply(state) {
          return state.user.loaded_reply;
+      },
+      getUserLRoleoadedReply(state) {
+         return state.user_role.loaded_reply;
       }
    },
    mutations: {
@@ -98,6 +104,9 @@ const store = createStore<State>({
       },
       SET_USER_LOADED_REPLY: (state, data:boolean) => {
          state.user.loaded_reply = data;
+      },
+      SET_USER_ROLE_LOADED_REPLY: (state, data:boolean) => {
+         state.user_role.loaded_reply = data;
       }
    }
 });

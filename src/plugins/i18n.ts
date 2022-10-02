@@ -365,6 +365,69 @@ const i18n = createI18n({
                }
             }
          },
+         user_role: {
+            title: "User roles",
+            subtitle: "Description about the user roles view",
+            table: {
+               search: "Search...",
+               field: {
+                  id: "Id User Role",
+                  created: "Created",
+                  updated: "Updated",
+                  name: "Name",
+                  show_details: "Show details",
+                  actions: "Actions"
+               },
+               content: {
+                  id: "# User Role",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  name: "Name",
+                  details: {
+                     show_details: "Show details",
+                     hide_details: "Hide details",
+                     empty: "Theres no data to display"
+                  }
+               }
+            },
+            window: {
+               add: {
+                  title: "Add User Role",
+                  subtitle: "The user roles that will be added for the use of the system",
+                  button: {
+                     add: "Add"
+                  }
+               },
+               update: {
+                  title: "Update User Role",
+                  subtitle: "The user roles that will be updated for the use of the system",
+                  button: {
+                     update: "Update"
+                  }
+               },
+               delete: {
+                  title: "Delete User Role",
+                  subtitle: "The user roles that will be deleted from the system",
+                  button: {
+                     delete: "Delete",
+                  }
+               },
+               see: {
+                  title: "See Catetgory",
+                  subtitle: "The user roles in the system",
+               },
+               field: {
+                  id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  name: "Name"
+               },
+               button: {
+                  clear: "Clear",
+                  close: "Close"
+               }
+            }
+         },
          global: {
             default_error: "An unexpected error has occurred. Please, try again"
          }
