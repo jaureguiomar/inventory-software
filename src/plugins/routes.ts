@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "@/views/Login.vue";
+import BranchSelect from "@/views/BranchSelect.vue";
 import Home from "@/views/Home.vue";
 import Sale from "@/views/Sale.vue";
 import Client from "@/views/Client.vue";
@@ -27,12 +28,21 @@ import UserRoleSee from "@/windows/user-role/UserRoleSee.vue";
 import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import store from "@/plugins/store";
+import { BranchStore, SessionStore } from "@/interfaces/store";
 
 const routes = [
    {
       path: "/login",
       component: Login,
       name: "login",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/branch-select",
+      component: BranchSelect,
+      name: "branch-select",
       meta: {
          requiresAuth: false
       }
@@ -301,16 +311,36 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-   const session = JSON.parse(localStorage.getItem("session") || `{
-      "loggued_in": false
+   const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{
+      "id": -1,
+      "name": "",
+      "telephone": "",
+      "address": ""
    }`);
-   store.commit("SET_LOGGUED_IN_DATA", session.loggued_in);
+   const session:SessionStore = JSON.parse(localStorage.getItem("session") || `{
+      "loggued_in": false,
+      "user": {
+         "username": "",
+         "email": "",
+         "first_name": "",
+         "last_name": "",
+         "role": {
+            "id": -1,
+            "name": ""
+         }
+      }
+   }`);
+   store.commit("SET_BRANCH_DATA", branch);
+   store.commit("SET_SESSION_LOGGUED_IN_DATA", session.loggued_in);
+   store.commit("SET_SESSION_USER_DATA", session.user);
 
    if(!to.name) {
       if(session.loggued_in)
          next({ name: "home" });
       else
          next({ name: "login" });
+   } else if(branch.id <= 0 && to.name !== "branch-select") {
+      next({ name: "branch-select" });
    } else if(to.name === "login") {
       if(session.loggued_in)
          next({ name: "home" });

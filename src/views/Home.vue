@@ -62,9 +62,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Banner from "../views/layout/Banner.vue";
-import Content from "../views/layout/Content.vue";
-import MenuHome from "../views/layout/MenuHome.vue";
+import Banner from "@/views/layout/Banner.vue";
+import Content from "@/views/layout/Content.vue";
+import MenuHome from "@/views/layout/MenuHome.vue";
 
 export default defineComponent({
    name: "home-component",

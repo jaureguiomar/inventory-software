@@ -99,7 +99,7 @@ export const validateField = (value:string, newValidation?:Function|any) => {
       message: ""
    };
 
-   if(value === "") {
+   if(value === "" || value === null) {
       result.error = true;
       result.message = "This field is required";
    } else {

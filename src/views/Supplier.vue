@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { SuppliersResponse, WindowResponse, Supplier } from "../interfaces/supplier/supplier";
+import { SuppliersResponse, WindowResponse, Supplier } from "@/interfaces/supplier/supplier";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";

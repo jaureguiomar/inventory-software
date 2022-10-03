@@ -1,28 +1,28 @@
 import { InputFieldString } from "@/interfaces/general";
 
 // Main
-interface UserRole {
+interface Branch {
    id: number;
    is_active: number;
    created: string;
    updated: string;
    name: string;
-   // atributes_1: number;
-   // atributes_2: number;
-   // atributes_3: number;
-   // atributes_4: number;
+   telephone: string;
+   address: string;
 }
 
 // Props
-interface UserRoleField {
+interface BranchField {
    name: InputFieldString;
+   telephone: InputFieldString;
+   address: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: UserRole;
+   data: Branch;
 }
 
 // IPCParams Content
@@ -34,7 +34,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: UserRole;
+   data?: Branch;
 }
 
 // Page
@@ -47,14 +47,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: UserRole|null;
+   data: Branch|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: UserRole;
+   data: Branch;
    ok: boolean;
    message: string;
 }
@@ -63,28 +63,28 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface UserRoleResponse {
+interface BranchResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface UserRoleOneResponse {
-   data: UserRole;
+interface BranchOneResponse {
+   data: Branch;
    error: ResponseError;
 }
-interface UserRolesResponse {
-   data: Array<UserRole>;
+interface BranchesResponse {
+   data: Array<Branch>;
    error: ResponseError;
 }
 
 export {
-   UserRole,
+   Branch,
    Content,
    IPCParams,
    IPCParamsContent,
-   UserRoleResponse,
-   UserRoleOneResponse,
-   UserRolesResponse,
+   BranchResponse,
+   BranchOneResponse,
+   BranchesResponse,
    WindowResponse,
    Page,
-   UserRoleField
+   BranchField
 };

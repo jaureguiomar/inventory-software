@@ -1,12 +1,30 @@
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
-import { State, SaleProduct } from "@/interfaces/store";
+import { State, SaleProductStore, UserStore, BranchStore } from "@/interfaces/store";
 import { findValueBy } from '@/plugins/mixins';
 
 const store = createStore<State>({
    state() {
       return {
-         loggued_in: false,
+         branch: {
+            id: -1,
+            name: "",
+            telephone: "",
+            address: ""
+         },
+         session: {
+            loggued_in: false,
+            user: {
+               username: "",
+               email: "",
+               first_name: "",
+               last_name: "",
+               role: {
+                  id: -1,
+                  name: ""
+               }
+            }
+         },
          sale: {
             product: []
          },
@@ -31,39 +49,48 @@ const store = createStore<State>({
       }
    },
    getters: {
-      getLogguedIn(state) {
-         return state.loggued_in;
+      getSessionLogguedIn(state:State) {
+         return state.session.loggued_in;
       },
-      getSaleProduct(state) {
+      getSessionUser(state:State) {
+         return state.session.user;
+      },
+      getSaleProduct(state:State) {
          return state.sale.product;
       },
-      getClientLoadedReply(state) {
+      getClientLoadedReply(state:State) {
          return state.client.loaded_reply;
       },
-      getSupplierLoadedReply(state) {
+      getSupplierLoadedReply(state:State) {
          return state.supplier.loaded_reply;
       },
-      getProductLoadedReply(state) {
+      getProductLoadedReply(state:State) {
          return state.product.loaded_reply;
       },
-      getCategoryLoadedReply(state) {
+      getCategoryLoadedReply(state:State) {
          return state.category.loaded_reply;
       },
-      getUserLoadedReply(state) {
+      getUserLoadedReply(state:State) {
          return state.user.loaded_reply;
       },
-      getUserLRoleoadedReply(state) {
+      getUserLRoleoadedReply(state:State) {
          return state.user_role.loaded_reply;
       }
    },
    mutations: {
-      SET_LOGGUED_IN_DATA: (state, data) => {
-         state.loggued_in = data;
+      SET_BRANCH_DATA: (state:State, data:BranchStore) => {
+         state.branch = data;
       },
-      SET_SALE_PRODUCT_REPLY: (state, data:Array<SaleProduct>) => {
+      SET_SESSION_LOGGUED_IN_DATA: (state:State, data:boolean) => {
+         state.session.loggued_in = data;
+      },
+      SET_SESSION_USER_DATA: (state:State, data:UserStore) => {
+         state.session.user = data;
+      },
+      SET_SALE_PRODUCT_REPLY: (state:State, data:Array<SaleProductStore>) => {
          state.sale.product = data;
       },
-      ADD_SALE_PRODUCT_REPLY: (state, data:SaleProduct) => {
+      ADD_SALE_PRODUCT_REPLY: (state:State, data:SaleProductStore) => {
          const finded_index = findValueBy(state.sale.product, data.id, "id");
          if(finded_index < 0) {
             state.sale.product.push({
@@ -76,7 +103,7 @@ const store = createStore<State>({
             state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);
          }
       },
-      MINUS_SALE_PRODUCT_QUANTITY: (state, id_product:number) => {
+      MINUS_SALE_PRODUCT_QUANTITY: (state:State, id_product:number) => {
          const finded_index = findValueBy(state.sale.product, id_product, "id");
          if(finded_index >= 0) {
             if(state.sale.product[finded_index].sale_quantity > 1) {
@@ -85,27 +112,27 @@ const store = createStore<State>({
             }
          }
       },
-      REMOVE_SALE_PRODUCT_REPLY: (state, id_product:number) => {
+      REMOVE_SALE_PRODUCT_REPLY: (state:State, id_product:number) => {
          const finded_index = findValueBy(state.sale.product, id_product, "id");
          if(finded_index >= 0)
             state.sale.product.splice(finded_index, 1);
       },
-      SET_CLIENT_LOADED_REPLY: (state, data:boolean) => {
+      SET_CLIENT_LOADED_REPLY: (state:State, data:boolean) => {
          state.client.loaded_reply = data;
       },
-      SET_SUPPLIER_LOADED_REPLY: (state, data:boolean) => {
+      SET_SUPPLIER_LOADED_REPLY: (state:State, data:boolean) => {
          state.supplier.loaded_reply = data;
       },
-      SET_PRODUCT_LOADED_REPLY: (state, data:boolean) => {
+      SET_PRODUCT_LOADED_REPLY: (state:State, data:boolean) => {
          state.product.loaded_reply = data;
       },
-      SET_CATEGORY_LOADED_REPLY: (state, data:boolean) => {
+      SET_CATEGORY_LOADED_REPLY: (state:State, data:boolean) => {
          state.category.loaded_reply = data;
       },
-      SET_USER_LOADED_REPLY: (state, data:boolean) => {
+      SET_USER_LOADED_REPLY: (state:State, data:boolean) => {
          state.user.loaded_reply = data;
       },
-      SET_USER_ROLE_LOADED_REPLY: (state, data:boolean) => {
+      SET_USER_ROLE_LOADED_REPLY: (state:State, data:boolean) => {
          state.user_role.loaded_reply = data;
       }
    }

@@ -56,6 +56,7 @@ import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { key } from "@/plugins/store";
+import { SessionStore } from "@/interfaces/store";
 
 export default defineComponent({
    name: "menu-home-component",
@@ -64,10 +65,26 @@ export default defineComponent({
       const router = useRouter();
 
       const onLogout = () => {
-         localStorage.setItem("session", JSON.stringify({
-            loggued_in: false
-         }));
-         store.commit("SET_LOGGUED_IN_DATA", false);
+         const new_user:SessionStore = {
+            loggued_in: true,
+            user: {
+               username: "",
+               email: "",
+               first_name: "",
+               last_name: "",
+               role: {
+                  id: -1,
+                  name: "",
+                  // atributes_1: -1,
+                  // atributes_2: -1,
+                  // atributes_3: -1,
+                  // atributes_4: -1
+               }
+            }
+         }
+
+         localStorage.setItem("session", JSON.stringify(new_user));
+         store.commit("SET_SESSION_LOGGUED_IN_DATA", false);
          router.push({ name: "login" });
       }
 
