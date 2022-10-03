@@ -42,7 +42,7 @@
          </div>
          <div class="bottom">Roles</div>
       </router-link>
-      <a href="#_" @click="onLogout">
+      <a class="cursor-pointer" @click="onLogout">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />
          </div>
@@ -65,8 +65,8 @@ export default defineComponent({
       const router = useRouter();
 
       const onLogout = () => {
-         const new_user:SessionStore = {
-            loggued_in: true,
+         const new_session:SessionStore = {
+            loggued_in: false,
             user: {
                username: "",
                email: "",
@@ -83,8 +83,9 @@ export default defineComponent({
             }
          }
 
-         localStorage.setItem("session", JSON.stringify(new_user));
-         store.commit("SET_SESSION_LOGGUED_IN_DATA", false);
+         localStorage.setItem("session", JSON.stringify(new_session));
+         store.commit("SET_SESSION_LOGGUED_IN_DATA", new_session.loggued_in);
+         store.commit("SET_SESSION_USER_DATA", new_session.user);
          router.push({ name: "login" });
       }
 
