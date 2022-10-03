@@ -49,6 +49,9 @@ const store = createStore<State>({
       }
    },
    getters: {
+      getBranch(state:State) {
+         return state.branch;
+      },
       getSessionLogguedIn(state:State) {
          return state.session.loggued_in;
       },

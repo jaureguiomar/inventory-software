@@ -2,19 +2,44 @@
    <div class="banner">
       <div class="logo">{{ t("banner.inventory") }}</div>
       <div class="text">{{ t("banner.system") }}</div>
+
+      <div class="branch-data">
+         <div class="branch-data-title">
+            <strong>{{ getBranch.name }}</strong>
+         </div>
+         -
+         {{ getBranch.address }} ({{ getBranch.telephone }})
+      </div>
+      <div class="user-data">
+         <strong>Cajero:</strong>
+         {{ getSessionUser.first_name + " " + getSessionUser.last_name }}
+      </div>
    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
+import { key } from "@/plugins/store";
 
 export default defineComponent({
    name: "banner-component",
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
+
+      const getBranch = computed(() => {
+         return store.getters["getBranch"];
+      });
+      const getSessionUser = computed(() => {
+         return store.getters["getSessionUser"];
+      });
+
       return {
-         t
+         t,
+         getBranch,
+         getSessionUser
       };
    }
 });
@@ -49,12 +74,36 @@ export default defineComponent({
          &:hover
             cursor: pointer
             background: #05386b
+      .branch-data
+         position: absolute
+         right: 34px
+         top: 30px
+         color: white
+         font-size: 16px
+         .branch-data-title
+            font-size: 24px
+            display: inline-block
+      .user-data
+         position: absolute
+         right: 34px
+         top: 70px
+         color: white
+         font-size: 16px
+         font-weight: normal
 
-   @media screen and (max-width: 360px)
+   @media screen and (max-width: 1000px)
       .banner
          flex-direction: column
          .logo
             margin: 0
          .text
             margin-top: 10px
+         .branch-data
+            position: relative
+            top: 0
+            right: 0
+         .user-data
+            position: relative
+            top: 0
+            right: 0
 </style>
