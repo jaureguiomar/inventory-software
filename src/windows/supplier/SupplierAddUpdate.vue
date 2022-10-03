@@ -88,10 +88,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
+import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, SupplierField, SupplierResponse, Supplier } from "@/interfaces/supplier/supplier";
 import Banner from "@/views/layout/Banner.vue";
@@ -109,6 +111,7 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
       const page = reactive<Page>({
          id: -1,
          type: "",
@@ -135,6 +138,10 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
 
       window.api.receive("supplier-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
@@ -174,7 +181,8 @@ export default defineComponent({
 
          if(page.id <= 0) {
             let response = await axios.put<SupplierResponse>("supplier/v3/create.php", {
-               name: field.name.text
+               name: field.name.text,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -205,7 +213,8 @@ export default defineComponent({
          } else {
             let response = await axios.post<SupplierResponse>("supplier/v3/update.php", {
                id: page.id,
-               name: field.name.text
+               name: field.name.text,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {

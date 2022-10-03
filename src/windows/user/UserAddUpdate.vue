@@ -167,10 +167,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
+import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/interfaces/user/user";
 import { UserRole, UserRoleOneResponse, UserRolesResponse } from "@/interfaces/user-role/user-role";
@@ -189,6 +191,7 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
       const role = ref<UserRole[]>([]);
       const roleOptions = ref<Array<string>>([]);
       const roleFilteredOptions = ref<Array<string>>([]);
@@ -333,6 +336,10 @@ export default defineComponent({
             }
          });
 
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
+
       const onAddUpdate = async() => {
          field.username.text = field.username.text.trim();
          field.email.text = field.email.text.trim();
@@ -402,7 +409,8 @@ export default defineComponent({
                password: field.password.text,
                first_name: field.first_name.text,
                last_name: field.last_name.text,
-               id_role: id_role
+               id_role: id_role,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -450,7 +458,8 @@ export default defineComponent({
                password: field.password.text,
                first_name: field.first_name.text,
                last_name: field.last_name.text,
-               id_role: id_role
+               id_role: id_role,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {

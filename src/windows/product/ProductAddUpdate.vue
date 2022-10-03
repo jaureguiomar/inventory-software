@@ -198,11 +198,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
 import { useQuasar } from "quasar";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
+import { key } from "@/plugins/store";
 import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
 import { Category, CategoryOneResponse, CategoriesResponse } from "@/interfaces/category/category";
@@ -222,6 +224,7 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
       const $q = useQuasar();
       const hasBarcode = ref(true);
       const updateBarcode = ref(false);
@@ -315,6 +318,10 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
 
       window.api.receive("product-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
@@ -494,7 +501,8 @@ export default defineComponent({
                buy_price: field.buy_price.text,
                sale_price: field.sale_price.text,
                quantity: field.quantity.text,
-               id_category: id_category
+               id_category: id_category,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -544,7 +552,8 @@ export default defineComponent({
                buy_price: field.buy_price.text,
                sale_price: field.sale_price.text,
                quantity: field.quantity.text,
-               id_category: id_category
+               id_category: id_category,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {

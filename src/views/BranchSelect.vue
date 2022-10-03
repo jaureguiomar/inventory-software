@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n/index";
@@ -133,35 +133,32 @@ export default defineComponent({
       });
 
       onMounted(() => {
-         axios.get<BranchesResponse>("branch/v3/select-all.php")
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_branched:Array<Branch> = [];
+         axios.get<BranchesResponse>("branch/v3/find.php", {
+            params: {
+               type: "id_branch",
+               query: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_branched:Array<Branch> = [];
 
-                     for(let i = 0; i < data.length; i++) {
-                        formatted_branched.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           name: data[i].name,
-                           telephone: data[i].telephone,
-                           address: data[i].address
-                        });
-
-                        branchOptions.value.push(data[i].name);
-                        branchFilteredOptions.value.push(data[i].name);
-                     }
-                     branch.value = formatted_branched;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_branched.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name,
+                        telephone: data[i].telephone,
+                        address: data[i].address
                      });
+
+                     branchOptions.value.push(data[i].name);
+                     branchFilteredOptions.value.push(data[i].name);
                   }
+                  branch.value = formatted_branched;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -169,7 +166,14 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            });
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         });
       });
 
       const onSelect = () => {
@@ -247,6 +251,10 @@ export default defineComponent({
          field.name.error.message = result.message;
          return result.error;
       };
+
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
 
       return {
          branchOptions,

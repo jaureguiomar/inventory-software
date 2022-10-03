@@ -186,6 +186,9 @@ export default defineComponent({
          }
       ];
 
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
       const getUserRoleLoadedReply = computed(() => {
          return store.getters["getUserRoleLoadedReply"];
       });
@@ -193,29 +196,26 @@ export default defineComponent({
       const onRefreshData = () => {
          userRole.value = [];
 
-         axios.get<UserRolesResponse>("user_role/v3/select-all.php")
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_categories:Array<UserRole> = [];
-                     for(let i = 0; i < data.length; i++) {
-                        formatted_categories.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           name: data[i].name
-                        });
-                     }
-                     userRole.value = formatted_categories;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
+         axios.get<UserRolesResponse>("user_role/v3/find.php", {
+            params: {
+               type: "id_branch",
+               query: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_categories:Array<UserRole> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_categories.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name
                      });
                   }
+                  userRole.value = formatted_categories;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -223,7 +223,14 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            });
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         });
       };
       const onUserRoleAddWindowClick = () => {
          window.api.send("user-role-module-window", {

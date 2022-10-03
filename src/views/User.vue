@@ -228,6 +228,9 @@ export default defineComponent({
          }
       ];
 
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
       const getUserLoadedReply = computed(() => {
          return store.getters["getUserLoadedReply"];
       });
@@ -235,41 +238,38 @@ export default defineComponent({
       const onRefreshData = () => {
          user.value = [];
 
-         axios.get<UsersResponse>("user/v3/select-all.php")
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_users:Array<User> = [];
-                     for(let i = 0; i < data.length; i++) {
-                        formatted_users.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           username: data[i].username,
-                           email: data[i].email,
-                           password: data[i].password,
-                           first_name: data[i].first_name,
-                           last_name: data[i].last_name,
-                           id_role: data[i].id_role,
-                           role: {
-                              id: Number(data[i].role.id),
-                              is_active: Number(data[i].role.is_active),
-                              created: data[i].role.created,
-                              updated: data[i].role.updated,
-                              name: data[i].role.name
-                           }
-                        });
-                     }
-                     user.value = formatted_users;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
+         axios.get<UsersResponse>("user/v3/find.php", {
+            params: {
+               type: "id_branch",
+               query: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_users:Array<User> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_users.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        username: data[i].username,
+                        email: data[i].email,
+                        password: data[i].password,
+                        first_name: data[i].first_name,
+                        last_name: data[i].last_name,
+                        id_role: data[i].id_role,
+                        role: {
+                           id: Number(data[i].role.id),
+                           is_active: Number(data[i].role.is_active),
+                           created: data[i].role.created,
+                           updated: data[i].role.updated,
+                           name: data[i].role.name
+                        }
                      });
                   }
+                  user.value = formatted_users;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -277,7 +277,14 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            });
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         });
       };
       const onUserAddWindowClick = () => {
          window.api.send("user-module-window", {

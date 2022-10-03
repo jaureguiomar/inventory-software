@@ -247,6 +247,9 @@ export default defineComponent({
          }
       ];
 
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
       const getProductLoadedReply = computed(() => {
          return store.getters["getProductLoadedReply"];
       });
@@ -254,42 +257,39 @@ export default defineComponent({
       const onRefreshData = () => {
          product.value = [];
 
-         axios.get<ProductsResponse>("product/v3/select-all.php")
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_products:Array<Product> = [];
-                     for(let i = 0; i < data.length; i++) {
-                        formatted_products.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           code: data[i].code,
-                           name: data[i].name,
-                           description: data[i].description,
-                           buy_price: data[i].buy_price,
-                           sale_price: data[i].sale_price,
-                           quantity: Number(data[i].quantity),
-                           id_category: Number(data[i].id_category),
-                           category: {
-                              id: Number(data[i].category.id),
-                              is_active: Number(data[i].category.is_active),
-                              created: data[i].category.created,
-                              updated: data[i].category.updated,
-                              name: data[i].category.name
-                           }
-                        });
-                     }
-                     product.value = formatted_products;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
+         axios.get<ProductsResponse>("product/v3/find.php", {
+            params: {
+               type: "id_branch",
+               query: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_products:Array<Product> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_products.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        code: data[i].code,
+                        name: data[i].name,
+                        description: data[i].description,
+                        buy_price: data[i].buy_price,
+                        sale_price: data[i].sale_price,
+                        quantity: Number(data[i].quantity),
+                        id_category: Number(data[i].id_category),
+                        category: {
+                           id: Number(data[i].category.id),
+                           is_active: Number(data[i].category.is_active),
+                           created: data[i].category.created,
+                           updated: data[i].category.updated,
+                           name: data[i].category.name
+                        }
                      });
                   }
+                  product.value = formatted_products;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -297,7 +297,14 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            });
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         });
       };
       const onProductAddWindowClick = () => {
          window.api.send("product-module-window", {

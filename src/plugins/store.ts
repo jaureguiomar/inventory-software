@@ -52,6 +52,9 @@ const store = createStore<State>({
       getBranch(state:State) {
          return state.branch;
       },
+      getBranchId(state:State) {
+         return state.branch.id;
+      },
       getSessionLogguedIn(state:State) {
          return state.session.loggued_in;
       },

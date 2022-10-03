@@ -362,19 +362,16 @@ export default defineComponent({
       };
       const onRefreshProducts = () => {
          all_products.value = [];
-         axios.get<ProductsResponse>("product/v3/select-all.php")
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     all_products.value = data;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
-                     });
-                  }
+         axios.get<ProductsResponse>("product/v3/find.php", {
+            params: {
+               type: "id_branch",
+               query: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  all_products.value = data;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -382,7 +379,14 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            });
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         });
       };
       const onDisplayProductListDialog = () => {
          $q.dialog({
@@ -425,6 +429,9 @@ export default defineComponent({
          }
       };
 
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
       const getSaleProduct = computed(() => {
          return store.getters["getSaleProduct"];
       });

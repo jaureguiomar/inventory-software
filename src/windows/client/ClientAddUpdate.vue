@@ -158,10 +158,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
+import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client";
 import Banner from "@/views/layout/Banner.vue";
@@ -179,6 +181,7 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
       const page = reactive<Page>({
          id: -1,
          type: "",
@@ -277,6 +280,10 @@ export default defineComponent({
          loaded.value = true;
       });
 
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
+
       const onAddUpdate = async() => {
          field.first_name.text = field.first_name.text.trim();
          field.last_name.text = field.last_name.text.trim();
@@ -334,7 +341,8 @@ export default defineComponent({
                address: field.address.text,
                cellphone: field.cellphone.text,
                cellphone2: field.cellphone2.text,
-               email: field.email.text
+               email: field.email.text,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -375,7 +383,8 @@ export default defineComponent({
                address: field.address.text,
                cellphone: field.cellphone.text,
                cellphone2: field.cellphone2.text,
-               email: field.email.text
+               email: field.email.text,
+               id_branch: getBranchId.value
             });
             if(response) {
                if(!response.data.error.is_error) {
