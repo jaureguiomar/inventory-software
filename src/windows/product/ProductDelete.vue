@@ -170,14 +170,14 @@ export default defineComponent({
          buy_price: "",
          sale_price: "",
          quantity: 0,
+         id_category: -1,
          category: {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
             name: "",
-         },
-         category_id: -1,
+         }
       });
       const loaded = ref(false);
 
@@ -194,8 +194,8 @@ export default defineComponent({
             product.buy_price = data.data.buy_price;
             product.sale_price = data.data.sale_price;
             product.quantity = data.data.quantity;
+            product.id_category = data.data.id_category;
             product.category = data.data.category;
-            product.category_id = data.data.category_id;
          }
          loaded.value = true;
       });

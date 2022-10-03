@@ -13,8 +13,8 @@ interface Product {
    buy_price: string;
    sale_price: string;
    quantity: number;
+   id_category: number;
    category: Category;
-   category_id: number;
 }
 
 // Props
@@ -25,7 +25,7 @@ interface ProductField {
    buy_price: InputFieldString;
    sale_price: InputFieldString;
    quantity: InputFieldNumber;
-   category_id: InputFieldNumber;
+   id_category: InputFieldNumber;
 }
 
 // IPCParams

@@ -272,14 +272,14 @@ export default defineComponent({
                            buy_price: data[i].buy_price,
                            sale_price: data[i].sale_price,
                            quantity: Number(data[i].quantity),
+                           id_category: Number(data[i].id_category),
                            category: {
                               id: Number(data[i].category.id),
                               is_active: Number(data[i].category.is_active),
                               created: data[i].category.created,
                               updated: data[i].category.updated,
                               name: data[i].category.name
-                           },
-                           category_id: Number(data[i].category_id)
+                           }
                         });
                      }
                      product.value = formatted_products;
@@ -325,8 +325,8 @@ export default defineComponent({
                buy_price: item.buy_price,
                sale_price: item.sale_price,
                quantity: item.quantity,
-               category: { ...item.category },
-               category_id: item.category_id
+               id_category: item.id_category,
+               category: { ...item.category }
             }
          });
       };
@@ -349,8 +349,8 @@ export default defineComponent({
                buy_price: item.buy_price,
                sale_price: item.sale_price,
                quantity: item.quantity,
-               category: { ...item.category },
-               category_id: item.category_id
+               id_category: item.id_category,
+               category: { ...item.category }
             }
          });
       };
@@ -369,8 +369,8 @@ export default defineComponent({
                buy_price: item.buy_price,
                sale_price: item.sale_price,
                quantity: item.quantity,
-               category: { ...item.category },
-               category_id: item.category_id
+               id_category: item.id_category,
+               category: { ...item.category }
             }
          });
       };

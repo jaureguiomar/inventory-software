@@ -129,17 +129,17 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-select
-                        v-model="field.category_id.text"
+                        v-model="field.id_category.text"
                         use-input
                         input-debounce="0"
                         label="Category"
                         :options="categoryOptions"
                         behavior="menu"
-                        :error="field.category_id.error.is_error"
-                        :error-message="field.category_id.error.message"
+                        :error="field.id_category.error.is_error"
+                        :error-message="field.id_category.error.message"
                         @filter="categoryFilter"
-                        @blur="onCategoryIdBlur"
-                        @keyup="onCategoryIdKeyup"
+                        @blur="onIdCategoryBlur"
+                        @keyup="onIdCategoryKeyup"
                      >
                         <template #no-option>
                            <q-item>
@@ -247,14 +247,14 @@ export default defineComponent({
          buy_price: "",
          sale_price: "",
          quantity: 0,
+         id_category: -1,
          category: {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
             name: "",
-         },
-         category_id: -1,
+         }
       });
       const field = reactive<ProductField>({
          code: {
@@ -305,7 +305,7 @@ export default defineComponent({
                message: ""
             }
          },
-         category_id: {
+         id_category: {
             text: "",
             max_text: 100,
             error: {
@@ -331,8 +331,8 @@ export default defineComponent({
             product.buy_price = data.data.buy_price;
             product.sale_price = data.data.sale_price;
             product.quantity = data.data.quantity;
+            product.id_category = data.data.id_category;
             product.category = data.data.category;
-            product.category_id = data.data.category_id;
 
             field.code.text = data.data.code;
             field.name.text = data.data.name;
@@ -340,7 +340,7 @@ export default defineComponent({
             field.buy_price.text = data.data.buy_price;
             field.sale_price.text = data.data.sale_price;
             field.quantity.text = data.data.quantity.toString();
-            field.category_id.text = data.data.category.name;
+            field.id_category.text = data.data.category.name;
             if(!field.code.text)
                hasBarcode.value = false;
          }
@@ -392,7 +392,7 @@ export default defineComponent({
          field.buy_price.text = field.buy_price.text.trim();
          field.sale_price.text = field.sale_price.text.trim();
          field.quantity.text = field.quantity.text.trim();
-         field.category_id.text = field.category_id.text.trim();
+         field.id_category.text = field.id_category.text.trim();
 
          // let code:string = field.code.text;
          let name:string = field.name.text;
@@ -400,15 +400,15 @@ export default defineComponent({
          let buy_price:string = field.buy_price.text;
          let sale_price:string = field.sale_price.text;
          let quantity:string = field.quantity.text;
-         let category_name:string = field.category_id.text;
-         // let category_id:number = -1;
+         let category_name:string = field.id_category.text;
+         // let id_category:number = -1;
          // let error_code:boolean = false;
          let error_name:boolean = false;
          let error_description:boolean = false;
          let error_buy_price:boolean = false;
          let error_sale_price:boolean = false;
          let error_quantity:boolean = false;
-         let error_category_id:boolean = false;
+         let error_id_category:boolean = false;
 
          // error_code = validateCode(code);
          error_name = validateName(name);
@@ -421,13 +421,13 @@ export default defineComponent({
          // Validate category
          const finded_index = findValueBy(category.value, category_name, "name");
          if(finded_index < 0)
-            error_category_id = true;
-         if(error_category_id)
-            error_category_id = validateCategoryId(category_name);
+            error_id_category = true;
+         if(error_id_category)
+            error_id_category = validateIdCategory(category_name);
          // else
-         //    category_id = category.value[finded_index].id;
+         //    id_category = category.value[finded_index].id;
 
-         if(error_name || error_buy_price || error_sale_price || error_quantity || error_category_id)
+         if(error_name || error_buy_price || error_sale_price || error_quantity || error_id_category)
             return;
          if(description)
             if(error_description)
@@ -469,22 +469,22 @@ export default defineComponent({
             buy_price: "",
             sale_price: "",
             quantity: -1,
+            id_category: -1,
             category: {
                id: -1,
                is_active: -1,
                created: "",
                updated: "",
                name: ""
-            },
-            category_id: -1
+            }
          };
 
-         // Get "category_id"
-         let category_id = -1;
-         const finded_index = findValueBy(category.value, field.category_id.text, "name");
+         // Get "id_category"
+         let id_category = -1;
+         const finded_index = findValueBy(category.value, field.id_category.text, "name");
          if(finded_index < 0)
             return;
-         category_id = category.value[finded_index].id;
+         id_category = category.value[finded_index].id;
 
          if(page.id <= 0) {
             let response = await axios.put<ProductResponse>("product/v3/create.php", {
@@ -494,7 +494,7 @@ export default defineComponent({
                buy_price: field.buy_price.text,
                sale_price: field.sale_price.text,
                quantity: field.quantity.text,
-               category_id: category_id
+               id_category: id_category
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -517,7 +517,7 @@ export default defineComponent({
                         updated: "",
                         name: ""
                      },
-                     category_id: Number(data.category_id)
+                     id_category: Number(data.id_category)
                   };
                } else {
                   Swal.fire({
@@ -544,7 +544,7 @@ export default defineComponent({
                buy_price: field.buy_price.text,
                sale_price: field.sale_price.text,
                quantity: field.quantity.text,
-               category_id: category_id
+               id_category: id_category
             });
             if(response) {
                if(!response.data.error.is_error) {
@@ -560,14 +560,14 @@ export default defineComponent({
                      buy_price: data.buy_price,
                      sale_price: data.sale_price,
                      quantity: Number(data.quantity),
+                     id_category: Number(data.id_category),
                      category: {
                         id: -1,
                         is_active: -1,
                         created: "",
                         updated: "",
                         name: ""
-                     },
-                     category_id: Number(data.category_id)
+                     }
                   };
                } else {
                   Swal.fire({
@@ -588,7 +588,7 @@ export default defineComponent({
          }
 
          // Get Category
-         let response = await axios.get<CategoryOneResponse>(`category/v3/select-one.php?id=${ formatted_data.category_id }`);
+         let response = await axios.get<CategoryOneResponse>(`category/v3/select-one.php?id=${ formatted_data.id_category }`);
          if(response) {
             if(!response.data.error.is_error) {
                const data:Category = response.data.data;
@@ -717,9 +717,9 @@ export default defineComponent({
          let value = field.quantity.text;
          validateQuantity(value);
       };
-      const onCategoryIdBlur = () => {
-         let value = field.category_id.text;
-         validateCategoryId(value);
+      const onIdCategoryBlur = () => {
+         let value = field.id_category.text;
+         validateIdCategory(value);
       };
       /////////////////////
       // Keypress Events //
@@ -752,9 +752,9 @@ export default defineComponent({
          let value = field.quantity.text;
          validateQuantity(value);
       };
-      const onCategoryIdKeyup = () => {
-         let value = field.category_id.text;
-         validateCategoryId(value);
+      const onIdCategoryKeyup = () => {
+         let value = field.id_category.text;
+         validateIdCategory(value);
       };
       ////////////////
       // Validators //
@@ -818,10 +818,10 @@ export default defineComponent({
          field.quantity.error.message = result.message;
          return result.error;
       };
-      const validateCategoryId = (category_id:string) => {
-         let result = validateField(category_id);
-         field.category_id.error.is_error = result.error;
-         field.category_id.error.message = result.message;
+      const validateIdCategory = (id_category:string) => {
+         let result = validateField(id_category);
+         field.id_category.error.is_error = result.error;
+         field.id_category.error.message = result.message;
          return result.error;
       };
 
@@ -845,14 +845,14 @@ export default defineComponent({
          onBuyPriceBlur,
          onSalePriceBlur,
          onQuantityBlur,
-         onCategoryIdBlur,
+         onIdCategoryBlur,
          // onCodeKeyup,
          onNameKeyup,
          onDescriptionKeyup,
          onBuyPriceKeyup,
          onSalePriceKeyup,
          onQuantityKeyup,
-         onCategoryIdKeyup
+         onIdCategoryKeyup
       }
    }
 });
