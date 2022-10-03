@@ -32,7 +32,7 @@
                separator="vertical"
                virtual-scroll
                :virtual-scroll-sticky-size-start="48"
-               row-key="first_name"
+               row-key="id"
                :visible-columns="clientVisibleColumns"
                :pagination="clientPagination"
                :filter="clientFilter"
