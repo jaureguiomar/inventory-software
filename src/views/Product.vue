@@ -141,7 +141,7 @@ export default defineComponent({
       const product = ref<Product[]>([]);
       const productVisibleColumns = ref<Array<string>>([
          "id", "created", "updated", "code", "name", "description",
-         "buy_price", "sale_price", "quantity", "category", "actions"
+         "buy_price", "sale_price", "quantity", "actions"
       ]);
       const productFilter = ref("");
       const productPagination = reactive({

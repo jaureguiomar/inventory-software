@@ -1,4 +1,5 @@
-import { InputFieldString } from "@/interfaces/general";
+import { InputFieldNumber, InputFieldString } from "@/interfaces/general";
+import { UserRole } from "@/interfaces/user-role/user-role";
 
 // Main
 interface User {
@@ -11,6 +12,8 @@ interface User {
    password: string;
    first_name: string;
    last_name: string;
+   id_role: number;
+   role: UserRole;
 }
 
 // Props
@@ -20,6 +23,7 @@ interface UserField {
    password: InputFieldString;
    first_name: InputFieldString;
    last_name: InputFieldString;
+   id_role: InputFieldNumber;
 }
 
 // IPCParams

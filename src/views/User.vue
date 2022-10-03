@@ -64,6 +64,17 @@
                   </q-select>
                </template>
 
+               <template #body-cell-username="props">
+                  <q-td :props="props">
+                     <div>
+                        {{ props.row.username }}
+                        <q-badge outline align="middle" color="primary">
+                           {{ props.row.role.name }}
+                        </q-badge>
+                     </div>
+                  </q-td>
+               </template>
+
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
@@ -240,7 +251,15 @@ export default defineComponent({
                            email: data[i].email,
                            password: data[i].password,
                            first_name: data[i].first_name,
-                           last_name: data[i].last_name
+                           last_name: data[i].last_name,
+                           id_role: data[i].id_role,
+                           role: {
+                              id: Number(data[i].role.id),
+                              is_active: Number(data[i].role.is_active),
+                              created: data[i].role.created,
+                              updated: data[i].role.updated,
+                              name: data[i].role.name
+                           }
                         });
                      }
                      user.value = formatted_users;
@@ -284,7 +303,9 @@ export default defineComponent({
                email: item.email,
                password: item.password,
                first_name: item.first_name,
-               last_name: item.last_name
+               last_name: item.last_name,
+               id_role: item.id_role,
+               role: { ...item.role }
             }
          });
       };
@@ -305,7 +326,9 @@ export default defineComponent({
                email: item.email,
                password: item.password,
                first_name: item.first_name,
-               last_name: item.last_name
+               last_name: item.last_name,
+               id_role: item.id_role,
+               role: { ...item.role }
             }
          });
       };
@@ -322,7 +345,9 @@ export default defineComponent({
                email: item.email,
                password: item.password,
                first_name: item.first_name,
-               last_name: item.last_name
+               last_name: item.last_name,
+               id_role: item.id_role,
+               role: { ...item.role }
             }
          });
       };

@@ -95,6 +95,15 @@
                      >
                      </q-input>
                   </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.role.name"
+                        :label="t('user.window.field.role_name') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
                </div>
                <div class="text-center">
                   <q-btn
@@ -139,7 +148,15 @@ export default defineComponent({
          email: "",
          password: "",
          first_name: "",
-         last_name: ""
+         last_name: "",
+         id_role: -1,
+         role: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+         }
       });
       const loaded = ref(false);
 
@@ -155,6 +172,8 @@ export default defineComponent({
             user.password = data.data.password;
             user.first_name = data.data.first_name;
             user.last_name = data.data.last_name;
+            user.id_role = data.data.id_role;
+            user.role = data.data.role;
          }
          loaded.value = true;
       });

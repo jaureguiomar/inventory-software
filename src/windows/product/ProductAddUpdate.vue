@@ -674,6 +674,18 @@ export default defineComponent({
          if(hasBarcode.value)
             updateBarcode.value = true;
       };
+      const categoryFilter = (value:string, update:Function) => {
+         if(value === "") {
+            update(() => {
+               categoryOptions.value = categoryFilteredOptions.value;
+            });
+            return;
+         }
+         update(() => {
+            const needle = value.toLowerCase();
+            categoryOptions.value = categoryFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
+         });
+      };
       /////////////////
       // Blur Events //
       // const onCodeBlur = () => {
@@ -812,18 +824,6 @@ export default defineComponent({
          field.category_id.error.message = result.message;
          return result.error;
       };
-      const categoryFilter = (value:string, update:Function) => {
-         if(value === "") {
-            update(() => {
-               categoryOptions.value = categoryFilteredOptions.value;
-            });
-            return;
-         }
-         update(() => {
-            const needle = value.toLowerCase();
-            categoryOptions.value = categoryFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
-         });
-      };
 
       return {
          t,
@@ -838,6 +838,7 @@ export default defineComponent({
          onClear,
          onClose,
          onHasBarcodeCheckboxClick,
+         categoryFilter,
          // onCodeBlur,
          onNameBlur,
          onDescriptionBlur,
@@ -851,8 +852,7 @@ export default defineComponent({
          onBuyPriceKeyup,
          onSalePriceKeyup,
          onQuantityKeyup,
-         onCategoryIdKeyup,
-         categoryFilter
+         onCategoryIdKeyup
       }
    }
 });

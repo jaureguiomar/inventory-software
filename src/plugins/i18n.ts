@@ -362,6 +362,7 @@ const i18n = createI18n({
                   password: "Password",
                   first_name: "First Name",
                   last_name: "Last Name",
+                  role_name: "Role Name"
                },
                button: {
                   clear: "Clear",
