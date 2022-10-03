@@ -5,6 +5,8 @@ import log from "electron-log";
 import path from "path";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import getMAC from "getmac";
+import { machineId } from "node-machine-id";
 import { window } from "@/background/window";
 import "@/background/printer";
 
@@ -38,6 +40,15 @@ async function createWindow() {
    });
    // window.main.removeMenu();
    window.main.maximize();
+
+   const machine_id:string = await machineId();
+   const mac_address:string = getMAC();
+   window.main.webContents.on("did-finish-load", function () {
+      window.main.webContents.send("setup-machine", {
+         machine_id,
+         mac_address
+      });
+   });
 
    if(process.env.WEBPACK_DEV_SERVER_URL) {
       await window.main.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);

@@ -1,3 +1,27 @@
+import axios from "@/plugins/axios";
+import { BranchStore } from "@/interfaces/store";
+import { BranchOneResponse } from '@/interfaces/branch/branch';
+
+export const beforeEnterGuard = async(to, _, next) => {
+   const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{
+      "id": -1,
+      "name": "",
+      "telephone": "",
+      "address": ""
+   }`);
+
+   if(branch.id > 0) {
+      try {
+         await axios.get<BranchOneResponse>(`branch/v3/select-one.php?id=${ branch.id }`);
+      } catch (error) {
+         if(to.name !== "branch-disabled")
+            next({ name: "branch-disabled" });
+            return;
+      }
+   }
+   next();
+};
+
 export const findValueBy = (all_data, value, key) => {
    let finded_index = -1;
    for(let i = 0; i < all_data.length; i++) {

@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "@/views/Login.vue";
 import BranchSelect from "@/views/BranchSelect.vue";
+import BranchDisabled from "@/views/BranchDisabled.vue";
 import Home from "@/views/Home.vue";
 import Sale from "@/views/Sale.vue";
 import Client from "@/views/Client.vue";
@@ -28,6 +29,7 @@ import UserRoleSee from "@/windows/user-role/UserRoleSee.vue";
 import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import store from "@/plugins/store";
+import { beforeEnterGuard } from '@/plugins/mixins';
 import { BranchStore, SessionStore } from "@/interfaces/store";
 
 const routes = [
@@ -37,7 +39,8 @@ const routes = [
       name: "login",
       meta: {
          requiresAuth: false
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/branch-select",
@@ -48,20 +51,21 @@ const routes = [
       }
    },
    {
+      path: "/branch-disabled",
+      component: BranchDisabled,
+      name: "branch-disabled",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
       path: "/",
       component: Home,
       name: "home",
       meta: {
          requiresAuth: true
-      }
-   },
-   {
-      path: "/client",
-      component: Client,
-      name: "client",
-      meta: {
-         requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/sale",
@@ -69,7 +73,17 @@ const routes = [
       name: "sale",
       meta: {
          requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
+   },
+   {
+      path: "/client",
+      component: Client,
+      name: "client",
+      meta: {
+         requiresAuth: true
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/client-see/:id",
@@ -109,7 +123,8 @@ const routes = [
       name: "supplier",
       meta: {
          requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/supplier-see/:id",
@@ -149,7 +164,8 @@ const routes = [
       name: "product",
       meta: {
          requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/product-see/:id",
@@ -189,7 +205,8 @@ const routes = [
       name: "category",
       meta: {
          requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/category-see/:id",
@@ -229,7 +246,8 @@ const routes = [
       name: "user",
       meta: {
          requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/user-see/:id",
@@ -269,7 +287,8 @@ const routes = [
       name: "user-role",
       meta: {
          requiresAuth: true
-      }
+      },
+      beforeEnter: [ beforeEnterGuard ]
    },
    {
       path: "/user-role-see/:id",

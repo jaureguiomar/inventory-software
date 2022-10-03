@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, computed } from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n/index";
@@ -85,8 +85,8 @@ import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
 import { findValueBy, validateField } from "@/plugins/mixins";
-import { Branch, BranchesResponse, BranchField } from "@/interfaces/branch/branch";
-import { BranchStore } from '@/interfaces/store';
+import { IPCBranchMachine, Branch, BranchesResponse, BranchField, BranchResponse } from "@/interfaces/branch/branch";
+import { BranchStore } from "@/interfaces/store";
 import Menu from "@/views/layout/Menu.vue";
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
@@ -129,36 +129,62 @@ export default defineComponent({
                is_error: false,
                message: ""
             }
+         },
+         machine_id: {
+            text: "",
+            max_text: 100,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         },
+         mac_address: {
+            text: "",
+            max_text: 60,
+            error: {
+               is_error: false,
+               message: ""
+            }
          }
       });
 
       onMounted(() => {
-         axios.get<BranchesResponse>("branch/v3/find.php", {
-            params: {
-               type: "id_branch",
-               query: getBranchId.value
-            }
-         }).then((response) => {
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data.data;
-                  let formatted_branched:Array<Branch> = [];
+         window.api.receive("setup-machine", (data:IPCBranchMachine) => {
+            field.machine_id.text = data.machine_id;
+            field.mac_address.text = data.mac_address;
+         });
 
-                  for(let i = 0; i < data.length; i++) {
-                     formatted_branched.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        telephone: data[i].telephone,
-                        address: data[i].address
+         axios.get<BranchesResponse>("branch/v3/select-all.php")
+            .then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_branched:Array<Branch> = [];
+
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_branched.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name,
+                           telephone: data[i].telephone,
+                           address: data[i].address,
+                           machine_id: data[i].machine_id,
+                           mac_address: data[i].mac_address
+                        });
+
+                        branchOptions.value.push(data[i].name);
+                        branchFilteredOptions.value.push(data[i].name);
+                     }
+                     branch.value = formatted_branched;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
                      });
-
-                     branchOptions.value.push(data[i].name);
-                     branchFilteredOptions.value.push(data[i].name);
                   }
-                  branch.value = formatted_branched;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -166,35 +192,53 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            } else {
-               Swal.fire({
-                  title: "Error",
-                  text: t("global.default_error"),
-                  icon: "error"
-               });
-            }
-         });
+            });
       });
 
       const onSelect = () => {
          const finded_index = findValueBy(branch.value, field.name.text, "name");
          if(finded_index >= 0) {
-            const new_branch:BranchStore = {
+            axios.post<BranchResponse>("branch/v3/update.php", {
                id: branch.value[finded_index].id,
                name: branch.value[finded_index].name,
                telephone: branch.value[finded_index].telephone,
-               address: branch.value[finded_index].address
-            };
-            localStorage.setItem("branch", JSON.stringify(new_branch));
-            store.commit("SET_BRANCH_DATA", branch);
+               address: branch.value[finded_index].address,
+               machine_id: field.machine_id.text,
+               mac_address: field.mac_address.text
+            }).then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const new_branch:BranchStore = {
+                        id: branch.value[finded_index].id,
+                        name: branch.value[finded_index].name,
+                        telephone: branch.value[finded_index].telephone,
+                        address: branch.value[finded_index].address
+                     };
+                     localStorage.setItem("branch", JSON.stringify(new_branch));
+                     store.commit("SET_BRANCH_DATA", branch);
 
-            Swal.fire({
-               title: "Ok",
-               text: "Branch selected successfully",
-               icon: "success"
-            }).then(() => {
-               router.push({ name: "login" });
-            })
+                     Swal.fire({
+                        title: "Ok",
+                        text: "Branch selected successfully",
+                        icon: "success"
+                     }).then(() => {
+                        router.push({ name: "login" });
+                     })
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            });
          } else {
             Swal.fire({
                title: "Error",
@@ -251,10 +295,6 @@ export default defineComponent({
          field.name.error.message = result.message;
          return result.error;
       };
-
-      const getBranchId = computed(() => {
-         return store.getters["getBranchId"];
-      });
 
       return {
          branchOptions,

@@ -3,14 +3,14 @@
       <div class="logo">{{ t("banner.inventory") }}</div>
       <div class="text">{{ t("banner.system") }}</div>
 
-      <div class="branch-data">
+      <div v-if="getSessionLogguedIn" class="branch-data">
          <div class="branch-data-title">
             <strong>{{ getBranch.name }}</strong>
          </div>
          -
          {{ getBranch.address }} ({{ getBranch.telephone }})
       </div>
-      <div class="user-data">
+      <div v-if="getSessionLogguedIn" class="user-data">
          <strong>Cajero:</strong>
          {{ getSessionUser.first_name + " " + getSessionUser.last_name }}
       </div>
@@ -32,6 +32,9 @@ export default defineComponent({
       const getBranch = computed(() => {
          return store.getters["getBranch"];
       });
+      const getSessionLogguedIn = computed(() => {
+         return store.getters["getSessionLogguedIn"];
+      });
       const getSessionUser = computed(() => {
          return store.getters["getSessionUser"];
       });
@@ -39,6 +42,7 @@ export default defineComponent({
       return {
          t,
          getBranch,
+         getSessionLogguedIn,
          getSessionUser
       };
    }

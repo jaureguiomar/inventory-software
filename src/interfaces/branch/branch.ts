@@ -1,6 +1,10 @@
 import { InputFieldString } from "@/interfaces/general";
 
 // Main
+interface IPCBranchMachine {
+   machine_id: string;
+   mac_address: string;
+}
 interface Branch {
    id: number;
    is_active: number;
@@ -9,6 +13,8 @@ interface Branch {
    name: string;
    telephone: string;
    address: string;
+   machine_id: string;
+   mac_address: string;
 }
 
 // Props
@@ -16,6 +22,8 @@ interface BranchField {
    name: InputFieldString;
    telephone: InputFieldString;
    address: InputFieldString;
+   machine_id: InputFieldString;
+   mac_address: InputFieldString;
 }
 
 // IPCParams
@@ -77,6 +85,7 @@ interface BranchesResponse {
 }
 
 export {
+   IPCBranchMachine,
    Branch,
    Content,
    IPCParams,

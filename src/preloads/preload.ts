@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld(
       },
       receive: (channel:string, func) => {
          const validChannels:Array<string> = [
+            "setup-machine",
             "main-window-client-module-reply", "main-window-supplier-module-reply",
             "main-window-product-module-reply", "main-window-category-module-reply",
             "main-window-user-module-reply", "main-window-user-role-module-reply"
