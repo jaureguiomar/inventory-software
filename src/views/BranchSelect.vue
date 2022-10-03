@@ -211,6 +211,7 @@ export default defineComponent({
             branchOptions.value = branchFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
          });
       };
+
       /////////////////
       // Blur Events //
       const onNameBlur = () => {
