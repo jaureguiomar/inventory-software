@@ -41,6 +41,7 @@
     "escpos": "^3.0.0-alpha.6",
     "escpos-usb": "^3.0.0-alpha.4",
     "getmac": "^5.20.0",
+    "mysql": "^2.18.1",
     "node-machine-id": "^1.1.12",
     "node-sass": "^7.0.1",
     "quasar": "^2.0.0",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/mysql": "^2.15.21",
     "@types/vue-i18n": "^7.0.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",

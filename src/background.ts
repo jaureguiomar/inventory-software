@@ -9,6 +9,7 @@ import getMAC from "getmac";
 import { machineId } from "node-machine-id";
 import { window } from "@/background/window";
 import "@/background/printer";
+import "@/background/mysql";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 // let icon_path = "";
