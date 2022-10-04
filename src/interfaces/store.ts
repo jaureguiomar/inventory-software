@@ -39,7 +39,7 @@ interface SessionStore {
 }
 
 interface State {
-   // loggued_in: boolean;
+   is_online: boolean;
    branch: BranchStore;
    session: SessionStore;
    sale: SaleStore;

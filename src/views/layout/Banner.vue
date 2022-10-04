@@ -14,6 +14,10 @@
          <strong>Cajero:</strong>
          {{ getSessionUser.first_name + " " + getSessionUser.last_name }}
       </div>
+      <div v-if="getSessionLogguedIn" class="system-data">
+         <span class="q-mr-sm">Inventory Software v0.1.0</span>
+         <span :style="[getIsOnline ? { color: '#5cdb94' } : { color: '#C10015' }]">({{ (getIsOnline) ? "Online" : "Offline" }})</span>
+      </div>
    </div>
 </template>
 
@@ -29,6 +33,9 @@ export default defineComponent({
       const { t } = useI18n();
       const store = useStore(key);
 
+      const getIsOnline = computed(() => {
+         return store.getters["getIsOnline"];
+      });
       const getBranch = computed(() => {
          return store.getters["getBranch"];
       });
@@ -41,6 +48,7 @@ export default defineComponent({
 
       return {
          t,
+         getIsOnline,
          getBranch,
          getSessionLogguedIn,
          getSessionUser
@@ -94,10 +102,18 @@ export default defineComponent({
          color: white
          font-size: 16px
          font-weight: normal
+      .system-data
+         position: absolute
+         right: 34px
+         top: 107px
+         color: white
+         font-size: 16px
+         font-weight: normal
 
    @media screen and (max-width: 1000px)
       .banner
          flex-direction: column
+         text-align: center
          .logo
             margin: 0
          .text
@@ -107,6 +123,11 @@ export default defineComponent({
             top: 0
             right: 0
          .user-data
+            position: relative
+            top: 0
+            right: 0
+            margin-bottom: 7px
+         .system-data
             position: relative
             top: 0
             right: 0

@@ -6,6 +6,7 @@ import { findValueBy } from "@/plugins/mixins/general";
 const store = createStore<State>({
    state() {
       return {
+         is_online: false,
          branch: {
             id: -1,
             name: "",
@@ -49,6 +50,9 @@ const store = createStore<State>({
       }
    },
    getters: {
+      getIsOnline(state:State) {
+         return state.is_online;
+      },
       getBranch(state:State) {
          return state.branch;
       },
@@ -84,6 +88,9 @@ const store = createStore<State>({
       }
    },
    mutations: {
+      SET_IS_ONLINE_DATA: (state:State, data:boolean) => {
+         state.is_online = data;
+      },
       SET_BRANCH_DATA: (state:State, data:BranchStore) => {
          state.branch = data;
       },
