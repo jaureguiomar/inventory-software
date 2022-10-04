@@ -73,7 +73,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
-import { getFormattedDateString } from "@/plugins/mixins";
+import { getFormattedDateString } from "@/plugins/mixins/general";
 import { Supplier, IPCParams } from "@/interfaces/supplier/supplier";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";

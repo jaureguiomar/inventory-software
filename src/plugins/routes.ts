@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory, _RouteLocationBase } from "vue-router";
 import Login from "@/views/Login.vue";
 import BranchSelect from "@/views/BranchSelect.vue";
 import BranchDisabled from "@/views/BranchDisabled.vue";
@@ -29,7 +29,7 @@ import UserRoleSee from "@/windows/user-role/UserRoleSee.vue";
 import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import store from "@/plugins/store";
-import { beforeEnterGuard } from '@/plugins/mixins';
+import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
 import { BranchStore, SessionStore } from "@/interfaces/store";
 
 const routes = [
@@ -40,7 +40,7 @@ const routes = [
       meta: {
          requiresAuth: false
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/branch-select",
@@ -65,7 +65,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/sale",
@@ -74,7 +74,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/client",
@@ -83,7 +83,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/client-see/:id",
@@ -124,7 +124,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/supplier-see/:id",
@@ -165,7 +165,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/product-see/:id",
@@ -206,7 +206,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/category-see/:id",
@@ -247,7 +247,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/user-see/:id",
@@ -288,7 +288,7 @@ const routes = [
       meta: {
          requiresAuth: true
       },
-      beforeEnter: [ beforeEnterGuard ]
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
       path: "/user-role-see/:id",
@@ -329,7 +329,7 @@ const router = createRouter({
    history: createWebHashHistory()
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function) => {
    const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{
       "id": -1,
       "name": "",
@@ -358,8 +358,6 @@ router.beforeEach((to, from, next) => {
          next({ name: "home" });
       else
          next({ name: "login" });
-   } else if(branch.id <= 0 && to.name !== "branch-select") {
-      next({ name: "branch-select" });
    } else if(to.name === "login") {
       if(session.loggued_in)
          next({ name: "home" });

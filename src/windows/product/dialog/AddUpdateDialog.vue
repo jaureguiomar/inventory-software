@@ -41,8 +41,8 @@
 import { reactive, onMounted, getCurrentInstance } from "vue";
 import { useDialogPluginComponent } from "quasar";
 import { useI18n } from "vue-i18n/index";
+import { validateField } from "@/plugins/mixins/general";
 import { InputFieldString } from "@/interfaces/general";
-import { validateField } from "@/plugins/mixins";
 
 interface ProductCodeField {
    code: InputFieldString;

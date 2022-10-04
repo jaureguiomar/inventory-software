@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import FontAwesomeIcon from "@/plugins/font-awesome";
 import VueBarcodeScanner from "vue3-barcode-scanner";
-import SimpleTypeahead from 'vue3-simple-typeahead';
+import SimpleTypeahead from "vue3-simple-typeahead";
 import { Quasar } from "quasar";
 import App from "./App.vue";
 import i18n from "@/plugins/i18n";

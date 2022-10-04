@@ -205,7 +205,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
-import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
 import { Category, CategoryOneResponse, CategoriesResponse } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";

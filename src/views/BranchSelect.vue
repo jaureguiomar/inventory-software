@@ -84,7 +84,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
-import { findValueBy, validateField } from "@/plugins/mixins";
+import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { IPCBranchMachine, Branch, BranchesResponse, BranchField, BranchResponse } from "@/interfaces/branch/branch";
 import { BranchStore } from "@/interfaces/store";
 import Menu from "@/views/layout/Menu.vue";

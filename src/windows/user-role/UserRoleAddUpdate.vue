@@ -94,7 +94,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
-import { validateField, getFormattedDateString } from "@/plugins/mixins";
+import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, UserRoleField, UserRoleResponse, UserRole } from "@/interfaces/user-role/user-role";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";

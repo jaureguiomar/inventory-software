@@ -164,7 +164,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
-import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins";
+import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";

@@ -1,7 +1,7 @@
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 import { State, SaleProductStore, UserStore, BranchStore } from "@/interfaces/store";
-import { findValueBy } from '@/plugins/mixins';
+import { findValueBy } from "@/plugins/mixins/general";
 
 const store = createStore<State>({
    state() {

@@ -173,7 +173,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
-import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins";
+import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/interfaces/user/user";
 import { UserRole, UserRoleOneResponse, UserRolesResponse } from "@/interfaces/user-role/user-role";
 import Banner from "@/views/layout/Banner.vue";

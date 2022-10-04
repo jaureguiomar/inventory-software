@@ -122,7 +122,7 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
 import { key } from "@/plugins/store";
-import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins";
+import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { ProductsResponse, WindowResponse, Product } from "@/interfaces/product/product";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";

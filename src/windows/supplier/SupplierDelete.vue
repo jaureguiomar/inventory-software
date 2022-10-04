@@ -82,7 +82,7 @@ import { defineComponent, ref, reactive } from "vue";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "@/plugins/axios";
-import { getFormattedDateString } from "@/plugins/mixins";
+import { getFormattedDateString } from "@/plugins/mixins/general";
 import { Supplier, SupplierResponse, IPCParams } from "@/interfaces/supplier/supplier";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
