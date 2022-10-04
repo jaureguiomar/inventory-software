@@ -230,6 +230,12 @@ export default defineComponent({
                   icon: "error"
                });
             }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
          });
       };
       const onUserRoleAddWindowClick = () => {

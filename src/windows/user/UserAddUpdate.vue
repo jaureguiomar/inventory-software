@@ -334,7 +334,13 @@ export default defineComponent({
                   icon: "error"
                });
             }
-         });
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
+         })
 
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
@@ -403,37 +409,46 @@ export default defineComponent({
          };
 
          if(page.id <= 0) {
-            let response = await axios.put<UserResponse>("user/v3/create.php", {
-               username: field.username.text,
-               email: field.email.text,
-               password: field.password.text,
-               first_name: field.first_name.text,
-               last_name: field.last_name.text,
-               id_role: id_role,
-               id_branch: getBranchId.value
-            });
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data:User = response.data.data.data;
-                  formatted_data = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     username: data.username,
-                     email: data.email,
-                     password: data.password,
-                     first_name: data.first_name,
-                     last_name: data.last_name,
-                     id_role: data.id_role,
-                     role: {
-                        id: -1,
-                        is_active: -1,
-                        created: "",
-                        updated: "",
-                        name: "",
-                     }
-                  };
+            try {
+               let response = await axios.put<UserResponse>("user/v3/create.php", {
+                  username: field.username.text,
+                  email: field.email.text,
+                  password: field.password.text,
+                  first_name: field.first_name.text,
+                  last_name: field.last_name.text,
+                  id_role: id_role,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data:User = response.data.data.data;
+                     formatted_data = {
+                        id: Number(data.id),
+                        is_active: Number(data.is_active),
+                        created: data.created,
+                        updated: data.updated,
+                        username: data.username,
+                        email: data.email,
+                        password: data.password,
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        id_role: data.id_role,
+                        role: {
+                           id: -1,
+                           is_active: -1,
+                           created: "",
+                           updated: "",
+                           name: "",
+                        }
+                     };
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
                } else {
                   Swal.fire({
                      title: "Error",
@@ -442,7 +457,7 @@ export default defineComponent({
                   });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
@@ -451,38 +466,47 @@ export default defineComponent({
                return;
             }
          } else {
-            let response = await axios.post<UserResponse>("user/v3/update.php", {
-               id: page.id,
-               username: field.username.text,
-               email: field.email.text,
-               password: field.password.text,
-               first_name: field.first_name.text,
-               last_name: field.last_name.text,
-               id_role: id_role,
-               id_branch: getBranchId.value
-            });
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data:User = response.data.data.data;
-                  formatted_data = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     username: data.username,
-                     email: data.email,
-                     password: data.password,
-                     first_name: data.first_name,
-                     last_name: data.last_name,
-                     id_role: data.id_role,
-                     role: {
-                        id: -1,
-                        is_active: -1,
-                        created: "",
-                        updated: "",
-                        name: "",
-                     }
-                  };
+            try {
+               let response = await axios.post<UserResponse>("user/v3/update.php", {
+                  id: page.id,
+                  username: field.username.text,
+                  email: field.email.text,
+                  password: field.password.text,
+                  first_name: field.first_name.text,
+                  last_name: field.last_name.text,
+                  id_role: id_role,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data:User = response.data.data.data;
+                     formatted_data = {
+                        id: Number(data.id),
+                        is_active: Number(data.is_active),
+                        created: data.created,
+                        updated: data.updated,
+                        username: data.username,
+                        email: data.email,
+                        password: data.password,
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        id_role: data.id_role,
+                        role: {
+                           id: -1,
+                           is_active: -1,
+                           created: "",
+                           updated: "",
+                           name: "",
+                        }
+                     };
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
                } else {
                   Swal.fire({
                      title: "Error",
@@ -491,27 +515,36 @@ export default defineComponent({
                   });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
-                  });
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
                return;
             }
          }
 
          // Get role
-         let response = await axios.get<UserRoleOneResponse>(`user_role/v3/select-one.php?id=${ formatted_data.id_role }`);
-         if(response) {
-            if(!response.data.error.is_error) {
-               const data:UserRole = response.data.data;
-               formatted_data.role = {
-                  id: Number(data.id),
-                  is_active: Number(data.is_active),
-                  created: data.created,
-                  updated: data.updated,
-                  name: data.name
+         try {
+            let response = await axios.get<UserRoleOneResponse>(`user_role/v3/select-one.php?id=${ formatted_data.id_role }`);
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data:UserRole = response.data.data;
+                  formatted_data.role = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     name: data.name
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
                }
             } else {
                Swal.fire({
@@ -521,7 +554,7 @@ export default defineComponent({
                });
                return;
             }
-         } else {
+         } catch (error) {
             Swal.fire({
                title: "Error",
                text: t("global.default_error"),

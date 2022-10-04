@@ -180,14 +180,23 @@ export default defineComponent({
       });
 
       const onDelete = async() => {
-         let response = await axios.delete<ClientResponse>("client/v3/delete.php", {
-            params: {
-               field: "id",
-               data: client.id
-            },
-         });
-         if(response) {
-            if(response.data.error.is_error) {
+         try {
+            let response = await axios.delete<ClientResponse>("client/v3/delete.php", {
+               params: {
+                  field: "id",
+                  data: client.id
+               },
+            });
+            if(response) {
+               if(response.data.error.is_error) {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
+            } else {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
@@ -195,7 +204,7 @@ export default defineComponent({
                });
                return;
             }
-         } else {
+         } catch (error) {
             Swal.fire({
                title: "Error",
                text: t("global.default_error"),

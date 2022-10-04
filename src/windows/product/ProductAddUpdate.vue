@@ -390,6 +390,12 @@ export default defineComponent({
                   icon: "error"
                });
             }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
          });
 
       const onAddUpdate = async() => {
@@ -494,39 +500,48 @@ export default defineComponent({
          id_category = category.value[finded_index].id;
 
          if(page.id <= 0) {
-            let response = await axios.put<ProductResponse>("product/v3/create.php", {
-               code: field.code.text,
-               name: field.name.text,
-               description: field.description.text,
-               buy_price: field.buy_price.text,
-               sale_price: field.sale_price.text,
-               quantity: field.quantity.text,
-               id_category: id_category,
-               id_branch: getBranchId.value
-            });
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data:Product = response.data.data.data;
-                  formatted_data = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     code: data.code,
-                     name: data.name,
-                     description: data.description,
-                     buy_price: data.buy_price,
-                     sale_price: data.sale_price,
-                     quantity: Number(data.quantity),
-                     category: {
-                        id: -1,
-                        is_active: -1,
-                        created: "",
-                        updated: "",
-                        name: ""
-                     },
-                     id_category: Number(data.id_category)
-                  };
+            try {
+               let response = await axios.put<ProductResponse>("product/v3/create.php", {
+                  code: field.code.text,
+                  name: field.name.text,
+                  description: field.description.text,
+                  buy_price: field.buy_price.text,
+                  sale_price: field.sale_price.text,
+                  quantity: field.quantity.text,
+                  id_category: id_category,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data:Product = response.data.data.data;
+                     formatted_data = {
+                        id: Number(data.id),
+                        is_active: Number(data.is_active),
+                        created: data.created,
+                        updated: data.updated,
+                        code: data.code,
+                        name: data.name,
+                        description: data.description,
+                        buy_price: data.buy_price,
+                        sale_price: data.sale_price,
+                        quantity: Number(data.quantity),
+                        category: {
+                           id: -1,
+                           is_active: -1,
+                           created: "",
+                           updated: "",
+                           name: ""
+                        },
+                        id_category: Number(data.id_category)
+                     };
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
                } else {
                   Swal.fire({
                      title: "Error",
@@ -535,7 +550,7 @@ export default defineComponent({
                   });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
@@ -544,49 +559,58 @@ export default defineComponent({
                return;
             }
          } else {
-            let response = await axios.post<ProductResponse>("product/v3/update.php", {
-               id: page.id,
-               code: field.code.text,
-               name: field.name.text,
-               description: field.description.text,
-               buy_price: field.buy_price.text,
-               sale_price: field.sale_price.text,
-               quantity: field.quantity.text,
-               id_category: id_category,
-               id_branch: getBranchId.value
-            });
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data:Product = response.data.data.data;
-                  formatted_data = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     code: data.code,
-                     name: data.name,
-                     description: data.description,
-                     buy_price: data.buy_price,
-                     sale_price: data.sale_price,
-                     quantity: Number(data.quantity),
-                     id_category: Number(data.id_category),
-                     category: {
-                        id: -1,
-                        is_active: -1,
-                        created: "",
-                        updated: "",
-                        name: ""
-                     }
-                  };
+            try {
+               let response = await axios.post<ProductResponse>("product/v3/update.php", {
+                  id: page.id,
+                  code: field.code.text,
+                  name: field.name.text,
+                  description: field.description.text,
+                  buy_price: field.buy_price.text,
+                  sale_price: field.sale_price.text,
+                  quantity: field.quantity.text,
+                  id_category: id_category,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data:Product = response.data.data.data;
+                     formatted_data = {
+                        id: Number(data.id),
+                        is_active: Number(data.is_active),
+                        created: data.created,
+                        updated: data.updated,
+                        code: data.code,
+                        name: data.name,
+                        description: data.description,
+                        buy_price: data.buy_price,
+                        sale_price: data.sale_price,
+                        quantity: Number(data.quantity),
+                        id_category: Number(data.id_category),
+                        category: {
+                           id: -1,
+                           is_active: -1,
+                           created: "",
+                           updated: "",
+                           name: ""
+                        }
+                     };
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
                } else {
                   Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
-                  });
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),
@@ -597,16 +621,25 @@ export default defineComponent({
          }
 
          // Get Category
-         let response = await axios.get<CategoryOneResponse>(`category/v3/select-one.php?id=${ formatted_data.id_category }`);
-         if(response) {
-            if(!response.data.error.is_error) {
-               const data:Category = response.data.data;
-               formatted_data.category = {
-                  id: Number(data.id),
-                  is_active: Number(data.is_active),
-                  created: data.created,
-                  updated: data.updated,
-                  name: data.name
+         try {
+            let response = await axios.get<CategoryOneResponse>(`category/v3/select-one.php?id=${ formatted_data.id_category }`);
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data:Category = response.data.data;
+                  formatted_data.category = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     name: data.name
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
                }
             } else {
                Swal.fire({
@@ -616,7 +649,7 @@ export default defineComponent({
                });
                return;
             }
-         } else {
+         } catch (error) {
             Swal.fire({
                title: "Error",
                text: t("global.default_error"),

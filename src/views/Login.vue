@@ -69,44 +69,50 @@ export default defineComponent({
             username: email.value,
             password: password.value
          }).then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data.data;
-                     const new_user:SessionStore = {
-                        loggued_in: true,
-                        user: {
-                           username: data.username,
-                           email: data.email,
-                           first_name: data.first_name,
-                           last_name: data.last_name,
-                           role: {
-                              id: Number(data.role.id),
-                              name: data.role.name,
-                              // atributes_1: -1,
-                              // atributes_2: -1,
-                              // atributes_3: -1,
-                              // atributes_4: -1
-                           }
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data.data;
+                  const new_user:SessionStore = {
+                     loggued_in: true,
+                     user: {
+                        username: data.username,
+                        email: data.email,
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        role: {
+                           id: Number(data.role.id),
+                           name: data.role.name,
+                           // atributes_1: -1,
+                           // atributes_2: -1,
+                           // atributes_3: -1,
+                           // atributes_4: -1
                         }
                      }
-                     localStorage.setItem("session", JSON.stringify(new_user));
-                     store.commit("SET_SESSION_LOGGUED_IN_DATA", true);
-                     router.push({ name: "home" });
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: "Invalid user credentials",
-                        icon: "error"
-                     });
                   }
+                  localStorage.setItem("session", JSON.stringify(new_user));
+                  store.commit("SET_SESSION_LOGGUED_IN_DATA", true);
+                  router.push({ name: "home" });
                } else {
                   Swal.fire({
                      title: "Error",
-                     text: t("global.default_error"),
+                     text: "Invalid user credentials",
                      icon: "error"
                   });
                }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
             });
+         });
       }
 
       return {

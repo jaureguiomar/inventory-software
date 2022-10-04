@@ -180,20 +180,29 @@ export default defineComponent({
          };
 
          if(page.id <= 0) {
-            let response = await axios.put<CategoryResponse>("category/v3/create.php", {
-               name: field.name.text,
-               id_branch: getBranchId.value
-            });
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data:Category = response.data.data.data;
-                  formatted_data = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     name: data.name
-                  };
+            try {
+               let response = await axios.put<CategoryResponse>("category/v3/create.php", {
+                  name: field.name.text,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data:Category = response.data.data.data;
+                     formatted_data = {
+                        id: Number(data.id),
+                        is_active: Number(data.is_active),
+                        created: data.created,
+                        updated: data.updated,
+                        name: data.name
+                     };
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
                } else {
                   Swal.fire({
                      title: "Error",
@@ -202,7 +211,7 @@ export default defineComponent({
                   });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
@@ -211,35 +220,44 @@ export default defineComponent({
                return;
             }
          } else {
-            let response = await axios.post<CategoryResponse>("category/v3/update.php", {
-               id: page.id,
-               name: field.name.text,
-               id_branch: getBranchId.value
-            });
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data:Category = response.data.data.data;
-                  formatted_data = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     name: data.name
-                  };
+            try {
+               let response = await axios.post<CategoryResponse>("category/v3/update.php", {
+                  id: page.id,
+                  name: field.name.text,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data:Category = response.data.data.data;
+                     formatted_data = {
+                        id: Number(data.id),
+                        is_active: Number(data.is_active),
+                        created: data.created,
+                        updated: data.updated,
+                        name: data.name
+                     };
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
                } else {
                   Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
-                  });
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
-                  });
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
                return;
             }
          }

@@ -121,14 +121,23 @@ export default defineComponent({
       });
 
       const onDelete = async() => {
-         let response = await axios.delete<SupplierResponse>("supplier/v3/delete.php", {
-            params: {
-               field: "id",
-               data: supplier.id
-            },
-         });
-         if(response) {
-            if(response.data.error.is_error) {
+         try {
+            let response = await axios.delete<SupplierResponse>("supplier/v3/delete.php", {
+               params: {
+                  field: "id",
+                  data: supplier.id
+               },
+            });
+            if(response) {
+               if(response.data.error.is_error) {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
+            } else {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
@@ -136,7 +145,7 @@ export default defineComponent({
                });
                return;
             }
-         } else {
+         } catch (error) {
             Swal.fire({
                title: "Error",
                text: t("global.default_error"),
