@@ -150,12 +150,14 @@ export default defineComponent({
          first_name: "",
          last_name: "",
          id_role: -1,
+         id_branch: -1,
          role: {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
             name: "",
+            id_branch: -1
          }
       });
       const loaded = ref(false);
@@ -173,6 +175,7 @@ export default defineComponent({
             user.first_name = data.data.first_name;
             user.last_name = data.data.last_name;
             user.id_role = data.data.id_role;
+            user.id_branch = data.data.id_branch;
             user.role = data.data.role;
          }
          loaded.value = true;

@@ -7,6 +7,7 @@ interface Category {
    created: string;
    updated: string;
    name: string;
+   id_branch: number;
 }
 
 // Props

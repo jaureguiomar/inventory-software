@@ -95,7 +95,8 @@ export default defineComponent({
          is_active: -1,
          created: "",
          updated: "",
-         name: ""
+         name: "",
+         id_branch: -1
       });
       const loaded = ref(false);
 
@@ -107,6 +108,7 @@ export default defineComponent({
             category.created = getFormattedDateString(data.data.created);
             category.updated = getFormattedDateString(data.data.updated);
             category.name = data.data.name;
+            category.id_branch = data.data.id_branch;
          }
          loaded.value = true;
       });

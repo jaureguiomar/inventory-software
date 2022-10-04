@@ -13,6 +13,7 @@ interface User {
    first_name: string;
    last_name: string;
    id_role: number;
+   id_branch: number;
    role: UserRole;
 }
 

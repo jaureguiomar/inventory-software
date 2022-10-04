@@ -14,6 +14,7 @@ interface Product {
    sale_price: string;
    quantity: number;
    id_category: number;
+   id_branch: number;
    category: Category;
 }
 

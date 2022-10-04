@@ -175,7 +175,8 @@ export default defineComponent({
                         address: data[i].address,
                         cellphone: data[i].cellphone,
                         cellphone2: data[i].cellphone2,
-                        email: data[i].email
+                        email: data[i].email,
+                        id_branch: Number(data[i].id_branch)
                      });
                   }
                   client = formatted_clients;

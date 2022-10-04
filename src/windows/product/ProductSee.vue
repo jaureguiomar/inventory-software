@@ -162,12 +162,14 @@ export default defineComponent({
          sale_price: "",
          quantity: 0,
          id_category: -1,
+         id_branch: -1,
          category: {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
             name: "",
+            id_branch: -1
          }
       });
       const loaded = ref(false);
@@ -186,6 +188,7 @@ export default defineComponent({
             product.sale_price = data.data.sale_price;
             product.quantity = data.data.quantity;
             product.id_category = data.data.id_category;
+            product.id_branch = data.data.id_branch;
             product.category = data.data.category;
          }
          loaded.value = true;

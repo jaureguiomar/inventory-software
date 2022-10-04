@@ -125,7 +125,8 @@ export default defineComponent({
          is_active: -1,
          created: "",
          updated: "",
-         name: ""
+         name: "",
+         id_branch: -1
       });
       const field = reactive<UserRoleField>({
          name: {
@@ -149,6 +150,7 @@ export default defineComponent({
             userRole.created = getFormattedDateString(data.data.created);
             userRole.updated = getFormattedDateString(data.data.updated);
             userRole.name = data.data.name;
+            userRole.id_branch = data.data.id_branch;
 
             field.name.text = data.data.name;
          }
@@ -176,7 +178,8 @@ export default defineComponent({
             is_active: -1,
             created: "",
             updated: "",
-            name: ""
+            name: "",
+            id_branch: -1
          };
 
          if(page.id <= 0) {
@@ -193,7 +196,8 @@ export default defineComponent({
                         is_active: Number(data.is_active),
                         created: data.created,
                         updated: data.updated,
-                        name: data.name
+                        name: data.name,
+                        id_branch: Number(data.id_branch)
                      };
                   } else {
                      Swal.fire({
@@ -234,7 +238,8 @@ export default defineComponent({
                         is_active: Number(data.is_active),
                         created: data.created,
                         updated: data.updated,
-                        name: data.name
+                        name: data.name,
+                        id_branch: Number(data.id_branch)
                      };
                   } else {
                      Swal.fire({

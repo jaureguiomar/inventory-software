@@ -259,13 +259,15 @@ export default defineComponent({
                         password: data[i].password,
                         first_name: data[i].first_name,
                         last_name: data[i].last_name,
-                        id_role: data[i].id_role,
+                        id_role: Number(data[i].id_role),
+                        id_branch: Number(data[i].id_branch),
                         role: {
                            id: Number(data[i].role.id),
                            is_active: Number(data[i].role.is_active),
                            created: data[i].role.created,
                            updated: data[i].role.updated,
-                           name: data[i].role.name
+                           name: data[i].role.name,
+                           id_branch: Number(data[i].role.id_branch)
                         }
                      });
                   }

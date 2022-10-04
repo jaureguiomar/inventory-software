@@ -212,7 +212,8 @@ export default defineComponent({
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
-                        name: data[i].name
+                        name: data[i].name,
+                        id_branch: Number(data[i].id_branch)
                      });
                   }
                   category.value = formatted_categories;

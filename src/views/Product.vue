@@ -280,12 +280,14 @@ export default defineComponent({
                         sale_price: data[i].sale_price,
                         quantity: Number(data[i].quantity),
                         id_category: Number(data[i].id_category),
+                        id_branch: Number(data[i].id_branch),
                         category: {
                            id: Number(data[i].category.id),
                            is_active: Number(data[i].category.is_active),
                            created: data[i].category.created,
                            updated: data[i].category.updated,
-                           name: data[i].category.name
+                           name: data[i].category.name,
+                           id_branch: Number(data[i].category.id_branch)
                         }
                      });
                   }

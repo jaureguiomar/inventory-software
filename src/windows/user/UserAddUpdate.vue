@@ -214,12 +214,14 @@ export default defineComponent({
          first_name: "",
          last_name: "",
          id_role: -1,
+         id_branch: -1,
          role: {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
             name: "",
+            id_branch: -1
          }
       });
       const field = reactive<UserField>({
@@ -313,7 +315,8 @@ export default defineComponent({
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
-                        name: data[i].name
+                        name: data[i].name,
+                        id_branch: Number(data[i].id_branch)
                      });
 
                      roleOptions.value.push(data[i].name);
@@ -399,12 +402,14 @@ export default defineComponent({
             first_name: "",
             last_name: "",
             id_role: -1,
+            id_branch: -1,
             role: {
                id: -1,
                is_active: -1,
                created: "",
                updated: "",
                name: "",
+               id_branch: -1
             }
          };
 
@@ -432,13 +437,15 @@ export default defineComponent({
                         password: data.password,
                         first_name: data.first_name,
                         last_name: data.last_name,
-                        id_role: data.id_role,
+                        id_role: Number(data.id_role),
+                        id_branch: Number(data.id_branch),
                         role: {
                            id: -1,
                            is_active: -1,
                            created: "",
                            updated: "",
                            name: "",
+                           id_branch: -1
                         }
                      };
                   } else {
@@ -490,13 +497,15 @@ export default defineComponent({
                         password: data.password,
                         first_name: data.first_name,
                         last_name: data.last_name,
-                        id_role: data.id_role,
+                        id_role: Number(data.id_role),
+                        id_branch: Number(data.id_branch),
                         role: {
                            id: -1,
                            is_active: -1,
                            created: "",
                            updated: "",
                            name: "",
+                           id_branch: -1
                         }
                      };
                   } else {
@@ -536,7 +545,8 @@ export default defineComponent({
                      is_active: Number(data.is_active),
                      created: data.created,
                      updated: data.updated,
-                     name: data.name
+                     name: data.name,
+                     id_branch: data.id_branch
                   }
                } else {
                   Swal.fire({

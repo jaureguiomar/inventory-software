@@ -12,6 +12,7 @@ interface Client {
    cellphone: string;
    cellphone2: string|null;
    email: string;
+   id_branch: number;
 }
 
 // Props

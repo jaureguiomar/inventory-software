@@ -200,7 +200,8 @@ export default defineComponent({
          address: "",
          cellphone: "",
          cellphone2: "",
-         email: ""
+         email: "",
+         id_branch: -1
       });
       const field = reactive<ClientField>({
          first_name: {
@@ -269,6 +270,7 @@ export default defineComponent({
             client.cellphone = data.data.cellphone;
             client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
             client.email = data.data.email;
+            client.id_branch = data.data.id_branch;
 
             field.first_name.text = data.data.first_name;
             field.last_name.text = data.data.last_name;
@@ -331,7 +333,8 @@ export default defineComponent({
             address: "",
             cellphone: "",
             cellphone2: "",
-            email: ""
+            email: "",
+            id_branch: -1
          };
 
          if(page.id <= 0) {
@@ -358,7 +361,8 @@ export default defineComponent({
                         address: data.address,
                         cellphone: data.cellphone,
                         cellphone2: data.cellphone2,
-                        email: data.email
+                        email: data.email,
+                        id_branch: Number(data.id_branch)
                      };
                   } else {
                      Swal.fire({
@@ -409,7 +413,8 @@ export default defineComponent({
                         address: data.address,
                         cellphone: data.cellphone,
                         cellphone2: data.cellphone2,
-                        email: data.email
+                        email: data.email,
+                        id_branch: Number(data.id_branch)
                      };
                   } else {
                      Swal.fire({

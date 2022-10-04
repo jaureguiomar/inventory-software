@@ -11,6 +11,7 @@ interface UserRole {
    // atributes_2: number;
    // atributes_3: number;
    // atributes_4: number;
+   id_branch: number;
 }
 
 // Props

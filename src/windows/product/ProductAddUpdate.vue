@@ -251,12 +251,14 @@ export default defineComponent({
          sale_price: "",
          quantity: 0,
          id_category: -1,
+         id_branch: -1,
          category: {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
             name: "",
+            id_branch: -1
          }
       });
       const field = reactive<ProductField>({
@@ -339,6 +341,7 @@ export default defineComponent({
             product.sale_price = data.data.sale_price;
             product.quantity = data.data.quantity;
             product.id_category = data.data.id_category;
+            product.id_branch = data.data.id_branch;
             product.category = data.data.category;
 
             field.code.text = data.data.code;
@@ -369,7 +372,8 @@ export default defineComponent({
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
-                        name: data[i].name
+                        name: data[i].name,
+                        id_branch: Number(data[i].id_branch)
                      });
 
                      categoryOptions.value.push(data[i].name);
@@ -483,12 +487,14 @@ export default defineComponent({
             sale_price: "",
             quantity: -1,
             id_category: -1,
+            id_branch: -1,
             category: {
                id: -1,
                is_active: -1,
                created: "",
                updated: "",
-               name: ""
+               name: "",
+               id_branch: -1
             }
          };
 
@@ -525,14 +531,16 @@ export default defineComponent({
                         buy_price: data.buy_price,
                         sale_price: data.sale_price,
                         quantity: Number(data.quantity),
+                        id_category: Number(data.id_category),
+                        id_branch: Number(data.id_branch),
                         category: {
                            id: -1,
                            is_active: -1,
                            created: "",
                            updated: "",
-                           name: ""
-                        },
-                        id_category: Number(data.id_category)
+                           name: "",
+                           id_branch: -1
+                        }
                      };
                   } else {
                      Swal.fire({
@@ -586,12 +594,14 @@ export default defineComponent({
                         sale_price: data.sale_price,
                         quantity: Number(data.quantity),
                         id_category: Number(data.id_category),
+                        id_branch: Number(data.id_branch),
                         category: {
                            id: -1,
                            is_active: -1,
                            created: "",
                            updated: "",
-                           name: ""
+                           name: "",
+                           id_branch: -1
                         }
                      };
                   } else {
@@ -631,7 +641,8 @@ export default defineComponent({
                      is_active: Number(data.is_active),
                      created: data.created,
                      updated: data.updated,
-                     name: data.name
+                     name: data.name,
+                     id_branch: Number(data.id_branch)
                   }
                } else {
                   Swal.fire({

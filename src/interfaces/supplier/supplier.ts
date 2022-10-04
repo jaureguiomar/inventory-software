@@ -7,6 +7,7 @@ interface Supplier {
    created: string;
    updated: string;
    name: string;
+   id_branch: number;
 }
 
 // Props

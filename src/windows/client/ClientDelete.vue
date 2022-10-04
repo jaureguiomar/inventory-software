@@ -158,7 +158,8 @@ export default defineComponent({
          address: "",
          cellphone: "",
          cellphone2: "",
-         email: ""
+         email: "",
+         id_branch: -1
       });
       const loaded = ref(false);
 
@@ -175,6 +176,7 @@ export default defineComponent({
             client.cellphone = data.data.cellphone;
             client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
             client.email = data.data.email;
+            client.id_branch = data.data.id_branch;
          }
          loaded.value = true;
       });
