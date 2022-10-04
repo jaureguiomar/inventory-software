@@ -7,6 +7,7 @@ const store = createStore<State>({
    state() {
       return {
          is_online: false,
+         automatic_bakup_done: false,
          branch: {
             id: -1,
             name: "",
@@ -53,6 +54,9 @@ const store = createStore<State>({
       getIsOnline(state:State) {
          return state.is_online;
       },
+      getAutomaticBakupDone(state:State) {
+         return state.automatic_bakup_done;
+      },
       getBranch(state:State) {
          return state.branch;
       },
@@ -90,6 +94,9 @@ const store = createStore<State>({
    mutations: {
       SET_IS_ONLINE_DATA: (state:State, data:boolean) => {
          state.is_online = data;
+      },
+      SET_AUTOMATIC_BAKUP_DONE_DATA: (state:State, data:boolean) => {
+         state.automatic_bakup_done = data;
       },
       SET_BRANCH_DATA: (state:State, data:BranchStore) => {
          state.branch = data;

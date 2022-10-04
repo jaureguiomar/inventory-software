@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld(
    "api", {
       send: (channel:string, data) => {
          const validChannels:Array<string> = [
+            "mysql-bakup",
             "client-module-window", "supplier-module-window",
             "product-module-window", "category-module-window",
             "user-module-window", "user-role-module-window",
@@ -15,6 +16,7 @@ contextBridge.exposeInMainWorld(
       receive: (channel:string, func) => {
          const validChannels:Array<string> = [
             "setup-machine",
+            "mysql-bakup-reply",
             "main-window-client-module-reply", "main-window-supplier-module-reply",
             "main-window-product-module-reply", "main-window-category-module-reply",
             "main-window-user-module-reply", "main-window-user-role-module-reply"
