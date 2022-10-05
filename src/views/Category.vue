@@ -203,7 +203,7 @@ export default defineComponent({
          category.value = [];
 
          if(getIsOnline.value) {
-            axios.get<CategoriesResponse>(`${ getServer }/category/v3/select-all.php`)
+            axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`)
                .then((response) => {
                   if(response) {
                      if(!response.data.error.is_error) {
