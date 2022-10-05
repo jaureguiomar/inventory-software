@@ -258,7 +258,18 @@ export default defineComponent({
             created: "",
             updated: "",
             name: "",
-            id_branch: -1
+            id_branch: -1,
+            branch: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               telephone: "",
+               address: "",
+               machine_id: "",
+               mac_address: "",
+            }
          }
       });
       const field = reactive<ProductField>({
@@ -373,7 +384,18 @@ export default defineComponent({
                         created: data[i].created,
                         updated: data[i].updated,
                         name: data[i].name,
-                        id_branch: Number(data[i].id_branch)
+                        id_branch: Number(data[i].id_branch),
+                        branch: {
+                           id: Number(data[i].branch.id),
+                           is_active: Number(data[i].branch.is_active),
+                           created: data[i].branch.created,
+                           updated: data[i].branch.updated,
+                           name: data[i].branch.name,
+                           telephone: data[i].branch.telephone,
+                           address: data[i].branch.address,
+                           machine_id: data[i].branch.machine_id,
+                           mac_address: data[i].branch.mac_address
+                        }
                      });
 
                      categoryOptions.value.push(data[i].name);
@@ -494,7 +516,18 @@ export default defineComponent({
                created: "",
                updated: "",
                name: "",
-               id_branch: -1
+               id_branch: -1,
+                  branch: {
+                  id: -1,
+                  is_active: -1,
+                  created: "",
+                  updated: "",
+                  name: "",
+                  telephone: "",
+                  address: "",
+                  machine_id: "",
+                  mac_address: "",
+               }
             }
          };
 
@@ -539,7 +572,18 @@ export default defineComponent({
                            created: "",
                            updated: "",
                            name: "",
-                           id_branch: -1
+                           id_branch: -1,
+                           branch: {
+                              id: -1,
+                              is_active: -1,
+                              created: "",
+                              updated: "",
+                              name: "",
+                              telephone: "",
+                              address: "",
+                              machine_id: "",
+                              mac_address: "",
+                           }
                         }
                      };
                   } else {
@@ -601,7 +645,18 @@ export default defineComponent({
                            created: "",
                            updated: "",
                            name: "",
-                           id_branch: -1
+                           id_branch: -1,
+                           branch: {
+                              id: -1,
+                              is_active: -1,
+                              created: "",
+                              updated: "",
+                              name: "",
+                              telephone: "",
+                              address: "",
+                              machine_id: "",
+                              mac_address: "",
+                           }
                         }
                      };
                   } else {
@@ -642,7 +697,18 @@ export default defineComponent({
                      created: data.created,
                      updated: data.updated,
                      name: data.name,
-                     id_branch: Number(data.id_branch)
+                     id_branch: Number(data.id_branch),
+                     branch: {
+                        id: -1,
+                        is_active: -1,
+                        created: "",
+                        updated: "",
+                        name: "",
+                        telephone: "",
+                        address: "",
+                        machine_id: "",
+                        mac_address: "",
+                     }
                   }
                } else {
                   Swal.fire({

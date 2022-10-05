@@ -1,4 +1,5 @@
 import { InputFieldString } from "@/interfaces/general";
+import { Branch } from "@/interfaces/branch/branch";
 
 // Main
 interface Client {
@@ -13,6 +14,7 @@ interface Client {
    cellphone2: string|null;
    email: string;
    id_branch: number;
+   branch: Branch;
 }
 
 // Props

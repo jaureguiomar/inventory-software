@@ -206,7 +206,18 @@ export default defineComponent({
                            created: data[i].created,
                            updated: data[i].updated,
                            name: data[i].name,
-                           id_branch: Number(data[i].id_branch)
+                           id_branch: Number(data[i].id_branch),
+                           branch: {
+                              id: Number(data[i].branch.id),
+                              is_active: Number(data[i].branch.is_active),
+                              created: data[i].branch.created,
+                              updated: data[i].branch.updated,
+                              name: data[i].branch.name,
+                              telephone: data[i].branch.telephone,
+                              address: data[i].branch.address,
+                              machine_id: data[i].branch.machine_id,
+                              mac_address: data[i].branch.mac_address
+                           }
                         });
                      }
                      userRole.value = formatted_categories;

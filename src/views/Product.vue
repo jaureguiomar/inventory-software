@@ -287,7 +287,18 @@ export default defineComponent({
                            created: data[i].category.created,
                            updated: data[i].category.updated,
                            name: data[i].category.name,
-                           id_branch: Number(data[i].category.id_branch)
+                           id_branch: Number(data[i].category.id_branch),
+                           branch: {
+                              id: -1,
+                              is_active: -1,
+                              created: "",
+                              updated: "",
+                              name: "",
+                              telephone: "",
+                              address: "",
+                              machine_id: "",
+                              mac_address: "",
+                           }
                         }
                      });
                   }

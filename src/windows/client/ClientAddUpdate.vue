@@ -201,7 +201,18 @@ export default defineComponent({
          cellphone: "",
          cellphone2: "",
          email: "",
-         id_branch: -1
+         id_branch: -1,
+         branch: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            telephone: "",
+            address: "",
+            machine_id: "",
+            mac_address: "",
+         }
       });
       const field = reactive<ClientField>({
          first_name: {
@@ -334,7 +345,18 @@ export default defineComponent({
             cellphone: "",
             cellphone2: "",
             email: "",
-            id_branch: -1
+            id_branch: -1,
+            branch: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               telephone: "",
+               address: "",
+               machine_id: "",
+               mac_address: "",
+            }
          };
 
          if(page.id <= 0) {
@@ -362,7 +384,18 @@ export default defineComponent({
                         cellphone: data.cellphone,
                         cellphone2: data.cellphone2,
                         email: data.email,
-                        id_branch: Number(data.id_branch)
+                        id_branch: Number(data.id_branch),
+                        branch: {
+                           id: Number(data.branch.id),
+                           is_active: Number(data.branch.is_active),
+                           created: data.branch.created,
+                           updated: data.branch.updated,
+                           name: data.branch.name,
+                           telephone: data.branch.telephone,
+                           address: data.branch.address,
+                           machine_id: data.branch.machine_id,
+                           mac_address: data.branch.mac_address
+                        }
                      };
                   } else {
                      Swal.fire({
@@ -414,7 +447,18 @@ export default defineComponent({
                         cellphone: data.cellphone,
                         cellphone2: data.cellphone2,
                         email: data.email,
-                        id_branch: Number(data.id_branch)
+                        id_branch: Number(data.id_branch),
+                        branch: {
+                           id: Number(data.branch.id),
+                           is_active: Number(data.branch.is_active),
+                           created: data.branch.created,
+                           updated: data.branch.updated,
+                           name: data.branch.name,
+                           telephone: data.branch.telephone,
+                           address: data.branch.address,
+                           machine_id: data.branch.machine_id,
+                           mac_address: data.branch.mac_address
+                        }
                      };
                   } else {
                      Swal.fire({

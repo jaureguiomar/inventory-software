@@ -1,4 +1,5 @@
 import { InputFieldString } from "@/interfaces/general";
+import { Branch } from "@/interfaces/branch/branch";
 
 // Main
 interface Category {
@@ -8,6 +9,7 @@ interface Category {
    updated: string;
    name: string;
    id_branch: number;
+   branch: Branch;
 }
 
 // Props

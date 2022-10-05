@@ -1,4 +1,5 @@
 import { InputFieldString } from "@/interfaces/general";
+import { Branch } from "@/interfaces/branch/branch";
 
 // Main
 interface Supplier {
@@ -8,6 +9,7 @@ interface Supplier {
    updated: string;
    name: string;
    id_branch: number;
+   branch: Branch;
 }
 
 // Props

@@ -1,5 +1,6 @@
 import { InputFieldNumber, InputFieldString } from "@/interfaces/general";
 import { UserRole } from "@/interfaces/user-role/user-role";
+import { Branch } from "@/interfaces/branch/branch";
 
 // Main
 interface User {
@@ -15,6 +16,7 @@ interface User {
    id_role: number;
    id_branch: number;
    role: UserRole;
+   branch: Branch;
 }
 
 // Props

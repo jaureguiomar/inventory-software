@@ -253,7 +253,18 @@ export default defineComponent({
                            cellphone: data[i].cellphone,
                            cellphone2: data[i].cellphone2,
                            email: data[i].email,
-                           id_branch: Number(data[i].id_branch)
+                           id_branch: Number(data[i].id_branch),
+                           branch: {
+                              id: Number(data[i].branch.id),
+                              is_active: Number(data[i].branch.is_active),
+                              created: data[i].branch.created,
+                              updated: data[i].branch.updated,
+                              name: data[i].branch.name,
+                              telephone: data[i].branch.telephone,
+                              address: data[i].branch.address,
+                              machine_id: data[i].branch.machine_id,
+                              mac_address: data[i].branch.mac_address
+                           }
                         });
                      }
                      client.value = formatted_clients;

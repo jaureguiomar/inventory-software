@@ -150,7 +150,18 @@ export default defineComponent({
          cellphone: "",
          cellphone2: "",
          email: "",
-         id_branch: -1
+         id_branch: -1,
+         branch: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            telephone: "",
+            address: "",
+            machine_id: "",
+            mac_address: "",
+         }
       });
       const loaded = ref(false);
 
@@ -168,6 +179,7 @@ export default defineComponent({
             client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
             client.email = data.data.email;
             client.id_branch = data.data.id_branch;
+            client.branch = data.data.branch;
          }
          loaded.value = true;
       });

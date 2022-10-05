@@ -260,7 +260,29 @@ export default defineComponent({
                               created: data[i].role.created,
                               updated: data[i].role.updated,
                               name: data[i].role.name,
-                              id_branch: Number(data[i].role.id_branch)
+                              id_branch: Number(data[i].role.id_branch),
+                              branch: {
+                                 id: -1,
+                                 is_active: -1,
+                                 created: "",
+                                 updated: "",
+                                 name: "",
+                                 telephone: "",
+                                 address: "",
+                                 machine_id: "",
+                                 mac_address: ""
+                              }
+                           },
+                           branch: {
+                              id: -1,
+                              is_active: -1,
+                              created: "",
+                              updated: "",
+                              name: "",
+                              telephone: "",
+                              address: "",
+                              machine_id: "",
+                              mac_address: ""
                            }
                         });
                      }

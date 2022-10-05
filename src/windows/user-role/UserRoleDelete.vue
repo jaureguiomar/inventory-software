@@ -105,7 +105,18 @@ export default defineComponent({
          created: "",
          updated: "",
          name: "",
-         id_branch: -1
+         id_branch: -1,
+         branch: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            telephone: "",
+            address: "",
+            machine_id: "",
+            mac_address: ""
+         }
       });
       const loaded = ref(false);
 
@@ -118,6 +129,7 @@ export default defineComponent({
             userRole.updated = getFormattedDateString(data.data.updated);
             userRole.name = data.data.name;
             userRole.id_branch = data.data.id_branch;
+            userRole.branch = data.data.branch;
          }
          loaded.value = true;
       });
