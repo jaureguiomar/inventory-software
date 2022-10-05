@@ -34,30 +34,31 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
    connection.query(query);
 
    // Reset auto_increments
-   query = "alter table client auto_increment = 1";
-   connection.query(query);
-   query = "alter table supplier auto_increment = 1";
-   connection.query(query);
-   query = "alter table sale_product auto_increment = 1";
-   connection.query(query);
-   query = "alter table sale auto_increment = 1";
-   connection.query(query);
-   query = "alter table product auto_increment = 1";
-   connection.query(query);
-   query = "alter table category auto_increment = 1";
-   connection.query(query);
-   query = "alter table users auto_increment = 1";
-   connection.query(query);
-   query = "alter table user_role auto_increment = 1";
-   connection.query(query);
-   query = "alter table branch auto_increment = 1";
-   connection.query(query);
+   // query = "alter table client auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table supplier auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table sale_product auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table sale auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table product auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table category auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table users auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table user_role auto_increment = 1";
+   // connection.query(query);
+   // query = "alter table branch auto_increment = 1";
+   // connection.query(query);
 
    // Add branches
    for(let i = 0; i < data.branch.length; i++) {
       const curr_data = data.branch[i];
       query = "";
       query += "insert into branch set ";
+      query += "id = " + curr_data.id + ", ";
       query += "name = '" + curr_data.name + "', ";
       query += "telephone = " + parseStringField(curr_data.telephone) + ", ";
       query += "address = " + parseStringField(curr_data.address) + ", ";
@@ -77,6 +78,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.user_role[i];
       query = "";
       query += "insert into user_role set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "name = '" + curr_data.name + "', ";
@@ -95,6 +97,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.user[i];
       query = "";
       query += "insert into users set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "username = '" + curr_data.username + "', ";
@@ -118,6 +121,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.category[i];
       query = "";
       query += "insert into category set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "name = '" + curr_data.name + "', ";
@@ -136,6 +140,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.product[i];
       query = "";
       query += "insert into product set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       // query += "is_favorite = " + curr_data.is_favorite + ", ";
@@ -161,6 +166,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.sale[i];
       query = "";
       query += "insert into sale set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "total = " + curr_data.total + ", ";
@@ -179,6 +185,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.sale_product[i];
       query = "";
       query += "insert into sale_product set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "id_sale = " + curr_data.id_sale + ", ";
@@ -199,6 +206,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.supplier[i];
       query = "";
       query += "insert into supplier set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "name = '" + curr_data.name + "', ";
@@ -217,6 +225,7 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
       const curr_data = data.client[i];
       query = "";
       query += "insert into client set ";
+      query += "id = " + curr_data.id + ", ";
       query += "is_sync = 1, ";
       query += "sync_type = null, ";
       query += "first_name = '" + curr_data.first_name + "', ";
