@@ -13,8 +13,6 @@ interface GenericStore {
 interface GenericStore2 {
    loaded_reply: boolean;
    loaded_get: boolean;
-   loaded_create: boolean;
-   loaded_update: boolean;
 }
 // Branch
 interface BranchStore {

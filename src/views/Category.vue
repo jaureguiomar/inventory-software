@@ -246,9 +246,9 @@ export default defineComponent({
                });
             });
          } else {
-            window.api.send("mysql-get-category-data");
+            window.api.send("mysql-get-category");
             if(!getCategoryLoadedGet.value) {
-               window.api.receive("mysql-get-category-data-reply", function(data:Category[]) {
+               window.api.receive("mysql-get-category-reply", function(data:Category[]) {
                   category.value = data;
                });
                store.commit("SET_CATEGORY_LOADED_GET", true);

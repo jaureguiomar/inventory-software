@@ -157,6 +157,9 @@ export default defineComponent({
          loaded.value = true;
       });
 
+      const getIsOnline = computed(() => {
+         return store.getters["getIsOnline"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -181,24 +184,39 @@ export default defineComponent({
             name: "",
             id_branch: -1
          };
+         let message = "";
+
+         if(page.type === "add")
+            message = "The category has been added properly";
+         else if(page.type === "update")
+            message = "The category has been updated properly";
 
          if(page.id <= 0) {
-            try {
-               let response = await axios.put<CategoryResponse>("category/v3/create.php", {
-                  name: field.name.text,
-                  id_branch: getBranchId.value
-               });
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:Category = response.data.data.data;
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        name: data.name,
-                        id_branch: Number(data.id_branch)
-                     };
+            if(getIsOnline.value) {
+               try {
+                  let response = await axios.put<CategoryResponse>("category/v3/create.php", {
+                     name: field.name.text,
+                     id_branch: getBranchId.value
+                  });
+                  if(response) {
+                     if(!response.data.error.is_error) {
+                        const data:Category = response.data.data.data;
+                        formatted_data = {
+                           id: Number(data.id),
+                           is_active: Number(data.is_active),
+                           created: data.created,
+                           updated: data.updated,
+                           name: data.name,
+                           id_branch: Number(data.id_branch)
+                        };
+                     } else {
+                        Swal.fire({
+                           title: "Error",
+                           text: t("global.default_error"),
+                           icon: "error"
+                        });
+                        return;
+                     }
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -207,7 +225,7 @@ export default defineComponent({
                      });
                      return;
                   }
-               } else {
+               } catch (error) {
                   Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),
@@ -215,75 +233,122 @@ export default defineComponent({
                   });
                   return;
                }
-            } catch (error) {
-               Swal.fire({
-                  title: "Error",
-                  text: t("global.default_error"),
-                  icon: "error"
+            } else {
+               window.api.send("mysql-create-category", {
+                  name: field.name.text,
+                  id_branch: getBranchId.value
                });
-               return;
+               window.api.receive("mysql-create-category-reply", function(data:Category) {
+                  formatted_data = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     name: data.name,
+                     id_branch: Number(data.id_branch)
+                  };
+                  window.api.send("category-module-window-dialog", {
+                     type: page.type,
+                     message: message
+                  });
+               });
+               window.api.receive("category-module-window-dialog-reply", () => {
+                  window.api.send("category-module-window-close", {
+                     id: page.id,
+                     data: formatted_data,
+                     result: "success",
+                     type: page.type
+                  });
+               });
             }
          } else {
-            try {
-               let response = await axios.post<CategoryResponse>("category/v3/update.php", {
+            if(getIsOnline.value) {
+               try {
+                  let response = await axios.post<CategoryResponse>("category/v3/update.php", {
+                     id: page.id,
+                     name: field.name.text,
+                     id_branch: getBranchId.value
+                  });
+                  if(response) {
+                     if(!response.data.error.is_error) {
+                        const data:Category = response.data.data.data;
+                        formatted_data = {
+                           id: Number(data.id),
+                           is_active: Number(data.is_active),
+                           created: data.created,
+                           updated: data.updated,
+                           name: data.name,
+                           id_branch: Number(data.id_branch)
+                        };
+                     } else {
+                        Swal.fire({
+                           title: "Error",
+                           text: t("global.default_error"),
+                           icon: "error"
+                        });
+                        return;
+                     }
+                  } else {
+                     Swal.fire({
+                           title: "Error",
+                           text: t("global.default_error"),
+                           icon: "error"
+                        });
+                     return;
+                  }
+               } catch (error) {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
+            } else {
+               window.api.send("mysql-update-category", {
                   id: page.id,
                   name: field.name.text,
                   id_branch: getBranchId.value
                });
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:Category = response.data.data.data;
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        name: data.name,
-                        id_branch: Number(data.id_branch)
-                     };
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
-                     });
-                     return;
-                  }
-               } else {
-                  Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
-                     });
-                  return;
-               }
-            } catch (error) {
-               Swal.fire({
-                  title: "Error",
-                  text: t("global.default_error"),
-                  icon: "error"
+               window.api.receive("mysql-create-category-reply", function(data:Category) {
+                  formatted_data = {
+                     id: Number(data.id),
+                     is_active: Number(data.is_active),
+                     created: data.created,
+                     updated: data.updated,
+                     name: data.name,
+                     id_branch: Number(data.id_branch)
+                  };
+                  window.api.send("category-module-window-dialog", {
+                     type: page.type,
+                     message: message
+                  });
                });
-               return;
+               window.api.receive("category-module-window-dialog-reply", () => {
+                  window.api.send("category-module-window-close", {
+                     id: page.id,
+                     data: formatted_data,
+                     result: "success",
+                     type: page.type
+                  });
+               });
             }
          }
 
-         let message = "";
-         if(page.type === "add")
-            message = "The category has been added properly";
-         else if(page.type === "update")
-            message = "The category has been updated properly";
-         window.api.send("category-module-window-dialog", {
-            type: page.type,
-            message: message
-         });
-         window.api.receive("category-module-window-dialog-reply", () => {
-            window.api.send("category-module-window-close", {
-               id: page.id,
-               data: formatted_data,
-               result: "success",
-               type: page.type
+         if(getIsOnline.value) {
+            window.api.send("category-module-window-dialog", {
+               type: page.type,
+               message: message
             });
-         });
+            window.api.receive("category-module-window-dialog-reply", () => {
+               window.api.send("category-module-window-close", {
+                  id: page.id,
+                  data: formatted_data,
+                  result: "success",
+                  type: page.type
+               });
+            });
+         }
       };
       const onClear = () => {
          clearForm();

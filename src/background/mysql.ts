@@ -349,7 +349,7 @@ ipcMain.on("mysql-sync-unsync-data", function(e) {
    e.sender.send("mysql-sync-unsync-data-reply");
 });
 
-ipcMain.on("mysql-get-category-data", function(e) {
+ipcMain.on("mysql-get-category", function(e) {
    const connection = mysql.createConnection(mysql_connection);
    const query = "select * from category where is_active = 1";
 
@@ -367,78 +367,102 @@ ipcMain.on("mysql-get-category-data", function(e) {
             });
          }
       }
-      e.sender.send("mysql-get-category-data-reply", data);
+      e.sender.send("mysql-get-category-reply", data);
    });
 });
+ipcMain.on("mysql-create-category", function(e, data) {
+   const connection = mysql.createConnection(mysql_connection);
+   let query = "";
 
-// ipcMain.on("mysql-process-login", function(e, data) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let query_error:MysqlError|null = null;
-//    let query_result = [];
+   query += "insert into category set ";
+   query += "is_sync = 0, ";
+   query += "sync_type = 'add', ";
+   query += "name = '" + data.name + "', ";
+   query += "id_branch = " + data.id_branch;
 
-//    if(data.success) {
-//       query = "";
-//       query += "select * from users where ";
-//       query += "username = '" + data.username + "'";
-//       connection.query(query, function(error, row) {
-//          query_error = error;
-//          query_result = row;
+   connection.query(query, function(error, result) {
+      console.log("#####################");
+      console.log("## Category Insert ##");
+      console.log("error", error);
+      console.log("result", result);
+      // if(!error)
+      //    // Do something
 
-//          if(!query_error) {
-//          if(query_result.length <= 0) {
-//             query = "";
-//             query += "insert into users set ";
-//             query += "username = '" + data.username + "', ";
-//             query += "password = '" + data.password + "'";
-//             connection.query(query, function(error, row) {
-//                query_error = error;
-//                query_result = row;
+      query = "select * from category where id = " + result.insertId;
+      connection.query(query, function(error, rows) {
+         console.log("#####################");
+         console.log("## Category Select ##");
+         console.log("error", error);
+         console.log("rows", rows);
+         // if(!error)
+         //    // Do something
 
-//                connection.end(function() {
-//                   e.sender.send("mysql-process-login-reply", {
-//                      error: query_error,
-//                      result: query_result
-//                   });
-//                });
-//             });
-//          } else {
-//             query = "";
-//             query += "update users set ";
-//             query += "password = '" + data.password + "' ";
-//             query += "where username = '" + data.username + "'";
-//             connection.query(query, function(error, row) {
-//                query_error = error;
-//                query_result = row;
+         let new_category:Category = {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            id_branch: -1
+         };
+         if(rows.length > 0) {
+            new_category = {
+               id: Number(rows[0].id),
+               is_active: rows[0].is_active,
+               created: parseDate(rows[0].created),
+               updated: parseDate(rows[0].updated),
+               name: rows[0].name,
+               id_branch: Number(rows[0].id_branch)
+            };
+         }
 
-//                connection.end(function() {
-//                   e.sender.send("mysql-process-login-reply", {
-//                      error: query_error,
-//                      result: query_result
-//                   });
-//                });
-//             });
-//          }
-//          }
-//       });
-//    } else {
-//       query = "";
-//       query += "select * from users where ";
-//       query += "username = '" + data.username + "' and ";
-//       query += "password = '" + data.password + "'";
-//       connection.query(query, function(error, row) {
-//          query_error = error;
-//          query_result = row;
+         e.sender.send("mysql-create-category-reply", new_category);
+      });
+   });
+});
+ipcMain.on("mysql-update-category", function(e, data) {
+   const connection = mysql.createConnection(mysql_connection);
+   let query = "";
 
-//          connection.end(function() {
-//             e.sender.send("mysql-process-login-reply", {
-//                error: query_error,
-//                result: query_result
-//             });
-//          });
-//       });
-//    }
-// });
+   // Get category to veryfy if was added before (is_sync = 0)
+   // If is true, set async type as "add"
+   // else, set as update
+
+   query += "update category set ";
+   query += "is_sync = 0, ";
+   query += "sync_type = 'update', ";
+   query += "name = '" + data.name + "', ";
+   query += "id_branch = " + data.id_branch + " ";
+   query += "where id = " + data.id;
+
+   connection.query(query, function(error, rows) {
+      console.log("#####################");
+      console.log("## Category Update ##");
+      console.log("error", error);
+      console.log("rows", rows);
+      e.sender.send("mysql-update-category-reply", rows);
+   });
+});
+ipcMain.on("mysql-delete-category", function(e, id) {
+   const connection = mysql.createConnection(mysql_connection);
+   let query = "";
+
+   // Get category to veryfy if was added
+
+   query += "update category set ";
+   query += "is_active = 0, ";
+   query += "is_sync = 0, ";
+   query += "sync_type = 'delete' ";
+   query += "where id = " + id;
+
+   connection.query(query, function(error, rows) {
+      console.log("#####################");
+      console.log("## Category Delete ##");
+      console.log("error", error);
+      console.log("rows", rows);
+      e.sender.send("mysql-delete-category-reply", rows);
+   });
+});
 
 const parseStringField = (value:string) => {
    if(!value)
