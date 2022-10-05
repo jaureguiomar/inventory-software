@@ -103,19 +103,22 @@ export default defineComponent({
          }
 
          window.addEventListener("online", onOnline);
-         window.addEventListener("offline", onOffline);
+         // window.addEventListener("offline", onOffline);
       });
       onUnmounted(() => {
          window.removeEventListener("online", onOnline);
-         window.removeEventListener("offline", onOffline);
+         // window.removeEventListener("offline", onOffline);
       });
 
       const onOnline = () => {
+         ////////////////////////////////
+         // Sync local data to hosting //
+         ////////////////////////////////
          store.commit("SET_IS_ONLINE_DATA", true);
       };
-      const onOffline = () => {
-         store.commit("SET_IS_ONLINE_DATA", false);
-      };
+      // const onOffline = () => {
+      //    store.commit("SET_IS_ONLINE_DATA", false);
+      // };
       const onRefreshBakup = async() => {
          let branch:Array<Branch> = [];
          let client:Array<Client> = [];

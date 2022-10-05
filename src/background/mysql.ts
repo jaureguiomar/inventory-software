@@ -77,6 +77,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.user_role[i];
       query = "";
       query += "insert into user_role set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "name = '" + curr_data.name + "', ";
       query += "id_branch = " + curr_data.id_branch;
 
@@ -93,6 +95,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.user[i];
       query = "";
       query += "insert into users set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "username = '" + curr_data.username + "', ";
       query += "email = '" + curr_data.email + "', ";
       query += "password = '" + curr_data.password + "', ";
@@ -114,6 +118,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.category[i];
       query = "";
       query += "insert into category set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "name = '" + curr_data.name + "', ";
       query += "id_branch = " + curr_data.id_branch;
 
@@ -130,6 +136,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.product[i];
       query = "";
       query += "insert into product set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       // query += "is_favorite = " + curr_data.is_favorite + ", ";
       query += "code = " + parseStringField(curr_data.code) + ", ";
       query += "name = '" + curr_data.name + "', ";
@@ -153,6 +161,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.sale[i];
       query = "";
       query += "insert into sale set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "total = " + curr_data.total + ", ";
       query += "id_branch = " + curr_data.id_branch;
 
@@ -169,6 +179,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.sale_product[i];
       query = "";
       query += "insert into client set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "id_sale = " + curr_data.id_sale + ", ";
       query += "id_product = " + curr_data.id_product + ", ";
       query += "quantity = " + curr_data.quantity + ", ";
@@ -187,6 +199,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.supplier[i];
       query = "";
       query += "insert into supplier set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "name = '" + curr_data.name + "', ";
       query += "id_branch = " + curr_data.id_branch;
 
@@ -203,6 +217,8 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.client[i];
       query = "";
       query += "insert into client set ";
+      query += "is_sync = 1, ";
+      query += "sync_type = null, ";
       query += "first_name = '" + curr_data.first_name + "', ";
       query += "last_name = '" + curr_data.last_name + "', ";
       query += "address = " + parseStringField(curr_data.address) + ", ";
