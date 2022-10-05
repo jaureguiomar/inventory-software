@@ -100,7 +100,10 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div
+                  class="row"
+                  :class="[ (page.id <= 0) ? 'q-mb-md' : '' ]"
+               >
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.last_name.text"
@@ -136,6 +139,21 @@
                            </q-item>
                         </template>
                      </q-select>
+                  </div>
+               </div>
+               <div
+                  v-if="page.id > 0"
+                  class="row"
+                  :class="[ (page.id > 0) ? 'q-mb-md' : '' ]"
+               >
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.branch.name"
+                        label="Created in:"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
                   </div>
                </div>
                <div class="text-center">
@@ -313,7 +331,9 @@ export default defineComponent({
             user.first_name = data.data.first_name;
             user.last_name = data.data.last_name;
             user.id_role = data.data.id_role;
+            user.id_branch = data.data.id_branch;
             user.role = data.data.role;
+            user.branch = data.data.branch;
 
             field.username.text = data.data.username;
             field.email.text = data.data.email;

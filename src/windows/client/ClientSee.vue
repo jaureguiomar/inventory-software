@@ -85,7 +85,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="client.cellphone2"
@@ -99,6 +99,17 @@
                      <q-input
                         v-model="client.email"
                         :label="t('client.window.field.email') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.branch.name"
+                        label="Created in:"
                         type="text"
                         readonly
                      >

@@ -58,6 +58,15 @@
                      >
                      </q-input>
                   </div>
+                  <div v-if="page.id > 0" class="col-md-6 col-12">
+                     <q-input
+                        v-model="supplier.branch.name"
+                        label="Created in:"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
                </div>
                <div class="text-center">
                   <q-btn
@@ -166,6 +175,7 @@ export default defineComponent({
             supplier.updated = getFormattedDateString(data.data.updated);
             supplier.name = data.data.name;
             supplier.id_branch = data.data.id_branch;
+            supplier.branch = data.data.branch;
 
             field.name.text = data.data.name;
          }

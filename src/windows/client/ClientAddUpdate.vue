@@ -100,7 +100,10 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div
+                  class="row"
+                  :class="[ (page.id <= 0) ? 'q-mb-md' : '' ]"
+               >
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.cellphone2.text"
@@ -125,6 +128,21 @@
                         :error-message="field.email.error.message"
                         @blur="onEmailBlur"
                         @keyup="onEmailKeyup"
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div
+                  v-if="page.id > 0"
+                  class="row"
+                  :class="[ (page.id > 0) ? 'q-mb-md' : '' ]"
+               >
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="client.branch.name"
+                        label="Created in:"
+                        type="text"
+                        readonly
                      >
                      </q-input>
                   </div>
@@ -282,6 +300,7 @@ export default defineComponent({
             client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
             client.email = data.data.email;
             client.id_branch = data.data.id_branch;
+            client.branch = data.data.branch;
 
             field.first_name.text = data.data.first_name;
             field.last_name.text = data.data.last_name;

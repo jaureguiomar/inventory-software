@@ -274,15 +274,15 @@ export default defineComponent({
                               }
                            },
                            branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: "",
-                              machine_id: "",
-                              mac_address: ""
+                              id: Number(data[i].branch.id),
+                              is_active: Number(data[i].branch.is_active),
+                              created: data[i].branch.created,
+                              updated: data[i].branch.updated,
+                              name: data[i].branch.name,
+                              telephone: data[i].branch.telephone,
+                              address: data[i].branch.address,
+                              machine_id: data[i].branch.machine_id,
+                              mac_address: data[i].branch.mac_address,
                            }
                         });
                      }

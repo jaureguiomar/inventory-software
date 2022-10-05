@@ -85,7 +85,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="user.last_name"
@@ -99,6 +99,17 @@
                      <q-input
                         v-model="user.role.name"
                         :label="t('user.window.field.role_name') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="user.branch.name"
+                        label="Created in:"
                         type="text"
                         readonly
                      >
@@ -185,6 +196,7 @@ export default defineComponent({
       const loaded = ref(false);
 
       window.api.receive("user-module-window-reply", (data:IPCParams) => {
+         console.log("data", data);
          user.id = data.id;
          if(data.data) {
             user.id = data.data.id;
