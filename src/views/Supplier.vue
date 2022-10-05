@@ -186,9 +186,6 @@ export default defineComponent({
          }
       ];
 
-      const getBranchId = computed(() => {
-         return store.getters["getBranchId"];
-      });
       const getSupplierLoadedReply = computed(() => {
          return store.getters["getSupplierLoadedReply"];
       });
@@ -196,27 +193,30 @@ export default defineComponent({
       const onRefreshData = () => {
          supplier.value = [];
 
-         axios.get<SuppliersResponse>("supplier/v3/find.php", {
-            params: {
-               type: "id_branch",
-               query: getBranchId.value
-            }
-         }).then((response) => {
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data.data;
-                  let formatted_suppliers:Array<Supplier> = [];
-                  for(let i = 0; i < data.length; i++) {
-                     formatted_suppliers.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        id_branch: Number(data[i].id_branch)
+         axios.get<SuppliersResponse>("supplier/v3/select-all.php")
+            .then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_suppliers:Array<Supplier> = [];
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_suppliers.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name,
+                           id_branch: Number(data[i].id_branch)
+                        });
+                     }
+                     supplier.value = formatted_suppliers;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
                      });
                   }
-                  supplier.value = formatted_suppliers;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -224,20 +224,13 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            } else {
+            }).catch(() => {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
                   icon: "error"
                });
-            }
-         }).catch(() => {
-            Swal.fire({
-               title: "Error",
-               text: t("global.default_error"),
-               icon: "error"
             });
-         });
       };
       const onSupplierAddWindowClick = () => {
          window.api.send("supplier-module-window", {

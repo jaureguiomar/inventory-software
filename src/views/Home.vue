@@ -605,12 +605,7 @@ export default defineComponent({
 
          // Get Clients
          try {
-            let response = await axios.get<ClientsResponse>("client/v3/find.php", {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
-               }
-            });
+            let response = await axios.get<ClientsResponse>("client/v3/select-all.php");
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -651,12 +646,7 @@ export default defineComponent({
 
          // Get Suppliers
          try {
-            let response = await axios.get<SuppliersResponse>("supplier/v3/find.php", {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
-               }
-            });
+            let response = await axios.get<SuppliersResponse>("supplier/v3/select-all.php");
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -692,12 +682,7 @@ export default defineComponent({
 
          // Get Categories
          try {
-            let response = await axios.get<CategoriesResponse>("category/v3/find.php", {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
-               }
-            });
+            let response = await axios.get<CategoriesResponse>("category/v3/select-all.php");
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -873,12 +858,7 @@ export default defineComponent({
 
          // Get User Roles
          try {
-            let response = await axios.get<UserRolesResponse>("user_role/v3/find.php", {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
-               }
-            });
+            let response = await axios.get<UserRolesResponse>("user_role/v3/select-all.php");
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -914,12 +894,7 @@ export default defineComponent({
 
          // Get Users
          try {
-            let response = await axios.get<UsersResponse>("user/v3/find.php", {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
-               }
-            });
+            let response = await axios.get<UsersResponse>("user/v3/select-all.php");
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
