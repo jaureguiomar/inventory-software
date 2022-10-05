@@ -53,20 +53,16 @@ ipcMain.on("mysql-bakup", function(e, data) {
    query = "alter table branch auto_increment = 1";
    connection.query(query);
 
-   console.log("####################");
-   console.log("## Bakup Database ##");
-   console.log("data", data);
-
    // Add branches
    for(let i = 0; i < data.branch.length; i++) {
       const curr_data = data.branch[i];
       query = "";
       query += "insert into branch set ";
       query += "name = '" + curr_data.name + "', ";
-      query += "telephone = '" + curr_data.telephone + "', ";
-      query += "address = '" + curr_data.address + "', ";
-      query += "machine_id = '" + curr_data.machine_id + "', ";
-      query += "mac_address = '" + curr_data.mac_address + "'";
+      query += "telephone = " + parseStringField(curr_data.telephone) + ", ";
+      query += "address = " + parseStringField(curr_data.address) + ", ";
+      query += "machine_id = " + parseStringField(curr_data.machine_id) + ", ";
+      query += "mac_address = " + parseStringField(curr_data.mac_address);
 
       connection.query(query, function(error, rows) {
          console.log("############");
@@ -134,13 +130,13 @@ ipcMain.on("mysql-bakup", function(e, data) {
       const curr_data = data.product[i];
       query = "";
       query += "insert into product set ";
-      query += "is_favorite = " + curr_data.is_favorite + ", ";
-      query += "code = '" + curr_data.code + "', ";
+      // query += "is_favorite = " + curr_data.is_favorite + ", ";
+      query += "code = " + parseStringField(curr_data.code) + ", ";
       query += "name = '" + curr_data.name + "', ";
-      query += "description = '" + curr_data.description + "', ";
+      query += "description = " + parseStringField(curr_data.description) + ", ";
       query += "buy_price = '" + curr_data.buy_price + "', ";
       query += "sale_price = '" + curr_data.sale_price + "', ";
-      query += "quuantity = " + curr_data.quuantity + ", ";
+      query += "quantity = " + curr_data.quantity + ", ";
       query += "id_category = " + curr_data.id_category + ", ";
       query += "id_branch = " + curr_data.id_branch;
 
@@ -209,10 +205,10 @@ ipcMain.on("mysql-bakup", function(e, data) {
       query += "insert into client set ";
       query += "first_name = '" + curr_data.first_name + "', ";
       query += "last_name = '" + curr_data.last_name + "', ";
-      query += "address = '" + curr_data.address + "', ";
+      query += "address = " + parseStringField(curr_data.address) + ", ";
       query += "cellphone = '" + curr_data.cellphone + "', ";
-      query += "cellphone2 = '" + curr_data.cellphone2 + "', ";
-      query += "email = '" + curr_data.email + "', ";
+      query += "cellphone2 = " + parseStringField(curr_data.cellphone2) + ", ";
+      query += "email = " + parseStringField(curr_data.email) + ", ";
       query += "id_branch = " + curr_data.id_branch;
 
       connection.query(query, function(error, rows) {
@@ -492,3 +488,9 @@ ipcMain.on("mysql-bakup", function(e, data) {
 //       });
 //    }
 // });
+
+const parseStringField = (value:string) => {
+   if(!value)
+      return null;
+   return "'" + value + "'";
+};

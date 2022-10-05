@@ -69,6 +69,13 @@ import axios from "@/plugins/axios";
 import { key } from "@/plugins/store"
 import { Branch, BranchesResponse } from "@/interfaces/branch/branch";
 import { Client, ClientsResponse } from "@/interfaces/client/client";
+import { Supplier, SuppliersResponse } from "@/interfaces/supplier/supplier";
+import { Product, ProductsResponse } from "@/interfaces/product/product";
+import { CategoriesResponse, Category } from "@/interfaces/category/category";
+import { User, UsersResponse } from "@/interfaces/user/user";
+import { UserRole, UserRolesResponse } from "@/interfaces/user-role/user-role";
+import { SaleProduct, SaleProductsResponse } from "@/interfaces/sale-product/sale-product";
+import { Sale, SalesResponse } from "@/interfaces/sale/sale";
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
 import MenuHome from "@/views/layout/MenuHome.vue";
@@ -112,6 +119,13 @@ export default defineComponent({
       const onRefreshBakup = async() => {
          let branch:Array<Branch> = [];
          let client:Array<Client> = [];
+         let supplier:Array<Supplier> = [];
+         let category:Array<Category> = [];
+         let product:Array<Product> = [];
+         let sale:Array<Sale> = [];
+         let sale_product:Array<SaleProduct> = [];
+         let user_role:Array<UserRole> = [];
+         let user:Array<User> = [];
 
          // Get Branches
          try {
@@ -119,9 +133,9 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
-                  let formatted_branches:Array<Branch> = [];
+                  let formatted_data:Array<Branch> = [];
                   for(let i = 0; i < data.length; i++) {
-                     formatted_branches.push({
+                     formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
@@ -133,7 +147,7 @@ export default defineComponent({
                         mac_address: data[i].mac_address
                      });
                   }
-                  branch = formatted_branches;
+                  branch = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -163,9 +177,9 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
-                  let formatted_clients:Array<Client> = [];
+                  let formatted_data:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {
-                     formatted_clients.push({
+                     formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
@@ -179,7 +193,7 @@ export default defineComponent({
                         id_branch: Number(data[i].id_branch)
                      });
                   }
-                  client = formatted_clients;
+                  client = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -198,16 +212,333 @@ export default defineComponent({
             console.log("client-error", error);
          }
 
+         // Get Suppliers
+         try {
+            let response = await axios.get<SuppliersResponse>("supplier/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<Supplier> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name,
+                        id_branch: Number(data[i].id_branch)
+                     });
+                  }
+                  supplier = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("supplier-error", error);
+         }
+
+         // Get Categories
+         try {
+            let response = await axios.get<CategoriesResponse>("category/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<Category> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name,
+                        id_branch: Number(data[i].id_branch)
+                     });
+                  }
+                  category = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("category-error", error);
+         }
+
+         // Get Products
+         try {
+            let response = await axios.get<ProductsResponse>("product/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<Product> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        // is_favorite: Number(data[i].is_favorite),
+                        code: data[i].code,
+                        name: data[i].name,
+                        description: data[i].description,
+                        buy_price: data[i].buy_price,
+                        sale_price: data[i].sale_price,
+                        quantity: Number(data[i].quantity),
+                        id_category: Number(data[i].id_category),
+                        id_branch: Number(data[i].id_branch),
+                        category: {
+                           id: -1,
+                           is_active: -1,
+                           created: "",
+                           updated: "",
+                           name: "",
+                           id_branch: -1
+                        }
+                     });
+                  }
+                  product = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("product-error", error);
+         }
+
+         // Get Sales
+         try {
+            let response = await axios.get<SalesResponse>("sale/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<Sale> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        total: data[i].total,
+                        id_branch: Number(data[i].id_branch)
+                     });
+                  }
+                  sale = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("sale-error", error);
+         }
+
+         // Get Sale Products
+         try {
+            let response = await axios.get<SaleProductsResponse>("sale_product/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<SaleProduct> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        id_sale: Number(data[i].id_sale),
+                        id_product: Number(data[i].id_product),
+                        quantity: Number(data[i].quantity),
+                        id_branch: Number(data[i].id_branch)
+                     });
+                  }
+                  sale_product = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("sale-product-error", error);
+         }
+
+         // Get User Roles
+         try {
+            let response = await axios.get<UserRolesResponse>("user_role/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<UserRole> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name,
+                        id_branch: Number(data[i].id_branch)
+                     });
+                  }
+                  user_role = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("user-role-error", error);
+         }
+
+         // Get Users
+         try {
+            let response = await axios.get<UsersResponse>("user/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            });
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_data:Array<User> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_data.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        username: data[i].username,
+                        email: data[i].email,
+                        password: data[i].password,
+                        first_name: data[i].first_name,
+                        last_name: data[i].last_name,
+                        id_role: Number(data[i].id_role),
+                        id_branch: Number(data[i].id_branch),
+                        role: {
+                           id: -1,
+                           is_active: -1,
+                           created: "",
+                           updated: "",
+                           name: "",
+                           id_branch: -1
+                        }
+                     });
+                  }
+                  user = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("user-error", error);
+         }
+
          window.api.send("mysql-bakup", {
             branch: branch,
-            user_role: [],
-            user: [],
-            category: [],
-            product: [],
-            sale: [],
-            sale_product: [],
-            supplier: [],
-            client: client
+            client: client,
+            supplier: supplier,
+            category: category,
+            product: product,
+            sale: sale,
+            sale_product: sale_product,
+            user_role: user_role,
+            user: user
          });
          window.api.receive("mysql-bakup-reply", function() {
             Swal.fire({
@@ -216,8 +547,6 @@ export default defineComponent({
                icon: "success"
             });
          });
-
-         console.log("onRefreshBakup");
       };
 
       const getAutomaticBakupDone = computed(() => {
