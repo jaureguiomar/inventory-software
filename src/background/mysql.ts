@@ -331,201 +331,30 @@ ipcMain.on("mysql-get-unsync-data", function(e) {
    });
 });
 
-// ipcMain.on("mysql-sync-offline-data", function() {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
+ipcMain.on("mysql-sync-unsync-data", function(e) {
+   const connection = mysql.createConnection(mysql_connection);
+   let query = "";
 
-//    // Delete data
-//    query = "update sale set is_sync = 1";
-//    connection.query(query, function(error, result) {
-//       console.log("##########");
-//       console.log("## Sale ##");
-//       console.log("error", error);
-//       console.log("result", result);
-//    });
+   // Sync data
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale set is_sync = 1, sync_type = null";
+   connection.query(query);
 
-//    query = "update money_movements set is_sync = 1";
-//    connection.query(query, function(error, result) {
-//       console.log("####################");
-//       console.log("## Money Movement ##");
-//       console.log("error", error);
-//       console.log("result", result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-pos-profile", function(e) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query = "select * from pos_profile limit 1";
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          if(rows.length > 0)
-//          row_result = rows[0];
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-pos-profile-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-items", function(e) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query = "select * from items";
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          row_result = rows;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-items-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-sales", function(e, date) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query += "select * from sale ";
-//    query += "where posting_date ";
-//    query += "between '" + date.initial_date + "' and '" + date.final_date + "' ";
-//    query += "order by posting_date desc";
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          row_result = rows;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-sales-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-unsync-sales", function(e) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query += "select * from sale where is_sync = 0";
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          row_result = rows;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-unsync-sales-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-sale-by-id", function(e, sale_id) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query += "select * from sale ";
-//    query += "where id = " + sale_id;
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          if(rows.length > 0)
-//             row_result = rows[0];
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-sale-by-id-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-money-movements", function(e, date) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query += "select * from money_movements ";
-//    query += "where posting_date ";
-//    query += "between '" + date.initial_date + "' and '" + date.final_date + "' ";
-//    query += "order by posting_date desc";
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          row_result = rows;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-money-movements-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-get-unsync-money-movements", function(e) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let row_result = [];
-
-//    query += "select * from money_movements where is_sync = 0";
-//    connection.query(query, function(error, rows) {
-//       if(!error)
-//          row_result = rows;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-get-unsync-money-movements-reply", row_result);
-//    });
-// });
-
-// ipcMain.on("mysql-process-sale", function(e, sale) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let query_error:MysqlError|null = null;
-//    let query_result = null;
-
-//    query += "insert into sale set ";
-//    query += "is_sync = " + sale.is_sync + ", ";
-//    // query += "name = '" + sale.name + "', ";
-//    query += "items = '" + sale.items + "', ";
-//    query += "payments = '" + sale.payments + "', ";
-//    query += "pos_profile = '" + sale.pos_profile + "', ";
-//    query += "branch = '" + sale.branch + "', ";
-//    query += "posting_date = '" + sale.posting_date + "', ";
-//    query += "posting_time = '" + sale.posting_time + "', ";
-//    query += "total = '" + sale.total + "', ";
-//    query += "owner = '" + sale.username + "'";
-
-//    connection.query(query, function(error, row) {
-//       query_error = error;
-//       query_result = row;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-process-sale-reply", {
-//          error: query_error,
-//          result: query_result
-//       });
-//    });
-// });
-
-// ipcMain.on("mysql-process-money-movement", function(e, money_movement) {
-//    const connection = mysql.createConnection(mysql_connection);
-//    let query = "";
-//    let query_error:MysqlError|null = null;
-
-//    query += "insert into money_movements set ";
-//    query += "pos_profile = '" + money_movement.pos_profile + "', ";
-//    query += "branch = '" + money_movement.branch + "', ";
-//    query += "description = '" + money_movement.description + "', ";
-//    query += "total = '" + money_movement.total + "', ";
-//    query += "posting_date = '" + money_movement.posting_date + "', ";
-//    query += "move_type = '" + money_movement.move_type + "'";
-
-//    connection.query(query, function(error) {
-//       query_error = error;
-//    });
-
-//    connection.end(function() {
-//       e.sender.send("mysql-process-money-movement-reply", query_error);
-//    });
-// });
+   e.sender.send("mysql-sync-unsync-data-reply");
+});
 
 // ipcMain.on("mysql-process-login", function(e, data) {
 //    const connection = mysql.createConnection(mysql_connection);

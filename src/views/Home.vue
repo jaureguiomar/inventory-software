@@ -173,22 +173,15 @@ export default defineComponent({
             }
 
             // if(!error) {
-            //    window.api.send("mysql-get-unsync-data");
-            //    window.api.receive("mysql-get-unsync-data-reply", function(data) {
-            //       console.log("data", data);
-            //       Swal.fire({
-            //          title: "Ok",
-            //          text: "Retrieved unsync data properly",
-            //          icon: "success"
-            //       });
-            //    });
-            // }
-
-            Swal.fire({
-               title: "Ok",
-               text: "Retrieved unsync data properly",
-               icon: "success"
+            window.api.send("mysql-sync-unsync-data");
+            window.api.receive("mysql-sync-unsync-data-reply", function() {
+               Swal.fire({
+                  title: "Ok",
+                  text: "Sync data with server successfully",
+                  icon: "success"
+               });
             });
+            // }
          });
       };
       const onOffline = () => {
