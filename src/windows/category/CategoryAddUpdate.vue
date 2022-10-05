@@ -378,7 +378,7 @@ export default defineComponent({
                   name: field.name.text,
                   id_branch: getBranchId.value
                });
-               window.api.receive("mysql-create-category-reply", function(data:Category) {
+               window.api.receive("mysql-update-category-reply", function(data:Category) {
                   formatted_data = {
                      id: Number(data.id),
                      is_active: Number(data.is_active),

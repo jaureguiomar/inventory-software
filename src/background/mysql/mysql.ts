@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import mysql, { MysqlError } from "mysql";
 import { Category } from "@/interfaces/category/category";
 import { Branch } from "@/interfaces/branch/branch";
+import {} from "./functions";
 
 const mysql_connection = {
    host: "localhost",
@@ -517,7 +518,7 @@ ipcMain.on("mysql-update-category", async function(e, data) {
          query += "id_branch = " + data.id_branch + " ";
          query += "where id = " + data.id;
 
-         connection.query(query, function(error, result) {
+         connection.query(query, function(error) {
             let is_ok = true;
             if(error)
                is_ok = false;
@@ -624,25 +625,32 @@ ipcMain.on("mysql-update-category", async function(e, data) {
 
    e.sender.send("mysql-update-category-reply", new_category_data);
 });
-ipcMain.on("mysql-delete-category", function(e, id) {
+ipcMain.on("mysql-delete-category", async function(e, id) {
    const connection = mysql.createConnection(mysql_connection);
-   let query = "";
 
-   // Get category to veryfy if was added
+   const delete_category = async(id:number) => {
+      const promise_insert_branch = new Promise<boolean>((resolve) => {
+         let query = "";
+         query += "update category set ";
+         query += "is_active = 0, ";
+         query += "is_sync = 0, ";
+         query += "sync_type = 'delete' ";
+         query += "where id = " + id;
 
-   query += "update category set ";
-   query += "is_active = 0, ";
-   query += "is_sync = 0, ";
-   query += "sync_type = 'delete' ";
-   query += "where id = " + id;
+         connection.query(query, function(error, result) {
+            console.log("error", error);
+            console.log("result", result);
+            let is_ok = true;
+            if(error)
+               is_ok = false;
+            resolve(is_ok);
+         });
+      });
+      return await promise_insert_branch;
+   };
 
-   connection.query(query, function(error, rows) {
-      console.log("#####################");
-      console.log("## Category Delete ##");
-      console.log("error", error);
-      console.log("rows", rows);
-      e.sender.send("mysql-delete-category-reply", rows);
-   });
+   const is_ok = await delete_category(id);
+   e.sender.send("mysql-delete-category-reply", is_ok);
 });
 
 const parseStringField = (value:string) => {

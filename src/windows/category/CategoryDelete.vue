@@ -147,15 +147,24 @@ export default defineComponent({
       });
 
       const onDelete = async() => {
-         try {
-            let response = await axios.delete<CategoryResponse>(`${ getServer.value }/category/v3/delete.php`, {
-               params: {
-                  field: "id",
-                  data: category.id
-               },
-            });
-            if(response) {
-               if(response.data.error.is_error) {
+         if(getIsOnline.value) {
+            try {
+               let response = await axios.delete<CategoryResponse>(`${ getServer.value }/category/v3/delete.php`, {
+                  params: {
+                     field: "id",
+                     data: category.id
+                  },
+               });
+               if(response) {
+                  if(response.data.error.is_error) {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
+               } else {
                   Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),
@@ -163,7 +172,7 @@ export default defineComponent({
                   });
                   return;
                }
-            } else {
+            } catch (error) {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
@@ -171,27 +180,37 @@ export default defineComponent({
                });
                return;
             }
-         } catch (error) {
-            Swal.fire({
-               title: "Error",
-               text: t("global.default_error"),
-               icon: "error"
-            });
-            return;
-         }
 
-         window.api.send("category-module-window-dialog", {
-            type: "delete",
-            message: "The category has been deleted properly"
-         });
-         window.api.receive("category-module-window-dialog-reply", () => {
-            window.api.send("category-module-window-close", {
-               id: category.id,
-               data: null,
-               result: "success",
-               type: "delete"
+            window.api.send("category-module-window-dialog", {
+               type: "delete",
+               message: "The category has been deleted properly"
             });
-         });
+            window.api.receive("category-module-window-dialog-reply", () => {
+               window.api.send("category-module-window-close", {
+                  id: category.id,
+                  data: null,
+                  result: "success",
+                  type: "delete"
+               });
+            });
+         } else {
+            window.api.send("mysql-delete-category", category.id);
+            window.api.receive("mysql-delete-category-reply", function(data:Category) {
+               console.log("data", data);
+               window.api.send("category-module-window-dialog", {
+                  type: "delete",
+                  message: "The category has been deleted properly"
+               });
+            });
+            window.api.receive("category-module-window-dialog-reply", () => {
+               window.api.send("category-module-window-close", {
+                  id: category.id,
+                  data: null,
+                  result: "success",
+                  type: "delete"
+               });
+            });
+         }
       };
 
       const onClose = () => {
@@ -205,6 +224,9 @@ export default defineComponent({
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getIsOnline = computed(() => {
+         return store.getters["getIsOnline"];
       });
 
       return {

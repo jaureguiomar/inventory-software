@@ -10,7 +10,7 @@ import { machineId } from "node-machine-id";
 import fs from "fs";
 import { window } from "@/background/window";
 import "@/background/printer";
-import "@/background/mysql";
+import "@/background/mysql/mysql";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 protocol.registerSchemesAsPrivileged([
