@@ -251,7 +251,6 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
 
 ipcMain.on("mysql-get-unsync-data", function(e) {
    const connection = mysql.createConnection(mysql_connection);
-   let branch = [];
    let user_role = [];
    let user = [];
    let category = [];
@@ -262,63 +261,56 @@ ipcMain.on("mysql-get-unsync-data", function(e) {
    let client = [];
    let query = "";
 
-   query = "select * from branch where is_sync = 0";
+   query = "select * from user_role where is_sync = 0";
    connection.query(query, function(error, rows) {
       if(!error)
-         branch = rows;
+         user_role = rows;
 
-      query = "select * from user_role where is_sync = 0";
+      query = "select * from users where is_sync = 0";
       connection.query(query, function(error, rows) {
          if(!error)
-            user_role = rows;
+            user = rows;
 
-         query = "select * from users where is_sync = 0";
+         query = "select * from category where is_sync = 0";
          connection.query(query, function(error, rows) {
             if(!error)
-               user = rows;
+               category = rows;
 
-            query = "select * from category where is_sync = 0";
+            query = "select * from product where is_sync = 0";
             connection.query(query, function(error, rows) {
                if(!error)
-                  category = rows;
+                  product = rows;
 
-               query = "select * from product where is_sync = 0";
+               query = "select * from sale where is_sync = 0";
                connection.query(query, function(error, rows) {
                   if(!error)
-                     product = rows;
+                     sale = rows;
 
-                  query = "select * from sale where is_sync = 0";
+                  query = "select * from sale_product where is_sync = 0";
                   connection.query(query, function(error, rows) {
                      if(!error)
-                        sale = rows;
+                        sale_product = rows;
 
-                     query = "select * from sale_product where is_sync = 0";
+                     query = "select * from supplier where is_sync = 0";
                      connection.query(query, function(error, rows) {
                         if(!error)
-                           sale_product = rows;
+                           supplier = rows;
 
-                        query = "select * from supplier where is_sync = 0";
+                        query = "select * from client where is_sync = 0";
                         connection.query(query, function(error, rows) {
                            if(!error)
-                              supplier = rows;
+                              client = rows;
 
-                           query = "select * from client where is_sync = 0";
-                           connection.query(query, function(error, rows) {
-                              if(!error)
-                                 client = rows;
-
-                              connection.end(function() {
-                                 e.sender.send("mysql-get-unsync-data-reply", {
-                                    branch: branch,
-                                    user_role: user_role,
-                                    user: user,
-                                    category: category,
-                                    product: product,
-                                    sale: sale,
-                                    sale_product: sale_product,
-                                    supplier: supplier,
-                                    client: client
-                                 });
+                           connection.end(function() {
+                              e.sender.send("mysql-get-unsync-data-reply", {
+                                 user_role: user_role,
+                                 user: user,
+                                 category: category,
+                                 product: product,
+                                 sale: sale,
+                                 sale_product: sale_product,
+                                 supplier: supplier,
+                                 client: client
                               });
                            });
                         });
@@ -336,21 +328,21 @@ ipcMain.on("mysql-sync-unsync-data", function(e) {
    let query = "";
 
    // Sync data
-   query = "update sale set is_sync = 1, sync_type = null";
+   query = "update client set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update supplier set is_sync = 1, sync_type = null";
+   connection.query(query);
+   query = "update sale_product set is_sync = 1, sync_type = null";
    connection.query(query);
    query = "update sale set is_sync = 1, sync_type = null";
    connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
+   query = "update product set is_sync = 1, sync_type = null";
    connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
+   query = "update category set is_sync = 1, sync_type = null";
    connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
+   query = "update users set is_sync = 1, sync_type = null";
    connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
+   query = "update user_role set is_sync = 1, sync_type = null";
    connection.query(query);
 
    e.sender.send("mysql-sync-unsync-data-reply");

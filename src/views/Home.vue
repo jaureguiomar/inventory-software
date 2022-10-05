@@ -118,14 +118,230 @@ export default defineComponent({
 
          window.api.send("mysql-get-unsync-data");
          window.api.receive("mysql-get-unsync-data-reply", async function(data) {
+            // Sync User Roles
+            for(let i = 0; i < data.user_role.length; i++) {
+               const curr_data = data.user_role[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<UserRolesResponse>("user_role/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("user-role-create-error #1");
+                     } else {
+                        console.log("user-role-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("user-role-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<UserRolesResponse>("user_role/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("user-role-update-error #1");
+                     } else {
+                        console.log("user-role-update-error #2");
+                     }
+                  } catch (error) {
+                     console.log("user-role-update-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<UserRolesResponse>("user_role/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("user-role-delete-error #1");
+                     } else {
+                        console.log("user-role-delete-error #2");
+                     }
+                  } catch (error) {
+                     console.log("user-role-delete-error #3", error);
+                  }
+               }
+            }
+
+            // Sync Users
+            for(let i = 0; i < data.user.length; i++) {
+               const curr_data = data.user[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<UsersResponse>("user/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("user-create-error #1");
+                     } else {
+                        console.log("user-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("user-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<UsersResponse>("user/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("user-create-error #1");
+                     } else {
+                        console.log("user-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("user-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<UsersResponse>("user/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("user-create-error #1");
+                     } else {
+                        console.log("user-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("user-create-error #3", error);
+                  }
+               }
+            }
+
+            // Sync Categories
+            for(let i = 0; i < data.category.length; i++) {
+               const curr_data = data.category[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<CategoriesResponse>("category/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("category-create-error #1");
+                     } else {
+                        console.log("category-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("category-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<CategoriesResponse>("category/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("category-create-error #1");
+                     } else {
+                        console.log("category-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("category-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<CategoriesResponse>("category/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("category-create-error #1");
+                     } else {
+                        console.log("category-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("category-create-error #3", error);
+                  }
+               }
+            }
+
+            // Sync Products
+            for(let i = 0; i < data.product.length; i++) {
+               const curr_data = data.product[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<ProductsResponse>("product/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("product-create-error #1");
+                     } else {
+                        console.log("product-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("product-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<ProductsResponse>("product/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("product-create-error #1");
+                     } else {
+                        console.log("product-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("product-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<ProductsResponse>("product/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("product-create-error #1");
+                     } else {
+                        console.log("product-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("product-create-error #3", error);
+                  }
+               }
+            }
+
             // Sync Sales
             for(let i = 0; i < data.sale.length; i++) {
-               const curr_sale = data.sale[i];
-               if(curr_sale.sync_type === "add") {
+               const curr_data = data.sale[i];
+               if(curr_data.sync_type === "add") {
                   try {
                      let response = await axios.put<SalesResponse>("sale/v3/create.php", {
-                        total: curr_sale.total,
-                        id_branch: curr_sale.id_branch
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -136,12 +352,12 @@ export default defineComponent({
                   } catch (error) {
                      console.log("sale-create-error #3", error);
                   }
-               } else if(curr_sale.sync_type === "update") {
+               } else if(curr_data.sync_type === "update") {
                   try {
                      let response = await axios.post<SalesResponse>("sale/v3/update.php", {
-                        id: curr_sale.id,
-                        total: curr_sale.total,
-                        id_branch: curr_sale.id_branch
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -152,12 +368,12 @@ export default defineComponent({
                   } catch (error) {
                      console.log("sale-create-error #3", error);
                   }
-               } else if(curr_sale.sync_type === "delete") {
+               } else if(curr_data.sync_type === "delete") {
                   try {
                      let response = await axios.delete<SalesResponse>("sale/v3/delete.php", {
                         params: {
                            field: "id",
-                           data: curr_sale.id
+                           data: curr_data.id
                         },
                      });
                      if(response) {
@@ -172,16 +388,177 @@ export default defineComponent({
                }
             }
 
-            // if(!error) {
+            // Sync Sale Products
+            for(let i = 0; i < data.sale_product.length; i++) {
+               const curr_data = data.sale_product[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<SaleProductsResponse>("sale_product/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("sale-product-create-error #1");
+                     } else {
+                        console.log("sale-product-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("sale-product-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<SaleProductsResponse>("sale_product/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("sale-product-create-error #1");
+                     } else {
+                        console.log("sale-product-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("sale-product-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<SaleProductsResponse>("sale_product/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("sale-product-create-error #1");
+                     } else {
+                        console.log("sale-product-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("sale-product-create-error #3", error);
+                  }
+               }
+            }
+
+            // Sync Suppliers
+            for(let i = 0; i < data.supplier.length; i++) {
+               const curr_data = data.supplier[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<SuppliersResponse>("supplier/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("supplier-create-error #1");
+                     } else {
+                        console.log("supplier-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("supplier-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<SuppliersResponse>("supplier/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("supplier-create-error #1");
+                     } else {
+                        console.log("supplier-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("supplier-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<SuppliersResponse>("supplier/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("supplier-create-error #1");
+                     } else {
+                        console.log("supplier-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("supplier-create-error #3", error);
+                  }
+               }
+            }
+
+            // Sync Clients
+            for(let i = 0; i < data.client.length; i++) {
+               const curr_data = data.client[i];
+               if(curr_data.sync_type === "add") {
+                  try {
+                     let response = await axios.put<ClientsResponse>("client/v3/create.php", {
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("client-create-error #1");
+                     } else {
+                        console.log("client-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("client-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "update") {
+                  try {
+                     let response = await axios.post<ClientsResponse>("client/v3/update.php", {
+                        id: curr_data.id,
+                        total: curr_data.total,
+                        id_branch: curr_data.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("client-create-error #1");
+                     } else {
+                        console.log("client-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("client-create-error #3", error);
+                  }
+               } else if(curr_data.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<ClientsResponse>("client/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_data.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("client-create-error #1");
+                     } else {
+                        console.log("client-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("client-create-error #3", error);
+                  }
+               }
+            }
+
             window.api.send("mysql-sync-unsync-data");
             window.api.receive("mysql-sync-unsync-data-reply", function() {
+               // $q.dialog // Report of errors when theres internet again
                Swal.fire({
                   title: "Ok",
                   text: "Sync data with server successfully",
                   icon: "success"
                });
             });
-            // }
          });
       };
       const onOffline = () => {
