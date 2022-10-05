@@ -30,12 +30,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { UserResponse } from "@/interfaces/user/user";
 import { SessionStore } from "@/interfaces/store";
@@ -65,7 +65,7 @@ export default defineComponent({
             return;
          }
 
-         axios.post<UserResponse>("user/v3/login.php", {
+         axios.post<UserResponse>(`${ getServer.value }/user/v3/login.php`, {
             username: email.value,
             password: password.value
          }).then((response) => {
@@ -114,6 +114,10 @@ export default defineComponent({
             });
          });
       }
+
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
 
       return {
          email,

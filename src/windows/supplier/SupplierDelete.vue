@@ -87,10 +87,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, computed } from "vue";
 import { useI18n } from "vue-i18n/index";
+import { useStore } from "vuex";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
+import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
 import { Supplier, SupplierResponse, IPCParams } from "@/interfaces/supplier/supplier";
 import Banner from "@/views/layout/Banner.vue";
@@ -108,6 +110,7 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
       const supplier = reactive<Supplier>({
          id: -1,
          is_active: -1,
@@ -145,7 +148,7 @@ export default defineComponent({
 
       const onDelete = async() => {
          try {
-            let response = await axios.delete<SupplierResponse>("supplier/v3/delete.php", {
+            let response = await axios.delete<SupplierResponse>(`${ getServer.value }/supplier/v3/delete.php`, {
                params: {
                   field: "id",
                   data: supplier.id
@@ -199,6 +202,10 @@ export default defineComponent({
             type: "delete"
          });
       };
+
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
 
       return {
          t,

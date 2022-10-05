@@ -65,7 +65,7 @@ import { defineComponent, onMounted, onUnmounted, computed } from "vue";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store"
 import { Branch, BranchesResponse } from "@/interfaces/branch/branch";
 import { Client, ClientsResponse } from "@/interfaces/client/client";
@@ -113,7 +113,7 @@ export default defineComponent({
                   const curr_data = data.user_role[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<UserRolesResponse>("user_role/v3/create.php", {
+                        let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user_role/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -128,7 +128,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<UserRolesResponse>("user_role/v3/update.php", {
+                        let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user_role/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -144,7 +144,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<UserRolesResponse>("user_role/v3/delete.php", {
+                        let response = await axios.delete<UserRolesResponse>(`${ getServer.value }/user_role/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -167,7 +167,7 @@ export default defineComponent({
                   const curr_data = data.user[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<UsersResponse>("user/v3/create.php", {
+                        let response = await axios.put<UsersResponse>(`${ getServer.value }/user/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -182,7 +182,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<UsersResponse>("user/v3/update.php", {
+                        let response = await axios.post<UsersResponse>(`${ getServer.value }/user/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -198,7 +198,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<UsersResponse>("user/v3/delete.php", {
+                        let response = await axios.delete<UsersResponse>(`${ getServer.value }/user/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -221,7 +221,7 @@ export default defineComponent({
                   const curr_data = data.category[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<CategoriesResponse>("category/v3/create.php", {
+                        let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -236,7 +236,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<CategoriesResponse>("category/v3/update.php", {
+                        let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -252,7 +252,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<CategoriesResponse>("category/v3/delete.php", {
+                        let response = await axios.delete<CategoriesResponse>(`${ getServer.value }/category/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -275,7 +275,7 @@ export default defineComponent({
                   const curr_data = data.product[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<ProductsResponse>("product/v3/create.php", {
+                        let response = await axios.put<ProductsResponse>(`${ getServer.value }/product/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -290,7 +290,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<ProductsResponse>("product/v3/update.php", {
+                        let response = await axios.post<ProductsResponse>(`${ getServer.value }/product/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -306,7 +306,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<ProductsResponse>("product/v3/delete.php", {
+                        let response = await axios.delete<ProductsResponse>(`${ getServer.value }/product/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -329,7 +329,7 @@ export default defineComponent({
                   const curr_data = data.sale[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<SalesResponse>("sale/v3/create.php", {
+                        let response = await axios.put<SalesResponse>(`${ getServer.value }/sale/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -344,7 +344,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<SalesResponse>("sale/v3/update.php", {
+                        let response = await axios.post<SalesResponse>(`${ getServer.value }/sale/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -360,7 +360,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<SalesResponse>("sale/v3/delete.php", {
+                        let response = await axios.delete<SalesResponse>(`${ getServer.value }/sale/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -383,7 +383,7 @@ export default defineComponent({
                   const curr_data = data.sale_product[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<SaleProductsResponse>("sale_product/v3/create.php", {
+                        let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -398,7 +398,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<SaleProductsResponse>("sale_product/v3/update.php", {
+                        let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -414,7 +414,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<SaleProductsResponse>("sale_product/v3/delete.php", {
+                        let response = await axios.delete<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -437,7 +437,7 @@ export default defineComponent({
                   const curr_data = data.supplier[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<SuppliersResponse>("supplier/v3/create.php", {
+                        let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -452,7 +452,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<SuppliersResponse>("supplier/v3/update.php", {
+                        let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -468,7 +468,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<SuppliersResponse>("supplier/v3/delete.php", {
+                        let response = await axios.delete<SuppliersResponse>(`${ getServer.value }/supplier/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -491,7 +491,7 @@ export default defineComponent({
                   const curr_data = data.client[i];
                   if(curr_data.sync_type === "add") {
                      try {
-                        let response = await axios.put<ClientsResponse>("client/v3/create.php", {
+                        let response = await axios.put<ClientsResponse>(`${ getServer.value }/client/v3/create.php`, {
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
                         });
@@ -506,7 +506,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "update") {
                      try {
-                        let response = await axios.post<ClientsResponse>("client/v3/update.php", {
+                        let response = await axios.post<ClientsResponse>(`${ getServer.value }/client/v3/update.php`, {
                            id: curr_data.id,
                            total: curr_data.total,
                            id_branch: curr_data.id_branch
@@ -522,7 +522,7 @@ export default defineComponent({
                      }
                   } else if(curr_data.sync_type === "delete") {
                      try {
-                        let response = await axios.delete<ClientsResponse>("client/v3/delete.php", {
+                        let response = await axios.delete<ClientsResponse>(`${ getServer.value }/client/v3/delete.php`, {
                            params: {
                               field: "id",
                               data: curr_data.id
@@ -566,7 +566,7 @@ export default defineComponent({
 
          // Get Branches
          try {
-            let response = await axios.get<BranchesResponse>("branch/v3/select-all.php");
+            let response = await axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -605,7 +605,7 @@ export default defineComponent({
 
          // Get Clients
          try {
-            let response = await axios.get<ClientsResponse>("client/v3/select-all.php");
+            let response = await axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -657,7 +657,7 @@ export default defineComponent({
 
          // Get Suppliers
          try {
-            let response = await axios.get<SuppliersResponse>("supplier/v3/select-all.php");
+            let response = await axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -704,7 +704,7 @@ export default defineComponent({
 
          // Get Categories
          try {
-            let response = await axios.get<CategoriesResponse>("category/v3/select-all.php");
+            let response = await axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -751,7 +751,7 @@ export default defineComponent({
 
          // Get Products
          try {
-            let response = await axios.get<ProductsResponse>("product/v3/find.php", {
+            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`, {
                params: {
                   type: "id_branch",
                   query: getBranchId.value
@@ -818,7 +818,7 @@ export default defineComponent({
 
          // Get Sales
          try {
-            let response = await axios.get<SalesResponse>("sale/v3/find.php", {
+            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/v3/find.php`, {
                params: {
                   type: "id_branch",
                   query: getBranchId.value
@@ -859,7 +859,7 @@ export default defineComponent({
 
          // Get Sale Products
          try {
-            let response = await axios.get<SaleProductsResponse>("sale_product/v3/find.php", {
+            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/find.php`, {
                params: {
                   type: "id_branch",
                   query: getBranchId.value
@@ -902,7 +902,7 @@ export default defineComponent({
 
          // Get User Roles
          try {
-            let response = await axios.get<UserRolesResponse>("user_role/v3/select-all.php");
+            let response = await axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -949,7 +949,7 @@ export default defineComponent({
 
          // Get Users
          try {
-            let response = await axios.get<UsersResponse>("user/v3/select-all.php");
+            let response = await axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -1041,6 +1041,9 @@ export default defineComponent({
          }
       };
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getIsOnline = computed(() => {
          return store.getters["getIsOnline"];
       });

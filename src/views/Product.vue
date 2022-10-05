@@ -120,7 +120,7 @@ import { defineComponent, ref, computed, reactive } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { ProductsResponse, WindowResponse, Product } from "@/interfaces/product/product";
@@ -247,6 +247,9 @@ export default defineComponent({
          }
       ];
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -257,7 +260,7 @@ export default defineComponent({
       const onRefreshData = () => {
          product.value = [];
 
-         axios.get<ProductsResponse>("product/v3/find.php", {
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`, {
             params: {
                type: "id_branch",
                query: getBranchId.value

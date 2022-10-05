@@ -4,6 +4,7 @@ import { InputFieldString } from "@/interfaces/general";
 interface IPCBranchMachine {
    machine_id: string;
    mac_address: string;
+   ip_server: string;
 }
 interface Branch {
    id: number;

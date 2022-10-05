@@ -110,7 +110,7 @@ import { UserRolesResponse, WindowResponse, UserRole } from "@/interfaces/user-r
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import Banner from "@/views/layout/Banner.vue";
@@ -186,6 +186,9 @@ export default defineComponent({
          }
       ];
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getUserRoleLoadedReply = computed(() => {
          return store.getters["getUserRoleLoadedReply"];
       });
@@ -193,7 +196,7 @@ export default defineComponent({
       const onRefreshData = () => {
          userRole.value = [];
 
-         axios.get<UserRolesResponse>("user_role/v3/select-all.php")
+         axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`)
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {

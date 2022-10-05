@@ -203,7 +203,7 @@ import { useQuasar } from "quasar";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
@@ -332,6 +332,9 @@ export default defineComponent({
       });
       const loaded = ref(false);
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -370,7 +373,7 @@ export default defineComponent({
             updateBarcode.value = true;
          loaded.value = true;
       });
-      axios.get<CategoriesResponse>("category/v3/select-all.php")
+      axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`)
          .then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
@@ -540,7 +543,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<ProductResponse>("product/v3/create.php", {
+               let response = await axios.put<ProductResponse>(`${ getServer.value }/product/v3/create.php`, {
                   code: field.code.text,
                   name: field.name.text,
                   description: field.description.text,
@@ -612,7 +615,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<ProductResponse>("product/v3/update.php", {
+               let response = await axios.post<ProductResponse>(`${ getServer.value }/product/v3/update.php`, {
                   id: page.id,
                   code: field.code.text,
                   name: field.name.text,
@@ -687,7 +690,7 @@ export default defineComponent({
 
          // Get Category
          try {
-            let response = await axios.get<CategoryOneResponse>(`category/v3/select-one.php?id=${ formatted_data.id_category }`);
+            let response = await axios.get<CategoryOneResponse>(`${ getServer.value }/category/v3/select-one.php?id=${ formatted_data.id_category }`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data:Category = response.data.data;

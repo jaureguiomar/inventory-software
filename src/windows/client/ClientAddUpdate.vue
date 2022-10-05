@@ -180,7 +180,7 @@ import { defineComponent, reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client";
@@ -312,6 +312,9 @@ export default defineComponent({
          loaded.value = true;
       });
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -380,7 +383,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<ClientResponse>("client/v3/create.php", {
+               let response = await axios.put<ClientResponse>(`${ getServer.value }/client/v3/create.php`, {
                   first_name: field.first_name.text,
                   last_name: field.last_name.text,
                   address: field.address.text,
@@ -442,7 +445,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<ClientResponse>("client/v3/update.php", {
+               let response = await axios.post<ClientResponse>(`${ getServer.value }/client/v3/update.php`, {
                   id: page.id,
                   first_name: field.first_name.text,
                   last_name: field.last_name.text,

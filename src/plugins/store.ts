@@ -6,6 +6,7 @@ import { findValueBy } from "@/plugins/mixins/general";
 const store = createStore<State>({
    state() {
       return {
+         server: "",
          is_online: false,
          automatic_bakup_done: false,
          offline_bakup_done: false,
@@ -54,6 +55,9 @@ const store = createStore<State>({
       }
    },
    getters: {
+      getServer(state:State) {
+         return state.server;
+      },
       getIsOnline(state:State) {
          return state.is_online;
       },
@@ -104,6 +108,9 @@ const store = createStore<State>({
       }
    },
    mutations: {
+      SET_SERVER_DATA: (state:State, data:string) => {
+         state.server = data;
+      },
       SET_IS_ONLINE_DATA: (state:State, data:boolean) => {
          state.is_online = data;
       },

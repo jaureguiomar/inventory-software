@@ -1,7 +1,8 @@
 import axios from "axios";
 
+const server = localStorage.getItem("server");
 export default axios.create({
-   baseURL: "http://127.0.0.1/inventory-software-api/api/",
+   baseURL: `${ server }/inventory-software-api/api/`,
    responseType: "json",
    headers: {
       "Accept": "application/json",

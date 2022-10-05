@@ -1,7 +1,8 @@
 import { _RouteLocationBase } from "vue-router";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { BranchStore } from "@/interfaces/store";
 import { BranchOneResponse } from "@/interfaces/branch/branch";
+import store from "../store";
 
 export const validateBranchSelect = (to:_RouteLocationBase, from:_RouteLocationBase, next:Function) => {
    const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{
@@ -24,10 +25,12 @@ export const validateBranchActive = async(to:_RouteLocationBase, from:_RouteLoca
       "telephone": "",
       "address": ""
    }`);
+   if(!store.getters.getServer)
+      store.commit("SET_SERVER_DATA", localStorage.getItem("server"));
 
    if(branch.id > 0) {
       try {
-         await axios.get<BranchOneResponse>(`branch/v3/select-one.php?id=${ branch.id }`);
+         await axios.get<BranchOneResponse>(`${ store.getters.getServer }/branch/v3/select-one.php?id=${ branch.id }`);
          next();
       } catch (error) {
          if(to.name !== "branch-disabled")

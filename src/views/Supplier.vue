@@ -110,7 +110,7 @@ import { SuppliersResponse, WindowResponse, Supplier } from "@/interfaces/suppli
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import Banner from "@/views/layout/Banner.vue";
@@ -186,6 +186,9 @@ export default defineComponent({
          }
       ];
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getSupplierLoadedReply = computed(() => {
          return store.getters["getSupplierLoadedReply"];
       });
@@ -193,7 +196,7 @@ export default defineComponent({
       const onRefreshData = () => {
          supplier.value = [];
 
-         axios.get<SuppliersResponse>("supplier/v3/select-all.php")
+         axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`)
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {

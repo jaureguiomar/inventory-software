@@ -271,7 +271,7 @@
 </template>
 
 <script lang="ts">
-import axios from "@/plugins/axios";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
 import { useQuasar } from "quasar";
@@ -362,7 +362,7 @@ export default defineComponent({
       };
       const onRefreshProducts = () => {
          all_products.value = [];
-         axios.get<ProductsResponse>("product/v3/find.php", {
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`, {
             params: {
                type: "id_branch",
                query: getBranchId.value
@@ -435,6 +435,9 @@ export default defineComponent({
          }
       };
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });

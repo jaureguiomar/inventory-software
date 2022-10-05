@@ -43,6 +43,7 @@ interface SessionStore {
 }
 
 interface State {
+   server: string;
    is_online: boolean;
    automatic_bakup_done: boolean;
    offline_bakup_done: boolean;

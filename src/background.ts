@@ -7,21 +7,11 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import getMAC from "getmac";
 import { machineId } from "node-machine-id";
+import fs from "fs";
 import { window } from "@/background/window";
 import "@/background/printer";
 import "@/background/mysql";
-
 const isDevelopment = process.env.NODE_ENV !== "production";
-// let icon_path = "";
-// let rootDir = app.getAppPath();
-// const last = path.basename(rootDir);
-
-// if(last == "app.asar")
-//    rootDir = path.dirname(app.getPath("exe"));
-// if(isDevelopment)
-//    icon_path = path.join(__dirname, "src/assets/img/inventory-software-icon.ico");
-// else
-//    icon_path = path.join(rootDir, "resources/img/inventory-software-icon.ico");
 
 protocol.registerSchemesAsPrivileged([
    { scheme: "app", privileges: { secure: true, standard: true } }
@@ -44,10 +34,23 @@ async function createWindow() {
 
    const machine_id:string = await machineId();
    const mac_address:string = getMAC();
+   const config_path = getAppPath() + "\\params\\.config";
+   let config_content = "";
+
+   try {
+      config_content = fs.readFileSync(config_path, {
+         encoding: "utf8",
+         flag: "r"
+      });
+   } catch (error) {
+      console.log("error", error);
+   }
+
    window.main.webContents.on("did-finish-load", function () {
       window.main.webContents.send("setup-machine", {
          machine_id,
-         mac_address
+         mac_address,
+         ip_server: config_content
       });
    });
 
@@ -155,4 +158,19 @@ if(isDevelopment) {
          app.quit();
       });
    }
+}
+
+function getAppPath() {
+   let rootDir = app.getAppPath();
+   const last = path.basename(rootDir);
+   let app_path = "";
+
+   if(last == "app.asar")
+      rootDir = path.dirname(app.getPath("exe"));
+   if(isDevelopment)
+      app_path = path.join(__dirname, "src");
+   else
+      app_path = path.join(rootDir, "resources");
+
+   return app_path;
 }

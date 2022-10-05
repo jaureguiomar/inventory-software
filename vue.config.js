@@ -16,6 +16,10 @@ module.exports = {
           {
             from: "./src/assets/img",
             to: "./img"
+          },
+          {
+            from: "./src/params",
+            to: "./params/.config"
           }
         ],
         publish: [

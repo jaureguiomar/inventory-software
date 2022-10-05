@@ -101,7 +101,7 @@ import { defineComponent, reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, SupplierField, SupplierResponse, Supplier } from "@/interfaces/supplier/supplier";
@@ -160,6 +160,9 @@ export default defineComponent({
       });
       const loaded = ref(false);
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -216,7 +219,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<SupplierResponse>("supplier/v3/create.php", {
+               let response = await axios.put<SupplierResponse>(`${ getServer.value }/supplier/v3/create.php`, {
                   name: field.name.text,
                   id_branch: getBranchId.value
                });
@@ -268,7 +271,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<SupplierResponse>("supplier/v3/update.php", {
+               let response = await axios.post<SupplierResponse>(`${ getServer.value }/supplier/v3/update.php`, {
                   id: page.id,
                   name: field.name.text,
                   id_branch: getBranchId.value

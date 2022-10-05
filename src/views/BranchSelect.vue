@@ -77,12 +77,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { IPCBranchMachine, Branch, BranchesResponse, BranchField, BranchResponse } from "@/interfaces/branch/branch";
@@ -152,32 +152,44 @@ export default defineComponent({
          window.api.receive("setup-machine", (data:IPCBranchMachine) => {
             field.machine_id.text = data.machine_id;
             field.mac_address.text = data.mac_address;
+            localStorage.setItem("server", data.ip_server);
+            store.commit("SET_SERVER_DATA", data.ip_server);
          });
 
-         axios.get<BranchesResponse>("branch/v3/select-all.php")
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_branched:Array<Branch> = [];
+         setTimeout(() => {
+            branchOptions.value = [];
+            branchFilteredOptions.value = [];
+            axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`)
+               .then((response) => {
+                  if(response) {
+                     if(!response.data.error.is_error) {
+                        const data = response.data.data;
+                        let formatted_branched:Array<Branch> = [];
 
-                     for(let i = 0; i < data.length; i++) {
-                        formatted_branched.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           name: data[i].name,
-                           telephone: data[i].telephone,
-                           address: data[i].address,
-                           machine_id: data[i].machine_id,
-                           mac_address: data[i].mac_address
+                        for(let i = 0; i < data.length; i++) {
+                           formatted_branched.push({
+                              id: Number(data[i].id),
+                              is_active: Number(data[i].is_active),
+                              created: data[i].created,
+                              updated: data[i].updated,
+                              name: data[i].name,
+                              telephone: data[i].telephone,
+                              address: data[i].address,
+                              machine_id: data[i].machine_id,
+                              mac_address: data[i].mac_address
+                           });
+
+                           branchOptions.value.push(data[i].name);
+                           branchFilteredOptions.value.push(data[i].name);
+                        }
+                        branch.value = formatted_branched;
+                     } else {
+                        Swal.fire({
+                           title: "Error",
+                           text: t("global.default_error"),
+                           icon: "error"
                         });
-
-                        branchOptions.value.push(data[i].name);
-                        branchFilteredOptions.value.push(data[i].name);
                      }
-                     branch.value = formatted_branched;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -185,26 +197,21 @@ export default defineComponent({
                         icon: "error"
                      });
                   }
-               } else {
+               }).catch(() => {
                   Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),
                      icon: "error"
                   });
-               }
-            }).catch(() => {
-               Swal.fire({
-                  title: "Error",
-                  text: t("global.default_error"),
-                  icon: "error"
                });
-            });
+         }, 3000);
+
       });
 
       const onSelect = () => {
          const finded_index = findValueBy(branch.value, field.name.text, "name");
          if(finded_index >= 0) {
-            axios.post<BranchResponse>("branch/v3/update.php", {
+            axios.post<BranchResponse>(`${ getServer.value }/branch/v3/update.php`, {
                id: branch.value[finded_index].id,
                name: branch.value[finded_index].name,
                telephone: branch.value[finded_index].telephone,
@@ -307,6 +314,10 @@ export default defineComponent({
          field.name.error.message = result.message;
          return result.error;
       };
+
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
 
       return {
          branchOptions,

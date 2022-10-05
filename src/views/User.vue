@@ -121,7 +121,7 @@ import { UsersResponse, WindowResponse, User } from "@/interfaces/user/user";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import Banner from "@/views/layout/Banner.vue";
@@ -228,6 +228,9 @@ export default defineComponent({
          }
       ];
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
       const getUserLoadedReply = computed(() => {
          return store.getters["getUserLoadedReply"];
       });
@@ -235,7 +238,7 @@ export default defineComponent({
       const onRefreshData = () => {
          user.value = [];
 
-         axios.get<UsersResponse>("user/v3/select-all.php")
+         axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`)
             .then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {

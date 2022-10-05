@@ -189,7 +189,7 @@ import { defineComponent, reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
-import axios from "@/plugins/axios";
+import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins/general";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/interfaces/user/user";
@@ -316,6 +316,13 @@ export default defineComponent({
       });
       const loaded = ref(false);
 
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
+
       window.api.receive("user-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
          page.type = data.type;
@@ -344,7 +351,7 @@ export default defineComponent({
          }
          loaded.value = true;
       });
-      axios.get<UserRolesResponse>("user_role/v3/select-all.php")
+      axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`)
          .then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
@@ -396,11 +403,7 @@ export default defineComponent({
                text: t("global.default_error"),
                icon: "error"
             });
-         })
-
-      const getBranchId = computed(() => {
-         return store.getters["getBranchId"];
-      });
+         });
 
       const onAddUpdate = async() => {
          field.username.text = field.username.text.trim();
@@ -490,7 +493,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<UserResponse>("user/v3/create.php", {
+               let response = await axios.put<UserResponse>(`${ getServer.value }/user/v3/create.php`, {
                   username: field.username.text,
                   email: field.email.text,
                   password: field.password.text,
@@ -571,7 +574,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<UserResponse>("user/v3/update.php", {
+               let response = await axios.post<UserResponse>(`${ getServer.value }/user/v3/update.php`, {
                   id: page.id,
                   username: field.username.text,
                   email: field.email.text,
@@ -655,7 +658,7 @@ export default defineComponent({
 
          // Get role
          try {
-            let response = await axios.get<UserRoleOneResponse>(`user_role/v3/select-one.php?id=${ formatted_data.id_role }`);
+            let response = await axios.get<UserRoleOneResponse>(`${ getServer.value }/user_role/v3/select-one.php?id=${ formatted_data.id_role }`);
             if(response) {
                if(!response.data.error.is_error) {
                   const data:UserRole = response.data.data;
