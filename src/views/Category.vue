@@ -205,7 +205,6 @@ export default defineComponent({
                   if(response) {
                      if(!response.data.error.is_error) {
                         const data = response.data.data;
-                        console.log("data", data);
                         let formatted_categories:Array<Category> = [];
                         for(let i = 0; i < data.length; i++) {
                            formatted_categories.push({
@@ -280,7 +279,9 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name
+               name: item.name,
+               id_branch: item.id_branch,
+               branch: { ...item.branch }
             }
          });
       };
@@ -297,7 +298,9 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name
+               name: item.name,
+               id_branch: item.id_branch,
+               branch: { ...item.branch }
             }
          });
       };
@@ -310,7 +313,9 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name
+               name: item.name,
+               id_branch: item.id_branch,
+               branch: { ...item.branch }
             }
          });
       };

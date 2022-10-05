@@ -352,7 +352,11 @@ export default defineComponent({
                sale_price: item.sale_price,
                quantity: item.quantity,
                id_category: item.id_category,
-               category: { ...item.category }
+               id_branch: item.id_branch,
+               category: {
+                  ...item.category,
+                  branch: { ...item.category.branch }
+               }
             }
          });
       };
@@ -376,7 +380,11 @@ export default defineComponent({
                sale_price: item.sale_price,
                quantity: item.quantity,
                id_category: item.id_category,
-               category: { ...item.category }
+               id_branch: item.id_branch,
+               category: {
+                  ...item.category,
+                  branch: { ...item.category.branch }
+               }
             }
          });
       };
@@ -396,7 +404,11 @@ export default defineComponent({
                sale_price: item.sale_price,
                quantity: item.quantity,
                id_category: item.id_category,
-               category: { ...item.category }
+               id_branch: item.id_branch,
+               category: {
+                  ...item.category,
+                  branch: { ...item.category.branch }
+               }
             }
          });
       };

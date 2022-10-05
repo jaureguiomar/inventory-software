@@ -315,7 +315,9 @@ export default defineComponent({
                address: item.address,
                cellphone: item.cellphone,
                cellphone2: item.cellphone2,
-               email: item.email
+               email: item.email,
+               id_branch: item.id_branch,
+               branch: { ...item.branch }
             }
          });
       };
@@ -337,7 +339,9 @@ export default defineComponent({
                address: item.address,
                cellphone: item.cellphone,
                cellphone2: item.cellphone2,
-               email: item.email
+               email: item.email,
+               id_branch: item.id_branch,
+               branch: { ...item.branch }
             }
          });
       };
@@ -355,7 +359,9 @@ export default defineComponent({
                address: item.address,
                cellphone: item.cellphone,
                cellphone2: item.cellphone2,
-               email: item.email
+               email: item.email,
+               id_branch: item.id_branch,
+               branch: { ...item.branch }
             }
          });
       };

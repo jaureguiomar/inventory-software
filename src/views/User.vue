@@ -335,7 +335,12 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
-               role: { ...item.role }
+               id_branch: item.id_branch,
+               role: {
+                  ...item.role,
+                  branch: { ...item.role.branch }
+               },
+               branch: { ...item.branch }
             }
          });
       };
@@ -358,7 +363,12 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
-               role: { ...item.role }
+               id_branch: item.id_branch,
+               role: {
+                  ...item.role,
+                  branch: { ...item.role.branch }
+               },
+               branch: { ...item.branch }
             }
          });
       };
@@ -377,7 +387,12 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
-               role: { ...item.role }
+               id_branch: item.id_branch,
+               role: {
+                  ...item.role,
+                  branch: { ...item.role.branch }
+               },
+               branch: { ...item.branch }
             }
          });
       };
