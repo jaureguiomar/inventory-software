@@ -19,7 +19,7 @@ module.exports = {
           },
           {
             from: "./src/params",
-            to: "./params/.config"
+            to: "./params"
           }
         ],
         publish: [
