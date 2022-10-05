@@ -10,6 +10,12 @@ interface SaleStore {
 interface GenericStore {
    loaded_reply: boolean;
 }
+interface GenericStore2 {
+   loaded_reply: boolean;
+   loaded_get: boolean;
+   loaded_create: boolean;
+   loaded_update: boolean;
+}
 // Branch
 interface BranchStore {
    id: number;
@@ -49,7 +55,7 @@ interface State {
    client: GenericStore;
    supplier: GenericStore;
    product: GenericStore;
-   category: GenericStore;
+   category: GenericStore2;
    user: GenericStore;
    user_role: GenericStore;
 }

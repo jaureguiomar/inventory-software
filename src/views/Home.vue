@@ -92,30 +92,19 @@ export default defineComponent({
       const store = useStore(key);
 
       onMounted(() => {
-         const is_online = window.navigator.onLine;
-         store.commit("SET_IS_ONLINE_DATA", is_online);
-
-         if(is_online) {
+         if(getIsOnline) {
             if(!getAutomaticBakupDone.value) {
                onRefreshBakup();
                store.commit("SET_AUTOMATIC_BAKUP_DONE_DATA", true);
             }
          }
-
          window.addEventListener("online", onOnline);
-         window.addEventListener("offline", onOffline);
       });
       onUnmounted(() => {
          window.removeEventListener("online", onOnline);
-         window.removeEventListener("offline", onOffline);
       });
 
       const onOnline = () => {
-         ////////////////////////////////
-         // Sync local data to hosting //
-         ////////////////////////////////
-         store.commit("SET_IS_ONLINE_DATA", true);
-
          if(getRetrieveUnsyncDataDone.value) {
             window.api.send("mysql-get-unsync-data");
             window.api.receive("mysql-get-unsync-data-reply", async function(data) {
@@ -564,9 +553,6 @@ export default defineComponent({
             store.commit("SET_RETRIEVE_UNSYNC_DATA_DONE_DATA", true);
          }
       };
-      const onOffline = () => {
-         store.commit("SET_IS_ONLINE_DATA", false);
-      };
       const onRefreshBakup = async() => {
          let branch:Array<Branch> = [];
          let client:Array<Client> = [];
@@ -1003,6 +989,9 @@ export default defineComponent({
          }
       };
 
+      const getIsOnline = computed(() => {
+         return store.getters["getIsOnline"];
+      });
       const getAutomaticBakupDone = computed(() => {
          return store.getters["getAutomaticBakupDone"];
       });

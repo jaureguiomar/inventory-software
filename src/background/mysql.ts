@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 import mysql, { MysqlError } from "mysql";
+import { Category } from "@/interfaces/category/category";
 
 const mysql_connection = {
    host: "localhost",
@@ -348,6 +349,28 @@ ipcMain.on("mysql-sync-unsync-data", function(e) {
    e.sender.send("mysql-sync-unsync-data-reply");
 });
 
+ipcMain.on("mysql-get-category-data", function(e) {
+   const connection = mysql.createConnection(mysql_connection);
+   const query = "select * from category where is_active = 1";
+
+   connection.query(query, function(error, rows) {
+      const data:Array<Category> = [];
+      if(!error) {
+         for(let i = 0; i < rows.length; i++) {
+            data.push({
+               id: Number(rows[i].id),
+               is_active: rows[i].is_active,
+               created: parseDate(rows[i].created),
+               updated: parseDate(rows[i].updated),
+               name: rows[i].name,
+               id_branch: Number(rows[i].id_branch)
+            });
+         }
+      }
+      e.sender.send("mysql-get-category-data-reply", data);
+   });
+});
+
 // ipcMain.on("mysql-process-login", function(e, data) {
 //    const connection = mysql.createConnection(mysql_connection);
 //    let query = "";
@@ -422,3 +445,16 @@ const parseStringField = (value:string) => {
       return null;
    return "'" + value + "'";
 };
+
+const parseDate = (date:Date) => {
+   const year:number = date.getFullYear();
+   let month:string|number = date.getMonth() + 1;
+   let day:string|number = date.getDate();
+
+   if(month < 10)
+      month = "0" + month;
+   if(day < 10)
+      day = "0" + day;
+
+   return year + "-" + month + "-" + day;
+}

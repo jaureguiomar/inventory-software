@@ -42,7 +42,10 @@ const store = createStore<State>({
             loaded_reply: false
          },
          category: {
-            loaded_reply: false
+            loaded_reply: false,
+            loaded_get: false,
+            loaded_create: false,
+            loaded_update: false
          },
          user: {
             loaded_reply: false
@@ -91,6 +94,15 @@ const store = createStore<State>({
       },
       getCategoryLoadedReply(state:State) {
          return state.category.loaded_reply;
+      },
+      getCategoryLoadedGet(state:State) {
+         return state.category.loaded_get;
+      },
+      getCategoryLoadedCreate(state:State) {
+         return state.category.loaded_create;
+      },
+      getCategoryLoadedUpdate(state:State) {
+         return state.category.loaded_update;
       },
       getUserLoadedReply(state:State) {
          return state.user.loaded_reply;
@@ -162,6 +174,15 @@ const store = createStore<State>({
       },
       SET_CATEGORY_LOADED_REPLY: (state:State, data:boolean) => {
          state.category.loaded_reply = data;
+      },
+      SET_CATEGORY_LOADED_GET: (state:State, data:boolean) => {
+         state.category.loaded_get = data;
+      },
+      SET_CATEGORY_LOADED_CREATE: (state:State, data:boolean) => {
+         state.category.loaded_create = data;
+      },
+      SET_CATEGORY_LOADED_UPDATE: (state:State, data:boolean) => {
+         state.category.loaded_update = data;
       },
       SET_USER_LOADED_REPLY: (state:State, data:boolean) => {
          state.user.loaded_reply = data;

@@ -186,37 +186,51 @@ export default defineComponent({
          }
       ];
 
+      const getIsOnline = computed(() => {
+         return store.getters["getIsOnline"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
       const getCategoryLoadedReply = computed(() => {
          return store.getters["getCategoryLoadedReply"];
       });
+      const getCategoryLoadedGet = computed(() => {
+         return store.getters["getCategoryLoadedGet"];
+      });
 
       const onRefreshData = () => {
          category.value = [];
 
-         axios.get<CategoriesResponse>("category/v3/find.php", {
-            params: {
-               type: "id_branch",
-               query: getBranchId.value
-            }
-         }).then((response) => {
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data.data;
-                  let formatted_categories:Array<Category> = [];
-                  for(let i = 0; i < data.length; i++) {
-                     formatted_categories.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        id_branch: Number(data[i].id_branch)
+         if(getIsOnline.value) {
+            axios.get<CategoriesResponse>("category/v3/find.php", {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               }
+            }).then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_categories:Array<Category> = [];
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_categories.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name,
+                           id_branch: Number(data[i].id_branch)
+                        });
+                     }
+                     category.value = formatted_categories;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
                      });
                   }
-                  category.value = formatted_categories;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -224,20 +238,22 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            } else {
+            }).catch(() => {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
                   icon: "error"
                });
-            }
-         }).catch(() => {
-            Swal.fire({
-               title: "Error",
-               text: t("global.default_error"),
-               icon: "error"
             });
-         });
+         } else {
+            window.api.send("mysql-get-category-data");
+            if(!getCategoryLoadedGet.value) {
+               window.api.receive("mysql-get-category-data-reply", function(data:Category[]) {
+                  category.value = data;
+               });
+               store.commit("SET_CATEGORY_LOADED_GET", true);
+            }
+         }
       };
       const onCategoryAddWindowClick = () => {
          window.api.send("category-module-window", {
