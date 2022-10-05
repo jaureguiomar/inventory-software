@@ -103,11 +103,11 @@ export default defineComponent({
          }
 
          window.addEventListener("online", onOnline);
-         // window.addEventListener("offline", onOffline);
+         window.addEventListener("offline", onOffline);
       });
       onUnmounted(() => {
          window.removeEventListener("online", onOnline);
-         // window.removeEventListener("offline", onOffline);
+         window.removeEventListener("offline", onOffline);
       });
 
       const onOnline = () => {
@@ -115,10 +115,85 @@ export default defineComponent({
          // Sync local data to hosting //
          ////////////////////////////////
          store.commit("SET_IS_ONLINE_DATA", true);
+
+         window.api.send("mysql-get-unsync-data");
+         window.api.receive("mysql-get-unsync-data-reply", async function(data) {
+            // Sync Sales
+            for(let i = 0; i < data.sale.length; i++) {
+               const curr_sale = data.sale[i];
+               if(curr_sale.sync_type === "add") {
+                  try {
+                     let response = await axios.put<SalesResponse>("sale/v3/create.php", {
+                        total: curr_sale.total,
+                        id_branch: curr_sale.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("sale-create-error #1");
+                     } else {
+                        console.log("sale-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("sale-create-error #3", error);
+                  }
+               } else if(curr_sale.sync_type === "update") {
+                  try {
+                     let response = await axios.post<SalesResponse>("sale/v3/update.php", {
+                        id: curr_sale.id,
+                        total: curr_sale.total,
+                        id_branch: curr_sale.id_branch
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("sale-create-error #1");
+                     } else {
+                        console.log("sale-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("sale-create-error #3", error);
+                  }
+               } else if(curr_sale.sync_type === "delete") {
+                  try {
+                     let response = await axios.delete<SalesResponse>("sale/v3/delete.php", {
+                        params: {
+                           field: "id",
+                           data: curr_sale.id
+                        },
+                     });
+                     if(response) {
+                        if(response.data.error.is_error)
+                           console.log("sale-create-error #1");
+                     } else {
+                        console.log("sale-create-error #2");
+                     }
+                  } catch (error) {
+                     console.log("sale-create-error #3", error);
+                  }
+               }
+            }
+
+            // if(!error) {
+            //    window.api.send("mysql-get-unsync-data");
+            //    window.api.receive("mysql-get-unsync-data-reply", function(data) {
+            //       console.log("data", data);
+            //       Swal.fire({
+            //          title: "Ok",
+            //          text: "Retrieved unsync data properly",
+            //          icon: "success"
+            //       });
+            //    });
+            // }
+
+            Swal.fire({
+               title: "Ok",
+               text: "Retrieved unsync data properly",
+               icon: "success"
+            });
+         });
       };
-      // const onOffline = () => {
-      //    store.commit("SET_IS_ONLINE_DATA", false);
-      // };
+      const onOffline = () => {
+         store.commit("SET_IS_ONLINE_DATA", false);
+      };
       const onRefreshBakup = async() => {
          let branch:Array<Branch> = [];
          let client:Array<Client> = [];
@@ -532,7 +607,7 @@ export default defineComponent({
             console.log("user-error", error);
          }
 
-         window.api.send("mysql-bakup", {
+         window.api.send("mysql-offline-bakup", {
             branch: branch,
             client: client,
             supplier: supplier,
@@ -543,7 +618,7 @@ export default defineComponent({
             user_role: user_role,
             user: user
          });
-         window.api.receive("mysql-bakup-reply", function() {
+         window.api.receive("mysql-offline-bakup-reply", function() {
             Swal.fire({
                title: "Ok",
                text: "Database bakup done successfully",
