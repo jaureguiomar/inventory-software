@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import mysql, { MysqlError } from "mysql";
 import { Category } from "@/interfaces/category/category";
+import { Branch } from "@/interfaces/branch/branch";
 
 const mysql_connection = {
    host: "localhost",
@@ -349,26 +350,79 @@ ipcMain.on("mysql-sync-unsync-data", function(e) {
    e.sender.send("mysql-sync-unsync-data-reply");
 });
 
-ipcMain.on("mysql-get-category", function(e) {
+ipcMain.on("mysql-get-category", async function(e) {
    const connection = mysql.createConnection(mysql_connection);
-   const query = "select * from category where is_active = 1";
 
-   connection.query(query, function(error, rows) {
-      const data:Array<Category> = [];
-      if(!error) {
-         for(let i = 0; i < rows.length; i++) {
-            data.push({
-               id: Number(rows[i].id),
-               is_active: rows[i].is_active,
-               created: parseDate(rows[i].created),
-               updated: parseDate(rows[i].updated),
-               name: rows[i].name,
-               id_branch: Number(rows[i].id_branch)
-            });
+   const promise_get_category = new Promise((resolve) => {
+      const query = "select * from category where is_active = 1";
+      connection.query(query, function(error, rows) {
+         const data:Array<Category> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  created: parseDate(rows[i].created),
+                  updated: parseDate(rows[i].updated),
+                  name: rows[i].name,
+                  id_branch: Number(rows[i].id_branch),
+                  branch: {
+                     id: -1,
+                     is_active: -1,
+                     created: "",
+                     updated: "",
+                     name: "",
+                     telephone: "",
+                     address: "",
+                     machine_id: "",
+                     mac_address: ""
+                  }
+               });
+            }
          }
-      }
-      e.sender.send("mysql-get-category-reply", data);
+         resolve(data);
+      });
    });
+   const get_branch = async(id_branch:number) => {
+      const promise_get_branch = new Promise((resolve) => {
+         const query = "select * from branch where id = " + id_branch;
+         connection.query(query, function(error, rows) {
+            let result_branch:Branch = {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               telephone: "",
+               address: "",
+               machine_id: "",
+               mac_address: ""
+            };
+
+            if(!error) {
+               console.log("error", error);
+               console.log("rows", rows);
+               if(rows.length > 0)
+                  result_branch = { ...rows[0] };
+               console.log("result_branch", result_branch);
+            }
+            resolve(result_branch);
+         });
+      });
+      return await promise_get_branch as Branch;
+   }
+
+   const category_data:Array<Category> = await promise_get_category as Array<Category>;
+   for(let i = 0; i < category_data.length; i++) {
+      const branch_data = await get_branch(category_data[i].id_branch);
+      category_data[i].branch = { ...branch_data };
+   }
+
+   console.log("######################")
+   console.log("######################");
+   console.log("mysql-get-category");
+   console.log("category_data", category_data);
+   e.sender.send("mysql-get-category-reply", category_data);
 });
 ipcMain.on("mysql-create-category", function(e, data) {
    const connection = mysql.createConnection(mysql_connection);
@@ -403,7 +457,18 @@ ipcMain.on("mysql-create-category", function(e, data) {
             created: "",
             updated: "",
             name: "",
-            id_branch: -1
+            id_branch: -1,
+            branch: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               telephone: "",
+               address: "",
+               machine_id: "",
+               mac_address: ""
+            }
          };
          if(rows.length > 0) {
             new_category = {
@@ -412,7 +477,18 @@ ipcMain.on("mysql-create-category", function(e, data) {
                created: parseDate(rows[0].created),
                updated: parseDate(rows[0].updated),
                name: rows[0].name,
-               id_branch: Number(rows[0].id_branch)
+               id_branch: Number(rows[0].id_branch),
+               branch: {
+                  id: -1,
+                  is_active: -1,
+                  created: "",
+                  updated: "",
+                  name: "",
+                  telephone: "",
+                  address: "",
+                  machine_id: "",
+                  mac_address: ""
+               }
             };
          }
 
