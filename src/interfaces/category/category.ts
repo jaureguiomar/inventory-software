@@ -5,6 +5,8 @@ import { Branch } from "@/interfaces/branch/branch";
 interface Category {
    id: number;
    is_active: number;
+   is_sync?: number;
+   sync_type?: "add"|"update"|"delete";
    created: string;
    updated: string;
    name: string;
