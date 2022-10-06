@@ -472,12 +472,7 @@ ipcMain.on("mysql-create-category", async function(e, data) {
                   result_category = {
                      ...curr_row,
                      created: parseDate(curr_row.created),
-                     updated: parseDate(curr_row.updated),
-                     branch: {
-                        ...curr_row.branch,
-                        created: parseDate(curr_row.branch.created),
-                        updated: parseDate(curr_row.branch.updated),
-                     }
+                     updated: parseDate(curr_row.updated)
                   };
                }
             }
@@ -575,12 +570,7 @@ ipcMain.on("mysql-update-category", async function(e, data) {
                   result_category = {
                      ...curr_row,
                      created: parseDate(curr_row.created),
-                     updated: parseDate(curr_row.updated),
-                     branch: {
-                        ...curr_row.branch,
-                        created: parseDate(curr_row.branch.created),
-                        updated: parseDate(curr_row.branch.updated),
-                     }
+                     updated: parseDate(curr_row.updated)
                   };
                }
             }

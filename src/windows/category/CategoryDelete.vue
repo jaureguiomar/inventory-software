@@ -195,12 +195,20 @@ export default defineComponent({
             });
          } else {
             window.api.send("mysql-delete-category", category.id);
-            window.api.receive("mysql-delete-category-reply", function(data:Category) {
-               console.log("data", data);
-               window.api.send("category-module-window-dialog", {
-                  type: "delete",
-                  message: "The category has been deleted properly"
-               });
+            window.api.receive("mysql-delete-category-reply", function(is_ok:boolean) {
+               if(is_ok) {
+                  window.api.send("category-module-window-dialog", {
+                     type: "delete",
+                     message: "The category has been deleted properly"
+                  });
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
             });
             window.api.receive("category-module-window-dialog-reply", () => {
                window.api.send("category-module-window-close", {
