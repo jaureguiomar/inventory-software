@@ -1,7 +1,8 @@
 import { ipcMain } from "electron";
-import mysql, { MysqlError } from "mysql";
-import { Category } from "@/interfaces/category/category";
-import { Branch } from "@/interfaces/branch/branch";
+import mysql, { MysqlError, OkPacket } from "mysql";
+import { Category, CategoryMySQL, CategoryMySQLDelete } from "@/interfaces/category/category";
+import { Branch, BranchMySQL } from "@/interfaces/branch/branch";
+import { MySQLOfflineField } from "@/interfaces/general";
 // import {} from "@/background/mysql/functions";
 
 const mysql_connection = {
@@ -355,7 +356,7 @@ ipcMain.on("mysql-get-category", async function(e) {
    const connection = mysql.createConnection(mysql_connection);
    const promise_get_category = new Promise<Array<Category>>((resolve) => {
       const query = "select * from category where is_active = 1";
-      connection.query(query, function(error, rows) {
+      connection.query(query, function(error:MysqlError, rows:Array<CategoryMySQL>) {
          const data:Array<Category> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
@@ -386,7 +387,7 @@ ipcMain.on("mysql-get-category", async function(e) {
    const get_branch_by_id = async(id:number) => {
       const promise_get_branch_by_id = new Promise<Branch>((resolve) => {
          const query = "select * from branch where is_active = 1 and id = " + id;
-         connection.query(query, function(error, rows) {
+         connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
             let result_branch:Branch = {
                id: -1,
                is_active: -1,
@@ -433,7 +434,7 @@ ipcMain.on("mysql-create-category", async function(e, data) {
          query += "name = '" + data.name + "', ";
          query += "id_branch = " + data.id_branch;
 
-         connection.query(query, function(error, result) {
+         connection.query(query, function(error:MysqlError, result:OkPacket) {
             let new_id:number = -1;
             if(!error)
                new_id = result.insertId;
@@ -445,7 +446,7 @@ ipcMain.on("mysql-create-category", async function(e, data) {
    const get_category_by_id = async(id:number) => {
       const promise_get_category_by_id = new Promise<Category>((resolve) => {
          const query = "select * from category where is_active = 1 and id = " + id;
-         connection.query(query, function(error, rows) {
+         connection.query(query, function(error:MysqlError, rows:Array<CategoryMySQL>) {
             let result_category:Category = {
                id: -1,
                is_active: -1,
@@ -484,7 +485,7 @@ ipcMain.on("mysql-create-category", async function(e, data) {
    const get_branch_by_id = async(id:number) => {
       const promise_get_branch_by_id = new Promise<Branch>((resolve) => {
          const query = "select * from branch where is_active = 1 and id = " + id;
-         connection.query(query, function(error, rows) {
+         connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
             let result_branch:Branch = {
                id: -1,
                is_active: -1,
@@ -521,7 +522,7 @@ ipcMain.on("mysql-create-category", async function(e, data) {
 });
 ipcMain.on("mysql-update-category", async function(e, data) {
    const connection = mysql.createConnection(mysql_connection);
-   const update_category = async(data:Category) => {
+   const update_category = async(data:CategoryMySQL) => {
       const promise_update_category = new Promise<boolean>((resolve) => {
          let query = "";
          query += "update category set ";
@@ -540,10 +541,47 @@ ipcMain.on("mysql-update-category", async function(e, data) {
       });
       return await promise_update_category;
    };
+   const get_category_mysql_by_id = async(id:number) => {
+      const promise_get_category_mysql_by_id = new Promise<CategoryMySQL>((resolve) => {
+         const query = "select * from category where is_active = 1 and id = " + id;
+         connection.query(query, function(error:MysqlError, rows:Array<CategoryMySQL>) {
+            let result_category:CategoryMySQL = {
+               id: -1,
+               is_active: -1,
+               is_sync: -1,
+               sync_type: null,
+               created: new Date(),
+               updated: new Date(),
+               name: "",
+               id_branch: -1,
+               branch: {
+                  id: -1,
+                  is_active: -1,
+                  created: "",
+                  updated: "",
+                  name: "",
+                  telephone: "",
+                  address: "",
+                  machine_id: "",
+                  mac_address: ""
+               }
+            };
+
+            if(!error) {
+               if(rows.length > 0) {
+                  const curr_row = rows[0];
+                  result_category = { ...curr_row };
+               }
+            }
+            resolve(result_category);
+         });
+      });
+      return await promise_get_category_mysql_by_id;
+   };
    const get_category_by_id = async(id:number) => {
       const promise_get_category_by_id = new Promise<Category>((resolve) => {
          const query = "select * from category where is_active = 1 and id = " + id;
-         connection.query(query, function(error, rows) {
+         connection.query(query, function(error:MysqlError, rows:Array<CategoryMySQL>) {
             let result_category:Category = {
                id: -1,
                is_active: -1,
@@ -582,7 +620,7 @@ ipcMain.on("mysql-update-category", async function(e, data) {
    const get_branch_by_id = async(id:number) => {
       const promise_get_branch_by_id = new Promise<Branch>((resolve) => {
          const query = "select * from branch where is_active = 1 and id = " + id;
-         connection.query(query, function(error, rows) {
+         connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
             let result_branch:Branch = {
                id: -1,
                is_active: -1,
@@ -642,12 +680,12 @@ ipcMain.on("mysql-update-category", async function(e, data) {
       mac_address: ""
    };
 
-   const old_category_data = await get_category_by_id(data.id);
-   const sync_data = {
+   const old_category_mysql_data = await get_category_mysql_by_id(data.id);
+   const sync_data:MySQLOfflineField = {
       is_sync: 0,
       sync_type: "update"
    };
-   if(old_category_data.is_sync === 0 && old_category_data.sync_type === "add")
+   if(old_category_mysql_data.is_sync === 0 && old_category_mysql_data.sync_type === "add")
       sync_data.sync_type = "add";
 
    const is_ok = await update_category({
@@ -663,7 +701,7 @@ ipcMain.on("mysql-update-category", async function(e, data) {
 });
 ipcMain.on("mysql-delete-category", async function(e, id) {
    const connection = mysql.createConnection(mysql_connection);
-   const delete_category = async(data) => {
+   const delete_category = async(data:CategoryMySQLDelete) => {
       const promise_delete_category = new Promise<boolean>((resolve) => {
          let query = "";
          query += "update category set ";
@@ -681,15 +719,17 @@ ipcMain.on("mysql-delete-category", async function(e, id) {
       });
       return await promise_delete_category;
    };
-   const get_category_by_id = async(id:number) => {
-      const promise_get_category_by_id = new Promise<Category>((resolve) => {
+   const get_category_mysql_by_id = async(id:number) => {
+      const promise_get_category_mysql_by_id = new Promise<CategoryMySQL>((resolve) => {
          const query = "select * from category where is_active = 1 and id = " + id;
-         connection.query(query, function(error, rows) {
-            let result_category:Category = {
+         connection.query(query, function(error:MysqlError, rows:Array<CategoryMySQL>) {
+            let result_category:CategoryMySQL = {
                id: -1,
                is_active: -1,
-               created: "",
-               updated: "",
+               is_sync: -1,
+               sync_type: null,
+               created: new Date(),
+               updated: new Date(),
                name: "",
                id_branch: -1,
                branch: {
@@ -708,25 +748,21 @@ ipcMain.on("mysql-delete-category", async function(e, id) {
             if(!error) {
                if(rows.length > 0) {
                   const curr_row = rows[0];
-                  result_category = {
-                     ...curr_row,
-                     created: parseDate(curr_row.created),
-                     updated: parseDate(curr_row.updated)
-                  };
+                  result_category = { ...curr_row };
                }
             }
             resolve(result_category);
          });
       });
-      return await promise_get_category_by_id;
+      return await promise_get_category_mysql_by_id;
    };
 
-   const old_category_data = await get_category_by_id(id);
-   const sync_data = {
+   const old_category_mysql_data = await get_category_mysql_by_id(id);
+   const sync_data:MySQLOfflineField = {
       is_sync: 0,
       sync_type: "delete"
    };
-   if(old_category_data.is_sync === 0 && old_category_data.sync_type === "add")
+   if(old_category_mysql_data.is_sync === 0 && old_category_mysql_data.sync_type === "add")
       sync_data.is_sync = 1;
 
    const is_ok = await delete_category({

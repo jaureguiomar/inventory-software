@@ -2,16 +2,27 @@ import { InputFieldString } from "@/interfaces/general";
 import { Branch } from "@/interfaces/branch/branch";
 
 // Main
-interface Category {
+interface MainCategory {
    id: number;
    is_active: number;
-   is_sync?: number;
-   sync_type?: "add"|"update"|"delete";
-   created: string;
-   updated: string;
    name: string;
    id_branch: number;
    branch: Branch;
+}
+interface Category extends MainCategory {
+   created: string;
+   updated: string;
+}
+interface CategoryMySQL extends MainCategory {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
+   created: Date;
+   updated: Date;
+}
+interface CategoryMySQLDelete {
+   id: number;
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
 }
 
 // Props
@@ -79,6 +90,8 @@ interface CategoriesResponse {
 
 export {
    Category,
+   CategoryMySQL,
+   CategoryMySQLDelete,
    Content,
    IPCParams,
    IPCParamsContent,

@@ -14,8 +14,13 @@ interface InputFieldNumber {
    max_text: number;
    error: InputErrorField;
 }
+interface MySQLOfflineField {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
+}
 
 export {
    InputFieldString,
-   InputFieldNumber
+   InputFieldNumber,
+   MySQLOfflineField
 };

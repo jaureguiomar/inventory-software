@@ -1,21 +1,30 @@
 import { InputFieldString } from "@/interfaces/general";
 
 // Main
-interface IPCBranchMachine {
-   machine_id: string;
-   mac_address: string;
-   ip_server: string;
-}
-interface Branch {
+interface MainBranch {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    name: string;
    telephone: string;
    address: string;
    machine_id: string;
    mac_address: string;
+}
+interface Branch extends MainBranch {
+   created: string;
+   updated: string;
+}
+interface BranchMySQL extends MainBranch {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
+}
+
+interface IPCBranchMachine {
+   machine_id: string;
+   mac_address: string;
+   ip_server: string;
 }
 
 // Props
@@ -88,6 +97,7 @@ interface BranchesResponse {
 export {
    IPCBranchMachine,
    Branch,
+   BranchMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
