@@ -353,7 +353,6 @@ ipcMain.on("mysql-sync-unsync-data", function(e) {
 
 ipcMain.on("mysql-get-category", async function(e) {
    const connection = mysql.createConnection(mysql_connection);
-
    const promise_get_category = new Promise<Array<Category>>((resolve) => {
       const query = "select * from category where is_active = 1";
       connection.query(query, function(error, rows) {
@@ -401,8 +400,14 @@ ipcMain.on("mysql-get-category", async function(e) {
             };
 
             if(!error) {
-               if(rows.length > 0)
-                  result_branch = { ...rows[0] };
+               if(rows.length > 0) {
+                  const curr_row = rows[0];
+                  result_branch = {
+                     ...curr_row,
+                     created: parseDate(curr_row.created),
+                     updated: parseDate(curr_row.updated)
+                  };
+               }
             }
             resolve(result_branch);
          });
@@ -415,12 +420,10 @@ ipcMain.on("mysql-get-category", async function(e) {
       const branch_data = await get_branch_by_id(category_data[i].id_branch);
       category_data[i].branch = { ...branch_data };
    }
-
    e.sender.send("mysql-get-category-reply", category_data);
 });
 ipcMain.on("mysql-create-category", async function(e, data) {
    const connection = mysql.createConnection(mysql_connection);
-
    const insert_category = async(data:Category) => {
       const promise_insert_branch = new Promise<number>((resolve) => {
          let query = "";
@@ -464,8 +467,19 @@ ipcMain.on("mysql-create-category", async function(e, data) {
             };
 
             if(!error) {
-               if(rows.length > 0)
-                  result_category = { ...rows[0] };
+               if(rows.length > 0) {
+                  const curr_row = rows[0];
+                  result_category = {
+                     ...curr_row,
+                     created: parseDate(curr_row.created),
+                     updated: parseDate(curr_row.updated),
+                     branch: {
+                        ...curr_row.branch,
+                        created: parseDate(curr_row.branch.created),
+                        updated: parseDate(curr_row.branch.updated),
+                     }
+                  };
+               }
             }
             resolve(result_category);
          });
@@ -489,8 +503,14 @@ ipcMain.on("mysql-create-category", async function(e, data) {
             };
 
             if(!error) {
-               if(rows.length > 0)
-                  result_branch = { ...rows[0] };
+               if(rows.length > 0) {
+                  const curr_row = rows[0];
+                  result_branch = {
+                     ...curr_row,
+                     created: parseDate(curr_row.created),
+                     updated: parseDate(curr_row.updated)
+                  };
+               }
             }
             resolve(result_branch);
          });
@@ -502,12 +522,10 @@ ipcMain.on("mysql-create-category", async function(e, data) {
    const new_category_data = await get_category_by_id(new_category_id);
    const branch_data = await get_branch_by_id(new_category_data.id_branch);
    new_category_data.branch = { ...branch_data };
-
    e.sender.send("mysql-create-category-reply", new_category_data);
 });
 ipcMain.on("mysql-update-category", async function(e, data) {
    const connection = mysql.createConnection(mysql_connection);
-
    const update_category = async(data:Category) => {
       const promise_insert_branch = new Promise<boolean>((resolve) => {
          let query = "";
@@ -552,8 +570,19 @@ ipcMain.on("mysql-update-category", async function(e, data) {
             };
 
             if(!error) {
-               if(rows.length > 0)
-                  result_category = { ...rows[0] };
+               if(rows.length > 0) {
+                  const curr_row = rows[0];
+                  result_category = {
+                     ...curr_row,
+                     created: parseDate(curr_row.created),
+                     updated: parseDate(curr_row.updated),
+                     branch: {
+                        ...curr_row.branch,
+                        created: parseDate(curr_row.branch.created),
+                        updated: parseDate(curr_row.branch.updated),
+                     }
+                  };
+               }
             }
             resolve(result_category);
          });
@@ -577,8 +606,14 @@ ipcMain.on("mysql-update-category", async function(e, data) {
             };
 
             if(!error) {
-               if(rows.length > 0)
-                  result_branch = { ...rows[0] };
+               if(rows.length > 0) {
+                  const curr_row = rows[0];
+                  result_branch = {
+                     ...curr_row,
+                     created: parseDate(curr_row.created),
+                     updated: parseDate(curr_row.updated)
+                  };
+               }
             }
             resolve(result_branch);
          });
@@ -622,12 +657,10 @@ ipcMain.on("mysql-update-category", async function(e, data) {
       branch_data = await get_branch_by_id(data.id_branch);
       new_category_data.branch = { ...branch_data };
    }
-
    e.sender.send("mysql-update-category-reply", new_category_data);
 });
 ipcMain.on("mysql-delete-category", async function(e, id) {
    const connection = mysql.createConnection(mysql_connection);
-
    const delete_category = async(id:number) => {
       const promise_insert_branch = new Promise<boolean>((resolve) => {
          let query = "";
@@ -638,8 +671,6 @@ ipcMain.on("mysql-delete-category", async function(e, id) {
          query += "where id = " + id;
 
          connection.query(query, function(error, result) {
-            console.log("error", error);
-            console.log("result", result);
             let is_ok = true;
             if(error)
                is_ok = false;
