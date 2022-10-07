@@ -1051,9 +1051,6 @@ export default defineComponent({
       const getOfflineBakupDone = computed(() => {
          return store.getters["getOfflineBakupDone"];
       });
-      // const getRetrieveUnsyncDataDone = computed(() => {
-      //    return store.getters["getRetrieveUnsyncDataDone"];
-      // });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
