@@ -10,7 +10,6 @@ const store = createStore<State>({
          is_online: false,
          automatic_bakup_done: false,
          offline_bakup_done: false,
-         retrieve_unsync_data_done: false,
          branch: {
             id: -1,
             name: "",
@@ -67,9 +66,6 @@ const store = createStore<State>({
       getOfflineBakupDone(state:State) {
          return state.offline_bakup_done;
       },
-      getRetrieveUnsyncDataDone(state:State) {
-         return state.retrieve_unsync_data_done;
-      },
       getBranch(state:State) {
          return state.branch;
       },
@@ -119,9 +115,6 @@ const store = createStore<State>({
       },
       SET_OFFLINE_BAKUP_DONE_DATA: (state:State, data:boolean) => {
          state.offline_bakup_done = data;
-      },
-      SET_RETRIEVE_UNSYNC_DATA_DONE_DATA: (state:State, data:boolean) => {
-         state.retrieve_unsync_data_done = data;
       },
       SET_BRANCH_DATA: (state:State, data:BranchStore) => {
          state.branch = data;

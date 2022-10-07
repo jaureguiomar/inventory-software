@@ -47,7 +47,6 @@ interface State {
    is_online: boolean;
    automatic_bakup_done: boolean;
    offline_bakup_done: boolean;
-   retrieve_unsync_data_done: boolean;
    branch: BranchStore;
    session: SessionStore;
    sale: SaleStore;
