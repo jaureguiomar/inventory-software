@@ -14,7 +14,7 @@
          <strong>Cajero:</strong>
          {{ getSessionUser.first_name + " " + getSessionUser.last_name }}
       </div>
-      <div v-if="getPos" class="pos-data">
+      <div v-if="getSessionLogguedIn" class="pos-data">
          <strong>Caja:</strong>
          {{ getPos.name }}
       </div>
