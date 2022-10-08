@@ -242,65 +242,7 @@ export default defineComponent({
                      icon: "error"
                   });
                });
-
-            // Get poss
-            posOptions.value = [];
-            posFilteredOptions.value = [];
-            axios.get<PossResponse>(`${ getServer.value }/pos/v3/select-all.php`)
-               .then((response) => {
-                  if(response) {
-                     if(!response.data.error.is_error) {
-                        const data = response.data.data;
-                        let formatted_poss:Array<Pos> = [];
-
-                        for(let i = 0; i < data.length; i++) {
-                           formatted_poss.push({
-                              id: Number(data[i].id),
-                              is_active: Number(data[i].is_active),
-                              created: data[i].created,
-                              updated: data[i].updated,
-                              name: data[i].name,
-                              machine_id: data[i].machine_id,
-                              mac_address: data[i].mac_address,
-                              id_branch: Number(data[i].id_branch),
-                              branch: {
-                                 id: -1,
-                                 is_active: -1,
-                                 created: "",
-                                 updated: "",
-                                 name: "",
-                                 telephone: "",
-                                 address: ""
-                              }
-                           });
-
-                           posOptions.value.push(data[i].name);
-                           posFilteredOptions.value.push(data[i].name);
-                        }
-                        pos.value = formatted_poss;
-                     } else {
-                        Swal.fire({
-                           title: "Error",
-                           text: t("global.default_error"),
-                           icon: "error"
-                        });
-                     }
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
-                     });
-                  }
-               }).catch(() => {
-                  Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
-                  });
-               });
          }, 3000);
-
       });
 
       const onSelect = () => {
@@ -384,6 +326,79 @@ export default defineComponent({
             }
          }
       };
+      const getPosByBranch = (id_branch:number) => {
+         // Get poss
+         const finded_index = findValueBy(branch.value, branchField.name.text, "name");
+         clearPos();
+
+         if(finded_index >= 0) {
+            axios.get<PossResponse>(`${ getServer.value }/pos/v3/find.php`, {
+               params: {
+                  type: "id_branch",
+                  query: id_branch
+               }
+            }).then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_poss:Array<Pos> = [];
+
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_poss.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name,
+                           machine_id: data[i].machine_id,
+                           mac_address: data[i].mac_address,
+                           id_branch: Number(data[i].id_branch),
+                           branch: {
+                              id: Number(data[i].branch.id),
+                              is_active: Number(data[i].branch.is_active),
+                              created: data[i].branch.created,
+                              updated: data[i].branch.updated,
+                              name: data[i].branch.name,
+                              telephone: data[i].branch.telephone,
+                              address: data[i].branch.address,
+                           }
+                        });
+
+                        posOptions.value.push(data[i].name);
+                        posFilteredOptions.value.push(data[i].name);
+                     }
+                     pos.value = formatted_poss;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            }).catch(() => {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            });
+         }
+      };
+      const clearPos = () => {
+         pos.value = [];
+         posOptions.value = [];
+         posFilteredOptions.value = [];
+         posField.name.text = "";
+         posField.machine_id.text = "";
+         posField.mac_address.text = "";
+      }
       const branchFilter = (value:string, update:Function) => {
          if(value === "") {
             update(() => {
@@ -439,9 +454,11 @@ export default defineComponent({
          if(finded_index >= 0) {
             branchField.telephone.text = branch.value[finded_index].telephone;
             branchField.address.text = branch.value[finded_index].address;
+            getPosByBranch(branch.value[finded_index].id);
          } else {
             branchField.telephone.text = "";
             branchField.address.text = "";
+            clearPos();
          }
       };
       const onPosNameUpdate = () => {
