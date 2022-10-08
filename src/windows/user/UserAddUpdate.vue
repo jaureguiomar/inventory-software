@@ -247,9 +247,7 @@ export default defineComponent({
                updated: "",
                name: "",
                telephone: "",
-               address: "",
-               machine_id: "",
-               mac_address: ""
+               address: ""
             }
          },
          branch: {
@@ -259,9 +257,7 @@ export default defineComponent({
             updated: "",
             name: "",
             telephone: "",
-            address: "",
-            machine_id: "",
-            mac_address: ""
+            address: ""
          }
       });
       const field = reactive<UserField>({
@@ -373,9 +369,7 @@ export default defineComponent({
                            updated: data[i].branch.updated,
                            name: data[i].branch.name,
                            telephone: data[i].branch.telephone,
-                           address: data[i].branch.address,
-                           machine_id: data[i].branch.machine_id,
-                           mac_address: data[i].branch.mac_address
+                           address: data[i].branch.address
                         }
                      });
 
@@ -473,9 +467,7 @@ export default defineComponent({
                   updated: "",
                   name: "",
                   telephone: "",
-                  address: "",
-                  machine_id: "",
-                  mac_address: ""
+                  address: ""
                }
             },
             branch: {
@@ -485,9 +477,7 @@ export default defineComponent({
                updated: "",
                name: "",
                telephone: "",
-               address: "",
-               machine_id: "",
-               mac_address: ""
+               address: ""
             }
          };
 
@@ -531,9 +521,7 @@ export default defineComponent({
                               updated: "",
                               name: "",
                               telephone: "",
-                              address: "",
-                              machine_id: "",
-                              mac_address: ""
+                              address: ""
                            }
                         },
                         branch: {
@@ -543,9 +531,7 @@ export default defineComponent({
                            updated: data.branch.updated,
                            name: data.branch.name,
                            telephone: data.branch.telephone,
-                           address: data.branch.address,
-                           machine_id: data.branch.machine_id,
-                           mac_address: data.branch.mac_address
+                           address: data.branch.address
                         }
                      };
                   } else {
@@ -613,9 +599,7 @@ export default defineComponent({
                               updated: "",
                               name: "",
                               telephone: "",
-                              address: "",
-                              machine_id: "",
-                              mac_address: ""
+                              address: ""
                            }
                         },
                         branch: {
@@ -625,9 +609,7 @@ export default defineComponent({
                            updated: data.branch.updated,
                            name: data.branch.name,
                            telephone: data.branch.telephone,
-                           address: data.branch.address,
-                           machine_id: data.branch.machine_id,
-                           mac_address: data.branch.mac_address
+                           address: data.branch.address
                         }
                      };
                   } else {
@@ -676,9 +658,7 @@ export default defineComponent({
                            updated: data.branch.updated,
                            name: data.branch.name,
                            telephone: data.branch.telephone,
-                           address: data.branch.address,
-                           machine_id: data.branch.machine_id,
-                           mac_address: data.branch.mac_address
+                           address: data.branch.address
                         }
                   }
                } else {

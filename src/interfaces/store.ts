@@ -21,6 +21,11 @@ interface BranchStore {
    telephone: string;
    address: string;
 }
+// Pos
+interface PosStore {
+   id: number;
+   name: string;
+}
 // Session
 interface UserRoleStore {
    id: number;
@@ -48,6 +53,7 @@ interface State {
    automatic_bakup_done: boolean;
    offline_bakup_done: boolean;
    branch: BranchStore;
+   pos: PosStore;
    session: SessionStore;
    sale: SaleStore;
    client: GenericStore;
@@ -63,5 +69,6 @@ export {
    SaleProductStore,
    UserStore,
    BranchStore,
+   PosStore,
    SessionStore
 };

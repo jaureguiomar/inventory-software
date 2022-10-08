@@ -1,6 +1,6 @@
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
-import { State, SaleProductStore, UserStore, BranchStore } from "@/interfaces/store";
+import { State, SaleProductStore, UserStore, BranchStore, PosStore } from '@/interfaces/store';
 import { findValueBy } from "@/plugins/mixins/general";
 
 const store = createStore<State>({
@@ -15,6 +15,10 @@ const store = createStore<State>({
             name: "",
             telephone: "",
             address: ""
+         },
+         pos: {
+            id: -1,
+            name: ""
          },
          session: {
             loggued_in: false,
@@ -72,6 +76,12 @@ const store = createStore<State>({
       getBranchId(state:State) {
          return state.branch.id;
       },
+      getPos(state:State) {
+         return state.pos;
+      },
+      getPosId(state:State) {
+         return state.pos.id;
+      },
       getSessionLogguedIn(state:State) {
          return state.session.loggued_in;
       },
@@ -118,6 +128,9 @@ const store = createStore<State>({
       },
       SET_BRANCH_DATA: (state:State, data:BranchStore) => {
          state.branch = data;
+      },
+      SET_POS_DATA: (state:State, data:PosStore) => {
+         state.pos = data;
       },
       SET_SESSION_LOGGUED_IN_DATA: (state:State, data:boolean) => {
          state.session.loggued_in = data;

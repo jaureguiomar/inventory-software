@@ -17,18 +17,42 @@
             <div class="row">
                <div class="col-md-6 col-12">
                   <q-select
-                     v-model="field.name.text"
+                     v-model="branchField.name.text"
                      use-input
                      input-debounce="0"
                      label="Branch"
                      :options="branchOptions"
                      behavior="menu"
-                     :error="field.name.error.is_error"
-                     :error-message="field.name.error.message"
+                     :error="branchField.name.error.is_error"
+                     :error-message="branchField.name.error.message"
                      @filter="branchFilter"
-                     @blur="onNameBlur"
-                     @update:model-value="onNameUpdate"
-                     @input-value="onNameInput"
+                     @blur="onBranchNameBlur"
+                     @update:model-value="onBranchNameUpdate"
+                     @input-value="onBranchNameInput"
+                  >
+                     <template #no-option>
+                        <q-item>
+                           <q-item-section class="text-grey">
+                           No results
+                           </q-item-section>
+                        </q-item>
+                     </template>
+                  </q-select>
+               </div>
+               <div class="col-md-6 col-12">
+                  <q-select
+                     v-model="posField.name.text"
+                     use-input
+                     input-debounce="0"
+                     label="POS"
+                     :options="posOptions"
+                     behavior="menu"
+                     :error="posField.name.error.is_error"
+                     :error-message="posField.name.error.message"
+                     @filter="posFilter"
+                     @blur="onPosNameBlur"
+                     @update:model-value="onPosNameUpdate"
+                     @input-value="onPosNameInput"
                   >
                      <template #no-option>
                         <q-item>
@@ -43,7 +67,7 @@
             <div class="row q-mb-md">
                <div class="col-md-6 col-12">
                   <q-input
-                     v-model="field.telephone.text"
+                     v-model="branchField.telephone.text"
                      label="Telephone"
                      type="text"
                      bottom-slots
@@ -53,7 +77,7 @@
                </div>
                <div class="col-md-6 col-12">
                   <q-input
-                     v-model="field.address.text"
+                     v-model="branchField.address.text"
                      label="Address"
                      type="text"
                      bottom-slots
@@ -85,8 +109,10 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
-import { IPCBranchMachine, Branch, BranchesResponse, BranchField, BranchResponse } from "@/interfaces/branch/branch";
-import { BranchStore } from "@/interfaces/store";
+import { Branch, BranchesResponse, BranchField } from "@/interfaces/branch/branch";
+import { Pos, PossResponse, PosField, PosResponse } from "@/interfaces/pos/pos";
+import { BranchStore, PosStore } from "@/interfaces/store";
+import { IPCSetupMachine } from "@/interfaces/setup-machine";
 import Menu from "@/views/layout/Menu.vue";
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
@@ -105,7 +131,7 @@ export default defineComponent({
       const branchOptions = ref<Array<string>>([]);
       const branchFilteredOptions = ref<Array<string>>([]);
       const branch = ref<Branch[]>([]);
-      const field = reactive<BranchField>({
+      const branchField = reactive<BranchField>({
          name: {
             text: "",
             max_text: 160,
@@ -125,6 +151,19 @@ export default defineComponent({
          address: {
             text: "",
             max_text: 160,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         }
+      });
+      const posOptions = ref<Array<string>>([]);
+      const posFilteredOptions = ref<Array<string>>([]);
+      const pos = ref<Pos[]>([]);
+      const posField = reactive<PosField>({
+         name: {
+            text: "",
+            max_text: 60,
             error: {
                is_error: false,
                message: ""
@@ -149,14 +188,15 @@ export default defineComponent({
       });
 
       onMounted(() => {
-         window.api.receive("setup-machine", (data:IPCBranchMachine) => {
-            field.machine_id.text = data.machine_id;
-            field.mac_address.text = data.mac_address;
+         window.api.receive("setup-machine", (data:IPCSetupMachine) => {
+            posField.machine_id.text = data.machine_id;
+            posField.mac_address.text = data.mac_address;
             localStorage.setItem("server", data.ip_server);
             store.commit("SET_SERVER_DATA", data.ip_server);
          });
 
          setTimeout(() => {
+            // Get branches
             branchOptions.value = [];
             branchFilteredOptions.value = [];
             axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`)
@@ -164,25 +204,80 @@ export default defineComponent({
                   if(response) {
                      if(!response.data.error.is_error) {
                         const data = response.data.data;
-                        let formatted_branched:Array<Branch> = [];
+                        let formatted_branches:Array<Branch> = [];
 
                         for(let i = 0; i < data.length; i++) {
-                           formatted_branched.push({
+                           formatted_branches.push({
                               id: Number(data[i].id),
                               is_active: Number(data[i].is_active),
                               created: data[i].created,
                               updated: data[i].updated,
                               name: data[i].name,
                               telephone: data[i].telephone,
-                              address: data[i].address,
-                              machine_id: data[i].machine_id,
-                              mac_address: data[i].mac_address
+                              address: data[i].address
                            });
 
                            branchOptions.value.push(data[i].name);
                            branchFilteredOptions.value.push(data[i].name);
                         }
-                        branch.value = formatted_branched;
+                        branch.value = formatted_branches;
+                     } else {
+                        Swal.fire({
+                           title: "Error",
+                           text: t("global.default_error"),
+                           icon: "error"
+                        });
+                     }
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                  }
+               }).catch(() => {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               });
+
+            // Get poss
+            posOptions.value = [];
+            posFilteredOptions.value = [];
+            axios.get<PossResponse>(`${ getServer.value }/pos/v3/select-all.php`)
+               .then((response) => {
+                  if(response) {
+                     if(!response.data.error.is_error) {
+                        const data = response.data.data;
+                        let formatted_poss:Array<Pos> = [];
+
+                        for(let i = 0; i < data.length; i++) {
+                           formatted_poss.push({
+                              id: Number(data[i].id),
+                              is_active: Number(data[i].is_active),
+                              created: data[i].created,
+                              updated: data[i].updated,
+                              name: data[i].name,
+                              machine_id: data[i].machine_id,
+                              mac_address: data[i].mac_address,
+                              id_branch: Number(data[i].id_branch),
+                              branch: {
+                                 id: -1,
+                                 is_active: -1,
+                                 created: "",
+                                 updated: "",
+                                 name: "",
+                                 telephone: "",
+                                 address: ""
+                              }
+                           });
+
+                           posOptions.value.push(data[i].name);
+                           posFilteredOptions.value.push(data[i].name);
+                        }
+                        pos.value = formatted_poss;
                      } else {
                         Swal.fire({
                            title: "Error",
@@ -209,26 +304,35 @@ export default defineComponent({
       });
 
       const onSelect = () => {
-         const finded_index = findValueBy(branch.value, field.name.text, "name");
-         if(finded_index >= 0) {
-            axios.post<BranchResponse>(`${ getServer.value }/branch/v3/update.php`, {
-               id: branch.value[finded_index].id,
-               name: branch.value[finded_index].name,
-               telephone: branch.value[finded_index].telephone,
-               address: branch.value[finded_index].address,
-               machine_id: field.machine_id.text,
-               mac_address: field.mac_address.text
+         const finded_index_branch = findValueBy(branch.value, branchField.name.text, "name");
+         const finded_index_pos = findValueBy(pos.value, posField.name.text, "name");
+
+         if(finded_index_branch >= 0 && finded_index_pos >= 0) {
+            axios.post<PosResponse>(`${ getServer.value }/pos/v3/update.php`, {
+               id: pos.value[finded_index_pos].id,
+               name: pos.value[finded_index_pos].name,
+               machine_id: posField.machine_id.text,
+               mac_address: posField.mac_address.text,
+               id_branch: pos.value[finded_index_pos].id_branch
             }).then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
+                     const data = response.data.data.data;
                      const new_branch:BranchStore = {
-                        id: branch.value[finded_index].id,
-                        name: branch.value[finded_index].name,
-                        telephone: branch.value[finded_index].telephone,
-                        address: branch.value[finded_index].address
+                       id: Number(branch.value[finded_index_branch].id),
+                       name: branch.value[finded_index_branch].name,
+                       telephone: branch.value[finded_index_branch].telephone,
+                       address: branch.value[finded_index_branch].address
                      };
+                     const new_pos:PosStore = {
+                       id: Number(data.id),
+                       name: data.name
+                     };
+
                      localStorage.setItem("branch", JSON.stringify(new_branch));
-                     store.commit("SET_BRANCH_DATA", branch);
+                     localStorage.setItem("pos", JSON.stringify(new_pos));
+                     store.commit("SET_BRANCH_DATA", new_branch);
+                     store.commit("SET_POS_DATA", new_pos);
 
                      Swal.fire({
                         title: "Ok",
@@ -259,11 +363,25 @@ export default defineComponent({
                });
             });
          } else {
-            Swal.fire({
-               title: "Error",
-               text: "You must select a branch to continue",
-               icon: "error"
-            });
+            if(finded_index_branch < 0 && finded_index_pos < 0) {
+               Swal.fire({
+                  title: "Error",
+                  text: "You must select branch & pos to continue",
+                  icon: "error"
+               });
+            } else if(finded_index_branch < 0) {
+               Swal.fire({
+                  title: "Error",
+                  text: "You must select a branch to continue",
+                  icon: "error"
+               });
+            } else if(finded_index_pos < 0) {
+               Swal.fire({
+                  title: "Error",
+                  text: "You must select a pos to continue",
+                  icon: "error"
+               });
+            }
          }
       };
       const branchFilter = (value:string, update:Function) => {
@@ -278,40 +396,70 @@ export default defineComponent({
             branchOptions.value = branchFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
          });
       };
+      const posFilter = (value:string, update:Function) => {
+         if(value === "") {
+            update(() => {
+               posOptions.value = posFilteredOptions.value;
+            });
+            return;
+         }
+         update(() => {
+            const needle = value.toLowerCase();
+            posOptions.value = posFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
+         });
+      };
 
       /////////////////
       // Blur Events //
-      const onNameBlur = () => {
-         let value = field.name.text;
-         validateName(value);
+      const onBranchNameBlur = () => {
+         let value = branchField.name.text;
+         validateBranchName(value);
+      };
+      const onPosNameBlur = () => {
+         let value = posField.name.text;
+         validatePosName(value);
       };
       //////////////////
       // Input Events //
-      const onNameInput = () => {
-         let value = field.name.text;
-         validateName(value);
+      const onBranchNameInput = () => {
+         let value = branchField.name.text;
+         validateBranchName(value);
+      };
+      const onPosNameInput = () => {
+         let value = posField.name.text;
+         validatePosName(value);
       };
       ////////////////////
       // Select Events //
-      const onNameUpdate = () => {
-         let value = field.name.text;
-         validateName(value);
+      const onBranchNameUpdate = () => {
+         let value = branchField.name.text;
+         validateBranchName(value);
 
          const finded_index = findValueBy(branch.value, value, "name");
          if(finded_index >= 0) {
-            field.telephone.text = branch.value[finded_index].telephone;
-            field.address.text = branch.value[finded_index].address;
+            branchField.telephone.text = branch.value[finded_index].telephone;
+            branchField.address.text = branch.value[finded_index].address;
          } else {
-            field.telephone.text = "";
-            field.address.text = "";
+            branchField.telephone.text = "";
+            branchField.address.text = "";
          }
+      };
+      const onPosNameUpdate = () => {
+         let value = posField.name.text;
+         validatePosName(value);
       };
       ////////////////
       // Validators //
-      const validateName = (name:string) => {
+      const validateBranchName = (name:string) => {
          let result = validateField(name);
-         field.name.error.is_error = result.error;
-         field.name.error.message = result.message;
+         branchField.name.error.is_error = result.error;
+         branchField.name.error.message = result.message;
+         return result.error;
+      };
+      const validatePosName = (name:string) => {
+         let result = validateField(name);
+         posField.name.error.is_error = result.error;
+         posField.name.error.message = result.message;
          return result.error;
       };
 
@@ -321,12 +469,18 @@ export default defineComponent({
 
       return {
          branchOptions,
-         field,
-         onSelect,
+         branchField,
          branchFilter,
-         onNameBlur,
-         onNameInput,
-         onNameUpdate
+         posOptions,
+         posField,
+         posFilter,
+         onBranchNameBlur,
+         onBranchNameInput,
+         onBranchNameUpdate,
+         onPosNameBlur,
+         onPosNameInput,
+         onPosNameUpdate,
+         onSelect
       };
    }
 });

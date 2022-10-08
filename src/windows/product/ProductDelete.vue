@@ -189,9 +189,7 @@ export default defineComponent({
                updated: "",
                name: "",
                telephone: "",
-               address: "",
-               machine_id: "",
-               mac_address: "",
+               address: ""
             }
          }
       });

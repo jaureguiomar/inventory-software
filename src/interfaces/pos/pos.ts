@@ -1,18 +1,21 @@
 import { InputFieldString } from "@/interfaces/general";
+import { Branch } from "@/interfaces/branch/branch";
 
 // Main
-interface MainBranch {
+interface MainPos {
    id: number;
    is_active: number;
    name: string;
-   telephone: string;
-   address: string;
+   machine_id: string;
+   mac_address: string;
+   id_branch: number;
+   branch: Branch;
 }
-interface Branch extends MainBranch {
+interface Pos extends MainPos {
    created: string;
    updated: string;
 }
-interface BranchMySQL extends MainBranch {
+interface PosMySQL extends MainPos {
    is_sync: number;
    sync_type: "add"|"update"|"delete";
    created: Date;
@@ -20,17 +23,17 @@ interface BranchMySQL extends MainBranch {
 }
 
 // Props
-interface BranchField {
+interface PosField {
    name: InputFieldString;
-   telephone: InputFieldString;
-   address: InputFieldString;
+   machine_id: InputFieldString;
+   mac_address: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: Branch;
+   data: Pos;
 }
 
 // IPCParams Content
@@ -42,7 +45,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Branch;
+   data?: Pos;
 }
 
 // Page
@@ -55,14 +58,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Branch|null;
+   data: Pos|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: Branch;
+   data: Pos;
    ok: boolean;
    message: string;
 }
@@ -71,29 +74,29 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface BranchResponse {
+interface PosResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface BranchOneResponse {
-   data: Branch;
+interface PosOneResponse {
+   data: Pos;
    error: ResponseError;
 }
-interface BranchesResponse {
-   data: Array<Branch>;
+interface PossResponse {
+   data: Array<Pos>;
    error: ResponseError;
 }
 
 export {
-   Branch,
-   BranchMySQL,
+   Pos,
+   PosMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
-   BranchResponse,
-   BranchOneResponse,
-   BranchesResponse,
+   PosResponse,
+   PosOneResponse,
+   PossResponse,
    WindowResponse,
    Page,
-   BranchField
+   PosField
 };

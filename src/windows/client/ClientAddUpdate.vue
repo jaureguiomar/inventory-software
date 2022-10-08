@@ -227,9 +227,7 @@ export default defineComponent({
             updated: "",
             name: "",
             telephone: "",
-            address: "",
-            machine_id: "",
-            mac_address: "",
+            address: ""
          }
       });
       const field = reactive<ClientField>({
@@ -375,9 +373,7 @@ export default defineComponent({
                updated: "",
                name: "",
                telephone: "",
-               address: "",
-               machine_id: "",
-               mac_address: "",
+               address: ""
             }
          };
 
@@ -414,9 +410,7 @@ export default defineComponent({
                            updated: data.branch.updated,
                            name: data.branch.name,
                            telephone: data.branch.telephone,
-                           address: data.branch.address,
-                           machine_id: data.branch.machine_id,
-                           mac_address: data.branch.mac_address
+                           address: data.branch.address
                         }
                      };
                   } else {
@@ -477,9 +471,7 @@ export default defineComponent({
                            updated: data.branch.updated,
                            name: data.branch.name,
                            telephone: data.branch.telephone,
-                           address: data.branch.address,
-                           machine_id: data.branch.machine_id,
-                           mac_address: data.branch.mac_address
+                           address: data.branch.address
                         }
                      };
                   } else {

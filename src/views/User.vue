@@ -271,9 +271,7 @@ export default defineComponent({
                                  updated: "",
                                  name: "",
                                  telephone: "",
-                                 address: "",
-                                 machine_id: "",
-                                 mac_address: ""
+                                 address: ""
                               }
                            },
                            branch: {
@@ -283,9 +281,7 @@ export default defineComponent({
                               updated: data[i].branch.updated,
                               name: data[i].branch.name,
                               telephone: data[i].branch.telephone,
-                              address: data[i].branch.address,
-                              machine_id: data[i].branch.machine_id,
-                              mac_address: data[i].branch.mac_address,
+                              address: data[i].branch.address
                            }
                         });
                      }

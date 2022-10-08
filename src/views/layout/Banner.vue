@@ -14,6 +14,10 @@
          <strong>Cajero:</strong>
          {{ getSessionUser.first_name + " " + getSessionUser.last_name }}
       </div>
+      <div v-if="getPos" class="pos-data">
+         <strong>Caja:</strong>
+         {{ getPos.name }}
+      </div>
       <div v-if="getSessionLogguedIn" class="system-data">
          <span class="q-mr-sm">Inventory Software v0.1.0</span>
          <span :style="[getIsOnline ? { color: '#5cdb94' } : { color: '#C10015' }]">({{ (getIsOnline) ? "Online" : "Offline" }})</span>
@@ -39,6 +43,9 @@ export default defineComponent({
       const getBranch = computed(() => {
          return store.getters["getBranch"];
       });
+      const getPos = computed(() => {
+         return store.getters["getPos"];
+      });
       const getSessionLogguedIn = computed(() => {
          return store.getters["getSessionLogguedIn"];
       });
@@ -50,6 +57,7 @@ export default defineComponent({
          t,
          getIsOnline,
          getBranch,
+         getPos,
          getSessionLogguedIn,
          getSessionUser
       };
@@ -102,10 +110,17 @@ export default defineComponent({
          color: white
          font-size: 16px
          font-weight: normal
-      .system-data
+      .pos-data
          position: absolute
          right: 34px
          top: 107px
+         color: white
+         font-size: 16px
+         font-weight: normal
+      .system-data
+         position: absolute
+         right: 34px
+         top: 137px
          color: white
          font-size: 16px
          font-weight: normal
@@ -123,6 +138,11 @@ export default defineComponent({
             top: 0
             right: 0
          .user-data
+            position: relative
+            top: 0
+            right: 0
+            margin-bottom: 7px
+         .pos-data
             position: relative
             top: 0
             right: 0
