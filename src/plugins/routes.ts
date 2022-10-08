@@ -330,6 +330,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function) => {
+   const server = localStorage.getItem("server");
    const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{
       "id": -1,
       "name": "",
@@ -349,6 +350,7 @@ router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function
          }
       }
    }`);
+   store.commit("SET_SERVER_DATA", server);
    store.commit("SET_BRANCH_DATA", branch);
    store.commit("SET_SESSION_LOGGUED_IN_DATA", session.loggued_in);
    store.commit("SET_SESSION_USER_DATA", session.user);
