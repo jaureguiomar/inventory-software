@@ -7,8 +7,8 @@
             <p class="q-ma-none">Select a branch</p>
          </template>
          <template #subtitle>
-            Opps... It seems that this system doesn't have a branch associated,
-            please select a branch to continue
+            Opps... It seems that this system doesn't have a branch and pos associated,
+            please select a branch and pos to continue
          </template>
       </Menu>
 
