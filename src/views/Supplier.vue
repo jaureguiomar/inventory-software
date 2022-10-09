@@ -106,13 +106,17 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { SuppliersResponse, WindowResponse, Supplier } from "@/interfaces/supplier/supplier";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
+import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
+import { SuppliersResponse, WindowResponse, Supplier } from "@/interfaces/supplier/supplier";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -203,22 +207,22 @@ export default defineComponent({
                      const data = response.data.data;
                      let formatted_suppliers:Array<Supplier> = [];
                      for(let i = 0; i < data.length; i++) {
+                        const formatted_user:User|null = format_user(data[i].user);
+                        const formatted_pos:Pos|null = format_pos(data[i].pos);
+                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                         formatted_suppliers.push({
                            id: Number(data[i].id),
                            is_active: Number(data[i].is_active),
                            created: data[i].created,
                            updated: data[i].updated,
                            name: data[i].name,
+                           id_user: Number(data[i].id_user),
+                           id_pos: Number(data[i].id_pos),
                            id_branch: Number(data[i].id_branch),
-                           branch: {
-                              id: Number(data[i].branch.id),
-                              is_active: Number(data[i].branch.is_active),
-                              created: data[i].branch.created,
-                              updated: data[i].branch.updated,
-                              name: data[i].branch.name,
-                              telephone: data[i].branch.telephone,
-                              address: data[i].branch.address
-                           }
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
                         });
                      }
                      supplier.value = formatted_suppliers;
@@ -265,7 +269,11 @@ export default defineComponent({
                created: item.created,
                updated: item.updated,
                name: item.name,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -284,7 +292,11 @@ export default defineComponent({
                created: item.created,
                updated: item.updated,
                name: item.name,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -299,7 +311,11 @@ export default defineComponent({
                created: item.created,
                updated: item.updated,
                name: item.name,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -328,6 +344,12 @@ export default defineComponent({
                         supplier.value[finded_index].created = data.data.created;
                         supplier.value[finded_index].updated = data.data.updated;
                         supplier.value[finded_index].name = data.data.name;
+                        supplier.value[finded_index].id_user = data.data.id_user;
+                        supplier.value[finded_index].id_pos = data.data.id_pos;
+                        supplier.value[finded_index].id_branch = data.data.id_branch;
+                        supplier.value[finded_index].user = data.data.user;
+                        supplier.value[finded_index].pos = data.data.pos;
+                        supplier.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {

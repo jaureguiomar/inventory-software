@@ -9,7 +9,7 @@ interface MainPos {
    machine_id: string;
    mac_address: string;
    id_branch: number;
-   branch: Branch;
+   branch: Branch|null;
 }
 interface Pos extends MainPos {
    created: string;

@@ -1,5 +1,8 @@
 import { Category } from "@/interfaces/category/category";
 import { InputFieldNumber, InputFieldString } from "@/interfaces/general";
+import { Branch } from "@/interfaces/branch/branch";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
 
 // Main
 interface Product {
@@ -14,8 +17,13 @@ interface Product {
    sale_price: string;
    quantity: number;
    id_category: number;
+   id_user: number;
+   id_pos: number;
    id_branch: number;
-   category: Category;
+   category: Category|null;
+   user: User|null;
+   pos: Pos|null;
+   branch: Branch|null;
 }
 
 // Props

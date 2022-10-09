@@ -105,7 +105,39 @@ export default defineComponent({
          created: "",
          updated: "",
          name: "",
+         id_user: -1,
+         id_pos: -1,
          id_branch: -1,
+         user: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         pos: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
+         },
          branch: {
             id: -1,
             is_active: -1,
@@ -126,7 +158,11 @@ export default defineComponent({
             userRole.created = getFormattedDateString(data.data.created);
             userRole.updated = getFormattedDateString(data.data.updated);
             userRole.name = data.data.name;
+            userRole.id_user = data.data.id_user;
+            userRole.id_pos = data.data.id_pos;
             userRole.id_branch = data.data.id_branch;
+            userRole.user = data.data.user;
+            userRole.pos = data.data.pos;
             userRole.branch = data.data.branch;
          }
          loaded.value = true;

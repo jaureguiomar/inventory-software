@@ -67,6 +67,7 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store"
+import { format_category, format_user, format_pos, format_branch, format_user_role, format_product, format_sale } from "@/plugins/mixins/format";
 import { Branch, BranchesResponse } from "@/interfaces/branch/branch";
 import { Client, ClientsResponse } from "@/interfaces/client/client";
 import { Supplier, SuppliersResponse } from "@/interfaces/supplier/supplier";
@@ -76,6 +77,7 @@ import { User, UsersResponse } from "@/interfaces/user/user";
 import { UserRole, UserRolesResponse } from "@/interfaces/user-role/user-role";
 import { SaleProduct, SaleProductsResponse } from "@/interfaces/sale-product/sale-product";
 import { Sale, SalesResponse } from "@/interfaces/sale/sale";
+import { Pos } from "@/interfaces/pos/pos";
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
 import MenuHome from "@/views/layout/MenuHome.vue";
@@ -607,6 +609,10 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
@@ -618,16 +624,12 @@ export default defineComponent({
                         cellphone: data[i].cellphone,
                         cellphone2: data[i].cellphone2,
                         email: data[i].email,
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        branch: {
-                           id: Number(data[i].branch.id),
-                           is_active: Number(data[i].branch.is_active),
-                           created: data[i].branch.created,
-                           updated: data[i].branch.updated,
-                           name: data[i].branch.name,
-                           telephone: data[i].branch.telephone,
-                           address: data[i].branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   client = formatted_data;
@@ -657,22 +659,22 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Supplier> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
                         name: data[i].name,
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        branch: {
-                           id: Number(data[i].branch.id),
-                           is_active: Number(data[i].branch.is_active),
-                           created: data[i].branch.created,
-                           updated: data[i].branch.updated,
-                           name: data[i].branch.name,
-                           telephone: data[i].branch.telephone,
-                           address: data[i].branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   supplier = formatted_data;
@@ -702,22 +704,22 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Category> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
                         name: data[i].name,
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        branch: {
-                           id: Number(data[i].branch.id),
-                           is_active: Number(data[i].branch.is_active),
-                           created: data[i].branch.created,
-                           updated: data[i].branch.updated,
-                           name: data[i].branch.name,
-                           telephone: data[i].branch.telephone,
-                           address: data[i].branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   category = formatted_data;
@@ -752,6 +754,11 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_category:Category|null = format_category(data[i].category);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
@@ -765,24 +772,13 @@ export default defineComponent({
                         sale_price: data[i].sale_price,
                         quantity: Number(data[i].quantity),
                         id_category: Number(data[i].id_category),
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        category: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           id_branch: -1,
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        }
+                        category: formatted_category,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   product = formatted_data;
@@ -817,13 +813,22 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Sale> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
                         total: data[i].total,
-                        id_branch: Number(data[i].id_branch)
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
+                        id_branch: Number(data[i].id_branch),
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   sale = formatted_data;
@@ -858,15 +863,28 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<SaleProduct> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_sale:Sale|null = format_sale(data[i].sale);
+                     const formatted_product:Product|null = format_product(data[i].product);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
+                        quantity: Number(data[i].quantity),
                         id_sale: Number(data[i].id_sale),
                         id_product: Number(data[i].id_product),
-                        quantity: Number(data[i].quantity),
-                        id_branch: Number(data[i].id_branch)
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
+                        id_branch: Number(data[i].id_branch),
+                        sale: formatted_sale,
+                        product: formatted_product,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   sale_product = formatted_data;
@@ -896,22 +914,22 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<UserRole> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
                         name: data[i].name,
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        branch: {
-                           id: Number(data[i].branch.id),
-                           is_active: Number(data[i].branch.is_active),
-                           created: data[i].branch.created,
-                           updated: data[i].branch.updated,
-                           name: data[i].branch.name,
-                           telephone: data[i].branch.telephone,
-                           address: data[i].branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   user_role = formatted_data;
@@ -941,6 +959,11 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<User> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_role:UserRole|null = format_user_role(data[i].role);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_data.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
@@ -952,33 +975,13 @@ export default defineComponent({
                         first_name: data[i].first_name,
                         last_name: data[i].last_name,
                         id_role: Number(data[i].id_role),
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        role: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           id_branch: -1,
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        },
-                        branch: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           telephone: "",
-                           address: ""
-                        }
+                        role: formatted_role,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   user = formatted_data;

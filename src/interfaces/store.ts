@@ -40,7 +40,7 @@ interface UserStore {
    email: string;
    first_name: string;
    last_name: string;
-   role: UserRoleStore;
+   role: UserRoleStore|null;
 }
 interface SessionStore {
    loggued_in: boolean;
@@ -70,5 +70,6 @@ export {
    UserStore,
    BranchStore,
    PosStore,
-   SessionStore
+   SessionStore,
+   UserRoleStore
 };

@@ -206,8 +206,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins/general";
+import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/interfaces/product/product";
 import { Category, CategoryOneResponse, CategoriesResponse } from "@/interfaces/category/category";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -251,6 +255,8 @@ export default defineComponent({
          sale_price: "",
          quantity: 0,
          id_category: -1,
+         id_user: -1,
+         id_pos: -1,
          id_branch: -1,
          category: {
             id: -1,
@@ -258,16 +264,51 @@ export default defineComponent({
             created: "",
             updated: "",
             name: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            user: null,
+            pos: null,
+            branch: null
+         },
+         user: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         pos: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
+         },
+         branch: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            telephone: "",
+            address: ""
          }
       });
       const field = reactive<ProductField>({
@@ -362,7 +403,8 @@ export default defineComponent({
             field.buy_price.text = data.data.buy_price;
             field.sale_price.text = data.data.sale_price;
             field.quantity.text = data.data.quantity.toString();
-            field.id_category.text = data.data.category.name;
+            if(data.data.category)
+               field.id_category.text = data.data.category.name;
             if(!field.code.text)
                hasBarcode.value = false;
          }
@@ -379,22 +421,22 @@ export default defineComponent({
                   let formatted_categories:Array<Category> = [];
 
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_categories.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
                         name: data[i].name,
+                        id_user: Number(data[i].id_branch),
+                        id_pos: Number(data[i].id_branch),
                         id_branch: Number(data[i].id_branch),
-                        branch: {
-                           id: Number(data[i].branch.id),
-                           is_active: Number(data[i].branch.is_active),
-                           created: data[i].branch.created,
-                           updated: data[i].branch.updated,
-                           name: data[i].branch.name,
-                           telephone: data[i].branch.telephone,
-                           address: data[i].branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
 
                      categoryOptions.value.push(data[i].name);
@@ -508,6 +550,8 @@ export default defineComponent({
             sale_price: "",
             quantity: -1,
             id_category: -1,
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
             category: {
                id: -1,
@@ -515,16 +559,51 @@ export default defineComponent({
                created: "",
                updated: "",
                name: "",
+               id_user: -1,
+               id_pos: -1,
                id_branch: -1,
-                  branch: {
-                  id: -1,
-                  is_active: -1,
-                  created: "",
-                  updated: "",
-                  name: "",
-                  telephone: "",
-                  address: ""
-               }
+               user: null,
+               pos: null,
+               branch: null
+            },
+            user: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               username: "",
+               email: "",
+               password: "",
+               first_name: "",
+               last_name: "",
+               id_role: -1,
+               id_user: -1,
+               id_pos: -1,
+               id_branch: -1,
+               role: null,
+               user: null,
+               pos: null,
+               branch: null
+            },
+            pos: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               machine_id: "",
+               mac_address: "",
+               id_branch: -1,
+               branch: null
+            },
+            branch: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               telephone: "",
+               address: ""
             }
          };
 
@@ -550,6 +629,11 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:Product = response.data.data.data;
+                     const formatted_category:Category|null = format_category(data.category);
+                     const formatted_user:User|null = format_user(data.user);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -562,24 +646,13 @@ export default defineComponent({
                         sale_price: data.sale_price,
                         quantity: Number(data.quantity),
                         id_category: Number(data.id_category),
+                        id_user: Number(data.id_user),
+                        id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
-                        category: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           id_branch: -1,
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        }
+                        category: formatted_category,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      };
                   } else {
                      Swal.fire({
@@ -621,6 +694,11 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:Product = response.data.data.data;
+                     const formatted_category:Category|null = format_category(data.category);
+                     const formatted_user:User|null = format_user(data.user);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -633,24 +711,13 @@ export default defineComponent({
                         sale_price: data.sale_price,
                         quantity: Number(data.quantity),
                         id_category: Number(data.id_category),
+                        id_user: Number(data.id_user),
+                        id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
-                        category: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           id_branch: -1,
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        }
+                        category: formatted_category,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      };
                   } else {
                      Swal.fire({
@@ -684,22 +751,22 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data:Category = response.data.data;
+                  const formatted_user:User|null = format_user(data.user);
+                  const formatted_pos:Pos|null = format_pos(data.pos);
+                  const formatted_branch:Branch|null = format_branch(data.branch);
+
                   formatted_data.category = {
                      id: Number(data.id),
                      is_active: Number(data.is_active),
                      created: data.created,
                      updated: data.updated,
                      name: data.name,
+                     id_user: Number(data.id_user),
+                     id_pos: Number(data.id_pos),
                      id_branch: Number(data.id_branch),
-                     branch: {
-                        id: -1,
-                        is_active: -1,
-                        created: "",
-                        updated: "",
-                        name: "",
-                        telephone: "",
-                        address: ""
-                     }
+                     user: formatted_user,
+                     pos: formatted_pos,
+                     branch: formatted_branch
                   }
                } else {
                   Swal.fire({

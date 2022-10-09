@@ -106,13 +106,17 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { CategoriesResponse, WindowResponse, Category } from "@/interfaces/category/category";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
+import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
+import { CategoriesResponse, WindowResponse, Category } from "@/interfaces/category/category";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -210,22 +214,22 @@ export default defineComponent({
                         const data = response.data.data;
                         let formatted_categories:Array<Category> = [];
                         for(let i = 0; i < data.length; i++) {
+                           const formatted_user:User|null = format_user(data[i].user);
+                           const formatted_pos:Pos|null = format_pos(data[i].pos);
+                           const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                            formatted_categories.push({
                               id: Number(data[i].id),
                               is_active: Number(data[i].is_active),
                               created: data[i].created,
                               updated: data[i].updated,
                               name: data[i].name,
+                              id_user: Number(data[i].id_user),
+                              id_pos: Number(data[i].id_pos),
                               id_branch: Number(data[i].id_branch),
-                              branch: {
-                                 id: Number(data[i].branch.id),
-                                 is_active: Number(data[i].branch.is_active),
-                                 created: data[i].branch.created,
-                                 updated: data[i].branch.updated,
-                                 name: data[i].branch.name,
-                                 telephone: data[i].branch.telephone,
-                                 address: data[i].branch.address
-                              }
+                              user: formatted_user,
+                              pos: formatted_pos,
+                              branch: formatted_branch
                            });
                         }
                         category.value = formatted_categories;

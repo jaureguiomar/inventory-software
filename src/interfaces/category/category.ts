@@ -1,13 +1,19 @@
 import { InputFieldString } from "@/interfaces/general";
 import { Branch } from "@/interfaces/branch/branch";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
 
 // Main
 interface MainCategory {
    id: number;
    is_active: number;
    name: string;
+   id_user: number;
+   id_pos: number;
    id_branch: number;
-   branch: Branch;
+   user: User|null;
+   pos: Pos|null;
+   branch: Branch|null;
 }
 interface Category extends MainCategory {
    created: string;

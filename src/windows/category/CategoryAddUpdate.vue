@@ -104,7 +104,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
+import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { IPCParamsContent, Page, CategoryField, CategoryResponse, Category } from "@/interfaces/category/category";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -135,7 +139,39 @@ export default defineComponent({
          created: "",
          updated: "",
          name: "",
+         id_user: -1,
+         id_pos: -1,
          id_branch: -1,
+         user: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         pos: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
+         },
          branch: {
             id: -1,
             is_active: -1,
@@ -168,7 +204,11 @@ export default defineComponent({
             category.created = getFormattedDateString(data.data.created);
             category.updated = getFormattedDateString(data.data.updated);
             category.name = data.data.name;
+            category.id_user = data.data.id_user;
+            category.id_pos = data.data.id_pos;
             category.id_branch = data.data.id_branch;
+            category.user = data.data.user;
+            category.pos = data.data.pos;
             category.branch = data.data.branch;
 
             field.name.text = data.data.name;
@@ -204,7 +244,39 @@ export default defineComponent({
             created: "",
             updated: "",
             name: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
+            user: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               username: "",
+               email: "",
+               password: "",
+               first_name: "",
+               last_name: "",
+               id_role: -1,
+               id_user: -1,
+               id_pos: -1,
+               id_branch: -1,
+               role: null,
+               user: null,
+               pos: null,
+               branch: null
+            },
+            pos: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               machine_id: "",
+               mac_address: "",
+               id_branch: -1,
+               branch: null
+            },
             branch: {
                id: -1,
                is_active: -1,
@@ -232,22 +304,22 @@ export default defineComponent({
                   if(response) {
                      if(!response.data.error.is_error) {
                         const data:Category = response.data.data.data;
+                        const formatted_user:User|null = format_user(data.user);
+                        const formatted_pos:Pos|null = format_pos(data.pos);
+                        const formatted_branch:Branch|null = format_branch(data.branch);
+
                         formatted_data = {
                            id: Number(data.id),
                            is_active: Number(data.is_active),
                            created: data.created,
                            updated: data.updated,
                            name: data.name,
+                           id_user: Number(data.id_user),
+                           id_pos: Number(data.id_pos),
                            id_branch: Number(data.id_branch),
-                           branch: {
-                              id: Number(data.branch.id),
-                              is_active: Number(data.branch.is_active),
-                              created: data.branch.created,
-                              updated: data.branch.updated,
-                              name: data.branch.name,
-                              telephone: data.branch.telephone,
-                              address: data.branch.address
-                           }
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
                         };
                      } else {
                         Swal.fire({
@@ -279,22 +351,22 @@ export default defineComponent({
                   id_branch: getBranchId.value
                });
                window.api.receive("mysql-create-category-reply", function(data:Category) {
+                  const formatted_user:User|null = format_user(data.user);
+                  const formatted_pos:Pos|null = format_pos(data.pos);
+                  const formatted_branch:Branch|null = format_branch(data.branch);
+
                   formatted_data = {
                      id: Number(data.id),
                      is_active: Number(data.is_active),
                      created: data.created,
                      updated: data.updated,
                      name: data.name,
+                     id_user: Number(data.id_user),
+                     id_pos: Number(data.id_pos),
                      id_branch: Number(data.id_branch),
-                     branch: {
-                        id: Number(data.branch.id),
-                        is_active: Number(data.branch.is_active),
-                        created: data.branch.created,
-                        updated: data.branch.updated,
-                        name: data.branch.name,
-                        telephone: data.branch.telephone,
-                        address: data.branch.address
-                     }
+                     user: formatted_user,
+                     pos: formatted_pos,
+                     branch: formatted_branch
                   };
                   window.api.send("category-module-window-dialog", {
                      type: page.type,
@@ -321,22 +393,22 @@ export default defineComponent({
                   if(response) {
                      if(!response.data.error.is_error) {
                         const data:Category = response.data.data.data;
+                        const formatted_user:User|null = format_user(data.user);
+                        const formatted_pos:Pos|null = format_pos(data.pos);
+                        const formatted_branch:Branch|null = format_branch(data.branch);
+
                         formatted_data = {
                            id: Number(data.id),
                            is_active: Number(data.is_active),
                            created: data.created,
                            updated: data.updated,
                            name: data.name,
+                           id_user: Number(data.id_user),
+                           id_pos: Number(data.id_pos),
                            id_branch: Number(data.id_branch),
-                           branch: {
-                              id: Number(data.branch.id),
-                              is_active: Number(data.branch.is_active),
-                              created: data.branch.created,
-                              updated: data.branch.updated,
-                              name: data.branch.name,
-                              telephone: data.branch.telephone,
-                              address: data.branch.address
-                           }
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
                         };
                      } else {
                         Swal.fire({
@@ -369,22 +441,22 @@ export default defineComponent({
                   id_branch: getBranchId.value
                });
                window.api.receive("mysql-update-category-reply", function(data:Category) {
+                  const formatted_user:User|null = format_user(data.user);
+                  const formatted_pos:Pos|null = format_pos(data.pos);
+                  const formatted_branch:Branch|null = format_branch(data.branch);
+
                   formatted_data = {
                      id: Number(data.id),
                      is_active: Number(data.is_active),
                      created: data.created,
                      updated: data.updated,
                      name: data.name,
+                     id_user: Number(data.id_user),
+                     id_pos: Number(data.id_pos),
                      id_branch: Number(data.id_branch),
-                     branch: {
-                        id: Number(data.branch.id),
-                        is_active: Number(data.branch.is_active),
-                        created: data.branch.created,
-                        updated: data.branch.updated,
-                        name: data.branch.name,
-                        telephone: data.branch.telephone,
-                        address: data.branch.address
-                     }
+                     user: formatted_user,
+                     pos: formatted_pos,
+                     branch: formatted_branch
                   };
                   window.api.send("category-module-window-dialog", {
                      type: page.type,

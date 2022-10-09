@@ -192,8 +192,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins/general";
+import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/interfaces/user/user";
 import { UserRole, UserRoleOneResponse, UserRolesResponse } from "@/interfaces/user-role/user-role";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -232,6 +235,8 @@ export default defineComponent({
          first_name: "",
          last_name: "",
          id_role: -1,
+         id_user: -1,
+         id_pos: -1,
          id_branch: -1,
          role: {
             id: -1,
@@ -239,16 +244,42 @@ export default defineComponent({
             created: "",
             updated: "",
             name: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            user: null,
+            pos: null,
+            branch: null
+         },
+         user: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         pos: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
          },
          branch: {
             id: -1,
@@ -334,8 +365,12 @@ export default defineComponent({
             user.first_name = data.data.first_name;
             user.last_name = data.data.last_name;
             user.id_role = data.data.id_role;
+            user.id_user = data.data.id_user;
+            user.id_pos = data.data.id_pos;
             user.id_branch = data.data.id_branch;
             user.role = data.data.role;
+            user.user = data.data.user;
+            user.pos = data.data.pos;
             user.branch = data.data.branch;
 
             field.username.text = data.data.username;
@@ -343,7 +378,8 @@ export default defineComponent({
             field.password.text = data.data.password;
             field.first_name.text = data.data.first_name;
             field.last_name.text = data.data.last_name;
-            field.id_role.text = data.data.role.name;
+            if(data.data.role)
+               field.id_role.text = data.data.role.name;
          }
          loaded.value = true;
       });
@@ -355,22 +391,22 @@ export default defineComponent({
                   let formatted_roles:Array<UserRole> = [];
 
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_roles.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
                         name: data[i].name,
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        branch: {
-                           id: Number(data[i].branch.id),
-                           is_active: Number(data[i].branch.is_active),
-                           created: data[i].branch.created,
-                           updated: data[i].branch.updated,
-                           name: data[i].branch.name,
-                           telephone: data[i].branch.telephone,
-                           address: data[i].branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
 
                      roleOptions.value.push(data[i].name);
@@ -452,6 +488,8 @@ export default defineComponent({
             first_name: "",
             last_name: "",
             id_role: -1,
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
             role: {
                id: -1,
@@ -459,16 +497,42 @@ export default defineComponent({
                created: "",
                updated: "",
                name: "",
+               id_user: -1,
+               id_pos: -1,
                id_branch: -1,
-               branch: {
-                  id: -1,
-                  is_active: -1,
-                  created: "",
-                  updated: "",
-                  name: "",
-                  telephone: "",
-                  address: ""
-               }
+               user: null,
+               pos: null,
+               branch: null
+            },
+            user: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               username: "",
+               email: "",
+               password: "",
+               first_name: "",
+               last_name: "",
+               id_role: -1,
+               id_user: -1,
+               id_pos: -1,
+               id_branch: -1,
+               role: null,
+               user: null,
+               pos: null,
+               branch: null
+            },
+            pos: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               machine_id: "",
+               mac_address: "",
+               id_branch: -1,
+               branch: null
             },
             branch: {
                id: -1,
@@ -495,6 +559,11 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:User = response.data.data.data;
+                     const formatted_role:UserRole|null = format_user_role(data.role);
+                     const formatted_user:User|null = format_user(data.user);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -506,33 +575,13 @@ export default defineComponent({
                         first_name: data.first_name,
                         last_name: data.last_name,
                         id_role: Number(data.id_role),
+                        id_user: Number(data.id_user),
+                        id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
-                        role: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           id_branch: -1,
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        },
-                        branch: {
-                           id: Number(data.branch.id),
-                           is_active: Number(data.branch.is_active),
-                           created: data.branch.created,
-                           updated: data.branch.updated,
-                           name: data.branch.name,
-                           telephone: data.branch.telephone,
-                           address: data.branch.address
-                        }
+                        role: formatted_role,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      };
                   } else {
                      Swal.fire({
@@ -573,6 +622,11 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:User = response.data.data.data;
+                     const formatted_role:UserRole|null = format_user_role(data.role);
+                     const formatted_user:User|null = format_user(data.user);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -584,33 +638,13 @@ export default defineComponent({
                         first_name: data.first_name,
                         last_name: data.last_name,
                         id_role: Number(data.id_role),
+                        id_user: Number(data.id_user),
+                        id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
-                        role: {
-                           id: -1,
-                           is_active: -1,
-                           created: "",
-                           updated: "",
-                           name: "",
-                           id_branch: -1,
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        },
-                        branch: {
-                           id: Number(data.branch.id),
-                           is_active: Number(data.branch.is_active),
-                           created: data.branch.created,
-                           updated: data.branch.updated,
-                           name: data.branch.name,
-                           telephone: data.branch.telephone,
-                           address: data.branch.address
-                        }
+                        role: formatted_role,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      };
                   } else {
                      Swal.fire({
@@ -644,22 +678,22 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data:UserRole = response.data.data;
+                  const formatted_user:User|null = format_user(data.user);
+                  const formatted_pos:Pos|null = format_pos(data.pos);
+                  const formatted_branch:Branch|null = format_branch(data.branch);
+
                   formatted_data.role = {
                      id: Number(data.id),
                      is_active: Number(data.is_active),
                      created: data.created,
                      updated: data.updated,
                      name: data.name,
-                     id_branch: data.id_branch,
-                     branch: {
-                           id: Number(data.branch.id),
-                           is_active: Number(data.branch.is_active),
-                           created: data.branch.created,
-                           updated: data.branch.updated,
-                           name: data.branch.name,
-                           telephone: data.branch.telephone,
-                           address: data.branch.address
-                        }
+                     id_user: Number(data.id_user),
+                     id_pos: Number(data.id_pos),
+                     id_branch: Number(data.id_branch),
+                     user: formatted_user,
+                     pos: formatted_pos,
+                     branch: formatted_branch
                   }
                } else {
                   Swal.fire({

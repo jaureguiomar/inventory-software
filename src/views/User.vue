@@ -117,13 +117,17 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, reactive } from "vue"
-import { UsersResponse, WindowResponse, User } from "@/interfaces/user/user";
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
+import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
+import { UsersResponse, WindowResponse, User } from "@/interfaces/user/user";
+import { UserRole } from "@/interfaces/user-role/user-role";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -245,6 +249,11 @@ export default defineComponent({
                      const data = response.data.data;
                      let formatted_users:Array<User> = [];
                      for(let i = 0; i < data.length; i++) {
+                        const formatted_role:UserRole|null = format_user_role(data[i].role);
+                        const formatted_user:User|null = format_user(data[i].user);
+                        const formatted_pos:Pos|null = format_pos(data[i].pos);
+                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                         formatted_users.push({
                            id: Number(data[i].id),
                            is_active: Number(data[i].is_active),
@@ -256,33 +265,13 @@ export default defineComponent({
                            first_name: data[i].first_name,
                            last_name: data[i].last_name,
                            id_role: Number(data[i].id_role),
+                           id_user: Number(data[i].id_user),
+                           id_pos: Number(data[i].id_pos),
                            id_branch: Number(data[i].id_branch),
-                           role: {
-                              id: Number(data[i].role.id),
-                              is_active: Number(data[i].role.is_active),
-                              created: data[i].role.created,
-                              updated: data[i].role.updated,
-                              name: data[i].role.name,
-                              id_branch: Number(data[i].role.id_branch),
-                              branch: {
-                                 id: -1,
-                                 is_active: -1,
-                                 created: "",
-                                 updated: "",
-                                 name: "",
-                                 telephone: "",
-                                 address: ""
-                              }
-                           },
-                           branch: {
-                              id: Number(data[i].branch.id),
-                              is_active: Number(data[i].branch.is_active),
-                              created: data[i].branch.created,
-                              updated: data[i].branch.updated,
-                              name: data[i].branch.name,
-                              telephone: data[i].branch.telephone,
-                              address: data[i].branch.address
-                           }
+                           role: formatted_role,
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
                         });
                      }
                      user.value = formatted_users;
@@ -334,11 +323,12 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
+               id_user: item.id_role,
+               id_pos: item.id_role,
                id_branch: item.id_branch,
-               role: {
-                  ...item.role,
-                  branch: { ...item.role.branch }
-               },
+               role: { ...item.role },
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -362,11 +352,12 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
+               id_user: item.id_role,
+               id_pos: item.id_role,
                id_branch: item.id_branch,
-               role: {
-                  ...item.role,
-                  branch: { ...item.role.branch }
-               },
+               role: { ...item.role },
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -386,11 +377,12 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
+               id_user: item.id_role,
+               id_pos: item.id_role,
                id_branch: item.id_branch,
-               role: {
-                  ...item.role,
-                  branch: { ...item.role.branch }
-               },
+               role: { ...item.role },
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -423,6 +415,14 @@ export default defineComponent({
                         user.value[finded_index].password = data.data.password;
                         user.value[finded_index].first_name = data.data.first_name;
                         user.value[finded_index].last_name = data.data.last_name;
+                        user.value[finded_index].id_role = data.data.id_role;
+                        user.value[finded_index].id_user = data.data.id_user;
+                        user.value[finded_index].id_pos = data.data.id_pos;
+                        user.value[finded_index].id_branch = data.data.id_branch;
+                        user.value[finded_index].role = data.data.role;
+                        user.value[finded_index].user = data.data.user;
+                        user.value[finded_index].pos = data.data.pos;
+                        user.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {

@@ -183,7 +183,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins/general";
+import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/interfaces/client/client";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -219,7 +223,39 @@ export default defineComponent({
          cellphone: "",
          cellphone2: "",
          email: "",
+         id_user: -1,
+         id_pos: -1,
          id_branch: -1,
+         user: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         pos: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
+         },
          branch: {
             id: -1,
             is_active: -1,
@@ -297,7 +333,11 @@ export default defineComponent({
             client.cellphone = data.data.cellphone;
             client.cellphone2 = (data.data.cellphone2) ? data.data.cellphone2 : "";
             client.email = data.data.email;
+            client.id_user = data.data.id_user;
+            client.id_pos = data.data.id_pos;
             client.id_branch = data.data.id_branch;
+            client.user = data.data.user;
+            client.pos = data.data.pos;
             client.branch = data.data.branch;
 
             field.first_name.text = data.data.first_name;
@@ -365,7 +405,39 @@ export default defineComponent({
             cellphone: "",
             cellphone2: "",
             email: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
+            user: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               username: "",
+               email: "",
+               password: "",
+               first_name: "",
+               last_name: "",
+               id_role: -1,
+               id_user: -1,
+               id_pos: -1,
+               id_branch: -1,
+               role: null,
+               user: null,
+               pos: null,
+               branch: null
+            },
+            pos: {
+               id: -1,
+               is_active: -1,
+               created: "",
+               updated: "",
+               name: "",
+               machine_id: "",
+               mac_address: "",
+               id_branch: -1,
+               branch: null
+            },
             branch: {
                id: -1,
                is_active: -1,
@@ -391,6 +463,10 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:Client = response.data.data.data;
+                     const formatted_user:User|null = format_user(data.user);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -402,16 +478,12 @@ export default defineComponent({
                         cellphone: data.cellphone,
                         cellphone2: data.cellphone2,
                         email: data.email,
+                        id_user: Number(data.id_user),
+                        id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
-                        branch: {
-                           id: Number(data.branch.id),
-                           is_active: Number(data.branch.is_active),
-                           created: data.branch.created,
-                           updated: data.branch.updated,
-                           name: data.branch.name,
-                           telephone: data.branch.telephone,
-                           address: data.branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      };
                   } else {
                      Swal.fire({
@@ -452,6 +524,10 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:Client = response.data.data.data;
+                     const formatted_user:User|null = format_user(data.user);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -463,16 +539,12 @@ export default defineComponent({
                         cellphone: data.cellphone,
                         cellphone2: data.cellphone2,
                         email: data.email,
+                        id_user: Number(data.id_user),
+                        id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
-                        branch: {
-                           id: Number(data.branch.id),
-                           is_active: Number(data.branch.is_active),
-                           created: data.branch.created,
-                           updated: data.branch.updated,
-                           name: data.branch.name,
-                           telephone: data.branch.telephone,
-                           address: data.branch.address
-                        }
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      };
                   } else {
                      Swal.fire({

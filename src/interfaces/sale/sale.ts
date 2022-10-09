@@ -1,4 +1,7 @@
 import { InputFieldString } from "@/interfaces/general";
+import { Branch } from "@/interfaces/branch/branch";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
 
 // Main
 interface Sale {
@@ -7,7 +10,12 @@ interface Sale {
    created: string;
    updated: string;
    total: string;
+   id_user: number;
+   id_pos: number;
    id_branch: number;
+   user: User|null;
+   pos: Pos|null;
+   branch: Branch|null;
 }
 
 // Props

@@ -162,6 +162,8 @@ export default defineComponent({
          sale_price: "",
          quantity: 0,
          id_category: -1,
+         id_user: -1,
+         id_pos: -1,
          id_branch: -1,
          category: {
             id: -1,
@@ -169,16 +171,51 @@ export default defineComponent({
             created: "",
             updated: "",
             name: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            user: null,
+            pos: null,
+            branch: null
+         },
+         user: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         pos: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
+         },
+         branch: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            name: "",
+            telephone: "",
+            address: ""
          }
       });
       const loaded = ref(false);
@@ -197,8 +234,13 @@ export default defineComponent({
             product.sale_price = data.data.sale_price;
             product.quantity = data.data.quantity;
             product.id_category = data.data.id_category;
+            product.id_user = data.data.id_user;
+            product.id_pos = data.data.id_pos;
             product.id_branch = data.data.id_branch;
             product.category = data.data.category;
+            product.user = data.data.user;
+            product.pos = data.data.pos;
+            product.branch = data.data.branch;
          }
          loaded.value = true;
       });

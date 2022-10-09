@@ -123,7 +123,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
+import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
 import { ProductsResponse, WindowResponse, Product } from "@/interfaces/product/product";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Branch } from "@/interfaces/branch/branch";
+import { Category } from "@/interfaces/category/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -271,6 +276,11 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_products:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_category:Category|null = format_category(data[i].category);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+
                      formatted_products.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
@@ -283,24 +293,13 @@ export default defineComponent({
                         sale_price: data[i].sale_price,
                         quantity: Number(data[i].quantity),
                         id_category: Number(data[i].id_category),
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        category: {
-                           id: Number(data[i].category.id),
-                           is_active: Number(data[i].category.is_active),
-                           created: data[i].category.created,
-                           updated: data[i].category.updated,
-                           name: data[i].category.name,
-                           id_branch: Number(data[i].category.id_branch),
-                           branch: {
-                              id: -1,
-                              is_active: -1,
-                              created: "",
-                              updated: "",
-                              name: "",
-                              telephone: "",
-                              address: ""
-                           }
-                        }
+                        category: formatted_category,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
                   }
                   product.value = formatted_products;
@@ -353,11 +352,13 @@ export default defineComponent({
                sale_price: item.sale_price,
                quantity: item.quantity,
                id_category: item.id_category,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
-               category: {
-                  ...item.category,
-                  branch: { ...item.category.branch }
-               }
+               category: { ...item.category },
+               user: { ...item.user },
+               pos: { ...item.pos },
+               branch: { ...item.branch }
             }
          });
       };
@@ -381,11 +382,13 @@ export default defineComponent({
                sale_price: item.sale_price,
                quantity: item.quantity,
                id_category: item.id_category,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
-               category: {
-                  ...item.category,
-                  branch: { ...item.category.branch }
-               }
+               category: { ...item.category },
+               user: { ...item.user },
+               pos: { ...item.pos },
+               branch: { ...item.branch }
             }
          });
       };
@@ -405,11 +408,13 @@ export default defineComponent({
                sale_price: item.sale_price,
                quantity: item.quantity,
                id_category: item.id_category,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
-               category: {
-                  ...item.category,
-                  branch: { ...item.category.branch }
-               }
+               category: { ...item.category },
+               user: { ...item.user },
+               pos: { ...item.pos },
+               branch: { ...item.branch }
             }
          });
       };
@@ -442,6 +447,14 @@ export default defineComponent({
                         product.value[finded_index].buy_price = data.data.buy_price;
                         product.value[finded_index].sale_price = data.data.sale_price;
                         product.value[finded_index].quantity = data.data.quantity;
+                        product.value[finded_index].id_category = data.data.id_category;
+                        product.value[finded_index].id_user = data.data.id_user;
+                        product.value[finded_index].id_pos = data.data.id_pos;
+                        product.value[finded_index].id_branch = data.data.id_branch;
+                        product.value[finded_index].category = data.data.category;
+                        product.value[finded_index].user = data.data.user;
+                        product.value[finded_index].pos = data.data.pos;
+                        product.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {

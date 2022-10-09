@@ -38,7 +38,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { UserResponse } from "@/interfaces/user/user";
-import { SessionStore } from "@/interfaces/store";
+import { SessionStore, UserRoleStore } from "@/interfaces/store";
 
 export default defineComponent({
    name: "login-component",
@@ -72,6 +72,16 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data.data;
+                  let formatted_role_store:UserRoleStore|null = null;
+                  const curr_role = (data.role) ? data.role : null;
+
+                  if(curr_role) {
+                     formatted_role_store = {
+                        id: Number(curr_role.id),
+                        name: curr_role.name
+                     };
+                  }
+
                   const new_user:SessionStore = {
                      loggued_in: true,
                      user: {
@@ -79,14 +89,7 @@ export default defineComponent({
                         email: data.email,
                         first_name: data.first_name,
                         last_name: data.last_name,
-                        role: {
-                           id: Number(data.role.id),
-                           name: data.role.name,
-                           // atributes_1: -1,
-                           // atributes_2: -1,
-                           // atributes_3: -1,
-                           // atributes_4: -1
-                        }
+                        role: formatted_role_store
                      }
                   }
                   localStorage.setItem("session", JSON.stringify(new_user));

@@ -1,4 +1,9 @@
 import { InputFieldNumber } from '@/interfaces/general';
+import { Branch } from "@/interfaces/branch/branch";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Sale } from "@/interfaces/sale/sale";
+import { Product } from "@/interfaces/product/product";
 
 // Main
 interface SaleProduct {
@@ -6,10 +11,17 @@ interface SaleProduct {
    is_active: number;
    created: string;
    updated: string;
+   quantity: number;
    id_sale: number;
    id_product: number;
-   quantity: number;
+   id_user: number;
+   id_pos: number;
    id_branch: number;
+   sale: Sale|null;
+   product: Product|null;
+   user: User|null;
+   pos: Pos|null;
+   branch: Branch|null;
 }
 
 // Props

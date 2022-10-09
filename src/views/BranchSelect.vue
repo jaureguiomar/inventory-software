@@ -109,6 +109,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
+import { format_branch } from "@/plugins/mixins/format";
 import { Branch, BranchesResponse, BranchField } from "@/interfaces/branch/branch";
 import { Pos, PossResponse, PosField, PosResponse } from "@/interfaces/pos/pos";
 import { BranchStore, PosStore } from "@/interfaces/store";
@@ -344,6 +345,7 @@ export default defineComponent({
                      let formatted_poss:Array<Pos> = [];
 
                      for(let i = 0; i < data.length; i++) {
+                        const formatted_branch:Branch|null = format_branch(data[i].branch);
                         formatted_poss.push({
                            id: Number(data[i].id),
                            is_active: Number(data[i].is_active),
@@ -353,15 +355,7 @@ export default defineComponent({
                            machine_id: data[i].machine_id,
                            mac_address: data[i].mac_address,
                            id_branch: Number(data[i].id_branch),
-                           branch: {
-                              id: Number(data[i].branch.id),
-                              is_active: Number(data[i].branch.is_active),
-                              created: data[i].branch.created,
-                              updated: data[i].branch.updated,
-                              name: data[i].branch.name,
-                              telephone: data[i].branch.telephone,
-                              address: data[i].branch.address,
-                           }
+                           branch: formatted_branch
                         });
 
                         posOptions.value.push(data[i].name);
