@@ -68,6 +68,7 @@ export default defineComponent({
          const new_session:SessionStore = {
             loggued_in: false,
             user: {
+               id: -1,
                username: "",
                email: "",
                first_name: "",

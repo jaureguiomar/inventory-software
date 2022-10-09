@@ -23,6 +23,7 @@ const store = createStore<State>({
          session: {
             loggued_in: false,
             user: {
+               id: -1,
                username: "",
                email: "",
                first_name: "",
@@ -84,6 +85,9 @@ const store = createStore<State>({
       },
       getSessionLogguedIn(state:State) {
          return state.session.loggued_in;
+      },
+      getSessionUserId(state:State) {
+         return state.session.user.id;
       },
       getSessionUser(state:State) {
          return state.session.user;

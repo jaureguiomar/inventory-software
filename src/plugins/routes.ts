@@ -344,6 +344,7 @@ router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function
    const session:SessionStore = JSON.parse(localStorage.getItem("session") || `{
       "loggued_in": false,
       "user": {
+         "id": -1,
          "username": "",
          "email": "",
          "first_name": "",

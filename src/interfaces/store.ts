@@ -36,6 +36,7 @@ interface UserRoleStore {
    // atributes_4: number;
 }
 interface UserStore {
+   id: number;
    username: string;
    email: string;
    first_name: string;
