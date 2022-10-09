@@ -349,6 +349,12 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("user-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
@@ -554,6 +560,8 @@ export default defineComponent({
                   first_name: field.first_name.text,
                   last_name: field.last_name.text,
                   id_role: id_role,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {
@@ -617,6 +625,8 @@ export default defineComponent({
                   first_name: field.first_name.text,
                   last_name: field.last_name.text,
                   id_role: id_role,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {

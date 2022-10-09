@@ -356,6 +356,12 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       const onAddUpdate = async() => {
          field.first_name.text = field.first_name.text.trim();
@@ -458,6 +464,8 @@ export default defineComponent({
                   cellphone: field.cellphone.text,
                   cellphone2: field.cellphone2.text,
                   email: field.email.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {
@@ -519,6 +527,8 @@ export default defineComponent({
                   cellphone: field.cellphone.text,
                   cellphone2: field.cellphone2.text,
                   email: field.email.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {

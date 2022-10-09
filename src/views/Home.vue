@@ -116,7 +116,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user_role/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -132,7 +134,9 @@ export default defineComponent({
                      let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user_role/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -170,7 +174,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<UsersResponse>(`${ getServer.value }/user/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -186,7 +192,9 @@ export default defineComponent({
                      let response = await axios.post<UsersResponse>(`${ getServer.value }/user/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -224,7 +232,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -240,7 +250,9 @@ export default defineComponent({
                      let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -278,7 +290,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<ProductsResponse>(`${ getServer.value }/product/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -294,7 +308,9 @@ export default defineComponent({
                      let response = await axios.post<ProductsResponse>(`${ getServer.value }/product/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -332,7 +348,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<SalesResponse>(`${ getServer.value }/sale/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -348,7 +366,9 @@ export default defineComponent({
                      let response = await axios.post<SalesResponse>(`${ getServer.value }/sale/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -386,7 +406,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -402,7 +424,9 @@ export default defineComponent({
                      let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -440,7 +464,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -456,7 +482,9 @@ export default defineComponent({
                      let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -494,7 +522,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<ClientsResponse>(`${ getServer.value }/client/v3/create.php`, {
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)
@@ -510,7 +540,9 @@ export default defineComponent({
                      let response = await axios.post<ClientsResponse>(`${ getServer.value }/client/v3/update.php`, {
                         id: curr_data.id,
                         total: curr_data.total,
-                        id_branch: curr_data.id_branch
+                        id_user: curr_data.id_user,
+                        id_pos: curr_data.value,
+                        id_branch: curr_data.value
                      });
                      if(response) {
                         if(response.data.error.is_error)

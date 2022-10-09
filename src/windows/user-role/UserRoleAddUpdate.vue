@@ -222,6 +222,12 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       const onAddUpdate = async() => {
          field.name.text = field.name.text.trim();
@@ -289,6 +295,8 @@ export default defineComponent({
             try {
                let response = await axios.put<UserRoleResponse>(`${ getServer.value }/user_role/v3/create.php`, {
                   name: field.name.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {
@@ -340,6 +348,8 @@ export default defineComponent({
                let response = await axios.post<UserRoleResponse>(`${ getServer.value }/user_role/v3/update.php`, {
                   id: page.id,
                   name: field.name.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {

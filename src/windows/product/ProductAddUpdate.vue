@@ -377,6 +377,12 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("product-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
@@ -624,6 +630,8 @@ export default defineComponent({
                   sale_price: field.sale_price.text,
                   quantity: field.quantity.text,
                   id_category: id_category,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {
@@ -689,6 +697,8 @@ export default defineComponent({
                   sale_price: field.sale_price.text,
                   quantity: field.quantity.text,
                   id_category: id_category,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {

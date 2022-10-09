@@ -200,6 +200,12 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("supplier-module-window-reply", (data:IPCParamsContent) => {
          page.id = data.id;
@@ -289,6 +295,8 @@ export default defineComponent({
             try {
                let response = await axios.put<SupplierResponse>(`${ getServer.value }/supplier/v3/create.php`, {
                   name: field.name.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {
@@ -340,6 +348,8 @@ export default defineComponent({
                let response = await axios.post<SupplierResponse>(`${ getServer.value }/supplier/v3/update.php`, {
                   id: page.id,
                   name: field.name.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                if(response) {

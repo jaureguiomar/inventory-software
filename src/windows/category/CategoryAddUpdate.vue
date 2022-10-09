@@ -225,6 +225,12 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       const onAddUpdate = async() => {
          field.name.text = field.name.text.trim();
@@ -299,6 +305,8 @@ export default defineComponent({
                try {
                   let response = await axios.put<CategoryResponse>(`${ getServer.value }/category/v3/create.php`, {
                      name: field.name.text,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
                      id_branch: getBranchId.value
                   });
                   if(response) {
@@ -348,6 +356,8 @@ export default defineComponent({
             } else {
                window.api.send("mysql-create-category", {
                   name: field.name.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                window.api.receive("mysql-create-category-reply", function(data:Category) {
@@ -388,6 +398,8 @@ export default defineComponent({
                   let response = await axios.post<CategoryResponse>(`${ getServer.value }category/v3/update.php`, {
                      id: page.id,
                      name: field.name.text,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
                      id_branch: getBranchId.value
                   });
                   if(response) {
@@ -438,6 +450,8 @@ export default defineComponent({
                window.api.send("mysql-update-category", {
                   id: page.id,
                   name: field.name.text,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
                   id_branch: getBranchId.value
                });
                window.api.receive("mysql-update-category-reply", function(data:Category) {
