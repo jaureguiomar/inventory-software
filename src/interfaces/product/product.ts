@@ -5,11 +5,9 @@ import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 
 // Main
-interface Product {
+interface MainProduct {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    code: string;
    name: string;
    description: string|null;
@@ -24,6 +22,16 @@ interface Product {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface Product extends MainProduct {
+   created: string;
+   updated: string;
+}
+interface ProductMySQL extends MainProduct {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
 }
 
 // Props
@@ -97,6 +105,7 @@ interface ProductsResponse {
 
 export {
    Product,
+   ProductMySQL,
    Content,
    IPCParams,
    IPCParamsContent,

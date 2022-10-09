@@ -4,11 +4,9 @@ import { Branch } from "@/interfaces/branch/branch";
 import { Pos } from "@/interfaces/pos/pos";
 
 // Main
-interface User {
+interface MainUser {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    username: string;
    email: string;
    password: string;
@@ -22,6 +20,16 @@ interface User {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface User extends MainUser {
+   created: string;
+   updated: string;
+}
+interface UserMySQL extends MainUser {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
 }
 
 // Props
@@ -94,6 +102,7 @@ interface UsersResponse {
 
 export {
    User,
+   UserMySQL,
    Content,
    IPCParams,
    IPCParamsContent,

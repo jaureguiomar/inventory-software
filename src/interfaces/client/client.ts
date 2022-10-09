@@ -4,11 +4,9 @@ import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 
 // Main
-interface Client {
+interface MainClient {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    first_name: string;
    last_name: string;
    address: string;
@@ -21,6 +19,16 @@ interface Client {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface Client extends MainClient {
+   created: string;
+   updated: string;
+}
+interface ClientMySQL extends MainClient {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
+   created: Date;
+   updated: Date;
 }
 
 // Props
@@ -93,6 +101,7 @@ interface ClientsResponse {
 
 export {
    Client,
+   ClientMySQL,
    Content,
    IPCParams,
    IPCParamsContent,

@@ -4,11 +4,9 @@ import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 
 // Main
-interface UserRole {
+interface MainUserRole {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    name: string;
    // atributes_1: number;
    // atributes_2: number;
@@ -20,6 +18,16 @@ interface UserRole {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface UserRole extends MainUserRole {
+   created: string;
+   updated: string;
+}
+interface UserMySQL extends MainUserRole {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
 }
 
 // Props

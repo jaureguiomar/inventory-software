@@ -25,7 +25,7 @@ interface CategoryMySQL extends MainCategory {
    created: Date;
    updated: Date;
 }
-interface CategoryMySQLDelete {
+interface CategoryMySQLDelete { // Make it as global interface? (MySQLDelete)
    id: number;
    is_sync: number;
    sync_type: "add"|"update"|"delete"|null;

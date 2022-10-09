@@ -4,11 +4,9 @@ import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 
 // Main
-interface Supplier {
+interface MainSupplier {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    name: string;
    id_user: number;
    id_pos: number;
@@ -16,6 +14,16 @@ interface Supplier {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface Supplier extends MainSupplier {
+   created: string;
+   updated: string;
+}
+interface SupplierMySQL extends MainSupplier {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
 }
 
 // Props
@@ -83,6 +91,7 @@ interface SuppliersResponse {
 
 export {
    Supplier,
+   SupplierMySQL,
    Content,
    IPCParams,
    IPCParamsContent,

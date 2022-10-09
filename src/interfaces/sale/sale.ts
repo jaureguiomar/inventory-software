@@ -4,11 +4,9 @@ import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 
 // Main
-interface Sale {
+interface MainSale {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    total: string;
    id_user: number;
    id_pos: number;
@@ -16,6 +14,16 @@ interface Sale {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface Sale extends MainSale {
+   created: string;
+   updated: string;
+}
+interface SaleMySQL extends MainSale {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
 }
 
 // Props
@@ -83,6 +91,7 @@ interface SalesResponse {
 
 export {
    Sale,
+   SaleMySQL,
    Content,
    IPCParams,
    IPCParamsContent,

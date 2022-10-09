@@ -6,11 +6,9 @@ import { Sale } from "@/interfaces/sale/sale";
 import { Product } from "@/interfaces/product/product";
 
 // Main
-interface SaleProduct {
+interface MainSaleProduct {
    id: number;
    is_active: number;
-   created: string;
-   updated: string;
    quantity: number;
    id_sale: number;
    id_product: number;
@@ -22,6 +20,16 @@ interface SaleProduct {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface SaleProduct extends MainSaleProduct {
+   created: string;
+   updated: string;
+}
+interface SaleProductMySQL extends MainSaleProduct {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete";
+   created: Date;
+   updated: Date;
 }
 
 // Props
@@ -91,6 +99,7 @@ interface SaleProductsResponse {
 
 export {
    SaleProduct,
+   SaleProductMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
