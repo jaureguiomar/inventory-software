@@ -86,6 +86,14 @@ interface UserRolePermissionsResponse {
    error: ResponseError;
 }
 
+// Other
+interface UserRolePermissionAttributes {
+   atributes_1: number;
+   // atributes_2: number;
+   // atributes_3: number;
+   // atributes_4: number;
+}
+
 export {
    UserRolePermission,
    UserRolePermissionMySQL,
@@ -97,5 +105,6 @@ export {
    UserRolePermissionsResponse,
    WindowResponse,
    Page,
-   UserRolePermissionField
+   UserRolePermissionField,
+   UserRolePermissionAttributes
 };

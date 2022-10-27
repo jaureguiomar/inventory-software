@@ -360,6 +360,10 @@ export default defineComponent({
                         userRole.value[finded_index].created = data.data.created;
                         userRole.value[finded_index].updated = data.data.updated;
                         userRole.value[finded_index].name = data.data.name;
+                        userRole.value[finded_index].atributes_1 = data.data.atributes_1;
+                        userRole.value[finded_index].atributes_2 = data.data.atributes_2;
+                        userRole.value[finded_index].atributes_3 = data.data.atributes_3;
+                        userRole.value[finded_index].atributes_4 = data.data.atributes_4;
                         userRole.value[finded_index].id_user = data.data.id_user;
                         userRole.value[finded_index].id_pos = data.data.id_pos;
                         userRole.value[finded_index].id_branch = data.data.id_branch;
