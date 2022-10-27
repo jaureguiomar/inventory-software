@@ -139,6 +139,10 @@ export default defineComponent({
          created: "",
          updated: "",
          name: "",
+         atributes_1: 0,
+         atributes_2: 0,
+         atributes_3: 0,
+         atributes_4: 0,
          id_user: -1,
          id_pos: -1,
          id_branch: -1,
@@ -204,6 +208,10 @@ export default defineComponent({
             userRole.created = getFormattedDateString(data.data.created);
             userRole.updated = getFormattedDateString(data.data.updated);
             userRole.name = data.data.name;
+            userRole.atributes_1 = data.data.atributes_1;
+            userRole.atributes_2 = data.data.atributes_2;
+            userRole.atributes_3 = data.data.atributes_3;
+            userRole.atributes_4 = data.data.atributes_4;
             userRole.id_user = data.data.id_user;
             userRole.id_pos = data.data.id_pos;
             userRole.id_branch = data.data.id_branch;
@@ -247,6 +255,10 @@ export default defineComponent({
             created: "",
             updated: "",
             name: "",
+            atributes_1: 0,
+            atributes_2: 0,
+            atributes_3: 0,
+            atributes_4: 0,
             id_user: -1,
             id_pos: -1,
             id_branch: -1,
@@ -312,6 +324,10 @@ export default defineComponent({
                         created: data.created,
                         updated: data.updated,
                         name: data.name,
+                        atributes_1: Number(data.atributes_1),
+                        atributes_2: Number(data.atributes_2),
+                        atributes_3: Number(data.atributes_3),
+                        atributes_4: Number(data.atributes_4),
                         id_user: Number(data.id_user),
                         id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
@@ -365,6 +381,10 @@ export default defineComponent({
                         created: data.created,
                         updated: data.updated,
                         name: data.name,
+                        atributes_1: Number(data.atributes_1),
+                        atributes_2: Number(data.atributes_2),
+                        atributes_3: Number(data.atributes_3),
+                        atributes_4: Number(data.atributes_4),
                         id_user: Number(data.id_user),
                         id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),

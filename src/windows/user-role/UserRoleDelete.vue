@@ -117,6 +117,10 @@ export default defineComponent({
          created: "",
          updated: "",
          name: "",
+         atributes_1: 0,
+         atributes_2: 0,
+         atributes_3: 0,
+         atributes_4: 0,
          id_user: -1,
          id_pos: -1,
          id_branch: -1,
@@ -170,6 +174,10 @@ export default defineComponent({
             userRole.created = getFormattedDateString(data.data.created);
             userRole.updated = getFormattedDateString(data.data.updated);
             userRole.name = data.data.name;
+            userRole.atributes_1 = data.data.atributes_1;
+            userRole.atributes_2 = data.data.atributes_2;
+            userRole.atributes_3 = data.data.atributes_3;
+            userRole.atributes_4 = data.data.atributes_4;
             userRole.id_user = data.data.id_user;
             userRole.id_pos = data.data.id_pos;
             userRole.id_branch = data.data.id_branch;

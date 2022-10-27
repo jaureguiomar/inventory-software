@@ -8,10 +8,10 @@ interface MainUserRole {
    id: number;
    is_active: number;
    name: string;
-   // atributes_1: number;
-   // atributes_2: number;
-   // atributes_3: number;
-   // atributes_4: number;
+   atributes_1: number;
+   atributes_2: number;
+   atributes_3: number;
+   atributes_4: number;
    id_user: number;
    id_pos: number;
    id_branch: number;

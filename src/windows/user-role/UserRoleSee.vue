@@ -45,7 +45,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row q-mb-xl">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="userRole.name"
@@ -63,6 +63,121 @@
                         readonly
                      >
                      </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md text-center">
+                  <div class="col-12">
+                     <h6 class="q-ma-none">Role Permissions</h6>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 1</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox label="Permission 1" disabled></q-checkbox>
+                           <q-checkbox label="Permission 2" disabled></q-checkbox>
+                           <q-checkbox label="Permission 3" disabled></q-checkbox>
+                           <q-checkbox label="Permission 4" disabled></q-checkbox>
+                           <q-checkbox label="Permission 5" disabled></q-checkbox>
+                           <q-checkbox label="Permission 6" disabled></q-checkbox>
+                           <q-checkbox label="Permission 7" disabled></q-checkbox>
+                           <q-checkbox label="Permission 8" disabled></q-checkbox>
+                           <q-checkbox label="Permission 9" disabled></q-checkbox>
+                           <q-checkbox label="Permission 10" disabled></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 2</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox label="Permission 11" disabled></q-checkbox>
+                           <q-checkbox label="Permission 12" disabled></q-checkbox>
+                           <q-checkbox label="Permission 13" disabled></q-checkbox>
+                           <q-checkbox label="Permission 14" disabled></q-checkbox>
+                           <q-checkbox label="Permission 15" disabled></q-checkbox>
+                           <q-checkbox label="Permission 16" disabled></q-checkbox>
+                           <q-checkbox label="Permission 17" disabled></q-checkbox>
+                           <q-checkbox label="Permission 18" disabled></q-checkbox>
+                           <q-checkbox label="Permission 19" disabled></q-checkbox>
+                           <q-checkbox label="Permission 20" disabled></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 3</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox label="Permission 21" disabled></q-checkbox>
+                           <q-checkbox label="Permission 22" disabled></q-checkbox>
+                           <q-checkbox label="Permission 23" disabled></q-checkbox>
+                           <q-checkbox label="Permission 24" disabled></q-checkbox>
+                           <q-checkbox label="Permission 25" disabled></q-checkbox>
+                           <q-checkbox label="Permission 26" disabled></q-checkbox>
+                           <q-checkbox label="Permission 27" disabled></q-checkbox>
+                           <q-checkbox label="Permission 28" disabled></q-checkbox>
+                           <q-checkbox label="Permission 29" disabled></q-checkbox>
+                           <q-checkbox label="Permission 30" disabled></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 4</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox label="Permission 31" disabled></q-checkbox>
+                           <q-checkbox label="Permission 32" disabled></q-checkbox>
+                           <q-checkbox label="Permission 33" disabled></q-checkbox>
+                           <q-checkbox label="Permission 34" disabled></q-checkbox>
+                           <q-checkbox label="Permission 35" disabled></q-checkbox>
+                           <q-checkbox label="Permission 36" disabled></q-checkbox>
+                           <q-checkbox label="Permission 37" disabled></q-checkbox>
+                           <q-checkbox label="Permission 38" disabled></q-checkbox>
+                           <q-checkbox label="Permission 39" disabled></q-checkbox>
+                           <q-checkbox label="Permission 40" disabled></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 5</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox label="Permission 41" disabled></q-checkbox>
+                           <q-checkbox label="Permission 42" disabled></q-checkbox>
+                           <q-checkbox label="Permission 43" disabled></q-checkbox>
+                           <q-checkbox label="Permission 44" disabled></q-checkbox>
+                           <q-checkbox label="Permission 45" disabled></q-checkbox>
+                           <q-checkbox label="Permission 46" disabled></q-checkbox>
+                           <q-checkbox label="Permission 47" disabled></q-checkbox>
+                           <q-checkbox label="Permission 48" disabled></q-checkbox>
+                           <q-checkbox label="Permission 49" disabled></q-checkbox>
+                           <q-checkbox label="Permission 50" disabled></q-checkbox>
+                        </q-card-section>
+                     </q-card>
                   </div>
                </div>
                <div class="text-center">
@@ -105,6 +220,10 @@ export default defineComponent({
          created: "",
          updated: "",
          name: "",
+         atributes_1: 0,
+         atributes_2: 0,
+         atributes_3: 0,
+         atributes_4: 0,
          id_user: -1,
          id_pos: -1,
          id_branch: -1,
@@ -158,6 +277,10 @@ export default defineComponent({
             userRole.created = getFormattedDateString(data.data.created);
             userRole.updated = getFormattedDateString(data.data.updated);
             userRole.name = data.data.name;
+            userRole.atributes_1 = data.data.atributes_1;
+            userRole.atributes_2 = data.data.atributes_2;
+            userRole.atributes_3 = data.data.atributes_3;
+            userRole.atributes_4 = data.data.atributes_4;
             userRole.id_user = data.data.id_user;
             userRole.id_pos = data.data.id_pos;
             userRole.id_branch = data.data.id_branch;
