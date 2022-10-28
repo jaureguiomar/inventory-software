@@ -78,16 +78,76 @@
                         <q-separator inset></q-separator>
 
                         <q-card-section>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_1" label="Permission 1" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_2" label="Permission 2" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_3" label="Permission 3" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_4" label="Permission 4" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_5" label="Permission 5" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_6" label="Permission 6" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_7" label="Permission 7" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_8" label="Permission 8" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_9" label="Permission 9" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_10" label="Permission 10" disable></q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_1"
+                              :title="user_role_permissions_formatted.description.PERMISSION_1"
+                              :label="user_role_permissions_formatted.name.PERMISSION_1"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_2"
+                              :title="user_role_permissions_formatted.description.PERMISSION_2"
+                              :label="user_role_permissions_formatted.name.PERMISSION_2"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_3"
+                              :title="user_role_permissions_formatted.description.PERMISSION_3"
+                              :label="user_role_permissions_formatted.name.PERMISSION_3"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_4"
+                              :title="user_role_permissions_formatted.description.PERMISSION_4"
+                              :label="user_role_permissions_formatted.name.PERMISSION_4"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_5"
+                              :title="user_role_permissions_formatted.description.PERMISSION_5"
+                              :label="user_role_permissions_formatted.name.PERMISSION_5"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_6"
+                              :title="user_role_permissions_formatted.description.PERMISSION_6"
+                              :label="user_role_permissions_formatted.name.PERMISSION_6"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_7"
+                              :title="user_role_permissions_formatted.description.PERMISSION_7"
+                              :label="user_role_permissions_formatted.name.PERMISSION_7"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_8"
+                              :title="user_role_permissions_formatted.description.PERMISSION_8"
+                              :label="user_role_permissions_formatted.name.PERMISSION_8"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_9"
+                              :title="user_role_permissions_formatted.description.PERMISSION_9"
+                              :label="user_role_permissions_formatted.name.PERMISSION_9"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_10"
+                              :title="user_role_permissions_formatted.description.PERMISSION_10"
+                              :label="user_role_permissions_formatted.name.PERMISSION_10"
+                              disable
+                           >
+                           </q-checkbox>
                         </q-card-section>
                      </q-card>
                   </div>
@@ -100,16 +160,76 @@
                         <q-separator inset></q-separator>
 
                         <q-card-section>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_11" label="Permission 11" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_12" label="Permission 12" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_13" label="Permission 13" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_14" label="Permission 14" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_15" label="Permission 15" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_16" label="Permission 16" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_17" label="Permission 17" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_18" label="Permission 18" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_19" label="Permission 19" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_20" label="Permission 20" disable></q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_11"
+                              :title="user_role_permissions_formatted.description.PERMISSION_11"
+                              :label="user_role_permissions_formatted.name.PERMISSION_11"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_12"
+                              :title="user_role_permissions_formatted.description.PERMISSION_12"
+                              :label="user_role_permissions_formatted.name.PERMISSION_12"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_13"
+                              :title="user_role_permissions_formatted.description.PERMISSION_13"
+                              :label="user_role_permissions_formatted.name.PERMISSION_13"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_14"
+                              :title="user_role_permissions_formatted.description.PERMISSION_14"
+                              :label="user_role_permissions_formatted.name.PERMISSION_14"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_15"
+                              :title="user_role_permissions_formatted.description.PERMISSION_15"
+                              :label="user_role_permissions_formatted.name.PERMISSION_15"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_16"
+                              :title="user_role_permissions_formatted.description.PERMISSION_16"
+                              :label="user_role_permissions_formatted.name.PERMISSION_16"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_17"
+                              :title="user_role_permissions_formatted.description.PERMISSION_17"
+                              :label="user_role_permissions_formatted.name.PERMISSION_17"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_18"
+                              :title="user_role_permissions_formatted.description.PERMISSION_18"
+                              :label="user_role_permissions_formatted.name.PERMISSION_18"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_19"
+                              :title="user_role_permissions_formatted.description.PERMISSION_19"
+                              :label="user_role_permissions_formatted.name.PERMISSION_19"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_20"
+                              :title="user_role_permissions_formatted.description.PERMISSION_20"
+                              :label="user_role_permissions_formatted.name.PERMISSION_20"
+                              disable
+                           >
+                           </q-checkbox>
                         </q-card-section>
                      </q-card>
                   </div>
@@ -122,16 +242,76 @@
                         <q-separator inset></q-separator>
 
                         <q-card-section>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_21" label="Permission 21" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_22" label="Permission 22" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_23" label="Permission 23" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_24" label="Permission 24" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_25" label="Permission 25" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_26" label="Permission 26" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_27" label="Permission 27" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_28" label="Permission 28" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_29" label="Permission 29" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_30" label="Permission 30" disable></q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_21"
+                              :title="user_role_permissions_formatted.description.PERMISSION_21"
+                              :label="user_role_permissions_formatted.name.PERMISSION_21"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_22"
+                              :title="user_role_permissions_formatted.description.PERMISSION_22"
+                              :label="user_role_permissions_formatted.name.PERMISSION_22"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_23"
+                              :title="user_role_permissions_formatted.description.PERMISSION_23"
+                              :label="user_role_permissions_formatted.name.PERMISSION_23"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_24"
+                              :title="user_role_permissions_formatted.description.PERMISSION_24"
+                              :label="user_role_permissions_formatted.name.PERMISSION_24"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_25"
+                              :title="user_role_permissions_formatted.description.PERMISSION_25"
+                              :label="user_role_permissions_formatted.name.PERMISSION_25"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_26"
+                              :title="user_role_permissions_formatted.description.PERMISSION_26"
+                              :label="user_role_permissions_formatted.name.PERMISSION_26"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_27"
+                              :title="user_role_permissions_formatted.description.PERMISSION_27"
+                              :label="user_role_permissions_formatted.name.PERMISSION_27"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_28"
+                              :title="user_role_permissions_formatted.description.PERMISSION_28"
+                              :label="user_role_permissions_formatted.name.PERMISSION_28"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_29"
+                              :title="user_role_permissions_formatted.description.PERMISSION_29"
+                              :label="user_role_permissions_formatted.name.PERMISSION_29"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_30"
+                              :title="user_role_permissions_formatted.description.PERMISSION_30"
+                              :label="user_role_permissions_formatted.name.PERMISSION_30"
+                              disable
+                           >
+                           </q-checkbox>
                         </q-card-section>
                      </q-card>
                   </div>
@@ -144,12 +324,48 @@
                         <q-separator inset></q-separator>
 
                         <q-card-section>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_31" label="Permission 31" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_32" label="Permission 32" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_33" label="Permission 33" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_34" label="Permission 34" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_35" label="Permission 35" disable></q-checkbox>
-                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_36" label="Permission 36" disable></q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_31"
+                              :title="user_role_permissions_formatted.description.PERMISSION_31"
+                              :label="user_role_permissions_formatted.name.PERMISSION_31"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_32"
+                              :title="user_role_permissions_formatted.description.PERMISSION_32"
+                              :label="user_role_permissions_formatted.name.PERMISSION_32"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_33"
+                              :title="user_role_permissions_formatted.description.PERMISSION_33"
+                              :label="user_role_permissions_formatted.name.PERMISSION_33"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_34"
+                              :title="user_role_permissions_formatted.description.PERMISSION_34"
+                              :label="user_role_permissions_formatted.name.PERMISSION_34"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_35"
+                              :title="user_role_permissions_formatted.description.PERMISSION_35"
+                              :label="user_role_permissions_formatted.name.PERMISSION_35"
+                              disable
+                           >
+                           </q-checkbox>
+                           <q-checkbox
+                              v-model="user_role_permissions_formatted.access.PERMISSION_36"
+                              :title="user_role_permissions_formatted.description.PERMISSION_36"
+                              :label="user_role_permissions_formatted.name.PERMISSION_36"
+                              disable
+                           >
+                           </q-checkbox>
                         </q-card-section>
                      </q-card>
                   </div>
@@ -296,7 +512,8 @@ export default defineComponent({
                            name: data[i].name,
                            shortname: data[i].shortname,
                            description: data[i].description,
-                           attr_value: data[i].attr_value
+                           attr_value: data[i].attr_value,
+                           attr_level: Number(data[i].attr_level)
                         });
                      }
                      user_role_permission.value = formatted_user_role_permissions;

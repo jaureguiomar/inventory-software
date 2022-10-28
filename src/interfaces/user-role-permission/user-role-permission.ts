@@ -8,6 +8,7 @@ interface MainUserRolePermission {
    shortname: string;
    description: string;
    attr_value: string;
+   attr_level: number;
 }
 interface UserRolePermission extends MainUserRolePermission {
    created: string;
