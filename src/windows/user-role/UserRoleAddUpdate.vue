@@ -44,7 +44,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row q-mb-md">
+               <div class="row q-mb-xl">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="field.name.text"
@@ -66,6 +66,95 @@
                         readonly
                      >
                      </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md text-center">
+                  <div class="col-12">
+                     <h6 class="q-ma-none">Role Permissions</h6>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 1</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_1" label="Permission 1"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_2" label="Permission 2"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_3" label="Permission 3"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_4" label="Permission 4"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_5" label="Permission 5"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_6" label="Permission 6"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_7" label="Permission 7"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_8" label="Permission 8"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_9" label="Permission 9"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_10" label="Permission 10"></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 2</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_11" label="Permission 11"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_12" label="Permission 12"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_13" label="Permission 13"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_14" label="Permission 14"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_15" label="Permission 15"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_16" label="Permission 16"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_17" label="Permission 17"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_18" label="Permission 18"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_19" label="Permission 19"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_20" label="Permission 20"></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 3</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_21" label="Permission 21"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_22" label="Permission 22"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_23" label="Permission 23"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_24" label="Permission 24"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_25" label="Permission 25"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_26" label="Permission 26"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_27" label="Permission 27"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_28" label="Permission 28"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_29" label="Permission 29"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_30" label="Permission 30"></q-checkbox>
+                        </q-card-section>
+                     </q-card>
+                  </div>
+                  <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <q-card class="q-ma-md" bordered>
+                        <q-card-section>
+                           <div class="text-h6">Permissions 4</div>
+                        </q-card-section>
+
+                        <q-separator inset></q-separator>
+
+                        <q-card-section>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_31" label="Permission 31"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_32" label="Permission 32"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_33" label="Permission 33"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_34" label="Permission 34"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_35" label="Permission 35"></q-checkbox>
+                           <q-checkbox v-model="user_role_permissions_formatted.access.PERMISSION_36" label="Permission 36"></q-checkbox>
+                        </q-card-section>
+                     </q-card>
                   </div>
                </div>
                <div class="text-center">
@@ -105,7 +194,9 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
-import { IPCParamsContent, Page, UserRoleField, UserRoleResponse, UserRole } from "@/interfaces/user-role/user-role";
+import { format_user_permissions } from "@/plugins/mixins/permission";
+import { IPCParamsContent, Page, UserRoleField, UserRole, UserRoleResponse } from "@/interfaces/user-role/user-role";
+import { UserRolePermission, UserRolePermissionsResponse } from "@/interfaces/user-role-permission/user-role-permission";
 import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Branch } from "@/interfaces/branch/branch";
@@ -196,6 +287,14 @@ export default defineComponent({
             }
          }
       });
+      const user_role_permission = ref<UserRolePermission[]>([]);
+      const user_role_permissions_formatted = reactive({
+         name: {},
+         description: {},
+         attr: {},
+         int: {},
+         access: {}
+      });
       const loaded = ref(false);
 
       window.api.receive("user-role-module-window-reply", (data:IPCParamsContent) => {
@@ -221,6 +320,63 @@ export default defineComponent({
 
             field.name.text = data.data.name;
          }
+
+         axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`)
+         .then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_user_role_permissions:Array<UserRolePermission> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     formatted_user_role_permissions.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        name: data[i].name,
+                        shortname: data[i].shortname,
+                        description: data[i].description,
+                        attr_value: data[i].attr_value
+                     });
+                  }
+                  user_role_permission.value = formatted_user_role_permissions;
+
+                  // Format Permissions
+                  const user_permissions = { "atributes_1": (userRole.atributes_1) ? userRole.atributes_1 : 0 };
+                  const result_permissions = format_user_permissions(user_role_permission.value, user_permissions);
+                  const names_user_permissions = result_permissions["names"];
+                  const descriptions_user_permissions = result_permissions["descriptions"];
+                  const attrs_user_permissions = result_permissions["attrs"];
+                  const ints_user_permissions = result_permissions["ints"];
+                  const access_user_permissions = result_permissions["access"];
+
+                  user_role_permissions_formatted.name = names_user_permissions;
+                  user_role_permissions_formatted.description = descriptions_user_permissions;
+                  user_role_permissions_formatted.attr = attrs_user_permissions;
+                  user_role_permissions_formatted.int = ints_user_permissions;
+                  user_role_permissions_formatted.access = access_user_permissions;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
+         });
+
          loaded.value = true;
       });
 
@@ -303,10 +459,29 @@ export default defineComponent({
             }
          };
 
+         const access_keys = Object.keys(user_role_permissions_formatted.access);
+         let total_atributes_1 = 0;
+         for(let i = 0; i < access_keys.length; i++) {
+            const curr_key = access_keys[i];
+            // const curr_name = user_role_permissions_formatted.name[curr_key];
+            // const curr_description = user_role_permissions_formatted.description[curr_key];
+            // const curr_attr = user_role_permissions_formatted.attr[curr_key];
+            const curr_int = user_role_permissions_formatted.int[curr_key];
+            const curr_access = user_role_permissions_formatted.access[curr_key];
+            if(curr_access)
+               total_atributes_1 += curr_int;
+         }
+
+         console.log("total_atributes_1", total_atributes_1);
+
          if(page.id <= 0) {
             try {
                let response = await axios.put<UserRoleResponse>(`${ getServer.value }/user_role/v3/create.php`, {
                   name: field.name.text,
+                  atributes_1: total_atributes_1,
+                  atributes_2: 0,
+                  atributes_3: 0,
+                  atributes_4: 0,
                   id_user: getSessionUserId.value,
                   id_pos: getPosId.value,
                   id_branch: getBranchId.value
@@ -364,6 +539,10 @@ export default defineComponent({
                let response = await axios.post<UserRoleResponse>(`${ getServer.value }/user_role/v3/update.php`, {
                   id: page.id,
                   name: field.name.text,
+                  atributes_1: total_atributes_1,
+                  atributes_2: 0,
+                  atributes_3: 0,
+                  atributes_4: 0,
                   id_user: getSessionUserId.value,
                   id_pos: getPosId.value,
                   id_branch: getBranchId.value
@@ -483,6 +662,7 @@ export default defineComponent({
          field,
          loaded,
          userRole,
+         user_role_permissions_formatted,
          onAddUpdate,
          onClear,
          onClose,
