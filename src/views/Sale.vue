@@ -283,6 +283,7 @@ import {
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
 import { Product, ProductsResponse } from "@/interfaces/product/product";
+import { Sale, SaleResponse } from "@/interfaces/sale/sale";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -417,21 +418,105 @@ export default defineComponent({
       const onProductSaleDelete = (id_product:number) => {
          store.commit("REMOVE_SALE_PRODUCT_REPLY", id_product);
       };
-      const onSaveSale = () => {
+      const onSaveSale = async () => {
          if(getSaleProduct.value.length > 0) {
-            window.api.send("print-sale");
-            store.commit("SET_SALE_PRODUCT_REPLY", []);
-            Swal.fire({
-               title: "Ok",
-               text: "Thank you, come back soon",
-               icon: "success"
-            });
+            try {
+               // Create sale
+               let created_sale:Sale = {
+                  id: -1,
+                  is_active: -1,
+                  created: "",
+                  updated: "",
+                  total: "",
+                  id_user: -1,
+                  id_pos: -1,
+                  id_branch: -1,
+                  user: null,
+                  pos: null,
+                  branch: null
+               };
+               let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`, {
+                  total: calculateTotal.value,
+                  id_user: getSessionUserId.value,
+                  id_pos: getPosId.value,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     created_sale = response.data.data.data;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
+
+               // Create sale-products
+               let sale_product_error = false;
+               for(let i = 0; i < getSaleProduct.value.length; i++) {
+                  const curr_sale = getSaleProduct.value[i];
+                  response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
+                     quantity: curr_sale.sale_quantity,
+                     id_sale: created_sale.id,
+                     id_product: curr_sale.id,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  });
+                  if(response) {
+                     if(response.data.error.is_error)
+                        sale_product_error = true;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     sale_product_error = true;
+                  }
+               }
+
+               if(!sale_product_error) {
+                  window.api.send("print-sale");
+                  store.commit("SET_SALE_PRODUCT_REPLY", []);
+                  Swal.fire({
+                     title: "Ok",
+                     text: "Thank you, come back soon",
+                     icon: "success"
+                  });
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
+            } catch (error) {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+               return;
+            }
          } else {
             Swal.fire({
                title: "Error",
                text: "Theres no products in the sale",
                icon: "error"
             });
+            return;
          }
       };
 
@@ -441,9 +526,16 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getSaleProduct = computed(() => {
          return store.getters["getSaleProduct"];
       });
+
       const calculateTotal = computed(() => {
          let total = 0;
          for(let i = 0; i < getSaleProduct.value.length; i++)
@@ -552,11 +644,12 @@ export default defineComponent({
             margin-right: 10px
          .title
             text-align: left
-            font-size: 17px
-            font-weight: bold
+            font-size: 14px
             margin-bottom: 5px
          .text
             text-align: right
+            font-size: 23px
+            font-weight: bold
    .sale-quantity-container
       display: flex
       flex-direction: row
