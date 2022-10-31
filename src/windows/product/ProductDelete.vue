@@ -115,6 +115,14 @@
                      >
                      </q-input>
                   </div>
+                  <div class="col-md-6 col-12">
+                     <q-checkbox
+                        v-model="is_favorite"
+                        label="Is Favorite"
+                        disable
+                     >
+                     </q-checkbox>
+                  </div>
                </div>
                <div class="text-center">
                   <q-btn
@@ -167,6 +175,7 @@ export default defineComponent({
          is_active: -1,
          created: "",
          updated: "",
+         is_favorite: -1,
          code: "",
          name: "",
          description: "",
@@ -230,6 +239,7 @@ export default defineComponent({
             address: ""
          }
       });
+      const is_favorite = ref(false);
       const loaded = ref(false);
 
       window.api.receive("product-module-window-reply", (data:IPCParams) => {
@@ -239,6 +249,7 @@ export default defineComponent({
             product.is_active = data.data.is_active;
             product.created = getFormattedDateString(data.data.created);
             product.updated = getFormattedDateString(data.data.updated);
+            product.is_favorite = data.data.is_favorite;
             product.code = data.data.code;
             product.name = data.data.name;
             product.description = (data.data.description) ? data.data.description : "";
@@ -253,6 +264,7 @@ export default defineComponent({
             product.user = data.data.user;
             product.pos = data.data.pos;
             product.branch = data.data.branch;
+            is_favorite.value = (product.is_favorite === 1) ? true : false;
          }
          loaded.value = true;
       });
@@ -321,6 +333,7 @@ export default defineComponent({
       return {
          t,
          product,
+         is_favorite,
          loaded,
          onDelete,
          onClose

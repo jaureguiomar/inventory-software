@@ -38,7 +38,7 @@ export const format_product = (product:Product|null) => {
          is_active: Number(curr_data.is_active),
          created: curr_data.created,
          updated: curr_data.updated,
-         // is_favorite: Number(curr_data.is_favorite),
+         is_favorite: Number(curr_data.is_favorite),
          code: curr_data.code,
          name: curr_data.name,
          description: curr_data.description,

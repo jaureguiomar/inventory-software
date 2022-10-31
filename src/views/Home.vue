@@ -796,7 +796,7 @@ export default defineComponent({
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
-                        // is_favorite: Number(data[i].is_favorite),
+                        is_favorite: Number(data[i].is_favorite),
                         code: data[i].code,
                         name: data[i].name,
                         description: data[i].description,

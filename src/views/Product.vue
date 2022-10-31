@@ -286,6 +286,7 @@ export default defineComponent({
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
+                        is_favorite: Number(data[i].is_favorite),
                         code: data[i].code,
                         name: data[i].name,
                         description: data[i].description,
@@ -345,6 +346,7 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
+               is_favorite: item.is_favorite,
                code: item.code,
                name: item.name,
                description: item.description,
@@ -375,6 +377,7 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
+               is_favorite: item.is_favorite,
                code: item.code,
                name: item.name,
                description: item.description,
@@ -401,6 +404,7 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
+               is_favorite: item.is_favorite,
                code: item.code,
                name: item.name,
                description: item.description,
@@ -442,6 +446,7 @@ export default defineComponent({
                         product.value[finded_index].created = data.data.created;
                         product.value[finded_index].updated = data.data.updated;
                         product.value[finded_index].code = data.data.code;
+                        product.value[finded_index].is_favorite = data.data.is_favorite;
                         product.value[finded_index].name = data.data.name;
                         product.value[finded_index].description = data.data.description;
                         product.value[finded_index].buy_price = data.data.buy_price;

@@ -27,23 +27,28 @@
                   </div>
                   <div class="sale-favorite-items">
                      <q-list bordered separator>
-                        <q-item v-ripple clickable>
+                        <!-- <q-item v-ripple clickable>
                            <q-item-section>Single line item</q-item-section>
-                        </q-item>
+                        </q-item> -->
 
-                        <q-item v-ripple clickable>
+                        <q-item
+                           v-for="tmp_product in all_products_favorites"
+                           :key="tmp_product.id"
+                           v-ripple
+                           clickable
+                        >
                            <q-item-section>
-                              <q-item-label>Item with caption</q-item-label>
-                              <q-item-label caption>Caption</q-item-label>
+                              <q-item-label>{{ tmp_product.name }}</q-item-label>
+                              <q-item-label caption>{{ tmp_product.description }}</q-item-label>
                            </q-item-section>
                         </q-item>
 
-                        <q-item v-ripple clickable>
+                        <!-- <q-item v-ripple clickable>
                            <q-item-section>
                               <q-item-label overline>OVERLINE</q-item-label>
                               <q-item-label>Item with caption</q-item-label>
                            </q-item-section>
-                        </q-item>
+                        </q-item> -->
                      </q-list>
                   </div>
                </div>
@@ -110,23 +115,7 @@
                         </vue3-simple-typeahead>
                      </div>
                      <div class="options1-right">
-                        <q-btn
-                           class="q-mr-sm"
-                           color="primary"
-                           label="History"
-                        >
-                        </q-btn>
-                        <q-btn
-                           class="q-mr-sm"
-                           color="primary"
-                           label="Sales"
-                        >
-                        </q-btn>
-                        <q-btn
-                           color="primary"
-                           label="Buys"
-                        >
-                        </q-btn>
+                        <q-checkbox v-model="is_supplier" label="Supplier Sale"></q-checkbox>
                      </div>
                   </div>
                   <div class="sale-data">
@@ -246,20 +235,22 @@
                   <div class="sale-options2">
                      <q-btn
                         class="q-mr-sm"
-                        color="primary"
-                        label="Other option"
+                        color="info"
+                        label="Restore sale"
+                        @click="onRestoreSale"
                      >
                      </q-btn>
                      <q-btn
                         class="q-mr-sm"
-                        color="primary"
-                        label="Restore sale"
+                        color="info"
+                        label="Save sale"
+                        @click="onSaveSale"
                      >
                      </q-btn>
                      <q-btn
                         color="primary"
-                        label="Save sale"
-                        @click="onSaveSale"
+                        label="Finish sale"
+                        @click="onFinishSale"
                      >
                      </q-btn>
                   </div>
@@ -282,12 +273,18 @@ import {
 } from "vue";
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
+import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
 import { Product, ProductsResponse } from "@/interfaces/product/product";
 import { Sale, SaleResponse } from "@/interfaces/sale/sale";
+import { User } from "@/interfaces/user/user";
+import { Pos } from "@/interfaces/pos/pos";
+import { Category } from "@/interfaces/category/category";
+import { Branch } from "@/interfaces/branch/branch";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import ProductListDialog from "@/views/components/ProductListDialog.vue";
+import SaleSave from "@/views/components/SaleSave.vue";
 
 export default defineComponent({
    name: "sale-component",
@@ -321,12 +318,72 @@ export default defineComponent({
          },
          { name: "actions", label: t("product.table.field.actions"), align: "center", field: "actions", sortable: true }
       ];
+      const is_supplier = ref(false);
+      const all_products_favorites = ref<Product[]>([]);
 
       onMounted(() => {
          onRefreshProducts();
          barcodeScanner.init(onBarcodeScanned);
          const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
          typeaheadIdInput.addEventListener("keypress", typeaheadInputKeypress);
+
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`)
+            .then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_products:Array<Product> = [];
+
+                     for(let i = 0; i < data.length; i++) {
+                        const formatted_category:Category|null = format_category(data[i].category);
+                        const formatted_user:User|null = format_user(data[i].user);
+                        const formatted_pos:Pos|null = format_pos(data[i].pos);
+                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+
+                        formatted_products.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           is_favorite: Number(data[i].is_favorite),
+                           code: data[i].code,
+                           name: data[i].name,
+                           description: data[i].description,
+                           buy_price: data[i].buy_price,
+                           sale_price: data[i].sale_price,
+                           quantity: Number(data[i].quantity),
+                           id_category: Number(data[i].id_category),
+                           id_user: Number(data[i].id_branch),
+                           id_pos: Number(data[i].id_branch),
+                           id_branch: Number(data[i].id_branch),
+                           category: formatted_category,
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
+                        });
+                     }
+                     all_products_favorites.value = formatted_products;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            }).catch(() => {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            });
       });
       onBeforeUnmount(() => {
          const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
@@ -418,7 +475,30 @@ export default defineComponent({
       const onProductSaleDelete = (id_product:number) => {
          store.commit("REMOVE_SALE_PRODUCT_REPLY", id_product);
       };
+      const onRestoreSale = async () => {
+         console.log("onRestoreSale");
+         // $q.dialog({
+         //    component: ProductListDialog,
+         //    componentProps: {
+         //       allProducts: all_products.value
+         //    },
+         // }).onOk((payload:any) => {
+         //    store.commit("ADD_SALE_PRODUCT_REPLY", payload);
+         // });
+      };
       const onSaveSale = async () => {
+         console.log("onSaveSale");
+         $q.dialog({
+            component: SaleSave,
+            // componentProps: {
+            //    allProducts: all_products.value
+            // },
+         }).onOk((payload:any) => {
+            // store.commit("ADD_SALE_PRODUCT_REPLY", payload);
+            console.log("payload", payload);
+         });
+      };
+      const onFinishSale = async () => {
          if(getSaleProduct.value.length > 0) {
             try {
                // Create sale
@@ -437,6 +517,7 @@ export default defineComponent({
                };
                let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`, {
                   total: calculateTotal.value,
+                  is_supplier: is_supplier.value,
                   id_user: getSessionUserId.value,
                   id_pos: getPosId.value,
                   id_branch: getBranchId.value
@@ -467,6 +548,7 @@ export default defineComponent({
                   const curr_sale = getSaleProduct.value[i];
                   response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
                      quantity: curr_sale.sale_quantity,
+                     is_supplier: is_supplier.value,
                      id_sale: created_sale.id,
                      id_product: curr_sale.id,
                      id_user: getSessionUserId.value,
@@ -550,11 +632,15 @@ export default defineComponent({
          saleVisibleColumns,
          getSaleProduct,
          calculateTotal,
+         is_supplier,
+         all_products_favorites,
          onRefreshProducts,
          onDisplayProductListDialog,
          onQuantityPlusMinusClick,
          onProductSaleDelete,
-         onSaveSale
+         onRestoreSale,
+         onSaveSale,
+         onFinishSale
       };
    }
 });

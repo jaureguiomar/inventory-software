@@ -35,7 +35,8 @@ const store = createStore<State>({
             }
          },
          sale: {
-            product: []
+            product: [],
+            // saved: []
          },
          client: {
             loaded_reply: false

@@ -169,6 +169,15 @@
                      </q-checkbox>
                   </div>
                </div>
+               <div class="row q-mb-sm">
+                  <div class="col-md-6 col-12">
+                     <q-checkbox
+                        v-model="field.is_favorite.text"
+                        label="Is Favorite"
+                     >
+                     </q-checkbox>
+                  </div>
+               </div>
                <div class="text-center">
                   <q-btn
                      class="q-mr-sm"
@@ -248,6 +257,7 @@ export default defineComponent({
          is_active: -1,
          created: "",
          updated: "",
+         is_favorite: -1,
          code: "",
          name: "",
          description: "",
@@ -312,6 +322,14 @@ export default defineComponent({
          }
       });
       const field = reactive<ProductField>({
+         is_favorite: {
+            text: false,
+            max_text: 100,
+            error: {
+               is_error: false,
+               message: ""
+            }
+         },
          code: {
             text: "",
             max_text: 100,
@@ -393,6 +411,7 @@ export default defineComponent({
             product.is_active = data.data.is_active;
             product.created = getFormattedDateString(data.data.created);
             product.updated = getFormattedDateString(data.data.updated);
+            product.is_favorite = data.data.is_favorite;
             product.code = data.data.code;
             product.name = data.data.name;
             product.description = (data.data.description) ? data.data.description : "";
@@ -403,6 +422,7 @@ export default defineComponent({
             product.id_branch = data.data.id_branch;
             product.category = data.data.category;
 
+            field.is_favorite.text = (product.is_favorite === 1) ? true : false;
             field.code.text = data.data.code;
             field.name.text = data.data.name;
             field.description.text = (data.data.description) ? data.data.description : "";
@@ -549,6 +569,7 @@ export default defineComponent({
             is_active: -1,
             created: "",
             updated: "",
+            is_favorite: -1,
             code: "",
             name: "",
             description: "",
@@ -623,6 +644,7 @@ export default defineComponent({
          if(page.id <= 0) {
             try {
                let response = await axios.put<ProductResponse>(`${ getServer.value }/product/v3/create.php`, {
+                  is_favorite: (field.is_favorite.text) ? 1 : 0,
                   code: field.code.text,
                   name: field.name.text,
                   description: field.description.text,
@@ -647,6 +669,7 @@ export default defineComponent({
                         is_active: Number(data.is_active),
                         created: data.created,
                         updated: data.updated,
+                        is_favorite: Number(data.is_favorite),
                         code: data.code,
                         name: data.name,
                         description: data.description,
@@ -690,6 +713,7 @@ export default defineComponent({
             try {
                let response = await axios.post<ProductResponse>(`${ getServer.value }/product/v3/update.php`, {
                   id: page.id,
+                  is_favorite: (field.is_favorite.text) ? 1 : 0,
                   code: field.code.text,
                   name: field.name.text,
                   description: field.description.text,
@@ -714,6 +738,7 @@ export default defineComponent({
                         is_active: Number(data.is_active),
                         created: data.created,
                         updated: data.updated,
+                        is_favorite: Number(data.is_favorite),
                         code: data.code,
                         name: data.name,
                         description: data.description,
@@ -761,9 +786,9 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data:Category = response.data.data;
-                  const formatted_user:User|null = format_user(data.user);
-                  const formatted_pos:Pos|null = format_pos(data.pos);
-                  const formatted_branch:Branch|null = format_branch(data.branch);
+                  // const formatted_user:User|null = format_user(data.user);
+                  // const formatted_pos:Pos|null = format_pos(data.pos);
+                  // const formatted_branch:Branch|null = format_branch(data.branch);
 
                   formatted_data.category = {
                      id: Number(data.id),
@@ -774,9 +799,9 @@ export default defineComponent({
                      id_user: Number(data.id_user),
                      id_pos: Number(data.id_pos),
                      id_branch: Number(data.id_branch),
-                     user: formatted_user,
-                     pos: formatted_pos,
-                     branch: formatted_branch
+                     user: null,
+                     pos: null,
+                     branch: null
                   }
                } else {
                   Swal.fire({

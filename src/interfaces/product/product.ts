@@ -1,5 +1,5 @@
 import { Category } from "@/interfaces/category/category";
-import { InputFieldNumber, InputFieldString } from "@/interfaces/general";
+import { InputFieldString, InputFieldNumber, InputFieldBoolean } from "@/interfaces/general";
 import { Branch } from "@/interfaces/branch/branch";
 import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
@@ -8,6 +8,7 @@ import { Pos } from "@/interfaces/pos/pos";
 interface MainProduct {
    id: number;
    is_active: number;
+   is_favorite: number;
    code: string;
    name: string;
    description: string|null;
@@ -36,6 +37,7 @@ interface ProductMySQL extends MainProduct {
 
 // Props
 interface ProductField {
+   is_favorite: InputFieldBoolean;
    code: InputFieldString;
    name: InputFieldString;
    description: InputFieldString;
