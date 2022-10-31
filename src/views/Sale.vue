@@ -27,28 +27,17 @@
                   </div>
                   <div class="sale-favorite-items">
                      <q-list bordered separator>
-                        <!-- <q-item v-ripple clickable>
-                           <q-item-section>Single line item</q-item-section>
-                        </q-item> -->
-
                         <q-item
                            v-for="tmp_product in all_products_favorites"
                            :key="tmp_product.id"
                            v-ripple
                            clickable
                         >
-                           <q-item-section>
+                           <q-item-section @click="onAddFavoriteProduct(tmp_product)">
                               <q-item-label>{{ tmp_product.name }}</q-item-label>
                               <q-item-label caption>{{ tmp_product.description }}</q-item-label>
                            </q-item-section>
                         </q-item>
-
-                        <!-- <q-item v-ripple clickable>
-                           <q-item-section>
-                              <q-item-label overline>OVERLINE</q-item-label>
-                              <q-item-label>Item with caption</q-item-label>
-                           </q-item-section>
-                        </q-item> -->
                      </q-list>
                   </div>
                </div>
@@ -452,13 +441,16 @@ export default defineComponent({
             });
          });
       };
+      const onAddFavoriteProduct = (curr_product:Product) => {
+         store.commit("ADD_SALE_PRODUCT_REPLY", curr_product);
+      };
       const onDisplayProductListDialog = () => {
          $q.dialog({
             component: ProductListDialog,
             componentProps: {
                allProducts: all_products.value
             },
-         }).onOk((payload:any) => {
+         }).onOk((payload:Product) => {
             store.commit("ADD_SALE_PRODUCT_REPLY", payload);
          });
       };
@@ -635,6 +627,7 @@ export default defineComponent({
          is_supplier,
          all_products_favorites,
          onRefreshProducts,
+         onAddFavoriteProduct,
          onDisplayProductListDialog,
          onQuantityPlusMinusClick,
          onProductSaleDelete,
