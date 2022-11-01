@@ -86,11 +86,6 @@
                         </q-btn>
                      </div>
                      <div class="options1-middle">
-                        <!-- :itemProjection="itemProjectionFunction"
-                        @selectItem="selectItemEventHandler"
-                        @onInput="onInputEventHandler"
-                        @onFocus="onFocusEventHandler"
-                        @onBlur="onBlurEventHandler" -->
                         <vue3-simple-typeahead
                            id="typeahead_id"
                            placeholder="Barcode..."
