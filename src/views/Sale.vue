@@ -94,12 +94,13 @@
                         <vue3-simple-typeahead
                            id="typeahead_id"
                            placeholder="Barcode..."
-                           :items="['One','Two','Three', 'Fourth']"
+                           :items="all_products_favorites_input"
                            :minInputLength="1"
                            class="q-pa-sm rounded-borders text-weight-bold no-outline shadow-1"
+                           @selectItem="onSimpleTypeaheadSelectItem"
                         >
                            <template #list-item-text="slot">
-                              number.- {{ slot.item }}
+                              {{ slot.item }}
                            </template>
                         </vue3-simple-typeahead>
                      </div>
@@ -311,6 +312,7 @@ export default defineComponent({
       ];
       const is_supplier = ref(false);
       const all_products_favorites = ref<Product[]>([]);
+      const all_products_favorites_input = ref<string[]>([]);
 
       onMounted(() => {
          onRefreshProducts();
@@ -324,6 +326,7 @@ export default defineComponent({
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
                      let formatted_products:Array<Product> = [];
+                     let formatted_products_input:Array<string> = [];
 
                      for(let i = 0; i < data.length; i++) {
                         const formatted_category:Category|null = format_category(data[i].category);
@@ -352,8 +355,10 @@ export default defineComponent({
                            pos: formatted_pos,
                            branch: formatted_branch
                         });
+                        formatted_products_input.push(data[i].name);
                      }
                      all_products_favorites.value = formatted_products;
+                     all_products_favorites_input.value = formatted_products_input;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -408,6 +413,15 @@ export default defineComponent({
          typeaheadIdInput.dispatchEvent(new KeyboardEvent("keypress", {
             keyCode: 13
          }));
+      };
+      const onSimpleTypeaheadSelectItem = (value:string) => {
+         setTimeout(() => {
+            const finded_index = findValueBy(all_products_favorites.value, value, "name");
+            const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
+            if(finded_index >= 0)
+               onAddSaleProduct(all_products_favorites.value[finded_index]);
+            typeaheadIdInput.value = "";
+         }, 100);
       };
       const onRefreshProducts = () => {
          all_products.value = [];
@@ -631,6 +645,8 @@ export default defineComponent({
          calculateTotal,
          is_supplier,
          all_products_favorites,
+         all_products_favorites_input,
+         onSimpleTypeaheadSelectItem,
          onRefreshProducts,
          onAddFavoriteProduct,
          onDisplayProductListDialog,
