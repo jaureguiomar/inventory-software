@@ -108,7 +108,7 @@ import { UserRole } from "@/interfaces/user-role/user-role";
 import { User, UsersResponse } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Branch } from "@/interfaces/branch/branch";
-import { validateField } from "@/plugins/mixins/general";
+import { findValueBy, validateField } from "@/plugins/mixins/general";
 
 export default {
    emits: [
@@ -134,6 +134,7 @@ export default {
             }
          }
       });
+      const allUsers = ref<User[]>([]);
       const allUsersOptions = ref<string[]>([]);
       const allUsersFilteredOptions = ref<string[]>([]);
 
@@ -175,6 +176,7 @@ export default {
                      }
                      allUsersOptions.value = formatted_users_input;
                      allUsersFilteredOptions.value = formatted_users_input;
+                     allUsers.value = formatted_users;
                   } else {
                      // Swal.fire({
                      //    title: "Error",
@@ -222,11 +224,33 @@ export default {
       const onUserBlur = () => {
          validateUsername(field.username.text);
       };
+      const onProcessCashCutOff = () => {
+         field.amount.text = field.amount.text.trim();
+         field.username.text = field.username.text.trim();
+
+         let amount:string = field.amount.text;
+         let username:string = field.username.text;
+         let error_amount:boolean = false;
+         let error_username:boolean = false;
+         let error_id_user:boolean =false;
+
+         error_amount = validateAmount(amount);
+         error_username = validateUsername(username);
+         const finded_index = findValueBy(allUsers.value, username, "username");
+         if(finded_index < 0)
+            error_id_user = true;
+
+         if(error_amount || error_username || error_id_user)
+            return false;
+         return true;
+      };
       const onOpenCashCutOff = () => {
-         onDialogOK();
+         if(onProcessCashCutOff())
+            onDialogOK();
       };
       const onCloseCashCutOff = () => {
-         onDialogOK();
+         if(onProcessCashCutOff())
+            onDialogOK();
       };
       ////////////////
       // Validators //
