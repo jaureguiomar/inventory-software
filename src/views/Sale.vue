@@ -28,7 +28,7 @@
                   <div class="sale-favorite-items">
                      <q-list bordered separator>
                         <q-item
-                           v-for="tmp_product in all_products_favorites"
+                           v-for="tmp_product in allProductsFavorites"
                            :key="tmp_product.id"
                            v-ripple
                            clickable
@@ -42,7 +42,7 @@
                   </div>
                </div>
                <div class="sale-content">
-                  <div class="sale-indicators">
+                  <!-- <div class="sale-indicators">
                      <div class="sale-indicator-item">
                         <div class="sale-indicator-item-top">
                            Indicator 1
@@ -75,7 +75,7 @@
                            $1,250.00
                         </div>
                      </div>
-                  </div>
+                  </div> -->
                   <div class="sale-options1">
                      <div class="options1-left">
                         <q-btn
@@ -86,21 +86,29 @@
                         </q-btn>
                      </div>
                      <div class="options1-middle">
-                        <vue3-simple-typeahead
-                           id="typeahead_id"
-                           placeholder="Barcode..."
-                           :items="all_products_favorites_input"
-                           :minInputLength="1"
-                           class="q-pa-sm rounded-borders text-weight-bold no-outline shadow-1"
-                           @selectItem="onSimpleTypeaheadSelectItem"
+                        <q-select
+                           v-model="barcodeSelect"
+                           use-input
+                           dense
+                           input-debounce="0"
+                           label="Barcode..."
+                           :options="allProductsOptions"
+                           behavior="menu"
+                           style="max-width: 260px;"
+                           @filter="onBarcodeProductFilter"
+                           @update:model-value="onBarcodeProductUpdate"
                         >
-                           <template #list-item-text="slot">
-                              {{ slot.item }}
+                           <template #no-option>
+                              <q-item>
+                                 <q-item-section class="text-grey">
+                                 No results
+                                 </q-item-section>
+                              </q-item>
                            </template>
-                        </vue3-simple-typeahead>
+                        </q-select>
                      </div>
                      <div class="options1-right">
-                        <q-checkbox v-model="is_supplier" label="Supplier Sale"></q-checkbox>
+                        <q-checkbox v-model="isSupplier" label="Supplier Sale"></q-checkbox>
                      </div>
                   </div>
                   <div class="sale-data">
@@ -252,10 +260,7 @@ import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
 import { useQuasar } from "quasar";
 import { useStore } from "vuex";
-import {
-   defineComponent, getCurrentInstance, onMounted,
-   onBeforeUnmount, ref, computed
-} from "vue";
+import { defineComponent, getCurrentInstance, ref, computed, onMounted } from "vue";
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
@@ -305,15 +310,15 @@ export default defineComponent({
          },
          { name: "actions", label: t("product.table.field.actions"), align: "center", field: "actions", sortable: true }
       ];
-      const is_supplier = ref(false);
-      const all_products_favorites = ref<Product[]>([]);
-      const all_products_favorites_input = ref<string[]>([]);
+      const isSupplier = ref<Boolean>(false);
+      const allProductsFavorites = ref<Product[]>([]);
+      const allProductsOptions = ref<string[]>([]);
+      const allProductsFilteredOptions = ref<string[]>([]);
+      const barcodeSelect = ref<string>("");
 
       onMounted(() => {
          onRefreshProducts();
          barcodeScanner.init(onBarcodeScanned);
-         const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
-         typeaheadIdInput.addEventListener("keypress", typeaheadInputKeypress);
 
          axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`)
             .then((response) => {
@@ -352,8 +357,68 @@ export default defineComponent({
                         });
                         formatted_products_input.push(data[i].name);
                      }
-                     all_products_favorites.value = formatted_products;
-                     all_products_favorites_input.value = formatted_products_input;
+                     allProductsFavorites.value = formatted_products;
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            }).catch(() => {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            });
+
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/select-all.php`)
+            .then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_products:Array<Product> = [];
+                     let formatted_products_input:Array<string> = [];
+
+                     for(let i = 0; i < data.length; i++) {
+                        const formatted_category:Category|null = format_category(data[i].category);
+                        const formatted_user:User|null = format_user(data[i].user);
+                        const formatted_pos:Pos|null = format_pos(data[i].pos);
+                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+
+                        formatted_products.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           is_favorite: Number(data[i].is_favorite),
+                           code: data[i].code,
+                           name: data[i].name,
+                           description: data[i].description,
+                           buy_price: data[i].buy_price,
+                           sale_price: data[i].sale_price,
+                           quantity: Number(data[i].quantity),
+                           id_category: Number(data[i].id_category),
+                           id_user: Number(data[i].id_branch),
+                           id_pos: Number(data[i].id_branch),
+                           id_branch: Number(data[i].id_branch),
+                           category: formatted_category,
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
+                        });
+                        formatted_products_input.push(data[i].name);
+                     }
+                     allProductsOptions.value = formatted_products_input;
+                     allProductsFilteredOptions.value = formatted_products_input;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -376,46 +441,58 @@ export default defineComponent({
                });
             });
       });
-      onBeforeUnmount(() => {
-         const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
-         typeaheadIdInput.removeEventListener("keypress", typeaheadInputKeypress);
-      });
 
-      const typeaheadInputKeypress = (e:KeyboardEvent) => {
-         let keyCode = e.keyCode ? e.keyCode : e.which;
-         if(keyCode === 13) {
-            const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
-            const barcode = typeaheadIdInput.value;
-
-            setTimeout(() => {
-               const finded_index = findValueBy(all_products.value, barcode, "code");
-               if(finded_index >= 0) {
-                  onAddSaleProduct(all_products.value[finded_index]);
-               } else {
-                  Swal.fire({
-                     title: "Error",
-                     text: "Product does not exist",
-                     icon: "error"
-                  });
-               }
-               typeaheadIdInput.value = "";
-            }, 100);
-         }
-      };
       const onBarcodeScanned = (barcode:string) => {
-         const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
-         typeaheadIdInput.value = barcode;
-         typeaheadIdInput.dispatchEvent(new KeyboardEvent("keypress", {
-            keyCode: 13
-         }));
-      };
-      const onSimpleTypeaheadSelectItem = (value:string) => {
+         barcodeSelect.value = barcode;
+
          setTimeout(() => {
-            const finded_index = findValueBy(all_products_favorites.value, value, "name");
-            const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
-            if(finded_index >= 0)
-               onAddSaleProduct(all_products_favorites.value[finded_index]);
-            typeaheadIdInput.value = "";
+            const finded_index = findValueBy(all_products.value, barcode, "code");
+            if(finded_index >= 0) {
+               onAddSaleProduct(all_products.value[finded_index]);
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: "Product does not exist",
+                  icon: "error"
+               });
+            }
+            barcodeSelect.value = "";
+         }, 100);
+      };
+      // const onSimpleTypeaheadSelectItem = (value:string) => {
+      //    setTimeout(() => {
+      //       const finded_index = findValueBy(allProductsFavorites.value, value, "name");
+      //       const typeaheadIdInput = document.getElementById("typeahead_id") as HTMLInputElement;
+      //       if(finded_index >= 0)
+      //          onAddSaleProduct(allProductsFavorites.value[finded_index]);
+      //       typeaheadIdInput.value = "";
+      //    }, 100);
+      // };
+      const onBarcodeProductFilter = (value:string, update:Function) => {
+         if(value === "") {
+            update(() => {
+               allProductsOptions.value = allProductsFilteredOptions.value;
+            });
+            return;
+         }
+         update(() => {
+            const needle = value.toLowerCase();
+            allProductsOptions.value = allProductsFilteredOptions.value.filter(tmp_value => tmp_value.toLowerCase().indexOf(needle) > -1);
+         });
+      };
+      const onBarcodeProductUpdate = () => {
+         setTimeout(() => {
+            const finded_index = findValueBy(all_products.value, barcodeSelect.value, "name");
+            if(finded_index >= 0) {
+               onAddSaleProduct(all_products.value[finded_index]);
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: "Product does not exist",
+                  icon: "error"
+               });
+            }
+            barcodeSelect.value = "";
          }, 100);
       };
       const onRefreshProducts = () => {
@@ -516,7 +593,7 @@ export default defineComponent({
                };
                let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`, {
                   total: calculateTotal.value,
-                  is_supplier: is_supplier.value,
+                  is_supplier: isSupplier.value,
                   id_user: getSessionUserId.value,
                   id_pos: getPosId.value,
                   id_branch: getBranchId.value
@@ -547,7 +624,7 @@ export default defineComponent({
                   const curr_sale = getSaleCurrSaleProduct.value[i];
                   response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
                      quantity: curr_sale.sale_quantity,
-                     is_supplier: is_supplier.value,
+                     is_supplier: isSupplier.value,
                      id_sale: created_sale.id,
                      id_product: curr_sale.id,
                      id_user: getSessionUserId.value,
@@ -638,10 +715,12 @@ export default defineComponent({
          saleVisibleColumns,
          getSaleCurrSaleProduct,
          calculateTotal,
-         is_supplier,
-         all_products_favorites,
-         all_products_favorites_input,
-         onSimpleTypeaheadSelectItem,
+         isSupplier,
+         allProductsFavorites,
+         allProductsOptions,
+         barcodeSelect,
+         onBarcodeProductFilter,
+         onBarcodeProductUpdate,
          onRefreshProducts,
          onAddFavoriteProduct,
          onDisplayProductListDialog,
