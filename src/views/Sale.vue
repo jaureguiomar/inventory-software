@@ -110,7 +110,7 @@
                   <div class="sale-data">
                      <q-table
                         title="Sale"
-                        :rows="getSaleProduct"
+                        :rows="getSaleCurrSaleProduct"
                         :columns="saleColumns"
                         :no-data-label="t('client.table.content.details.empty')"
                         :no-results-label="t('client.table.content.details.empty')"
@@ -274,6 +274,8 @@ import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import ProductListDialog from "@/views/components/ProductListDialog.vue";
 import SaleSave from "@/views/components/SaleSave.vue";
+import SaleRestore from "@/views/components/SaleRestore.vue";
+import { SaleContentStore } from "@/interfaces/store";
 
 export default defineComponent({
    name: "sale-component",
@@ -388,7 +390,7 @@ export default defineComponent({
             setTimeout(() => {
                const finded_index = findValueBy(all_products.value, barcode, "code");
                if(finded_index >= 0) {
-                  store.commit("ADD_SALE_PRODUCT_REPLY", all_products.value[finded_index]);
+                  onAddSaleProduct(all_products.value[finded_index]);
                } else {
                   Swal.fire({
                      title: "Error",
@@ -442,7 +444,7 @@ export default defineComponent({
          });
       };
       const onAddFavoriteProduct = (curr_product:Product) => {
-         store.commit("ADD_SALE_PRODUCT_REPLY", curr_product);
+         onAddSaleProduct(curr_product);
       };
       const onDisplayProductListDialog = () => {
          $q.dialog({
@@ -451,47 +453,43 @@ export default defineComponent({
                allProducts: all_products.value
             },
          }).onOk((payload:Product) => {
-            store.commit("ADD_SALE_PRODUCT_REPLY", payload);
+            onAddSaleProduct(payload);
          });
       };
       const onQuantityPlusMinusClick = (product:Product, type:string) => {
          switch(type) {
             case "plus":
-               store.commit("ADD_SALE_PRODUCT_REPLY", product);
+               onAddSaleProduct(product);
                break;
             case "minus":
-               store.commit("MINUS_SALE_PRODUCT_QUANTITY", product.id);
+               store.commit("MINUS_SALE_CURR_SALE_PRODUCT_QUANTITY", product.id);
                break;
          }
       };
       const onProductSaleDelete = (id_product:number) => {
-         store.commit("REMOVE_SALE_PRODUCT_REPLY", id_product);
+         store.commit("REMOVE_SALE_CURR_SALE_PRODUCT", id_product);
       };
-      const onRestoreSale = async () => {
-         console.log("onRestoreSale");
-         // $q.dialog({
-         //    component: ProductListDialog,
-         //    componentProps: {
-         //       allProducts: all_products.value
-         //    },
-         // }).onOk((payload:any) => {
-         //    store.commit("ADD_SALE_PRODUCT_REPLY", payload);
-         // });
+      const onRestoreSale = () => {
+         $q.dialog({
+            component: SaleRestore,
+         }).onOk((payload:SaleContentStore) => {
+            store.commit("SET_SALE_CURR_SALE", payload);
+         });
       };
-      const onSaveSale = async () => {
-         console.log("onSaveSale");
+      const onSaveSale = () => {
          $q.dialog({
             component: SaleSave,
-            // componentProps: {
-            //    allProducts: all_products.value
-            // },
-         }).onOk((payload:any) => {
-            // store.commit("ADD_SALE_PRODUCT_REPLY", payload);
-            console.log("payload", payload);
+         }).onOk((payload:string) => {
+            store.commit("SET_SALE_CURR_SALE_DATA", payload);
+            store.commit("ADD_SALE_SAVED_SALE", {
+               ...getSaleCurrSale.value,
+               product: [ ...getSaleCurrSale.value.product ]
+            });
+            store.commit("SET_SALE_CURR_SALE_PRODUCT", []);
          });
       };
       const onFinishSale = async () => {
-         if(getSaleProduct.value.length > 0) {
+         if(getSaleCurrSaleProduct.value.length > 0) {
             try {
                // Create sale
                let created_sale:Sale = {
@@ -536,8 +534,8 @@ export default defineComponent({
 
                // Create sale-products
                let sale_product_error = false;
-               for(let i = 0; i < getSaleProduct.value.length; i++) {
-                  const curr_sale = getSaleProduct.value[i];
+               for(let i = 0; i < getSaleCurrSaleProduct.value.length; i++) {
+                  const curr_sale = getSaleCurrSaleProduct.value[i];
                   response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
                      quantity: curr_sale.sale_quantity,
                      is_supplier: is_supplier.value,
@@ -562,7 +560,7 @@ export default defineComponent({
 
                if(!sale_product_error) {
                   window.api.send("print-sale");
-                  store.commit("SET_SALE_PRODUCT_REPLY", []);
+                  store.commit("SET_SALE_CURR_SALE_PRODUCT", []);
                   Swal.fire({
                      title: "Ok",
                      text: "Thank you, come back soon",
@@ -593,6 +591,11 @@ export default defineComponent({
             return;
          }
       };
+      const onAddSaleProduct = (new_product:Product) => {
+         if(getSaleCurrSaleProduct.value.length <= 0)
+            store.commit("SET_SALE_CURR_SALE_DATA_AUTOMATIC");
+         store.commit("ADD_SALE_CURR_SALE_PRODUCT", new_product);
+      }
 
       const getServer = computed(() => {
          return store.getters["getServer"];
@@ -606,14 +609,16 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
-      const getSaleProduct = computed(() => {
-         return store.getters["getSaleProduct"];
+      const getSaleCurrSale = computed(() => {
+         return store.getters["getSaleCurrSale"];
       });
-
+      const getSaleCurrSaleProduct = computed(() => {
+         return store.getters["getSaleCurrSaleProduct"];
+      });
       const calculateTotal = computed(() => {
          let total = 0;
-         for(let i = 0; i < getSaleProduct.value.length; i++)
-            total += parseFloat(getSaleProduct.value[i].sale_price) * parseFloat(getSaleProduct.value[i].sale_quantity);
+         for(let i = 0; i < getSaleCurrSaleProduct.value.length; i++)
+            total += parseFloat(getSaleCurrSaleProduct.value[i].sale_price) * parseFloat(getSaleCurrSaleProduct.value[i].sale_quantity);
          return total.toFixed(2);
       });
 
@@ -622,7 +627,7 @@ export default defineComponent({
          saleColumns,
          saleFilter,
          saleVisibleColumns,
-         getSaleProduct,
+         getSaleCurrSaleProduct,
          calculateTotal,
          is_supplier,
          all_products_favorites,

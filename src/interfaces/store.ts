@@ -4,8 +4,14 @@ interface SaleProductStore extends Product {
    sale_quantity: number;
    sale_total: string;
 }
-interface SaleStore {
+interface SaleContentStore {
+   id: number;
+   name: string;
    product: Array<SaleProductStore>;
+}
+interface SaleStore {
+   curr_sale: SaleContentStore;
+   saved_sale: Array<SaleContentStore>;
 }
 interface GenericStore {
    loaded_reply: boolean;
@@ -68,6 +74,7 @@ interface State {
 export {
    State,
    SaleProductStore,
+   SaleContentStore,
    UserStore,
    BranchStore,
    PosStore,

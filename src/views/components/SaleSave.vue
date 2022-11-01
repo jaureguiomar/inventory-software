@@ -24,34 +24,20 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useDialogPluginComponent } from "quasar";
-import { useStore } from "vuex";
-import { key } from "@/plugins/store";
 
 export default {
    emits: [
       ...useDialogPluginComponent.emits
    ],
    setup () {
-      const store = useStore(key);
       const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
       const sale_name = ref("");
 
-      onMounted(() => {
-         // if(getSaleProduct.value.length < 0)
-      });
-
       const onSaveSale = () => {
-         store.commit("SET_SALE_PRODUCT_REPLY", []);
-         onDialogOK();
+         onDialogOK(sale_name.value);
       };
-
-      // const getSaleProduct = computed(() => {
-      //    return store.getters["getSaleProduct"];
-      // });
-
-      // console.log("getSaleProduct", getSaleProduct.value);
 
       return {
          sale_name,

@@ -1,6 +1,9 @@
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
-import { State, SaleProductStore, UserStore, BranchStore, PosStore } from '@/interfaces/store';
+import {
+   State, SaleProductStore, UserStore, BranchStore,
+   PosStore, SaleContentStore
+} from '@/interfaces/store';
 import { findValueBy } from "@/plugins/mixins/general";
 
 const store = createStore<State>({
@@ -35,8 +38,12 @@ const store = createStore<State>({
             }
          },
          sale: {
-            product: [],
-            // saved: []
+            curr_sale: {
+               id: -1,
+               name: "",
+               product: []
+            },
+            saved_sale: []
          },
          client: {
             loaded_reply: false
@@ -93,8 +100,14 @@ const store = createStore<State>({
       getSessionUser(state:State) {
          return state.session.user;
       },
-      getSaleProduct(state:State) {
-         return state.sale.product;
+      getSaleCurrSale(state:State) {
+         return state.sale.curr_sale;
+      },
+      getSaleCurrSaleProduct(state:State) {
+         return state.sale.curr_sale.product;
+      },
+      getSaleSavedSales(state:State) {
+         return state.sale.saved_sale;
       },
       getClientLoadedReply(state:State) {
          return state.client.loaded_reply;
@@ -143,35 +156,58 @@ const store = createStore<State>({
       SET_SESSION_USER_DATA: (state:State, data:UserStore) => {
          state.session.user = data;
       },
-      SET_SALE_PRODUCT_REPLY: (state:State, data:Array<SaleProductStore>) => {
-         state.sale.product = data;
+      SET_SALE_CURR_SALE: (state:State, data:SaleContentStore) => {
+         state.sale.curr_sale = data;
       },
-      ADD_SALE_PRODUCT_REPLY: (state:State, data:SaleProductStore) => {
-         const finded_index = findValueBy(state.sale.product, data.id, "id");
+      SET_SALE_CURR_SALE_DATA: (state:State, sale_name:string) => {
+         const new_id = (state.sale.saved_sale.length === 0) ?
+            1 : state.sale.saved_sale[state.sale.saved_sale.length - 1].id;
+
+         state.sale.curr_sale.id = new_id;
+         if(sale_name)
+            state.sale.curr_sale.name = sale_name;
+         else
+            state.sale.curr_sale.name = `Sale ${ new_id }`;
+      },
+      SET_SALE_CURR_SALE_DATA_AUTOMATIC: (state:State) => {
+         const new_id = (state.sale.saved_sale.length === 0) ?
+            1 : state.sale.saved_sale[state.sale.saved_sale.length - 1].id;
+
+         state.sale.curr_sale.id = new_id;
+         state.sale.curr_sale.name = `Sale ${ new_id }`;
+      },
+      ADD_SALE_SAVED_SALE: (state:State, data:SaleContentStore) => {
+         state.sale.saved_sale.push(data);
+      },
+      SET_SALE_CURR_SALE_PRODUCT: (state:State, data:Array<SaleProductStore>) => {
+         state.sale.curr_sale.product = data;
+      },
+      ADD_SALE_CURR_SALE_PRODUCT: (state:State, data:SaleProductStore) => {
+         const finded_index = findValueBy(state.sale.curr_sale.product, data.id, "id");
          if(finded_index < 0) {
-            state.sale.product.push({
+            state.sale.curr_sale.product.push({
                ...data,
                sale_quantity: 1,
                sale_total: data.sale_price
             });
          } else {
-            state.sale.product[finded_index].sale_quantity ++;
-            state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);
+            state.sale.curr_sale.product[finded_index].sale_quantity ++;
+            state.sale.curr_sale.product[finded_index].sale_total = (parseFloat(state.sale.curr_sale.product[finded_index].sale_price) * state.sale.curr_sale.product[finded_index].sale_quantity).toFixed(2);
          }
       },
-      MINUS_SALE_PRODUCT_QUANTITY: (state:State, id_product:number) => {
-         const finded_index = findValueBy(state.sale.product, id_product, "id");
+      MINUS_SALE_CURR_SALE_PRODUCT_QUANTITY: (state:State, id_product:number) => {
+         const finded_index = findValueBy(state.sale.curr_sale.product, id_product, "id");
          if(finded_index >= 0) {
-            if(state.sale.product[finded_index].sale_quantity > 1) {
-               state.sale.product[finded_index].sale_quantity --;
-               state.sale.product[finded_index].sale_total = (parseFloat(state.sale.product[finded_index].sale_price) * state.sale.product[finded_index].sale_quantity).toFixed(2);
+            if(state.sale.curr_sale.product[finded_index].sale_quantity > 1) {
+               state.sale.curr_sale.product[finded_index].sale_quantity --;
+               state.sale.curr_sale.product[finded_index].sale_total = (parseFloat(state.sale.curr_sale.product[finded_index].sale_price) * state.sale.curr_sale.product[finded_index].sale_quantity).toFixed(2);
             }
          }
       },
-      REMOVE_SALE_PRODUCT_REPLY: (state:State, id_product:number) => {
-         const finded_index = findValueBy(state.sale.product, id_product, "id");
+      REMOVE_SALE_CURR_SALE_PRODUCT: (state:State, id_product:number) => {
+         const finded_index = findValueBy(state.sale.curr_sale.product, id_product, "id");
          if(finded_index >= 0)
-            state.sale.product.splice(finded_index, 1);
+            state.sale.curr_sale.product.splice(finded_index, 1);
       },
       SET_CLIENT_LOADED_REPLY: (state:State, data:boolean) => {
          state.client.loaded_reply = data;
