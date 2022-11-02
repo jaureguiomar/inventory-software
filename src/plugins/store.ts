@@ -159,20 +159,15 @@ const store = createStore<State>({
       SET_SALE_CURR_SALE: (state:State, data:SaleContentStore) => {
          state.sale.curr_sale = data;
       },
-      SET_SALE_CURR_SALE_DATA: (state:State, sale_name:string) => {
-         const new_id = (state.sale.saved_sale.length === 0) ?
-            1 : state.sale.saved_sale[state.sale.saved_sale.length - 1].id;
-
-         state.sale.curr_sale.id = new_id;
+      SET_SALE_CURR_SALE_DATA_NAME: (state:State, sale_name:string) => {
          if(sale_name)
             state.sale.curr_sale.name = sale_name;
          else
-            state.sale.curr_sale.name = `Sale ${ new_id }`;
+            state.sale.curr_sale.name = `Sale ${ state.sale.curr_sale.id }`;
       },
       SET_SALE_CURR_SALE_DATA_AUTOMATIC: (state:State) => {
          const new_id = (state.sale.saved_sale.length === 0) ?
-            1 : state.sale.saved_sale[state.sale.saved_sale.length - 1].id;
-
+            1 : (state.sale.saved_sale[state.sale.saved_sale.length - 1].id + 1);
          state.sale.curr_sale.id = new_id;
          state.sale.curr_sale.name = `Sale ${ new_id }`;
       },

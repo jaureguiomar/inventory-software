@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row items-center no-wrap">
           <div class="col-12">
-            <h6 class="text-center q-ma-none">Restore Sale dialog</h6>
+            <h6 class="text-center q-mt-none q-mb-md">Restore Sale dialog</h6>
 
             <q-list bordered separator>
                <q-item
@@ -15,7 +15,11 @@
                   @click="onRestoreSale(tmp_saved_sale)"
                >
                   <q-item-section>
-                     <q-item-label>{{ tmp_saved_sale.name }}</q-item-label>
+                     <q-item-label>
+                        <strong>
+                           {{ tmp_saved_sale.name }}
+                        </strong>
+                     </q-item-label>
                      <!-- <q-item-label caption>{{ tmp_saved_sale.description }}</q-item-label> -->
                   </q-item-section>
                </q-item>

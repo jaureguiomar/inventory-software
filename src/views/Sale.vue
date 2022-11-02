@@ -577,7 +577,7 @@ export default defineComponent({
             $q.dialog({
                component: SaleSave,
             }).onOk((payload:string) => {
-               store.commit("SET_SALE_CURR_SALE_DATA", payload);
+               store.commit("SET_SALE_CURR_SALE_DATA_NAME", payload);
                store.commit("ADD_SALE_SAVED_SALE", {
                   ...getSaleCurrSale.value,
                   product: [ ...getSaleCurrSale.value.product ]
