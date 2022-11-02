@@ -79,6 +79,7 @@
                   <div class="sale-options1">
                      <div class="options1-left">
                         <q-btn
+                           class="q-mr-sm"
                            color="primary"
                            label="Product List"
                            @click="onDisplayProductListDialog"
@@ -108,6 +109,12 @@
                         </q-select>
                      </div>
                      <div class="options1-right">
+                        <q-btn
+                           color="primary"
+                           label="Cash Cut Off"
+                           @click="onDisplayCashCutOffDialog"
+                        >
+                        </q-btn>
                         <q-checkbox v-model="isSupplier" label="Supplier Sale"></q-checkbox>
                      </div>
                   </div>
@@ -274,8 +281,9 @@ import { Branch } from "@/interfaces/branch/branch";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import ProductListDialog from "@/views/components/ProductListDialog.vue";
-import SaleSave from "@/views/components/SaleSave.vue";
-import SaleRestore from "@/views/components/SaleRestore.vue";
+import SaleSaveDialog from "@/views/components/SaleSaveDialog.vue";
+import SaleRestoreDialog from "@/views/components/SaleRestoreDialog.vue";
+import SaleCashCutOffDialog from "@/views/components/SaleCashCutOffDialog.vue";
 import { SaleContentStore } from "@/interfaces/store";
 
 export default defineComponent({
@@ -542,6 +550,13 @@ export default defineComponent({
             onAddSaleProduct(payload);
          });
       };
+      const onDisplayCashCutOffDialog = () => {
+         $q.dialog({
+            component: SaleCashCutOffDialog,
+         }).onOk(() => {
+            console.log("SaleCashCutOffDialog");
+         });
+      };
       const onQuantityPlusMinusClick = (product:Product, type:string) => {
          switch(type) {
             case "plus":
@@ -558,7 +573,7 @@ export default defineComponent({
       const onRestoreSale = () => {
          if(getSaleSavedSales.value.length > 0) {
             $q.dialog({
-               component: SaleRestore,
+               component: SaleRestoreDialog,
             }).onOk((payload:SaleContentStore) => {
                store.commit("REMOVE_SALE_SAVED_SALE", payload.id);
                store.commit("SET_SALE_CURR_SALE", payload);
@@ -575,7 +590,7 @@ export default defineComponent({
       const onSaveSale = () => {
          if(getSaleCurrSaleProduct.value.length > 0) {
             $q.dialog({
-               component: SaleSave,
+               component: SaleSaveDialog,
             }).onOk((payload:string) => {
                store.commit("SET_SALE_CURR_SALE_DATA_NAME", payload);
                store.commit("ADD_SALE_SAVED_SALE", {
@@ -746,6 +761,7 @@ export default defineComponent({
          onRefreshProducts,
          onAddFavoriteProduct,
          onDisplayProductListDialog,
+         onDisplayCashCutOffDialog,
          onQuantityPlusMinusClick,
          onProductSaleDelete,
          onRestoreSale,

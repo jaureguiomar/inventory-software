@@ -5,7 +5,8 @@ import {
    faXmark, faPenToSquare, faArrowsRotate,
    faTruckField, faBoxesStacked, faBook,
    faArrowRightFromBracket, faEye, faSearch,
-   faCartShopping, faUserTie, faAddressBook
+   faCartShopping, faUserTie, faAddressBook,
+   faCashRegister, faMoneyBill, faUser
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faUsers);
@@ -23,5 +24,8 @@ library.add(faSearch);
 library.add(faCartShopping);
 library.add(faUserTie);
 library.add(faAddressBook);
+library.add(faCashRegister);
+library.add(faMoneyBill);
+library.add(faUser);
 
 export default FontAwesomeIcon;
