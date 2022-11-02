@@ -179,6 +179,11 @@ const store = createStore<State>({
       ADD_SALE_SAVED_SALE: (state:State, data:SaleContentStore) => {
          state.sale.saved_sale.push(data);
       },
+      REMOVE_SALE_SAVED_SALE: (state:State, id_saved_sale:number) => {
+         const finded_index = findValueBy(state.sale.saved_sale, id_saved_sale, "id");
+         if(finded_index >= 0)
+            state.sale.saved_sale.splice(finded_index, 1);
+      },
       SET_SALE_CURR_SALE_PRODUCT: (state:State, data:Array<SaleProductStore>) => {
          state.sale.curr_sale.product = data;
       },

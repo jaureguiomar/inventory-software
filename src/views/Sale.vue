@@ -556,23 +556,42 @@ export default defineComponent({
          store.commit("REMOVE_SALE_CURR_SALE_PRODUCT", id_product);
       };
       const onRestoreSale = () => {
-         $q.dialog({
-            component: SaleRestore,
-         }).onOk((payload:SaleContentStore) => {
-            store.commit("SET_SALE_CURR_SALE", payload);
-         });
+         if(getSaleSavedSales.value.length > 0) {
+            $q.dialog({
+               component: SaleRestore,
+            }).onOk((payload:SaleContentStore) => {
+               store.commit("REMOVE_SALE_SAVED_SALE", payload.id);
+               store.commit("SET_SALE_CURR_SALE", payload);
+            });
+         } else {
+            Swal.fire({
+               title: "Error",
+               text: "Theres no saved to sales",
+               icon: "error"
+            });
+            return;
+         }
       };
       const onSaveSale = () => {
-         $q.dialog({
-            component: SaleSave,
-         }).onOk((payload:string) => {
-            store.commit("SET_SALE_CURR_SALE_DATA", payload);
-            store.commit("ADD_SALE_SAVED_SALE", {
-               ...getSaleCurrSale.value,
-               product: [ ...getSaleCurrSale.value.product ]
+         if(getSaleCurrSaleProduct.value.length > 0) {
+            $q.dialog({
+               component: SaleSave,
+            }).onOk((payload:string) => {
+               store.commit("SET_SALE_CURR_SALE_DATA", payload);
+               store.commit("ADD_SALE_SAVED_SALE", {
+                  ...getSaleCurrSale.value,
+                  product: [ ...getSaleCurrSale.value.product ]
+               });
+               store.commit("SET_SALE_CURR_SALE_PRODUCT", []);
             });
-            store.commit("SET_SALE_CURR_SALE_PRODUCT", []);
-         });
+         } else {
+            Swal.fire({
+               title: "Error",
+               text: "Theres no sale to save",
+               icon: "error"
+            });
+            return;
+         }
       };
       const onFinishSale = async () => {
          if(getSaleCurrSaleProduct.value.length > 0) {
@@ -700,6 +719,9 @@ export default defineComponent({
       });
       const getSaleCurrSaleProduct = computed(() => {
          return store.getters["getSaleCurrSaleProduct"];
+      });
+      const getSaleSavedSales = computed(() => {
+         return store.getters["getSaleSavedSales"];
       });
       const calculateTotal = computed(() => {
          let total = 0;
