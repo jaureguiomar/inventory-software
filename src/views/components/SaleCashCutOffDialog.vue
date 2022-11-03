@@ -368,30 +368,30 @@ export default {
                return false;
             }
          } else if(type === "close") {
-            // // Retrieve sales by "id_corte" && sum amounts "sale" & "sale_supplier"
-            // try {
-            //    let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`, {
-            //       id: lastCashCutoff.id,
-            //       amount_open: lastCashCutoff.amount_open,
-            //       amount_sale: "",     // Calculate here
-            //       amount_supplier: "", // Calculate here
-            //       amount_close: field.amount.text,
-            //       date_close: null,
-            //       id_type: lastCashCutoff.id_type,
-            //       id_user_open: lastCashCutoff.id_user_open,
-            //       id_user_close: allUsers.value[finded_index].id,
-            //       id_pos: lastCashCutoff.id_pos,
-            //       id_branch: lastCashCutoff.id_branch
-            //    });
-            //    if(response) {
-            //       if(response.data.error.is_error)
-            //          return false;
-            //    } else {
-            //       return false;
-            //    }
-            // } catch (error) {
-            //    return false;
-            // }
+            // Retrieve sales by "id_corte" && sum amounts "sale" & "sale_supplier"
+            try {
+               let response = await axios.post<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`, {
+                  id: lastCashCutoff.id,
+                  amount_open: lastCashCutoff.amount_open,
+                  amount_sale: "400.00",     // Calculate here
+                  amount_supplier: "500.00", // Calculate here
+                  amount_close: field.amount.text,
+                  date_close: null,
+                  id_type: 2,
+                  id_user_open: lastCashCutoff.id_user_open,
+                  id_user_close: allUsers.value[finded_index].id,
+                  id_pos: lastCashCutoff.id_pos,
+                  id_branch: lastCashCutoff.id_branch
+               });
+               if(response) {
+                  if(response.data.error.is_error)
+                     return false;
+               } else {
+                  return false;
+               }
+            } catch (error) {
+               return false;
+            }
          }
 
          return true;
