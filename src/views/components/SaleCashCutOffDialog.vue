@@ -184,7 +184,7 @@ export default {
          user_close: null,
          pos: null,
          branch: null
-      })
+      });
 
       onMounted(() => {
          axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`, {

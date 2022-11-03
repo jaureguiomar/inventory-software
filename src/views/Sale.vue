@@ -267,7 +267,7 @@ import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
 import { useQuasar } from "quasar";
 import { useStore } from "vuex";
-import { defineComponent, getCurrentInstance, ref, computed, onMounted } from "vue";
+import { defineComponent, getCurrentInstance, ref, reactive, computed, onMounted } from "vue";
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
@@ -277,6 +277,7 @@ import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Category } from "@/interfaces/category/category";
 import { Branch } from "@/interfaces/branch/branch";
+import { CashCutoff, CashCutoffOneResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -323,9 +324,30 @@ export default defineComponent({
       const allProductsOptions = ref<string[]>([]);
       const allProductsFilteredOptions = ref<string[]>([]);
       const barcodeSelect = ref<string>("");
+      const lastCashCutoff = reactive<CashCutoff>({
+         id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
+         amount_open: "",
+         amount_sale: "",
+         amount_supplier: "",
+         amount_close: "",
+         date_close: "",
+         id_type: -1,
+         id_user_open: -1,
+         id_user_close: -1,
+         id_pos: -1,
+         id_branch: -1,
+         user_open: null,
+         user_close: null,
+         pos: null,
+         branch: null
+      });
 
       onMounted(() => {
          onRefreshProducts();
+         getLastCashCutoff();
          barcodeScanner.init(onBarcodeScanned);
 
          axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`)
@@ -450,6 +472,63 @@ export default defineComponent({
             });
       });
 
+      const getLastCashCutoff = () => {
+         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`, {
+            params: {
+               id_pos: getPosId.value,
+               id_branch: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  if(data) {
+                     const formatted_user_open:User|null = format_user(data.user_open);
+                     const formatted_user_close:User|null = format_user(data.user_close);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
+                     lastCashCutoff.id = Number(data.id);
+                     lastCashCutoff.is_active = Number(data.is_active);
+                     lastCashCutoff.created = data.created;
+                     lastCashCutoff.updated = data.updated;
+                     lastCashCutoff.amount_open = data.amount_open;
+                     lastCashCutoff.amount_sale = data.amount_sale;
+                     lastCashCutoff.amount_supplier = data.amount_supplier;
+                     lastCashCutoff.amount_close = data.amount_close;
+                     lastCashCutoff.date_close = data.date_close;
+                     lastCashCutoff.id_type = Number(data.id_type);
+                     lastCashCutoff.id_user_open = Number(data.id_user_open);
+                     lastCashCutoff.id_user_close = Number(data.id_user_close);
+                     lastCashCutoff.id_pos = Number(data.id_pos);
+                     lastCashCutoff.id_branch = Number(data.id_branch);
+                     lastCashCutoff.user_open = formatted_user_open;
+                     lastCashCutoff.user_close = formatted_user_close;
+                     lastCashCutoff.pos = formatted_pos;
+                     lastCashCutoff.branch = formatted_branch;
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
+         });
+      };
       const onBarcodeScanned = (barcode:string) => {
          barcodeSelect.value = barcode;
 
@@ -554,7 +633,7 @@ export default defineComponent({
          $q.dialog({
             component: SaleCashCutOffDialog,
          }).onOk(() => {
-            console.log("SaleCashCutOffDialog");
+            getLastCashCutoff();
          });
       };
       const onQuantityPlusMinusClick = (product:Product, type:string) => {
@@ -610,6 +689,15 @@ export default defineComponent({
       };
       const onFinishSale = async () => {
          if(getSaleCurrSaleProduct.value.length > 0) {
+            if(lastCashCutoff.id_type !== 1) {
+               Swal.fire({
+                  title: "Error",
+                  text: "Theres no cash cutoff opened",
+                  icon: "error"
+               });
+               return;
+            }
+
             try {
                // Create sale
                let created_sale:Sale = {
@@ -627,7 +715,8 @@ export default defineComponent({
                };
                let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`, {
                   total: calculateTotal.value,
-                  is_supplier: isSupplier.value,
+                  is_supplier: (isSupplier.value) ? 1 : 0,
+                  id_cash_cutoff: lastCashCutoff.id,
                   id_user: getSessionUserId.value,
                   id_pos: getPosId.value,
                   id_branch: getBranchId.value
@@ -658,7 +747,8 @@ export default defineComponent({
                   const curr_sale = getSaleCurrSaleProduct.value[i];
                   response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
                      quantity: curr_sale.sale_quantity,
-                     is_supplier: isSupplier.value,
+                     is_supplier: (isSupplier.value) ? 1 : 0,
+                     id_cash_cutoff: lastCashCutoff.id,
                      id_sale: created_sale.id,
                      id_product: curr_sale.id,
                      id_user: getSessionUserId.value,
@@ -712,6 +802,15 @@ export default defineComponent({
          }
       };
       const onAddSaleProduct = (new_product:Product) => {
+         if(lastCashCutoff.id_type !== 1) {
+            Swal.fire({
+               title: "Error",
+               text: "Theres no cash cutoff opened",
+               icon: "error"
+            });
+            return;
+         }
+
          if(getSaleCurrSaleProduct.value.length <= 0)
             store.commit("SET_SALE_CURR_SALE_DATA_AUTOMATIC");
          store.commit("ADD_SALE_CURR_SALE_PRODUCT", new_product);
