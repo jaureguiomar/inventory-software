@@ -136,7 +136,7 @@ import { UserRole } from "@/interfaces/user-role/user-role";
 import { User, UsersResponse } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Branch } from "@/interfaces/branch/branch";
-import { CashCutoff, CashCutoffOneResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
+import { CashCutoff, CashCutoffOneResponse, CashCutoffResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
 
 export default {
    emits: [
@@ -328,7 +328,7 @@ export default {
       const onUserBlur = () => {
          validateUsername(field.username.text);
       };
-      const onProcessCashCutOff = (type:string) => {
+      const onProcessCashCutOff = async(type:string) => {
          if(field.amount.text)
             field.amount.text = field.amount.text.trim();
          if(field.username)
@@ -349,21 +349,61 @@ export default {
          if(error_amount || error_username || error_id_user)
             return false;
 
-         if(type === "open")
-            console.log("Opened");
-         else if(type === "close")
-            console.log("Closed");
+         if(type === "open") {
+            try {
+               let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/create.php`, {
+                  amount_open: field.amount.text,
+                  id_type: 1,
+                  id_user_open: allUsers.value[finded_index].id,
+                  id_pos: getPosId.value,
+                  id_branch: getBranchId.value
+               });
+               if(response) {
+                  if(response.data.error.is_error)
+                     return false;
+               } else {
+                  return false;
+               }
+            } catch (error) {
+               return false;
+            }
+         } else if(type === "close") {
+            // // Retrieve sales by "id_corte" && sum amounts "sale" & "sale_supplier"
+            // try {
+            //    let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`, {
+            //       id: lastCashCutoff.id,
+            //       amount_open: lastCashCutoff.amount_open,
+            //       amount_sale: "",     // Calculate here
+            //       amount_supplier: "", // Calculate here
+            //       amount_close: field.amount.text,
+            //       date_close: null,
+            //       id_type: lastCashCutoff.id_type,
+            //       id_user_open: lastCashCutoff.id_user_open,
+            //       id_user_close: allUsers.value[finded_index].id,
+            //       id_pos: lastCashCutoff.id_pos,
+            //       id_branch: lastCashCutoff.id_branch
+            //    });
+            //    if(response) {
+            //       if(response.data.error.is_error)
+            //          return false;
+            //    } else {
+            //       return false;
+            //    }
+            // } catch (error) {
+            //    return false;
+            // }
+         }
 
          return true;
       };
-      const onOpenCashCutOff = () => {
+      const onOpenCashCutOff = async() => {
          if(lastCashCutoff.id_type !== 1)
-            if(onProcessCashCutOff("open"))
+            if(await onProcessCashCutOff("open"))
                onDialogOK();
       };
-      const onCloseCashCutOff = () => {
+      const onCloseCashCutOff = async() => {
          if(lastCashCutoff.id_type === 1)
-            if(onProcessCashCutOff("close"))
+            if(await onProcessCashCutOff("close"))
                onDialogOK();
       };
       ////////////////
