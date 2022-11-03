@@ -28,9 +28,8 @@
                <q-select
                   v-model="field.username.text"
                   use-input
-                  dense
                   input-debounce="0"
-                  label="Username"
+                  label="Username:"
                   :options="allUsersOptions"
                   behavior="menu"
                   style="max-width: 260px;"
@@ -55,8 +54,16 @@
          <div class="row justify-around items-center no-wrap">
             <div class="col-5">
             <q-card
-               v-ripple
-               class="cursor-pointer q-hoverable bg-primary text-white"
+               v-ripple="(lastCashCutoff.id_type !== 1) ? true : false"
+               :class="[
+                  (lastCashCutoff.id_type === -1)
+                     ? 'cursor-pointer q-hoverable'
+                     : (lastCashCutoff.id_type === 1)
+                        ? 'bg-primary text-white'
+                        : (lastCashCutoff.id_type === 2)
+                        ? 'cursor-pointer q-hoverable'
+                        : ''
+               ]"
                bordered
                @click="onOpenCashCutOff"
             >
@@ -66,13 +73,27 @@
                      <strong>Open</strong>
                      Cash Cut Off
                   </p>
+                  <p
+                     v-if="lastCashCutoff.id_type === 1"
+                     class="q-ma-none"
+                  >
+                     <strong>(Active)</strong>
+                  </p>
                </q-card-section>
             </q-card>
             </div>
             <div class="col-5">
             <q-card
-               v-ripple
-               class="cursor-pointer q-hoverable"
+               v-ripple="(lastCashCutoff.id_type === 1) ? true : false"
+               :class="[
+                  (lastCashCutoff.id_type === -1)
+                     ? 'bg-warning text-white'
+                     : (lastCashCutoff.id_type === 1)
+                        ? 'cursor-pointer q-hoverable'
+                        : (lastCashCutoff.id_type === 2)
+                        ? 'bg-primary text-white'
+                        : ''
+               ]"
                bordered
                @click="onCloseCashCutOff"
             >
@@ -81,6 +102,12 @@
                   <p class="q-ma-none">
                      <strong>Close</strong>
                      Cash Cut Off
+                  </p>
+                  <p
+                     v-if="lastCashCutoff.id_type === 2"
+                     class="q-ma-none"
+                  >
+                     <strong>(Active)</strong>
                   </p>
                </q-card-section>
             </q-card>
@@ -100,15 +127,16 @@ import axios from "axios";
 // import Swal from "sweetalert2";
 // import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
-import { ref, computed, onMounted, reactive } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useDialogPluginComponent } from "quasar";
 import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
+import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { key } from "@/plugins/store";
 import { UserRole } from "@/interfaces/user-role/user-role";
 import { User, UsersResponse } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Branch } from "@/interfaces/branch/branch";
-import { findValueBy, validateField } from "@/plugins/mixins/general";
+import { CashCutoff, CashCutoffOneResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
 
 export default {
    emits: [
@@ -137,8 +165,84 @@ export default {
       const allUsers = ref<User[]>([]);
       const allUsersOptions = ref<string[]>([]);
       const allUsersFilteredOptions = ref<string[]>([]);
+      const lastCashCutoff = reactive<CashCutoff>({
+         id: -1,
+         is_active: -1,
+         created: "",
+         updated: "",
+         amount_open: "",
+         amount_sale: "",
+         amount_supplier: "",
+         amount_close: "",
+         date_close: "",
+         id_type: -1,
+         id_user_open: -1,
+         id_user_close: -1,
+         id_pos: -1,
+         id_branch: -1,
+         user_open: null,
+         user_close: null,
+         pos: null,
+         branch: null
+      })
 
       onMounted(() => {
+         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`, {
+            params: {
+               id_pos: getPosId.value,
+               id_branch: getBranchId.value
+            }
+         }).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  if(data) {
+                     const formatted_user_open:User|null = format_user(data.user_open);
+                     const formatted_user_close:User|null = format_user(data.user_close);
+                     const formatted_pos:Pos|null = format_pos(data.pos);
+                     const formatted_branch:Branch|null = format_branch(data.branch);
+
+                     lastCashCutoff.id = Number(data.id);
+                     lastCashCutoff.is_active = Number(data.is_active);
+                     lastCashCutoff.created = data.created;
+                     lastCashCutoff.updated = data.updated;
+                     lastCashCutoff.amount_open = data.amount_open;
+                     lastCashCutoff.amount_sale = data.amount_sale;
+                     lastCashCutoff.amount_supplier = data.amount_supplier;
+                     lastCashCutoff.amount_close = data.amount_close;
+                     lastCashCutoff.date_close = data.date_close;
+                     lastCashCutoff.id_type = Number(data.id_type);
+                     lastCashCutoff.id_user_open = Number(data.id_user_open);
+                     lastCashCutoff.id_user_close = Number(data.id_user_close);
+                     lastCashCutoff.id_pos = Number(data.id_pos);
+                     lastCashCutoff.id_branch = Number(data.id_branch);
+                     lastCashCutoff.user_open = formatted_user_open;
+                     lastCashCutoff.user_close = formatted_user_close;
+                     lastCashCutoff.pos = formatted_pos;
+                     lastCashCutoff.branch = formatted_branch;
+                  }
+               } else {
+                  // Swal.fire({
+                  //    title: "Error",
+                  //    text: t("global.default_error"),
+                  //    icon: "error"
+                  // });
+               }
+            } else {
+               // Swal.fire({
+               //    title: "Error",
+               //    text: t("global.default_error"),
+               //    icon: "error"
+               // });
+            }
+         }).catch(() => {
+            // Swal.fire({
+            //    title: "Error",
+            //    text: t("global.default_error"),
+            //    icon: "error"
+            // });
+         });
+
          axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`)
             .then((response) => {
                if(response) {
@@ -224,9 +328,11 @@ export default {
       const onUserBlur = () => {
          validateUsername(field.username.text);
       };
-      const onProcessCashCutOff = () => {
-         field.amount.text = field.amount.text.trim();
-         field.username.text = field.username.text.trim();
+      const onProcessCashCutOff = (type:string) => {
+         if(field.amount.text)
+            field.amount.text = field.amount.text.trim();
+         if(field.username)
+            field.username.text = field.username.text.trim();
 
          let amount:string = field.amount.text;
          let username:string = field.username.text;
@@ -242,15 +348,23 @@ export default {
 
          if(error_amount || error_username || error_id_user)
             return false;
+
+         if(type === "open")
+            console.log("Opened");
+         else if(type === "close")
+            console.log("Closed");
+
          return true;
       };
       const onOpenCashCutOff = () => {
-         if(onProcessCashCutOff())
-            onDialogOK();
+         if(lastCashCutoff.id_type !== 1)
+            if(onProcessCashCutOff("open"))
+               onDialogOK();
       };
       const onCloseCashCutOff = () => {
-         if(onProcessCashCutOff())
-            onDialogOK();
+         if(lastCashCutoff.id_type === 1)
+            if(onProcessCashCutOff("close"))
+               onDialogOK();
       };
       ////////////////
       // Validators //
@@ -274,10 +388,17 @@ export default {
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
 
       return {
          field,
          allUsersOptions,
+         lastCashCutoff,
          dialogRef,
          onAmountBlur,
          onUserFilter,
