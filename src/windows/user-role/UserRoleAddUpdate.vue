@@ -534,7 +534,13 @@ export default defineComponent({
             field.name.text = data.data.name;
          }
 
-         axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`)
+         axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
+            {
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
+            }
+         )
          .then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
@@ -603,6 +609,9 @@ export default defineComponent({
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
@@ -708,16 +717,23 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<UserRoleResponse>(`${ getServer.value }/user_role/v3/create.php`, {
-                  name: field.name.text,
-                  atributes_1: total_atributes_1,
-                  atributes_2: total_atributes_2,
-                  atributes_3: total_atributes_3,
-                  atributes_4: total_atributes_4,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.put<UserRoleResponse>(`${ getServer.value }/user_role/v3/create.php`,
+                  {
+                     name: field.name.text,
+                     atributes_1: total_atributes_1,
+                     atributes_2: total_atributes_2,
+                     atributes_3: total_atributes_3,
+                     atributes_4: total_atributes_4,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:UserRole = response.data.data.data;
@@ -768,17 +784,24 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<UserRoleResponse>(`${ getServer.value }/user_role/v3/update.php`, {
-                  id: page.id,
-                  name: field.name.text,
-                  atributes_1: total_atributes_1,
-                  atributes_2: total_atributes_2,
-                  atributes_3: total_atributes_3,
-                  atributes_4: total_atributes_4,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.post<UserRoleResponse>(`${ getServer.value }/user_role/v3/update.php`,
+                  {
+                     id: page.id,
+                     name: field.name.text,
+                     atributes_1: total_atributes_1,
+                     atributes_2: total_atributes_2,
+                     atributes_3: total_atributes_3,
+                     atributes_4: total_atributes_4,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:UserRole = response.data.data.data;

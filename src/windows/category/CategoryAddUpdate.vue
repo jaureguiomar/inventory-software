@@ -222,6 +222,9 @@ export default defineComponent({
       const getIsOnline = computed(() => {
          return store.getters["getIsOnline"];
       });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -303,12 +306,19 @@ export default defineComponent({
          if(page.id <= 0) {
             if(getIsOnline.value) {
                try {
-                  let response = await axios.put<CategoryResponse>(`${ getServer.value }/category/v3/create.php`, {
-                     name: field.name.text,
-                     id_user: getSessionUserId.value,
-                     id_pos: getPosId.value,
-                     id_branch: getBranchId.value
-                  });
+                  let response = await axios.put<CategoryResponse>(`${ getServer.value }/category/v3/create.php`,
+                     {
+                        name: field.name.text,
+                        id_user: getSessionUserId.value,
+                        id_pos: getPosId.value,
+                        id_branch: getBranchId.value
+                     },
+                     {
+                        headers: {
+                           'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        }
+                     }
+                  );
                   if(response) {
                      if(!response.data.error.is_error) {
                         const data:Category = response.data.data.data;
@@ -395,13 +405,20 @@ export default defineComponent({
          } else {
             if(getIsOnline.value) {
                try {
-                  let response = await axios.post<CategoryResponse>(`${ getServer.value }category/v3/update.php`, {
-                     id: page.id,
-                     name: field.name.text,
-                     id_user: getSessionUserId.value,
-                     id_pos: getPosId.value,
-                     id_branch: getBranchId.value
-                  });
+                  let response = await axios.post<CategoryResponse>(`${ getServer.value }category/v3/update.php`,
+                     {
+                        id: page.id,
+                        name: field.name.text,
+                        id_user: getSessionUserId.value,
+                        id_pos: getPosId.value,
+                        id_branch: getBranchId.value
+                     },
+                     {
+                        headers: {
+                           'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        }
+                     }
+                  );
                   if(response) {
                      if(!response.data.error.is_error) {
                         const data:Category = response.data.data.data;

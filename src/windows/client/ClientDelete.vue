@@ -243,12 +243,17 @@ export default defineComponent({
 
       const onDelete = async() => {
          try {
-            let response = await axios.delete<ClientResponse>(`${ getServer.value }/client/v3/delete.php`, {
-               params: {
-                  field: "id",
-                  data: client.id
-               },
-            });
+            let response = await axios.delete<ClientResponse>(`${ getServer.value }/client/v3/delete.php`,
+               {
+                  params: {
+                     field: "id",
+                     data: client.id
+                  },
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(response.data.error.is_error) {
                   Swal.fire({
@@ -300,6 +305,9 @@ export default defineComponent({
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
 
       return {

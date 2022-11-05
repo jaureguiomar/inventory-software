@@ -114,12 +114,19 @@ export default defineComponent({
                const curr_data = data.user_role[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user_role/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user_role/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("user-role-create-error #1");
@@ -131,13 +138,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user_role/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user_role/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("user-role-update-error #1");
@@ -149,12 +163,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<UserRolesResponse>(`${ getServer.value }/user_role/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<UserRolesResponse>(`${ getServer.value }/user_role/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("user-role-delete-error #1");
@@ -172,12 +191,19 @@ export default defineComponent({
                const curr_data = data.user[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<UsersResponse>(`${ getServer.value }/user/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<UsersResponse>(`${ getServer.value }/user/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("user-create-error #1");
@@ -189,13 +215,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<UsersResponse>(`${ getServer.value }/user/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<UsersResponse>(`${ getServer.value }/user/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("user-create-error #1");
@@ -207,12 +240,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<UsersResponse>(`${ getServer.value }/user/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<UsersResponse>(`${ getServer.value }/user/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("user-create-error #1");
@@ -230,12 +268,19 @@ export default defineComponent({
                const curr_data = data.category[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("category-create-error #1");
@@ -247,13 +292,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("category-create-error #1");
@@ -265,12 +317,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<CategoriesResponse>(`${ getServer.value }/category/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<CategoriesResponse>(`${ getServer.value }/category/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("category-create-error #1");
@@ -288,12 +345,19 @@ export default defineComponent({
                const curr_data = data.product[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<ProductsResponse>(`${ getServer.value }/product/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<ProductsResponse>(`${ getServer.value }/product/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("product-create-error #1");
@@ -305,13 +369,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<ProductsResponse>(`${ getServer.value }/product/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<ProductsResponse>(`${ getServer.value }/product/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("product-create-error #1");
@@ -323,12 +394,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<ProductsResponse>(`${ getServer.value }/product/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<ProductsResponse>(`${ getServer.value }/product/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("product-create-error #1");
@@ -346,12 +422,19 @@ export default defineComponent({
                const curr_data = data.sale[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<SalesResponse>(`${ getServer.value }/sale/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<SalesResponse>(`${ getServer.value }/sale/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("sale-create-error #1");
@@ -363,13 +446,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<SalesResponse>(`${ getServer.value }/sale/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<SalesResponse>(`${ getServer.value }/sale/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("sale-create-error #1");
@@ -381,12 +471,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<SalesResponse>(`${ getServer.value }/sale/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<SalesResponse>(`${ getServer.value }/sale/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("sale-create-error #1");
@@ -404,12 +499,19 @@ export default defineComponent({
                const curr_data = data.sale_product[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("sale-product-create-error #1");
@@ -421,13 +523,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("sale-product-create-error #1");
@@ -439,12 +548,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("sale-product-create-error #1");
@@ -462,12 +576,19 @@ export default defineComponent({
                const curr_data = data.supplier[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("supplier-create-error #1");
@@ -479,13 +600,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("supplier-create-error #1");
@@ -497,12 +625,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<SuppliersResponse>(`${ getServer.value }/supplier/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<SuppliersResponse>(`${ getServer.value }/supplier/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("supplier-create-error #1");
@@ -520,12 +653,19 @@ export default defineComponent({
                const curr_data = data.client[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<ClientsResponse>(`${ getServer.value }/client/v3/create.php`, {
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.put<ClientsResponse>(`${ getServer.value }/client/v3/create.php`,
+                        {
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("client-create-error #1");
@@ -537,13 +677,20 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<ClientsResponse>(`${ getServer.value }/client/v3/update.php`, {
-                        id: curr_data.id,
-                        total: curr_data.total,
-                        id_user: curr_data.id_user,
-                        id_pos: curr_data.value,
-                        id_branch: curr_data.value
-                     });
+                     let response = await axios.post<ClientsResponse>(`${ getServer.value }/client/v3/update.php`,
+                        {
+                           id: curr_data.id,
+                           total: curr_data.total,
+                           id_user: curr_data.id_user,
+                           id_pos: curr_data.value,
+                           id_branch: curr_data.value
+                        },
+                        {
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("client-create-error #1");
@@ -555,12 +702,17 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<ClientsResponse>(`${ getServer.value }/client/v3/delete.php`, {
-                        params: {
-                           field: "id",
-                           data: curr_data.id
-                        },
-                     });
+                     let response = await axios.delete<ClientsResponse>(`${ getServer.value }/client/v3/delete.php`,
+                        {
+                           params: {
+                              field: "id",
+                              data: curr_data.id
+                           },
+                           headers: {
+                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           }
+                        }
+                     );
                      if(response) {
                         if(response.data.error.is_error)
                            console.log("client-create-error #1");
@@ -635,7 +787,13 @@ export default defineComponent({
 
          // Get Clients
          try {
-            let response = await axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`);
+            let response = await axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -685,7 +843,13 @@ export default defineComponent({
 
          // Get Suppliers
          try {
-            let response = await axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`);
+            let response = await axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -730,7 +894,13 @@ export default defineComponent({
 
          // Get Categories
          try {
-            let response = await axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`);
+            let response = await axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -775,12 +945,17 @@ export default defineComponent({
 
          // Get Products
          try {
-            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`, {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
+            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`,
+               {
+                  params: {
+                     type: "id_branch",
+                     query: getBranchId.value
+                  },
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
                }
-            });
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -834,12 +1009,17 @@ export default defineComponent({
 
          // Get Sales
          try {
-            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/v3/find.php`, {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
+            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/v3/find.php`,
+               {
+                  params: {
+                     type: "id_branch",
+                     query: getBranchId.value
+                  },
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
                }
-            });
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -884,12 +1064,17 @@ export default defineComponent({
 
          // Get Sale Products
          try {
-            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/find.php`, {
-               params: {
-                  type: "id_branch",
-                  query: getBranchId.value
+            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/find.php`,
+               {
+                  params: {
+                     type: "id_branch",
+                     query: getBranchId.value
+                  },
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
                }
-            });
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -940,7 +1125,13 @@ export default defineComponent({
 
          // Get User Roles
          try {
-            let response = await axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`);
+            let response = await axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -989,7 +1180,13 @@ export default defineComponent({
 
          // Get Users
          try {
-            let response = await axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`);
+            let response = await axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -1073,6 +1270,9 @@ export default defineComponent({
       });
       const getOfflineBakupDone = computed(() => {
          return store.getters["getOfflineBakupDone"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];

@@ -87,6 +87,11 @@ export default defineComponent({
          localStorage.setItem("session", JSON.stringify(new_session));
          store.commit("SET_SESSION_LOGGUED_IN_DATA", new_session.loggued_in);
          store.commit("SET_SESSION_USER_DATA", new_session.user);
+         store.commit("SET_AUTH_TOKEN_DATA", {
+            access_token: "",
+            refresh_token: "",
+            expires_in: -1
+         });
          router.push({ name: "login" });
       }
 

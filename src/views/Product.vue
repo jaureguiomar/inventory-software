@@ -255,6 +255,9 @@ export default defineComponent({
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -269,6 +272,9 @@ export default defineComponent({
             params: {
                type: "id_branch",
                query: getBranchId.value
+            },
+            headers: {
+               'Authorization': `Bearer ${ getAuthToken.value.access_token }`
             }
          }).then((response) => {
             if(response) {

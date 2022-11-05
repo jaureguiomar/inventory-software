@@ -350,51 +350,49 @@ export default defineComponent({
          getLastCashCutoff();
          barcodeScanner.init(onBarcodeScanned);
 
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`)
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_products:Array<Product> = [];
-                     let formatted_products_input:Array<string> = [];
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`,
+            {
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
+            }
+         ).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_products:Array<Product> = [];
+                  let formatted_products_input:Array<string> = [];
 
-                     for(let i = 0; i < data.length; i++) {
-                        const formatted_category:Category|null = format_category(data[i].category);
-                        const formatted_user:User|null = format_user(data[i].user);
-                        const formatted_pos:Pos|null = format_pos(data[i].pos);
-                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+                  for(let i = 0; i < data.length; i++) {
+                     const formatted_category:Category|null = format_category(data[i].category);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                        formatted_products.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           is_favorite: Number(data[i].is_favorite),
-                           code: data[i].code,
-                           name: data[i].name,
-                           description: data[i].description,
-                           buy_price: data[i].buy_price,
-                           sale_price: data[i].sale_price,
-                           quantity: Number(data[i].quantity),
-                           id_category: Number(data[i].id_category),
-                           id_user: Number(data[i].id_branch),
-                           id_pos: Number(data[i].id_branch),
-                           id_branch: Number(data[i].id_branch),
-                           category: formatted_category,
-                           user: formatted_user,
-                           pos: formatted_pos,
-                           branch: formatted_branch
-                        });
-                        formatted_products_input.push(data[i].name);
-                     }
-                     allProductsFavorites.value = formatted_products;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
+                     formatted_products.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        is_favorite: Number(data[i].is_favorite),
+                        code: data[i].code,
+                        name: data[i].name,
+                        description: data[i].description,
+                        buy_price: data[i].buy_price,
+                        sale_price: data[i].sale_price,
+                        quantity: Number(data[i].quantity),
+                        id_category: Number(data[i].id_category),
+                        id_user: Number(data[i].id_branch),
+                        id_pos: Number(data[i].id_branch),
+                        id_branch: Number(data[i].id_branch),
+                        category: formatted_category,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
+                     formatted_products_input.push(data[i].name);
                   }
+                  allProductsFavorites.value = formatted_products;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -402,60 +400,65 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            }).catch(() => {
+            } else {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
                   icon: "error"
                });
+            }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
             });
+         });
 
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/select-all.php`)
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_products:Array<Product> = [];
-                     let formatted_products_input:Array<string> = [];
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/select-all.php`,
+            {
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
+            }
+         ).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_products:Array<Product> = [];
+                  let formatted_products_input:Array<string> = [];
 
-                     for(let i = 0; i < data.length; i++) {
-                        const formatted_category:Category|null = format_category(data[i].category);
-                        const formatted_user:User|null = format_user(data[i].user);
-                        const formatted_pos:Pos|null = format_pos(data[i].pos);
-                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+                  for(let i = 0; i < data.length; i++) {
+                     const formatted_category:Category|null = format_category(data[i].category);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                        formatted_products.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           is_favorite: Number(data[i].is_favorite),
-                           code: data[i].code,
-                           name: data[i].name,
-                           description: data[i].description,
-                           buy_price: data[i].buy_price,
-                           sale_price: data[i].sale_price,
-                           quantity: Number(data[i].quantity),
-                           id_category: Number(data[i].id_category),
-                           id_user: Number(data[i].id_branch),
-                           id_pos: Number(data[i].id_branch),
-                           id_branch: Number(data[i].id_branch),
-                           category: formatted_category,
-                           user: formatted_user,
-                           pos: formatted_pos,
-                           branch: formatted_branch
-                        });
-                        formatted_products_input.push(data[i].name);
-                     }
-                     allProductsOptions.value = formatted_products_input;
-                     allProductsFilteredOptions.value = formatted_products_input;
-                  } else {
-                     Swal.fire({
-                        title: "Error",
-                        text: t("global.default_error"),
-                        icon: "error"
+                     formatted_products.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        is_favorite: Number(data[i].is_favorite),
+                        code: data[i].code,
+                        name: data[i].name,
+                        description: data[i].description,
+                        buy_price: data[i].buy_price,
+                        sale_price: data[i].sale_price,
+                        quantity: Number(data[i].quantity),
+                        id_category: Number(data[i].id_category),
+                        id_user: Number(data[i].id_branch),
+                        id_pos: Number(data[i].id_branch),
+                        id_branch: Number(data[i].id_branch),
+                        category: formatted_category,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
                      });
+                     formatted_products_input.push(data[i].name);
                   }
+                  allProductsOptions.value = formatted_products_input;
+                  allProductsFilteredOptions.value = formatted_products_input;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -463,22 +466,34 @@ export default defineComponent({
                      icon: "error"
                   });
                }
-            }).catch(() => {
+            } else {
                Swal.fire({
                   title: "Error",
                   text: t("global.default_error"),
                   icon: "error"
                });
+            }
+         }).catch(() => {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
             });
+         });
       });
 
       const getLastCashCutoff = () => {
-         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`, {
-            params: {
-               id_pos: getPosId.value,
-               id_branch: getBranchId.value
+         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`,
+            {
+               params: {
+                  id_pos: getPosId.value,
+                  id_branch: getBranchId.value
+               },
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
             }
-         }).then((response) => {
+         ).then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -584,12 +599,17 @@ export default defineComponent({
       };
       const onRefreshProducts = () => {
          all_products.value = [];
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`, {
-            params: {
-               type: "id_branch",
-               query: getBranchId.value
+         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`,
+            {
+               params: {
+                  type: "id_branch",
+                  query: getBranchId.value
+               },
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
             }
-         }).then((response) => {
+         ).then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -713,14 +733,21 @@ export default defineComponent({
                   pos: null,
                   branch: null
                };
-               let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`, {
-                  total: calculateTotal.value,
-                  is_supplier: (isSupplier.value) ? 1 : 0,
-                  id_cash_cutoff: lastCashCutoff.id,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`,
+                  {
+                     total: calculateTotal.value,
+                     is_supplier: (isSupplier.value) ? 1 : 0,
+                     id_cash_cutoff: lastCashCutoff.id,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      created_sale = response.data.data.data;
@@ -745,16 +772,23 @@ export default defineComponent({
                let sale_product_error = false;
                for(let i = 0; i < getSaleCurrSaleProduct.value.length; i++) {
                   const curr_sale = getSaleCurrSaleProduct.value[i];
-                  response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`, {
-                     quantity: curr_sale.sale_quantity,
-                     is_supplier: (isSupplier.value) ? 1 : 0,
-                     id_cash_cutoff: lastCashCutoff.id,
-                     id_sale: created_sale.id,
-                     id_product: curr_sale.id,
-                     id_user: getSessionUserId.value,
-                     id_pos: getPosId.value,
-                     id_branch: getBranchId.value
-                  });
+                  response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`,
+                     {
+                        quantity: curr_sale.sale_quantity,
+                        is_supplier: (isSupplier.value) ? 1 : 0,
+                        id_cash_cutoff: lastCashCutoff.id,
+                        id_sale: created_sale.id,
+                        id_product: curr_sale.id,
+                        id_user: getSessionUserId.value,
+                        id_pos: getPosId.value,
+                        id_branch: getBranchId.value
+                     },
+                     {
+                        headers: {
+                           'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        }
+                     }
+                  );
                   if(response) {
                      if(response.data.error.is_error)
                         sale_product_error = true;
@@ -818,6 +852,9 @@ export default defineComponent({
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];

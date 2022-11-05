@@ -20,6 +20,12 @@ interface GenericStore2 {
    loaded_reply: boolean;
    loaded_get: boolean;
 }
+// Auth Token
+interface AuthTokenStore {
+   access_token: string,
+   refresh_token: string,
+   expires_in: number
+}
 // Branch
 interface BranchStore {
    id: number;
@@ -59,6 +65,7 @@ interface State {
    is_online: boolean;
    automatic_bakup_done: boolean;
    offline_bakup_done: boolean;
+   auth_token: AuthTokenStore;
    branch: BranchStore;
    pos: PosStore;
    session: SessionStore;
@@ -76,6 +83,7 @@ export {
    SaleProductStore,
    SaleContentStore,
    UserStore,
+   AuthTokenStore,
    BranchStore,
    PosStore,
    SessionStore,

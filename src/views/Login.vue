@@ -37,7 +37,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
-import { UserResponse } from "@/interfaces/user/user";
+import { UserAuthResponse } from "@/interfaces/user/user";
 import { SessionStore, UserRoleStore } from "@/interfaces/store";
 
 export default defineComponent({
@@ -65,13 +65,14 @@ export default defineComponent({
             return;
          }
 
-         axios.post<UserResponse>(`${ getServer.value }/user/v3/login.php`, {
+         axios.post<UserAuthResponse>(`${ getServer.value }/auth/v3/auth.php`, {
             username: email.value,
             password: password.value
          }).then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data.data;
+                  const token = response.data.data.token;
                   let formatted_role_store:UserRoleStore|null = null;
                   const curr_role = (data.role) ? data.role : null;
 
@@ -93,8 +94,10 @@ export default defineComponent({
                         role: formatted_role_store
                      }
                   }
+
                   localStorage.setItem("session", JSON.stringify(new_user));
                   store.commit("SET_SESSION_LOGGUED_IN_DATA", true);
+                  store.commit("SET_AUTH_TOKEN_DATA", token);
                   router.push({ name: "home" });
                } else {
                   Swal.fire({

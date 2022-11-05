@@ -187,12 +187,17 @@ export default {
       });
 
       onMounted(() => {
-         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`, {
-            params: {
-               id_pos: getPosId.value,
-               id_branch: getBranchId.value
+         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`,
+            {
+               params: {
+                  id_pos: getPosId.value,
+                  id_branch: getBranchId.value
+               },
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
             }
-         }).then((response) => {
+         ).then((response) => {
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
@@ -243,51 +248,49 @@ export default {
             // });
          });
 
-         axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`)
-            .then((response) => {
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data;
-                     let formatted_users:Array<User> = [];
-                     let formatted_users_input:Array<string> = [];
+         axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`,
+            {
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
+            }
+         ).then((response) => {
+            if(response) {
+               if(!response.data.error.is_error) {
+                  const data = response.data.data;
+                  let formatted_users:Array<User> = [];
+                  let formatted_users_input:Array<string> = [];
 
-                     for(let i = 0; i < data.length; i++) {
-                        const formatted_role:UserRole|null = format_user_role(data[i].role);
-                        const formatted_user:User|null = format_user(data[i].user);
-                        const formatted_pos:Pos|null = format_pos(data[i].pos);
-                        const formatted_branch:Branch|null = format_branch(data[i].branch);
+                  for(let i = 0; i < data.length; i++) {
+                     const formatted_role:UserRole|null = format_user_role(data[i].role);
+                     const formatted_user:User|null = format_user(data[i].user);
+                     const formatted_pos:Pos|null = format_pos(data[i].pos);
+                     const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                        formatted_users.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           username: data[i].username,
-                           email: data[i].email,
-                           password: data[i].password,
-                           first_name: data[i].first_name,
-                           last_name: data[i].last_name,
-                           id_role: Number(data[i].id_role),
-                           id_user: Number(data[i].id_branch),
-                           id_pos: Number(data[i].id_branch),
-                           id_branch: Number(data[i].id_branch),
-                           role: formatted_role,
-                           user: formatted_user,
-                           pos: formatted_pos,
-                           branch: formatted_branch
-                        });
-                        formatted_users_input.push(data[i].username);
-                     }
-                     allUsersOptions.value = formatted_users_input;
-                     allUsersFilteredOptions.value = formatted_users_input;
-                     allUsers.value = formatted_users;
-                  } else {
-                     // Swal.fire({
-                     //    title: "Error",
-                     //    text: t("global.default_error"),
-                     //    icon: "error"
-                     // });
+                     formatted_users.push({
+                        id: Number(data[i].id),
+                        is_active: Number(data[i].is_active),
+                        created: data[i].created,
+                        updated: data[i].updated,
+                        username: data[i].username,
+                        email: data[i].email,
+                        password: data[i].password,
+                        first_name: data[i].first_name,
+                        last_name: data[i].last_name,
+                        id_role: Number(data[i].id_role),
+                        id_user: Number(data[i].id_branch),
+                        id_pos: Number(data[i].id_branch),
+                        id_branch: Number(data[i].id_branch),
+                        role: formatted_role,
+                        user: formatted_user,
+                        pos: formatted_pos,
+                        branch: formatted_branch
+                     });
+                     formatted_users_input.push(data[i].username);
                   }
+                  allUsersOptions.value = formatted_users_input;
+                  allUsersFilteredOptions.value = formatted_users_input;
+                  allUsers.value = formatted_users;
                } else {
                   // Swal.fire({
                   //    title: "Error",
@@ -295,13 +298,20 @@ export default {
                   //    icon: "error"
                   // });
                }
-            }).catch(() => {
+            } else {
                // Swal.fire({
                //    title: "Error",
                //    text: t("global.default_error"),
                //    icon: "error"
                // });
-            });
+            }
+         }).catch(() => {
+            // Swal.fire({
+            //    title: "Error",
+            //    text: t("global.default_error"),
+            //    icon: "error"
+            // });
+         });
       });
 
       const onAmountBlur = () => {
@@ -351,13 +361,20 @@ export default {
 
          if(type === "open") {
             try {
-               let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/create.php`, {
-                  amount_open: field.amount.text,
-                  id_type: 1,
-                  id_user_open: allUsers.value[finded_index].id,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/create.php`,
+                  {
+                     amount_open: field.amount.text,
+                     id_type: 1,
+                     id_user_open: allUsers.value[finded_index].id,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(response.data.error.is_error)
                      return false;
@@ -370,19 +387,26 @@ export default {
          } else if(type === "close") {
             // Retrieve sales by "id_corte" && sum amounts "sale" & "sale_supplier"
             try {
-               let response = await axios.post<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`, {
-                  id: lastCashCutoff.id,
-                  amount_open: lastCashCutoff.amount_open,
-                  amount_sale: "400.00",     // Calculate here
-                  amount_supplier: "500.00", // Calculate here
-                  amount_close: field.amount.text,
-                  date_close: null,
-                  id_type: 2,
-                  id_user_open: lastCashCutoff.id_user_open,
-                  id_user_close: allUsers.value[finded_index].id,
-                  id_pos: lastCashCutoff.id_pos,
-                  id_branch: lastCashCutoff.id_branch
-               });
+               let response = await axios.post<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`,
+                  {
+                     id: lastCashCutoff.id,
+                     amount_open: lastCashCutoff.amount_open,
+                     amount_sale: "400.00",     // Calculate here
+                     amount_supplier: "500.00", // Calculate here
+                     amount_close: field.amount.text,
+                     date_close: null,
+                     id_type: 2,
+                     id_user_open: lastCashCutoff.id_user_open,
+                     id_user_close: allUsers.value[finded_index].id,
+                     id_pos: lastCashCutoff.id_pos,
+                     id_branch: lastCashCutoff.id_branch
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(response.data.error.is_error)
                      return false;
@@ -427,6 +451,9 @@ export default {
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];

@@ -82,13 +82,28 @@ interface ResponseOk {
    ok: boolean;
    message: string;
 }
+interface ResponseAuthOk {
+   data: User;
+   token: ResponseAuthToken;
+   ok: boolean;
+   message: string;
+}
 interface ResponseError {
    is_error: boolean;
    message: string|null;
    no_error: number;
 }
+interface ResponseAuthToken {
+   access_token: string;
+   refresh_token: string;
+   expires_in: number;
+}
 interface UserResponse {
    data: ResponseOk;
+   error: ResponseError;
+}
+interface UserAuthResponse {
+   data: ResponseAuthOk;
    error: ResponseError;
 }
 interface UserOneResponse {
@@ -107,6 +122,7 @@ export {
    IPCParams,
    IPCParamsContent,
    UserResponse,
+   UserAuthResponse,
    UserOneResponse,
    UsersResponse,
    WindowResponse,

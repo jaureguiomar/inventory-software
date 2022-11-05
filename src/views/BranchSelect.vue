@@ -200,35 +200,33 @@ export default defineComponent({
             // Get branches
             branchOptions.value = [];
             branchFilteredOptions.value = [];
-            axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`)
-               .then((response) => {
-                  if(response) {
-                     if(!response.data.error.is_error) {
-                        const data = response.data.data;
-                        let formatted_branches:Array<Branch> = [];
+            axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`,
+            {
+               headers: {
+                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               }
+            }
+            ).then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_branches:Array<Branch> = [];
 
-                        for(let i = 0; i < data.length; i++) {
-                           formatted_branches.push({
-                              id: Number(data[i].id),
-                              is_active: Number(data[i].is_active),
-                              created: data[i].created,
-                              updated: data[i].updated,
-                              name: data[i].name,
-                              telephone: data[i].telephone,
-                              address: data[i].address
-                           });
-
-                           branchOptions.value.push(data[i].name);
-                           branchFilteredOptions.value.push(data[i].name);
-                        }
-                        branch.value = formatted_branches;
-                     } else {
-                        Swal.fire({
-                           title: "Error",
-                           text: t("global.default_error"),
-                           icon: "error"
+                     for(let i = 0; i < data.length; i++) {
+                        formatted_branches.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name,
+                           telephone: data[i].telephone,
+                           address: data[i].address
                         });
+
+                        branchOptions.value.push(data[i].name);
+                        branchFilteredOptions.value.push(data[i].name);
                      }
+                     branch.value = formatted_branches;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -236,13 +234,20 @@ export default defineComponent({
                         icon: "error"
                      });
                   }
-               }).catch(() => {
+               } else {
                   Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),
                      icon: "error"
                   });
+               }
+            }).catch(() => {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
                });
+            });
          }, 3000);
       });
 
@@ -476,6 +481,9 @@ export default defineComponent({
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
 
       return {

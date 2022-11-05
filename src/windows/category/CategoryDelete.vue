@@ -183,12 +183,17 @@ export default defineComponent({
       const onDelete = async() => {
          if(getIsOnline.value) {
             try {
-               let response = await axios.delete<CategoryResponse>(`${ getServer.value }/category/v3/delete.php`, {
-                  params: {
-                     field: "id",
-                     data: category.id
-                  },
-               });
+               let response = await axios.delete<CategoryResponse>(`${ getServer.value }/category/v3/delete.php`,
+                  {
+                     params: {
+                        field: "id",
+                        data: category.id
+                     },
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(response.data.error.is_error) {
                      Swal.fire({
@@ -269,6 +274,9 @@ export default defineComponent({
       });
       const getIsOnline = computed(() => {
          return store.getters["getIsOnline"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
 
       return {

@@ -2,8 +2,8 @@ import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 import {
    State, SaleProductStore, UserStore, BranchStore,
-   PosStore, SaleContentStore
-} from '@/interfaces/store';
+   PosStore, SaleContentStore, AuthTokenStore
+} from "@/interfaces/store";
 import { findValueBy } from "@/plugins/mixins/general";
 
 const store = createStore<State>({
@@ -13,6 +13,11 @@ const store = createStore<State>({
          is_online: false,
          automatic_bakup_done: false,
          offline_bakup_done: false,
+         auth_token: {
+            access_token: "",
+            refresh_token: "",
+            expires_in: -1
+         },
          branch: {
             id: -1,
             name: "",
@@ -79,6 +84,9 @@ const store = createStore<State>({
       getOfflineBakupDone(state:State) {
          return state.offline_bakup_done;
       },
+      getAuthToken(state:State) {
+         return state.auth_token;
+      },
       getBranch(state:State) {
          return state.branch;
       },
@@ -143,6 +151,9 @@ const store = createStore<State>({
       },
       SET_OFFLINE_BAKUP_DONE_DATA: (state:State, data:boolean) => {
          state.offline_bakup_done = data;
+      },
+      SET_AUTH_TOKEN_DATA: (state:State, data:AuthTokenStore) => {
+         state.auth_token = data;
       },
       SET_BRANCH_DATA: (state:State, data:BranchStore) => {
          state.branch = data;

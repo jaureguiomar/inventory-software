@@ -392,6 +392,9 @@ export default defineComponent({
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -439,43 +442,41 @@ export default defineComponent({
             updateBarcode.value = true;
          loaded.value = true;
       });
-      axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`)
-         .then((response) => {
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data.data;
-                  let formatted_categories:Array<Category> = [];
+      axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
+         {
+            headers: {
+               'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+            }
+         }
+      ).then((response) => {
+         if(response) {
+            if(!response.data.error.is_error) {
+               const data = response.data.data;
+               let formatted_categories:Array<Category> = [];
 
-                  for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+               for(let i = 0; i < data.length; i++) {
+                  const formatted_user:User|null = format_user(data[i].user);
+                  const formatted_pos:Pos|null = format_pos(data[i].pos);
+                  const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                     formatted_categories.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        id_user: Number(data[i].id_branch),
-                        id_pos: Number(data[i].id_branch),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
-
-                     categoryOptions.value.push(data[i].name);
-                     categoryFilteredOptions.value.push(data[i].name);
-                  }
-                  category.value = formatted_categories;
-               } else {
-                  Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
+                  formatted_categories.push({
+                     id: Number(data[i].id),
+                     is_active: Number(data[i].is_active),
+                     created: data[i].created,
+                     updated: data[i].updated,
+                     name: data[i].name,
+                     id_user: Number(data[i].id_branch),
+                     id_pos: Number(data[i].id_branch),
+                     id_branch: Number(data[i].id_branch),
+                     user: formatted_user,
+                     pos: formatted_pos,
+                     branch: formatted_branch
                   });
+
+                  categoryOptions.value.push(data[i].name);
+                  categoryFilteredOptions.value.push(data[i].name);
                }
+               category.value = formatted_categories;
             } else {
                Swal.fire({
                   title: "Error",
@@ -483,13 +484,20 @@ export default defineComponent({
                   icon: "error"
                });
             }
-         }).catch(() => {
+         } else {
             Swal.fire({
                title: "Error",
                text: t("global.default_error"),
                icon: "error"
             });
+         }
+      }).catch(() => {
+         Swal.fire({
+            title: "Error",
+            text: t("global.default_error"),
+            icon: "error"
          });
+      });
 
       const onAddUpdate = async() => {
          // field.code.text = field.code.text.trim();
@@ -643,19 +651,26 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<ProductResponse>(`${ getServer.value }/product/v3/create.php`, {
-                  is_favorite: (field.is_favorite.text) ? 1 : 0,
-                  code: field.code.text,
-                  name: field.name.text,
-                  description: field.description.text,
-                  buy_price: field.buy_price.text,
-                  sale_price: field.sale_price.text,
-                  quantity: field.quantity.text,
-                  id_category: id_category,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.put<ProductResponse>(`${ getServer.value }/product/v3/create.php`,
+                  {
+                     is_favorite: (field.is_favorite.text) ? 1 : 0,
+                     code: field.code.text,
+                     name: field.name.text,
+                     description: field.description.text,
+                     buy_price: field.buy_price.text,
+                     sale_price: field.sale_price.text,
+                     quantity: field.quantity.text,
+                     id_category: id_category,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:Product = response.data.data.data;
@@ -711,20 +726,27 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<ProductResponse>(`${ getServer.value }/product/v3/update.php`, {
-                  id: page.id,
-                  is_favorite: (field.is_favorite.text) ? 1 : 0,
-                  code: field.code.text,
-                  name: field.name.text,
-                  description: field.description.text,
-                  buy_price: field.buy_price.text,
-                  sale_price: field.sale_price.text,
-                  quantity: field.quantity.text,
-                  id_category: id_category,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.post<ProductResponse>(`${ getServer.value }/product/v3/update.php`,
+                  {
+                     id: page.id,
+                     is_favorite: (field.is_favorite.text) ? 1 : 0,
+                     code: field.code.text,
+                     name: field.name.text,
+                     description: field.description.text,
+                     buy_price: field.buy_price.text,
+                     sale_price: field.sale_price.text,
+                     quantity: field.quantity.text,
+                     id_category: id_category,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:Product = response.data.data.data;
@@ -782,7 +804,13 @@ export default defineComponent({
 
          // Get Category
          try {
-            let response = await axios.get<CategoryOneResponse>(`${ getServer.value }/category/v3/select-one.php?id=${ formatted_data.id_category }`);
+            let response = await axios.get<CategoryOneResponse>(`${ getServer.value }/category/v3/select-one.php?id=${ formatted_data.id_category }`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data:Category = response.data.data;

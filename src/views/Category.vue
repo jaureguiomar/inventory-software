@@ -196,6 +196,9 @@ export default defineComponent({
       const getIsOnline = computed(() => {
          return store.getters["getIsOnline"];
       });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
       const getCategoryLoadedReply = computed(() => {
          return store.getters["getCategoryLoadedReply"];
       });
@@ -207,39 +210,37 @@ export default defineComponent({
          category.value = [];
 
          if(getIsOnline.value) {
-            axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`)
-               .then((response) => {
-                  if(response) {
-                     if(!response.data.error.is_error) {
-                        const data = response.data.data;
-                        let formatted_categories:Array<Category> = [];
-                        for(let i = 0; i < data.length; i++) {
-                           const formatted_user:User|null = format_user(data[i].user);
-                           const formatted_pos:Pos|null = format_pos(data[i].pos);
-                           const formatted_branch:Branch|null = format_branch(data[i].branch);
+            axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            ).then((response) => {
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+                     let formatted_categories:Array<Category> = [];
+                     for(let i = 0; i < data.length; i++) {
+                        const formatted_user:User|null = format_user(data[i].user);
+                        const formatted_pos:Pos|null = format_pos(data[i].pos);
+                        const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                           formatted_categories.push({
-                              id: Number(data[i].id),
-                              is_active: Number(data[i].is_active),
-                              created: data[i].created,
-                              updated: data[i].updated,
-                              name: data[i].name,
-                              id_user: Number(data[i].id_user),
-                              id_pos: Number(data[i].id_pos),
-                              id_branch: Number(data[i].id_branch),
-                              user: formatted_user,
-                              pos: formatted_pos,
-                              branch: formatted_branch
-                           });
-                        }
-                        category.value = formatted_categories;
-                     } else {
-                        Swal.fire({
-                           title: "Error",
-                           text: t("global.default_error"),
-                           icon: "error"
+                        formatted_categories.push({
+                           id: Number(data[i].id),
+                           is_active: Number(data[i].is_active),
+                           created: data[i].created,
+                           updated: data[i].updated,
+                           name: data[i].name,
+                           id_user: Number(data[i].id_user),
+                           id_pos: Number(data[i].id_pos),
+                           id_branch: Number(data[i].id_branch),
+                           user: formatted_user,
+                           pos: formatted_pos,
+                           branch: formatted_branch
                         });
                      }
+                     category.value = formatted_categories;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -247,13 +248,20 @@ export default defineComponent({
                         icon: "error"
                      });
                   }
-               }).catch(() => {
+               } else {
                   Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),
                      icon: "error"
                   });
+               }
+            }).catch(() => {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
                });
+            });
          } else {
             window.api.send("mysql-get-category");
             if(!getCategoryLoadedGet.value) {

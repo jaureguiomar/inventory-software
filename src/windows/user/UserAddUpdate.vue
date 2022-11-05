@@ -350,6 +350,9 @@ export default defineComponent({
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
@@ -393,47 +396,45 @@ export default defineComponent({
          }
          loaded.value = true;
       });
-      axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`)
-         .then((response) => {
-            if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data.data;
-                  let formatted_roles:Array<UserRole> = [];
+      axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
+         {
+            headers: {
+               'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+            }
+         }
+      ).then((response) => {
+         if(response) {
+            if(!response.data.error.is_error) {
+               const data = response.data.data;
+               let formatted_roles:Array<UserRole> = [];
 
-                  for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
+               for(let i = 0; i < data.length; i++) {
+                  const formatted_user:User|null = format_user(data[i].user);
+                  const formatted_pos:Pos|null = format_pos(data[i].pos);
+                  const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                     formatted_roles.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        atributes_1: Number(data[i].atributes_1),
-                        atributes_2: Number(data[i].atributes_2),
-                        atributes_3: Number(data[i].atributes_3),
-                        atributes_4: Number(data[i].atributes_4),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
-
-                     roleOptions.value.push(data[i].name);
-                     roleFilteredOptions.value.push(data[i].name);
-                  }
-                  role.value = formatted_roles;
-               } else {
-                  Swal.fire({
-                     title: "Error",
-                     text: t("global.default_error"),
-                     icon: "error"
+                  formatted_roles.push({
+                     id: Number(data[i].id),
+                     is_active: Number(data[i].is_active),
+                     created: data[i].created,
+                     updated: data[i].updated,
+                     name: data[i].name,
+                     atributes_1: Number(data[i].atributes_1),
+                     atributes_2: Number(data[i].atributes_2),
+                     atributes_3: Number(data[i].atributes_3),
+                     atributes_4: Number(data[i].atributes_4),
+                     id_user: Number(data[i].id_user),
+                     id_pos: Number(data[i].id_pos),
+                     id_branch: Number(data[i].id_branch),
+                     user: formatted_user,
+                     pos: formatted_pos,
+                     branch: formatted_branch
                   });
+
+                  roleOptions.value.push(data[i].name);
+                  roleFilteredOptions.value.push(data[i].name);
                }
+               role.value = formatted_roles;
             } else {
                Swal.fire({
                   title: "Error",
@@ -441,13 +442,20 @@ export default defineComponent({
                   icon: "error"
                });
             }
-         }).catch(() => {
+         } else {
             Swal.fire({
                title: "Error",
                text: t("global.default_error"),
                icon: "error"
             });
+         }
+      }).catch(() => {
+         Swal.fire({
+            title: "Error",
+            text: t("global.default_error"),
+            icon: "error"
          });
+      });
 
       const onAddUpdate = async() => {
          field.username.text = field.username.text.trim();
@@ -565,17 +573,24 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<UserResponse>(`${ getServer.value }/user/v3/create.php`, {
-                  username: field.username.text,
-                  email: field.email.text,
-                  password: field.password.text,
-                  first_name: field.first_name.text,
-                  last_name: field.last_name.text,
-                  id_role: id_role,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.put<UserResponse>(`${ getServer.value }/user/v3/create.php`,
+                  {
+                     username: field.username.text,
+                     email: field.email.text,
+                     password: field.password.text,
+                     first_name: field.first_name.text,
+                     last_name: field.last_name.text,
+                     id_role: id_role,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:User = response.data.data.data;
@@ -629,18 +644,25 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<UserResponse>(`${ getServer.value }/user/v3/update.php`, {
-                  id: page.id,
-                  username: field.username.text,
-                  email: field.email.text,
-                  password: field.password.text,
-                  first_name: field.first_name.text,
-                  last_name: field.last_name.text,
-                  id_role: id_role,
-                  id_user: getSessionUserId.value,
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               });
+               let response = await axios.post<UserResponse>(`${ getServer.value }/user/v3/update.php`,
+                  {
+                     id: page.id,
+                     username: field.username.text,
+                     email: field.email.text,
+                     password: field.password.text,
+                     first_name: field.first_name.text,
+                     last_name: field.last_name.text,
+                     id_role: id_role,
+                     id_user: getSessionUserId.value,
+                     id_pos: getPosId.value,
+                     id_branch: getBranchId.value
+                  },
+                  {
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
                if(response) {
                   if(!response.data.error.is_error) {
                      const data:User = response.data.data.data;
@@ -696,7 +718,13 @@ export default defineComponent({
 
          // Get role
          try {
-            let response = await axios.get<UserRoleOneResponse>(`${ getServer.value }/user_role/v3/select-one.php?id=${ formatted_data.id_role }`);
+            let response = await axios.get<UserRoleOneResponse>(`${ getServer.value }/user_role/v3/select-one.php?id=${ formatted_data.id_role }`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(!response.data.error.is_error) {
                   const data:UserRole = response.data.data;

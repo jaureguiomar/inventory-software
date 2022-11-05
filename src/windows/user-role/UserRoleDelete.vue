@@ -528,8 +528,13 @@ export default defineComponent({
             userRole.pos = data.data.pos;
             userRole.branch = data.data.branch;
 
-            axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`)
-            .then((response) => {
+            axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
+               {
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            ).then((response) => {
                if(response) {
                   if(!response.data.error.is_error) {
                      const data = response.data.data;
@@ -597,12 +602,17 @@ export default defineComponent({
 
       const onDelete = async() => {
          try {
-            let response = await axios.delete<UserRoleResponse>(`${ getServer.value }/user_role/v3/delete.php`, {
-               params: {
-                  field: "id",
-                  data: userRole.id
-               },
-            });
+            let response = await axios.delete<UserRoleResponse>(`${ getServer.value }/user_role/v3/delete.php`,
+               {
+                  params: {
+                     field: "id",
+                     data: userRole.id
+                  },
+                  headers: {
+                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
             if(response) {
                if(response.data.error.is_error) {
                   Swal.fire({
@@ -654,6 +664,9 @@ export default defineComponent({
 
       const getServer = computed(() => {
          return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
       });
 
       return {
