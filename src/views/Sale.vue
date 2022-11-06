@@ -267,7 +267,7 @@ import Swal from "sweetalert2";
 import { useI18n } from "vue-i18n/index";
 import { useQuasar } from "quasar";
 import { useStore } from "vuex";
-import { defineComponent, getCurrentInstance, ref, reactive, computed, onMounted } from "vue";
+import { defineComponent, getCurrentInstance, ref, reactive, computed, onMounted, onBeforeUnmount } from "vue";
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
@@ -480,6 +480,9 @@ export default defineComponent({
                icon: "error"
             });
          });
+      });
+      onBeforeUnmount(() => {
+         barcodeScanner.destroy();
       });
 
       const getLastCashCutoff = () => {
