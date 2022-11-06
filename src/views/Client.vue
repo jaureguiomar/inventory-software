@@ -329,7 +329,11 @@ export default defineComponent({
                cellphone: item.cellphone,
                cellphone2: item.cellphone2,
                email: item.email,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -353,7 +357,11 @@ export default defineComponent({
                cellphone: item.cellphone,
                cellphone2: item.cellphone2,
                email: item.email,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -373,7 +381,11 @@ export default defineComponent({
                cellphone: item.cellphone,
                cellphone2: item.cellphone2,
                email: item.email,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -407,6 +419,12 @@ export default defineComponent({
                         client.value[finded_index].cellphone = data.data.cellphone;
                         client.value[finded_index].cellphone2 = data.data.cellphone2;
                         client.value[finded_index].email = data.data.email;
+                        client.value[finded_index].id_user = data.data.id_user;
+                        client.value[finded_index].id_pos = data.data.id_pos;
+                        client.value[finded_index].id_branch = data.data.id_branch;
+                        client.value[finded_index].user = data.data.user;
+                        client.value[finded_index].pos = data.data.pos;
+                        client.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {

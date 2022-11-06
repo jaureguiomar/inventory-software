@@ -728,9 +728,9 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data:UserRole = response.data.data;
-                  const formatted_user:User|null = format_user(data.user);
-                  const formatted_pos:Pos|null = format_pos(data.pos);
-                  const formatted_branch:Branch|null = format_branch(data.branch);
+                  // const formatted_user:User|null = format_user(data.user);
+                  // const formatted_pos:Pos|null = format_pos(data.pos);
+                  // const formatted_branch:Branch|null = format_branch(data.branch);
 
                   formatted_data.role = {
                      id: Number(data.id),
@@ -745,9 +745,12 @@ export default defineComponent({
                      id_user: Number(data.id_user),
                      id_pos: Number(data.id_pos),
                      id_branch: Number(data.id_branch),
-                     user: formatted_user,
-                     pos: formatted_pos,
-                     branch: formatted_branch
+                     user: null,
+                     pos: null,
+                     branch: null
+                     // user: formatted_user,
+                     // pos: formatted_pos,
+                     // branch: formatted_branch
                   }
                } else {
                   Swal.fire({

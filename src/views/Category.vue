@@ -293,7 +293,11 @@ export default defineComponent({
                created: item.created,
                updated: item.updated,
                name: item.name,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -312,7 +316,11 @@ export default defineComponent({
                created: item.created,
                updated: item.updated,
                name: item.name,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -327,7 +335,11 @@ export default defineComponent({
                created: item.created,
                updated: item.updated,
                name: item.name,
+               id_user: item.id_user,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
+               user: { ...item.user },
+               pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
@@ -356,6 +368,12 @@ export default defineComponent({
                         category.value[finded_index].created = data.data.created;
                         category.value[finded_index].updated = data.data.updated;
                         category.value[finded_index].name = data.data.name;
+                        category.value[finded_index].id_user = data.data.id_user;
+                        category.value[finded_index].id_pos = data.data.id_pos;
+                        category.value[finded_index].id_branch = data.data.id_branch;
+                        category.value[finded_index].user = data.data.user;
+                        category.value[finded_index].pos = data.data.pos;
+                        category.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {

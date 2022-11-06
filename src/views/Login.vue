@@ -105,6 +105,7 @@ export default defineComponent({
                      server: getServer.value,
                      access_token: token.access_token
                   });
+                  localStorage.setItem("token", JSON.stringify(token));
                   localStorage.setItem("session", JSON.stringify(new_user));
                   store.commit("SET_SESSION_LOGGUED_IN_DATA", true);
                   store.commit("SET_AUTH_TOKEN_DATA", token);

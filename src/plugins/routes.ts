@@ -30,7 +30,7 @@ import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import store from "@/plugins/store";
 import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
-import { BranchStore, PosStore, SessionStore } from "@/interfaces/store";
+import { AuthTokenStore, BranchStore, PosStore, SessionStore } from "@/interfaces/store";
 
 const routes = [
    {
@@ -331,6 +331,11 @@ const router = createRouter({
 
 router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function) => {
    const server = localStorage.getItem("server");
+   const token:AuthTokenStore = JSON.parse(localStorage.getItem("token") || `{
+      "access_token": "",
+      "refresh_token": "",
+      "expires_in": -1
+   }`);
    const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{
       "id": -1,
       "name": "",
@@ -356,6 +361,7 @@ router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function
       }
    }`);
    store.commit("SET_SERVER_DATA", server);
+   store.commit("SET_AUTH_TOKEN_DATA", token);
    store.commit("SET_BRANCH_DATA", branch);
    store.commit("SET_POS_DATA", pos);
    store.commit("SET_SESSION_LOGGUED_IN_DATA", session.loggued_in);

@@ -405,7 +405,7 @@ export default defineComponent({
          } else {
             if(getIsOnline.value) {
                try {
-                  let response = await axios.post<CategoryResponse>(`${ getServer.value }category/v3/update.php`,
+                  let response = await axios.post<CategoryResponse>(`${ getServer.value }/category/v3/update.php`,
                      {
                         id: page.id,
                         name: field.name.text,
