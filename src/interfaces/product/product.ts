@@ -3,6 +3,7 @@ import { InputFieldString, InputFieldNumber, InputFieldBoolean } from "@/interfa
 import { Branch } from "@/interfaces/branch/branch";
 import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
+import { SaleProduct } from "@/interfaces/sale-product/sale-product";
 
 // Main
 interface MainProduct {
@@ -23,6 +24,9 @@ interface MainProduct {
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
+}
+interface MainProductM2M extends MainProduct {
+   sale: SaleProduct
 }
 interface Product extends MainProduct {
    created: string;
@@ -106,6 +110,7 @@ interface ProductsResponse {
 }
 
 export {
+   MainProductM2M,
    Product,
    ProductMySQL,
    Content,

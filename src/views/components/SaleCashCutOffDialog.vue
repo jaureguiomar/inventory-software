@@ -137,6 +137,7 @@ import { User, UsersResponse } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Branch } from "@/interfaces/branch/branch";
 import { CashCutoff, CashCutoffOneResponse, CashCutoffResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
+import { SaleProductsM2MResponse } from "@/interfaces/sale-product/sale-product";
 
 export default {
    emits: [
@@ -385,14 +386,50 @@ export default {
                return false;
             }
          } else if(type === "close") {
-            // Retrieve sales by "id_corte" && sum amounts "sale" & "sale_supplier"
+            let amount_sale:number|string = 0;
+            let amount_supplier:number|string = 0;
+            try {
+               let response = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale_product/v3/find-by-sale.php`,
+                  {
+                     params: {
+                        type: "id_cash_cutoff",
+                        query: lastCashCutoff.id
+                     },
+                     headers: {
+                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
+               if(response) {
+                  if(!response.data.error.is_error) {
+                     const data = response.data.data;
+
+                     for(let i = 0; i < data.length; i++) {
+                        const curr_sale = data[i];
+                        if(curr_sale.is_supplier === 0)
+                           amount_sale += parseFloat(curr_sale.total);
+                        else
+                           amount_supplier += parseFloat(curr_sale.total);
+                     }
+                     amount_sale = amount_sale.toFixed(2);
+                     amount_supplier = amount_supplier.toFixed(2);
+                  } else {
+                     return false;
+                  }
+               } else {
+                  return false;
+               }
+            } catch (error) {
+               return false;
+            }
+
             try {
                let response = await axios.post<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`,
                   {
                      id: lastCashCutoff.id,
                      amount_open: lastCashCutoff.amount_open,
-                     amount_sale: "400.00",     // Calculate here
-                     amount_supplier: "500.00", // Calculate here
+                     amount_sale: amount_sale,
+                     amount_supplier: amount_supplier,
                      amount_close: field.amount.text,
                      date_close: null,
                      id_type: 2,

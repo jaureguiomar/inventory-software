@@ -2,15 +2,19 @@ import { InputFieldString } from "@/interfaces/general";
 import { Branch } from "@/interfaces/branch/branch";
 import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
+import { CashCutoff } from "@/interfaces/cash-cutoff/cash-cutoff";
 
 // Main
 interface MainSale {
    id: number;
    is_active: number;
    total: string;
+   is_supplier: number;
+   id_cash_cutoff: number;
    id_user: number;
    id_pos: number;
    id_branch: number;
+   cash_cutoff: CashCutoff|null;
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;

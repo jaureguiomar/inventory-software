@@ -3,7 +3,7 @@ import { Branch } from "@/interfaces/branch/branch";
 import { User } from "@/interfaces/user/user";
 import { Pos } from "@/interfaces/pos/pos";
 import { Sale } from "@/interfaces/sale/sale";
-import { Product } from "@/interfaces/product/product";
+import { MainProductM2M, Product } from "@/interfaces/product/product";
 
 // Main
 interface MainSaleProduct {
@@ -30,6 +30,9 @@ interface SaleProductMySQL extends MainSaleProduct {
    sync_type: "add"|"update"|"delete";
    created: Date;
    updated: Date;
+}
+interface SaleProductM2M extends Sale {
+   product: Array<MainProductM2M>;
 }
 
 // Props
@@ -96,9 +99,14 @@ interface SaleProductsResponse {
    data: Array<SaleProduct>;
    error: ResponseError;
 }
+interface SaleProductsM2MResponse {
+   data: Array<SaleProductM2M>;
+   error: ResponseError;
+}
 
 export {
    SaleProduct,
+   SaleProductM2M,
    SaleProductMySQL,
    Content,
    IPCParams,
@@ -106,6 +114,7 @@ export {
    SaleProductResponse,
    SaleProductOneResponse,
    SaleProductsResponse,
+   SaleProductsM2MResponse,
    WindowResponse,
    Page,
    SaleProductField

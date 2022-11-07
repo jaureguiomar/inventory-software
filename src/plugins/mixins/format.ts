@@ -5,6 +5,7 @@ import { Pos } from "@/interfaces/pos/pos";
 import { Branch } from "@/interfaces/branch/branch";
 import { Sale } from "@/interfaces/sale/sale";
 import { Product } from "@/interfaces/product/product";
+import { CashCutoff } from "@/interfaces/cash-cutoff/cash-cutoff";
 
 export const format_sale = (sale:Sale|null) => {
    let formatted_data:Sale|null = null;
@@ -17,9 +18,12 @@ export const format_sale = (sale:Sale|null) => {
          created: curr_data.created,
          updated: curr_data.updated,
          total: curr_data.total,
+         is_supplier: Number(curr_data.is_supplier),
+         id_cash_cutoff: Number(curr_data.id_cash_cutoff),
          id_user: Number(curr_data.id_user),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
+         cash_cutoff: null,
          user: null,
          pos: null,
          branch: null
@@ -167,6 +171,35 @@ export const format_branch = (branch:Branch|null) => {
          name: curr_data.name,
          telephone: curr_data.telephone,
          address: curr_data.address
+      }
+   }
+   return formatted_data;
+};
+
+export const format_cash_cutoff = (cash_cutoff:CashCutoff|null) => {
+   let formatted_data:CashCutoff|null = null;
+   const curr_data = (cash_cutoff) ? cash_cutoff : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         amount_open: curr_data.amount_open,
+         amount_sale: curr_data.amount_sale,
+         amount_supplier: curr_data.amount_supplier,
+         amount_close: curr_data.amount_close,
+         date_close: curr_data.date_close,
+         id_type: Number(curr_data.id_type),
+         id_user_open: Number(curr_data.id_user_open),
+         id_user_close: Number(curr_data.id_user_close),
+         id_pos: Number(curr_data.id_pos),
+         id_branch: Number(curr_data.id_branch),
+         user_open: null,
+         user_close: null,
+         pos: null,
+         branch: null
       }
    }
    return formatted_data;

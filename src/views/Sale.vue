@@ -729,9 +729,12 @@ export default defineComponent({
                   created: "",
                   updated: "",
                   total: "",
+                  is_supplier: -1,
+                  id_cash_cutoff: -1,
                   id_user: -1,
                   id_pos: -1,
                   id_branch: -1,
+                  cash_cutoff: null,
                   user: null,
                   pos: null,
                   branch: null

@@ -67,7 +67,7 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store"
-import { format_category, format_user, format_pos, format_branch, format_user_role, format_product, format_sale } from "@/plugins/mixins/format";
+import { format_category, format_user, format_pos, format_branch, format_user_role, format_product, format_sale, format_cash_cutoff } from "@/plugins/mixins/format";
 import { Branch, BranchesResponse } from "@/interfaces/branch/branch";
 import { Client, ClientsResponse } from "@/interfaces/client/client";
 import { Supplier, SuppliersResponse } from "@/interfaces/supplier/supplier";
@@ -78,6 +78,7 @@ import { UserRole, UserRolesResponse } from "@/interfaces/user-role/user-role";
 import { SaleProduct, SaleProductsResponse } from "@/interfaces/sale-product/sale-product";
 import { Sale, SalesResponse } from "@/interfaces/sale/sale";
 import { Pos } from "@/interfaces/pos/pos";
+import { CashCutoff } from "@/interfaces/cash-cutoff/cash-cutoff";
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
 import MenuHome from "@/views/layout/MenuHome.vue";
@@ -1025,6 +1026,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Sale> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i].cash_cutoff);
                      const formatted_user:User|null = format_user(data[i].user);
                      const formatted_pos:Pos|null = format_pos(data[i].pos);
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
@@ -1035,9 +1037,12 @@ export default defineComponent({
                         created: data[i].created,
                         updated: data[i].updated,
                         total: data[i].total,
+                        is_supplier: Number(data[i].is_supplier),
+                        id_cash_cutoff: Number(data[i].id_cash_cutoff),
                         id_user: Number(data[i].id_user),
                         id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
+                        cash_cutoff: formatted_cash_cutoff,
                         user: formatted_user,
                         pos: formatted_pos,
                         branch: formatted_branch
