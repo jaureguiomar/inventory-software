@@ -50,7 +50,7 @@
       </router-link>
       <router-link to="/cash-cutoff">
          <div class="top">
-            <font-awesome-icon icon="fa-solid fa-money-bill" size="4x" />
+            <font-awesome-icon icon="fa-solid fa-cash-register" size="4x" />
          </div>
          <div class="bottom">Cash Cutoff</div>
       </router-link>
