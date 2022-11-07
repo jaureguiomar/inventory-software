@@ -42,6 +42,24 @@
          </div>
          <div class="bottom">Roles</div>
       </router-link>
+      <router-link to="/sale-report">
+         <div class="top">
+            <font-awesome-icon icon="fa-solid fa-chart-line" size="4x" />
+         </div>
+         <div class="bottom">Sales</div>
+      </router-link>
+      <router-link to="/cash-cutoff">
+         <div class="top">
+            <font-awesome-icon icon="fa-solid fa-money-bill" size="4x" />
+         </div>
+         <div class="bottom">Cash Cutoff</div>
+      </router-link>
+      <router-link to="/activity-log">
+         <div class="top">
+            <font-awesome-icon icon="fa-solid fa-history" size="4x" />
+         </div>
+         <div class="bottom">Activity Log</div>
+      </router-link>
       <a class="cursor-pointer" @click="onLogout">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="4x" />

@@ -6,7 +6,8 @@ import {
    faTruckField, faBoxesStacked, faBook,
    faArrowRightFromBracket, faEye, faSearch,
    faCartShopping, faUserTie, faAddressBook,
-   faCashRegister, faMoneyBill, faUser
+   faCashRegister, faMoneyBill, faUser,
+   faChartLine, faHistory
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faUsers);
@@ -27,5 +28,7 @@ library.add(faAddressBook);
 library.add(faCashRegister);
 library.add(faMoneyBill);
 library.add(faUser);
+library.add(faChartLine);
+library.add(faHistory);
 
 export default FontAwesomeIcon;
