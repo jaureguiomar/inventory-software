@@ -57,7 +57,7 @@ ipcMain.on("client-module-window", function(e, data) {
             preload: path.join(__dirname, "preloadClient.js")
          }
       });
-      // window.client[data.type].removeMenu();
+      window.client[data.type].removeMenu();
       window.client[data.type].maximize();
 
       let setURL = "";
@@ -117,7 +117,7 @@ ipcMain.on("supplier-module-window", function(e, data) {
             preload: path.join(__dirname, "preloadSupplier.js")
          }
       });
-      // window.supplier[data.type].removeMenu();
+      window.supplier[data.type].removeMenu();
       window.supplier[data.type].maximize();
 
       let setURL = "";
@@ -177,7 +177,7 @@ ipcMain.on("product-module-window", function(e, data) {
             preload: path.join(__dirname, "preloadProduct.js")
          }
       });
-      // window.product[data.type].removeMenu();
+      window.product[data.type].removeMenu();
       window.product[data.type].maximize();
 
       let setURL = "";
@@ -237,7 +237,7 @@ ipcMain.on("category-module-window", function(e, data) {
             preload: path.join(__dirname, "preloadCategory.js")
          }
       });
-      // window.category[data.type].removeMenu();
+      window.category[data.type].removeMenu();
       window.category[data.type].maximize();
 
       let setURL = "";
@@ -297,7 +297,7 @@ ipcMain.on("user-module-window", function(e, data) {
             preload: path.join(__dirname, "preloadUser.js")
          }
       });
-      // window.user[data.type].removeMenu();
+      window.user[data.type].removeMenu();
       window.user[data.type].maximize();
 
       let setURL = "";
@@ -357,7 +357,7 @@ ipcMain.on("user-role-module-window", function(e, data) {
             preload: path.join(__dirname, "preloadUserRole.js")
          }
       });
-      // window.user_role[data.type].removeMenu();
+      window.user_role[data.type].removeMenu();
       window.user_role[data.type].maximize();
 
       let setURL = "";

@@ -29,7 +29,7 @@ async function createWindow() {
          preload: path.join(__dirname, "preload.js")
       }
    });
-   // window.main.removeMenu();
+   window.main.removeMenu();
    window.main.maximize();
 
    const machine_id:string = await machineId();
