@@ -45,12 +45,12 @@
                   </q-select>
                </template>
 
-               <template #no-data="{ icon, message, filter }">
+               <template #no-data="{ icon, message }">
                   <div class="full-width row flex-center q-gutter-sm">
                      <span>
                         {{ message }}
                      </span>
-                     <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon"></q-icon>
+                     <q-icon size="2em" :name="icon"></q-icon>
                   </div>
                </template>
 
