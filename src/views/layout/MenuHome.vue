@@ -74,7 +74,7 @@ import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { key } from "@/plugins/store";
-import { SessionStore } from "@/interfaces/store";
+import { SessionStore } from "@/types/store";
 
 export default defineComponent({
    name: "menu-home-component",

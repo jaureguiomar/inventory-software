@@ -1,9 +1,9 @@
-import { InputFieldNumber } from '@/interfaces/general';
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
-import { Sale } from "@/interfaces/sale/sale";
-import { MainProductM2M, Product } from "@/interfaces/product/product";
+import { InputFieldNumber } from '@/types/general';
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { Sale } from "@/types/sale";
+import { MainProductM2M, Product } from "@/types/product";
 
 // Main
 interface MainSaleProduct {

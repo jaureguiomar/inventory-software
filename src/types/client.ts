@@ -1,45 +1,51 @@
-import { InputFieldString } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
-import { CashCutoff } from "@/interfaces/cash-cutoff/cash-cutoff";
+import { InputFieldString } from "@/types/general";
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
 
 // Main
-interface MainSale {
+interface MainClient {
    id: number;
    is_active: number;
-   total: string;
-   is_supplier: number;
-   id_cash_cutoff: number;
+   first_name: string;
+   last_name: string;
+   address: string;
+   cellphone: string;
+   cellphone2: string|null;
+   email: string;
    id_user: number;
    id_pos: number;
    id_branch: number;
-   cash_cutoff: CashCutoff|null;
    user: User|null;
    pos: Pos|null;
    branch: Branch|null;
 }
-interface Sale extends MainSale {
+interface Client extends MainClient {
    created: string;
    updated: string;
 }
-interface SaleMySQL extends MainSale {
+interface ClientMySQL extends MainClient {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }
 
 // Props
-interface SaleField {
-   total: InputFieldString;
+interface ClientField {
+   first_name: InputFieldString;
+   last_name: InputFieldString;
+   address: InputFieldString;
+   cellphone: InputFieldString;
+   cellphone2: InputFieldString;
+   email: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: Sale;
+   data: Client;
 }
 
 // IPCParams Content
@@ -51,7 +57,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Sale;
+   data?: Client;
 }
 
 // Page
@@ -64,14 +70,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Sale|null;
+   data: Client|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: Sale;
+   data: Client;
    ok: boolean;
    message: string;
 }
@@ -80,29 +86,29 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface SaleResponse {
+interface ClientResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface SaleOneResponse {
-   data: Sale;
+interface ClientOneResponse {
+   data: Client;
    error: ResponseError;
 }
-interface SalesResponse {
-   data: Array<Sale>;
+interface ClientsResponse {
+   data: Array<Client>;
    error: ResponseError;
 }
 
 export {
-   Sale,
-   SaleMySQL,
+   Client,
+   ClientMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
-   SaleResponse,
-   SaleOneResponse,
-   SalesResponse,
+   ClientResponse,
+   ClientOneResponse,
+   ClientsResponse,
    WindowResponse,
    Page,
-   SaleField
+   ClientField
 };

@@ -1,6 +1,6 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { Category, CategoryMySQL, CategoryMySQLDelete } from "@/interfaces/category/category";
+import { Category, CategoryMySQL, CategoryMySQLDelete } from "@/types/category";
 
 export const get_categories = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<Category>>((resolve) => {

@@ -1,4 +1,4 @@
-import { UserRolePermission, UserRolePermissionAttributes } from "@/interfaces/user-role-permission/user-role-permission";
+import { UserRolePermission, UserRolePermissionAttributes } from "@/types/user-role-permission";
 
 export const validate_permission = (user_permissions:number, attr_value:string) => {
    const attr_value_parsed:number = parseInt(attr_value, 16);

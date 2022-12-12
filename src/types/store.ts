@@ -1,4 +1,4 @@
-import { Product } from "@/interfaces/product/product";
+import { Product } from "@/types/product";
 
 interface SaleProductStore extends Product {
    sale_quantity: number;

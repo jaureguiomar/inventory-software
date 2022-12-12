@@ -113,13 +113,13 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
-import { ClientsResponse, WindowResponse, Client } from "@/interfaces/client/client";
-import { Branch } from "@/interfaces/branch/branch";
+import { ClientsResponse, WindowResponse, Client } from "@/types/client";
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
 
 export default defineComponent({
    name: "client-component",

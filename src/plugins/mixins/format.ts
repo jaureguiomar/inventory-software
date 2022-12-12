@@ -1,11 +1,11 @@
-import { Category } from "@/interfaces/category/category";
-import { User } from "@/interfaces/user/user";
-import { UserRole } from "@/interfaces/user-role/user-role";
-import { Pos } from "@/interfaces/pos/pos";
-import { Branch } from "@/interfaces/branch/branch";
-import { Sale } from "@/interfaces/sale/sale";
-import { Product } from "@/interfaces/product/product";
-import { CashCutoff } from "@/interfaces/cash-cutoff/cash-cutoff";
+import { Category } from "@/types/category";
+import { User } from "@/types/user";
+import { UserRole } from "@/types/user-role";
+import { Pos } from "@/types/pos";
+import { Branch } from "@/types/branch";
+import { Sale } from "@/types/sale";
+import { Product } from "@/types/product";
+import { CashCutoff } from "@/types/cash-cutoff";
 
 export const format_sale = (sale:Sale|null) => {
    let formatted_data:Sale|null = null;

@@ -1,38 +1,29 @@
-import { InputFieldString } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
+import { InputFieldString } from "@/types/general";
 
 // Main
-interface MainCategory {
+interface MainActivityLogOperation {
    id: number;
    is_active: number;
    name: string;
-   id_user: number;
-   id_pos: number;
-   id_branch: number;
-   user: User|null;
-   pos: Pos|null;
-   branch: Branch|null;
 }
-interface Category extends MainCategory {
+interface ActivityLogOperation extends MainActivityLogOperation {
    created: string;
    updated: string;
 }
-interface CategoryMySQL extends MainCategory {
+interface ActivityLogOperationMySQL extends MainActivityLogOperation {
    is_sync: number;
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }
-interface CategoryMySQLDelete { // Make it as global interface? (MySQLDelete)
+interface ActivityLogOperationMySQLDelete { // Make it as global interface? (MySQLDelete)
    id: number;
    is_sync: number;
    sync_type: "add"|"update"|"delete"|null;
 }
 
 // Props
-interface CategoryField {
+interface ActivityLogOperationField {
    name: InputFieldString;
 }
 
@@ -40,7 +31,7 @@ interface CategoryField {
 interface IPCParams {
    id: number;
    type: string;
-   data: Category;
+   data: ActivityLogOperation;
 }
 
 // IPCParams Content
@@ -52,7 +43,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Category;
+   data?: ActivityLogOperation;
 }
 
 // Page
@@ -65,14 +56,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Category|null;
+   data: ActivityLogOperation|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: Category;
+   data: ActivityLogOperation;
    ok: boolean;
    message: string;
 }
@@ -81,30 +72,30 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface CategoryResponse {
+interface ActivityLogOperationResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface CategoryOneResponse {
-   data: Category;
+interface ActivityLogOperationOneResponse {
+   data: ActivityLogOperation;
    error: ResponseError;
 }
-interface CategoriesResponse {
-   data: Array<Category>;
+interface ActivityLogOperationsResponse {
+   data: Array<ActivityLogOperation>;
    error: ResponseError;
 }
 
 export {
-   Category,
-   CategoryMySQL,
-   CategoryMySQLDelete,
+   ActivityLogOperation,
+   ActivityLogOperationMySQL,
+   ActivityLogOperationMySQLDelete,
    Content,
    IPCParams,
    IPCParamsContent,
-   CategoryResponse,
-   CategoryOneResponse,
-   CategoriesResponse,
+   ActivityLogOperationResponse,
+   ActivityLogOperationOneResponse,
+   ActivityLogOperationsResponse,
    WindowResponse,
    Page,
-   CategoryField
+   ActivityLogOperationField
 };

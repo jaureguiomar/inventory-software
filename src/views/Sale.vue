@@ -271,13 +271,14 @@ import { defineComponent, getCurrentInstance, ref, reactive, computed, onMounted
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
-import { Product, ProductsResponse } from "@/interfaces/product/product";
-import { Sale, SaleResponse } from "@/interfaces/sale/sale";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
-import { Category } from "@/interfaces/category/category";
-import { Branch } from "@/interfaces/branch/branch";
-import { CashCutoff, CashCutoffOneResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
+import { Product, ProductsResponse } from "@/types/product";
+import { Sale, SaleResponse } from "@/types/sale";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { Category } from "@/types/category";
+import { Branch } from "@/types/branch";
+import { CashCutoff, CashCutoffOneResponse } from "@/types/cash-cutoff";
+import { SaleContentStore } from "@/types/store";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -285,7 +286,6 @@ import ProductListDialog from "@/views/components/ProductListDialog.vue";
 import SaleSaveDialog from "@/views/components/SaleSaveDialog.vue";
 import SaleRestoreDialog from "@/views/components/SaleRestoreDialog.vue";
 import SaleCashCutOffDialog from "@/views/components/SaleCashCutOffDialog.vue";
-import { SaleContentStore } from "@/interfaces/store";
 
 export default defineComponent({
    name: "sale-component",

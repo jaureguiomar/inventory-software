@@ -1,7 +1,7 @@
-import { InputFieldString } from "@/interfaces/general";
-import { User } from "@/interfaces/user/user";
-import { ActivityLogAccess } from "@/interfaces/activity-log-access/activity-log-access";
-import { ActivityLogOperation } from "@/interfaces/activity-log-operation/activity-log-operation";
+import { InputFieldString } from "@/types/general";
+import { User } from "@/types/user";
+import { ActivityLogAccess } from "@/types/activity-log-access";
+import { ActivityLogOperation } from "@/types/activity-log-operation";
 
 // Main
 interface MainActivityLog {

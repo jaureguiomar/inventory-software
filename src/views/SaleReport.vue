@@ -6,7 +6,7 @@
             <router-link class="q-mr-xs text-white" to="/">
                <font-awesome-icon icon="fa-solid fa-arrow-left"></font-awesome-icon>
             </router-link>
-            <p class="q-ma-none">{{ t("user_role.title") }}</p>
+            <p class="q-ma-none">{{ t("sale_report.title") }}</p>
          </template>
          <template #right-content>
             <a class="q-mr-sm text-white cursor-pointer" @click="onUserRoleAddWindowClick">
@@ -17,7 +17,7 @@
             </a>
          </template>
          <template #subtitle>
-            {{ t("user_role.subtitle") }}
+            {{ t("sale_report.subtitle") }}
          </template>
       </Menu>
 
@@ -25,21 +25,21 @@
          <template #content>
             <q-table
                title="User Roles List"
-               :rows="userRole"
-               :columns="userRoleColumns"
-               :no-data-label="t('user_role.table.content.details.empty')"
-               :no-results-label="t('user_role.table.content.details.empty')"
+               :rows="sale"
+               :columns="saleColumns"
+               :no-data-label="t('sale_report.table.content.details.empty')"
+               :no-results-label="t('sale_report.table.content.details.empty')"
                separator="vertical"
                virtual-scroll
                :virtual-scroll-sticky-size-start="48"
                row-key="id"
-               :visible-columns="userRoleVisibleColumns"
-               :pagination="userRolePagination"
-               :filter="userRoleFilter"
+               :visible-columns="saleVisibleColumns"
+               :pagination="salePagination"
+               :filter="saleFilter"
             >
                <template #top>
                   <h6 class="q-ma-none q-mr-md">User Roles List</h6>
-                  <q-input v-model="userRoleFilter" dense debounce="300" placeholder="Search">
+                  <q-input v-model="saleFilter" dense debounce="300" placeholder="Search">
                      <template #append>
                         <font-awesome-icon icon="fa-solid fa-search" size="1x" />
                      </template>
@@ -48,7 +48,7 @@
                   <q-space></q-space>
 
                   <q-select
-                     v-model="userRoleVisibleColumns"
+                     v-model="saleVisibleColumns"
                      multiple
                      outlined
                      dense
@@ -56,7 +56,7 @@
                      :display-value="$q.lang.table.columns"
                      emit-value
                      map-options
-                     :options="userRoleColumns"
+                     :options="saleColumns"
                      option-value="name"
                      options-cover
                      style="min-width: 150px"
@@ -113,16 +113,18 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
-import { UserRolesResponse, WindowResponse, UserRole } from "@/types/user-role";
+import { SalesResponse, WindowResponse, Sale } from "@/types/sale";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
+import { CashCutoff } from "@/types/cash-cutoff";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
+import { format_cash_cutoff } from '@/plugins/mixins/format';
 
 export default defineComponent({
-   name: "user-role-component",
+   name: "sale-report-component",
    components: {
       Banner,
       Menu,
@@ -131,20 +133,20 @@ export default defineComponent({
    setup() {
       const { t } = useI18n();
       const store = useStore(key);
-      const userRole = ref<UserRole[]>([]);
-      const userRoleVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "name", "actions" ]);
-      const userRoleFilter = ref("");
-      const userRolePagination = reactive({
+      const sale = ref<Sale[]>([]);
+      const saleVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "name", "actions" ]);
+      const saleFilter = ref("");
+      const salePagination = reactive({
          sortBy: "desc",
          descending: false,
          page: 1,
          rowsPerPage: 5
       });
-      const userRoleColumns:Array<any> = [
+      const saleColumns:Array<any> = [
          {
             name: "id",
             // required: true,
-            label: t("user_role.table.field.id"),
+            label: t("sale_report.table.field.id"),
             align: "center",
             field: "id",
             sortable: true,
@@ -157,7 +159,7 @@ export default defineComponent({
          },
          {
             name: "created",
-            label: t("user_role.table.field.created"),
+            label: t("sale_report.table.field.created"),
             align: "center",
             field: "created",
             sortable: true,
@@ -167,7 +169,7 @@ export default defineComponent({
          },
          {
             name: "updated",
-            label: t("user_role.table.field.updated"),
+            label: t("sale_report.table.field.updated"),
             align: "center",
             field: "updated",
             sortable: true,
@@ -177,14 +179,14 @@ export default defineComponent({
          },
          {
             name: "name",
-            label: t("user_role.table.field.name"),
+            label: t("sale_report.table.field.name"),
             align: "center",
             field: "name",
             sortable: true
          },
          {
             name: "actions",
-            label: t("user_role.table.field.actions"),
+            label: t("sale_report.table.field.actions"),
             align: "center",
             sortable: true
          }
@@ -196,14 +198,14 @@ export default defineComponent({
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
-      const getUserRoleLoadedReply = computed(() => {
-         return store.getters["getUserRoleLoadedReply"];
+      const getSaleLoadedReply = computed(() => {
+         return store.getters["getSaleLoadedReply"];
       });
 
       const onRefreshData = () => {
-         userRole.value = [];
+         sale.value = [];
 
-         axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
+         axios.get<SalesResponse>(`${ getServer.value }/sale/v3/select-all.php`,
             {
                headers: {
                   'Authorization': `Bearer ${ getAuthToken.value.access_token }`
@@ -213,31 +215,31 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
-                  let formatted_categories:Array<UserRole> = [];
+                  let formatted_sale:Array<Sale> = [];
                   for(let i = 0; i < data.length; i++) {
+                     const formatted_cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i].cash_cutoff);
                      const formatted_user:User|null = format_user(data[i].user);
                      const formatted_pos:Pos|null = format_pos(data[i].pos);
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
 
-                     formatted_categories.push({
+                     formatted_sale.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
-                        name: data[i].name,
-                        atributes_1: Number(data[i].atributes_1),
-                        atributes_2: Number(data[i].atributes_2),
-                        atributes_3: Number(data[i].atributes_3),
-                        atributes_4: Number(data[i].atributes_4),
-                        id_user: Number(data[i].id_branch),
-                        id_pos: Number(data[i].id_branch),
+                        total: data[i].total,
+                        is_supplier: Number(data[i].is_supplier),
+                        id_cash_cutoff: Number(data[i].id_cash_cutoff),
+                        id_user: Number(data[i].id_user),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
+                        cash_cutoff: formatted_cash_cutoff,
                         user: formatted_user,
                         pos: formatted_pos,
-                        branch: formatted_branch,
+                        branch: formatted_branch
                      });
                   }
-                  userRole.value = formatted_categories;
+                  sale.value = formatted_sale;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -265,13 +267,13 @@ export default defineComponent({
             id: -1,
             type: "add",
             content: {
-               title: t("user_role.window.add.title"),
-               description: t("user_role.window.add.subtitle")
+               title: t("sale_report.window.add.title"),
+               description: t("sale_report.window.add.subtitle")
             },
             data: null
          });
       };
-      const onUserRoleSeeWindowClick = (item:UserRole) => {
+      const onUserRoleSeeWindowClick = (item:Sale) => {
          window.api.send("user-role-module-window", {
             id: item.id,
             type: "see",
@@ -280,48 +282,46 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name,
-               atributes_1: item.atributes_1,
-               atributes_2: item.atributes_2,
-               atributes_3: item.atributes_3,
-               atributes_4: item.atributes_4,
+               total: item.total,
+               is_supplier: item.is_supplier,
+               id_cash_cutoff: item.id_cash_cutoff,
                id_user: item.id_user,
                id_pos: item.id_pos,
                id_branch: item.id_branch,
+               cash_cutoff: { ...item.cash_cutoff },
                user: { ...item.user },
                pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
       };
-      const onUserRoleUpdateWindowClick = (item:UserRole) => {
+      const onUserRoleUpdateWindowClick = (item:Sale) => {
          window.api.send("user-role-module-window", {
             id: item.id,
             type: "update",
             content: {
-               title: t("user_role.window.update.title"),
-               description: t("user_role.window.update.subtitle")
+               title: t("sale_report.window.update.title"),
+               description: t("sale_report.window.update.subtitle")
             },
             data: {
                id: item.id,
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name,
-               atributes_1: item.atributes_1,
-               atributes_2: item.atributes_2,
-               atributes_3: item.atributes_3,
-               atributes_4: item.atributes_4,
+               total: item.total,
+               is_supplier: item.is_supplier,
+               id_cash_cutoff: item.id_cash_cutoff,
                id_user: item.id_user,
                id_pos: item.id_pos,
                id_branch: item.id_branch,
+               cash_cutoff: { ...item.cash_cutoff },
                user: { ...item.user },
                pos: { ...item.pos },
                branch: { ...item.branch }
             }
          });
       };
-      const onUserRoleDeleteWindowClick = (item:UserRole) => {
+      const onUserRoleDeleteWindowClick = (item:Sale) => {
          window.api.send("user-role-module-window", {
             id: item.id,
             type: "delete",
@@ -330,14 +330,13 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               name: item.name,
-               atributes_1: item.atributes_1,
-               atributes_2: item.atributes_2,
-               atributes_3: item.atributes_3,
-               atributes_4: item.atributes_4,
+               total: item.total,
+               is_supplier: item.is_supplier,
+               id_cash_cutoff: item.id_cash_cutoff,
                id_user: item.id_user,
                id_pos: item.id_pos,
                id_branch: item.id_branch,
+               cash_cutoff: { ...item.cash_cutoff },
                user: { ...item.user },
                pos: { ...item.pos },
                branch: { ...item.branch }
@@ -346,16 +345,16 @@ export default defineComponent({
       };
 
       onRefreshData();
-      if(!getUserRoleLoadedReply.value) {
+      if(!getSaleLoadedReply.value) {
          window.api.receive("main-window-user-role-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
-                     userRole.value.push(data.data);
+                     sale.value.push(data.data);
                } else if(data.type === "update") {
                   let finded_index = -1;
-                  for(let i = 0; i < userRole.value.length; i++) {
-                     const curr_user_role = userRole.value[i];
+                  for(let i = 0; i < sale.value.length; i++) {
+                     const curr_user_role = sale.value[i];
                      if(curr_user_role.id == data.id) {
                         finded_index = i;
                         break;
@@ -363,34 +362,33 @@ export default defineComponent({
                   }
                   if(finded_index >= 0) {
                      if(data.data) {
-                        userRole.value[finded_index].id = data.data.id;
-                        userRole.value[finded_index].is_active = data.data.is_active;
-                        userRole.value[finded_index].created = data.data.created;
-                        userRole.value[finded_index].updated = data.data.updated;
-                        userRole.value[finded_index].name = data.data.name;
-                        userRole.value[finded_index].atributes_1 = data.data.atributes_1;
-                        userRole.value[finded_index].atributes_2 = data.data.atributes_2;
-                        userRole.value[finded_index].atributes_3 = data.data.atributes_3;
-                        userRole.value[finded_index].atributes_4 = data.data.atributes_4;
-                        userRole.value[finded_index].id_user = data.data.id_user;
-                        userRole.value[finded_index].id_pos = data.data.id_pos;
-                        userRole.value[finded_index].id_branch = data.data.id_branch;
-                        userRole.value[finded_index].user = data.data.user;
-                        userRole.value[finded_index].pos = data.data.pos;
-                        userRole.value[finded_index].branch = data.data.branch;
+                        sale.value[finded_index].id = data.data.id;
+                        sale.value[finded_index].is_active = data.data.is_active;
+                        sale.value[finded_index].created = data.data.created;
+                        sale.value[finded_index].updated = data.data.updated;
+                        sale.value[finded_index].total = data.data.total;
+                        sale.value[finded_index].is_supplier = data.data.is_supplier;
+                        sale.value[finded_index].id_cash_cutoff = data.data.id_cash_cutoff;
+                        sale.value[finded_index].id_user = data.data.id_user;
+                        sale.value[finded_index].id_pos = data.data.id_pos;
+                        sale.value[finded_index].id_branch = data.data.id_branch;
+                        sale.value[finded_index].cash_cutoff = data.data.cash_cutoff;
+                        sale.value[finded_index].user = data.data.user;
+                        sale.value[finded_index].pos = data.data.pos;
+                        sale.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {
                   let finded_index = -1;
-                  for(let i = 0; i < userRole.value.length; i++) {
-                     const curr_user_role = userRole.value[i];
+                  for(let i = 0; i < sale.value.length; i++) {
+                     const curr_user_role = sale.value[i];
                      if(curr_user_role.id == data.id) {
                         finded_index = i;
                         break;
                      }
                   }
                   if(finded_index >= 0)
-                     userRole.value.splice(finded_index, 1);
+                     sale.value.splice(finded_index, 1);
                }
             }
          });
@@ -399,11 +397,11 @@ export default defineComponent({
 
       return {
          t,
-         userRole,
-         userRoleVisibleColumns,
-         userRoleColumns,
-         userRoleFilter,
-         userRolePagination,
+         sale,
+         saleVisibleColumns,
+         saleColumns,
+         saleFilter,
+         salePagination,
          onRefreshData,
          onUserRoleAddWindowClick,
          onUserRoleSeeWindowClick,

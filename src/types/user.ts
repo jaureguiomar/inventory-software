@@ -1,7 +1,7 @@
-import { InputFieldNumber, InputFieldString } from "@/interfaces/general";
-import { UserRole } from "@/interfaces/user-role/user-role";
-import { Branch } from "@/interfaces/branch/branch";
-import { Pos } from "@/interfaces/pos/pos";
+import { InputFieldNumber, InputFieldString } from "@/types/general";
+import { UserRole } from "@/types/user-role";
+import { Branch } from "@/types/branch";
+import { Pos } from "@/types/pos";
 
 // Main
 interface MainUser {

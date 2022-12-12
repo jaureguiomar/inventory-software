@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ActivityLogInsert, ActivityLogResponse } from "@/interfaces/activity-log/activity-log";
+import { ActivityLogInsert, ActivityLogResponse } from "@/types/activity-log";
 
 export const create_activity_log = async(log_data:ActivityLogInsert) => {
    try {

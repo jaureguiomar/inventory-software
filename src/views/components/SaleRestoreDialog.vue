@@ -40,7 +40,7 @@ import { ref, computed } from "vue";
 import { useDialogPluginComponent } from "quasar";
 import { useStore } from "vuex";
 import { key } from "@/plugins/store";
-import { SaleContentStore } from "@/interfaces/store";
+import { SaleContentStore } from "@/types/store";
 
 export default {
    emits: [

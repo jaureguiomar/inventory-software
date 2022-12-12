@@ -153,7 +153,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
-import { Product, ProductResponse, IPCParams } from "@/interfaces/product/product";
+import { Product, ProductResponse, IPCParams } from "@/types/product";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";

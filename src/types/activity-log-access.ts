@@ -1,37 +1,29 @@
-import { InputFieldString } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
+import { InputFieldString } from "@/types/general";
 
 // Main
-interface MainUserRole {
+interface MainActivityLogAccess {
    id: number;
    is_active: number;
    name: string;
-   atributes_1: number;
-   atributes_2: number;
-   atributes_3: number;
-   atributes_4: number;
-   id_user: number;
-   id_pos: number;
-   id_branch: number;
-   user: User|null;
-   pos: Pos|null;
-   branch: Branch|null;
 }
-interface UserRole extends MainUserRole {
+interface ActivityLogAccess extends MainActivityLogAccess {
    created: string;
    updated: string;
 }
-interface UserMySQL extends MainUserRole {
+interface ActivityLogAccessMySQL extends MainActivityLogAccess {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }
+interface ActivityLogAccessMySQLDelete { // Make it as global interface? (MySQLDelete)
+   id: number;
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
+}
 
 // Props
-interface UserRoleField {
+interface ActivityLogAccessField {
    name: InputFieldString;
 }
 
@@ -39,7 +31,7 @@ interface UserRoleField {
 interface IPCParams {
    id: number;
    type: string;
-   data: UserRole;
+   data: ActivityLogAccess;
 }
 
 // IPCParams Content
@@ -51,7 +43,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: UserRole;
+   data?: ActivityLogAccess;
 }
 
 // Page
@@ -64,14 +56,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: UserRole|null;
+   data: ActivityLogAccess|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: UserRole;
+   data: ActivityLogAccess;
    ok: boolean;
    message: string;
 }
@@ -80,28 +72,30 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface UserRoleResponse {
+interface ActivityLogAccessResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface UserRoleOneResponse {
-   data: UserRole;
+interface ActivityLogAccessOneResponse {
+   data: ActivityLogAccess;
    error: ResponseError;
 }
-interface UserRolesResponse {
-   data: Array<UserRole>;
+interface ActivityLogAccessesResponse {
+   data: Array<ActivityLogAccess>;
    error: ResponseError;
 }
 
 export {
-   UserRole,
+   ActivityLogAccess,
+   ActivityLogAccessMySQL,
+   ActivityLogAccessMySQLDelete,
    Content,
    IPCParams,
    IPCParamsContent,
-   UserRoleResponse,
-   UserRoleOneResponse,
-   UserRolesResponse,
+   ActivityLogAccessResponse,
+   ActivityLogAccessOneResponse,
+   ActivityLogAccessesResponse,
    WindowResponse,
    Page,
-   UserRoleField
+   ActivityLogAccessField
 };

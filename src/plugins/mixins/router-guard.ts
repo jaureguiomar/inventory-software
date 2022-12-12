@@ -1,8 +1,8 @@
 import { _RouteLocationBase } from "vue-router";
 import axios from "axios";
-import { BranchStore } from "@/interfaces/store";
-import { BranchOneResponse } from "@/interfaces/branch/branch";
-import store from "../store";
+import { BranchStore } from "@/types/store";
+import { BranchOneResponse } from "@/types/branch";
+import store from "@/plugins/store";
 
 export const validateBranchSelect = (to:_RouteLocationBase, from:_RouteLocationBase, next:Function) => {
    const branch:BranchStore = JSON.parse(localStorage.getItem("branch") || `{

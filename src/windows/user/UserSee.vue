@@ -134,7 +134,7 @@
 import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import { getFormattedDateString } from "@/plugins/mixins/general";
-import { User, IPCParams } from "@/interfaces/user/user";
+import { User, IPCParams } from "@/types/user";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";

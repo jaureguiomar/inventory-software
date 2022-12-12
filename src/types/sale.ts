@@ -1,18 +1,29 @@
-import { InputFieldString } from "@/interfaces/general";
+import { InputFieldString } from "@/types/general";
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { CashCutoff } from "@/types/cash-cutoff";
 
 // Main
-interface MainBranch {
+interface MainSale {
    id: number;
    is_active: number;
-   name: string;
-   telephone: string;
-   address: string;
+   total: string;
+   is_supplier: number;
+   id_cash_cutoff: number;
+   id_user: number;
+   id_pos: number;
+   id_branch: number;
+   cash_cutoff: CashCutoff|null;
+   user: User|null;
+   pos: Pos|null;
+   branch: Branch|null;
 }
-interface Branch extends MainBranch {
+interface Sale extends MainSale {
    created: string;
    updated: string;
 }
-interface BranchMySQL extends MainBranch {
+interface SaleMySQL extends MainSale {
    is_sync: number;
    sync_type: "add"|"update"|"delete";
    created: Date;
@@ -20,17 +31,15 @@ interface BranchMySQL extends MainBranch {
 }
 
 // Props
-interface BranchField {
-   name: InputFieldString;
-   telephone: InputFieldString;
-   address: InputFieldString;
+interface SaleField {
+   total: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: Branch;
+   data: Sale;
 }
 
 // IPCParams Content
@@ -42,7 +51,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Branch;
+   data?: Sale;
 }
 
 // Page
@@ -55,14 +64,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Branch|null;
+   data: Sale|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: Branch;
+   data: Sale;
    ok: boolean;
    message: string;
 }
@@ -71,29 +80,29 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface BranchResponse {
+interface SaleResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface BranchOneResponse {
-   data: Branch;
+interface SaleOneResponse {
+   data: Sale;
    error: ResponseError;
 }
-interface BranchesResponse {
-   data: Array<Branch>;
+interface SalesResponse {
+   data: Array<Sale>;
    error: ResponseError;
 }
 
 export {
-   Branch,
-   BranchMySQL,
+   Sale,
+   SaleMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
-   BranchResponse,
-   BranchOneResponse,
-   BranchesResponse,
+   SaleResponse,
+   SaleOneResponse,
+   SalesResponse,
    WindowResponse,
    Page,
-   BranchField
+   SaleField
 };

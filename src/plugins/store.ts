@@ -3,7 +3,7 @@ import { createStore, Store } from "vuex";
 import {
    State, SaleProductStore, UserStore, BranchStore,
    PosStore, SaleContentStore, AuthTokenStore
-} from "@/interfaces/store";
+} from "@/types/store";
 import { findValueBy } from "@/plugins/mixins/general";
 
 const store = createStore<State>({

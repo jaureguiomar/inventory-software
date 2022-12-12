@@ -1,7 +1,7 @@
-import { InputFieldString, InputFieldNumber } from "@/interfaces/general";
-import { User } from "@/interfaces/user/user";
-import { Branch } from "@/interfaces/branch/branch";
-import { Pos } from "@/interfaces/pos/pos";
+import { InputFieldString, InputFieldNumber } from "@/types/general";
+import { User } from "@/types/user";
+import { Branch } from "@/types/branch";
+import { Pos } from "@/types/pos";
 
 // Main
 interface MainCashCutoffPermission {

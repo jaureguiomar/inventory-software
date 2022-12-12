@@ -132,12 +132,12 @@ import { useDialogPluginComponent } from "quasar";
 import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { key } from "@/plugins/store";
-import { UserRole } from "@/interfaces/user-role/user-role";
-import { User, UsersResponse } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
-import { Branch } from "@/interfaces/branch/branch";
-import { CashCutoff, CashCutoffOneResponse, CashCutoffResponse } from "@/interfaces/cash-cutoff/cash-cutoff";
-import { SaleProductsM2MResponse } from "@/interfaces/sale-product/sale-product";
+import { UserRole } from "@/types/user-role";
+import { User, UsersResponse } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { Branch } from "@/types/branch";
+import { CashCutoff, CashCutoffOneResponse, CashCutoffResponse } from "@/types/cash-cutoff";
+import { SaleProductsM2MResponse } from "@/types/sale-product";
 
 export default {
    emits: [

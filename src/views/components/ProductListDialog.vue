@@ -81,7 +81,7 @@
 import { useDialogPluginComponent } from "quasar";
 import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n/index";
-import { Product } from "@/interfaces/product/product";
+import { Product } from "@/types/product";
 
 export default {
    props: {

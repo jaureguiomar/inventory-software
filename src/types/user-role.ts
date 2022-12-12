@@ -1,13 +1,17 @@
-import { InputFieldString } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
+import { InputFieldString } from "@/types/general";
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
 
 // Main
-interface MainSupplier {
+interface MainUserRole {
    id: number;
    is_active: number;
    name: string;
+   atributes_1: number;
+   atributes_2: number;
+   atributes_3: number;
+   atributes_4: number;
    id_user: number;
    id_pos: number;
    id_branch: number;
@@ -15,11 +19,11 @@ interface MainSupplier {
    pos: Pos|null;
    branch: Branch|null;
 }
-interface Supplier extends MainSupplier {
+interface UserRole extends MainUserRole {
    created: string;
    updated: string;
 }
-interface SupplierMySQL extends MainSupplier {
+interface UserMySQL extends MainUserRole {
    is_sync: number;
    sync_type: "add"|"update"|"delete";
    created: Date;
@@ -27,7 +31,7 @@ interface SupplierMySQL extends MainSupplier {
 }
 
 // Props
-interface SupplierField {
+interface UserRoleField {
    name: InputFieldString;
 }
 
@@ -35,7 +39,7 @@ interface SupplierField {
 interface IPCParams {
    id: number;
    type: string;
-   data: Supplier;
+   data: UserRole;
 }
 
 // IPCParams Content
@@ -47,7 +51,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Supplier;
+   data?: UserRole;
 }
 
 // Page
@@ -60,14 +64,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Supplier|null;
+   data: UserRole|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: Supplier;
+   data: UserRole;
    ok: boolean;
    message: string;
 }
@@ -76,29 +80,28 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface SupplierResponse {
+interface UserRoleResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface SupplierOneResponse {
-   data: Supplier;
+interface UserRoleOneResponse {
+   data: UserRole;
    error: ResponseError;
 }
-interface SuppliersResponse {
-   data: Array<Supplier>;
+interface UserRolesResponse {
+   data: Array<UserRole>;
    error: ResponseError;
 }
 
 export {
-   Supplier,
-   SupplierMySQL,
+   UserRole,
    Content,
    IPCParams,
    IPCParamsContent,
-   SupplierResponse,
-   SupplierOneResponse,
-   SuppliersResponse,
+   UserRoleResponse,
+   UserRoleOneResponse,
+   UserRolesResponse,
    WindowResponse,
    Page,
-   SupplierField
+   UserRoleField
 };

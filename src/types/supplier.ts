@@ -1,18 +1,13 @@
-import { InputFieldString } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
+import { InputFieldString } from "@/types/general";
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
 
 // Main
-interface MainClient {
+interface MainSupplier {
    id: number;
    is_active: number;
-   first_name: string;
-   last_name: string;
-   address: string;
-   cellphone: string;
-   cellphone2: string|null;
-   email: string;
+   name: string;
    id_user: number;
    id_pos: number;
    id_branch: number;
@@ -20,32 +15,27 @@ interface MainClient {
    pos: Pos|null;
    branch: Branch|null;
 }
-interface Client extends MainClient {
+interface Supplier extends MainSupplier {
    created: string;
    updated: string;
 }
-interface ClientMySQL extends MainClient {
+interface SupplierMySQL extends MainSupplier {
    is_sync: number;
-   sync_type: "add"|"update"|"delete"|null;
+   sync_type: "add"|"update"|"delete";
    created: Date;
    updated: Date;
 }
 
 // Props
-interface ClientField {
-   first_name: InputFieldString;
-   last_name: InputFieldString;
-   address: InputFieldString;
-   cellphone: InputFieldString;
-   cellphone2: InputFieldString;
-   email: InputFieldString;
+interface SupplierField {
+   name: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: Client;
+   data: Supplier;
 }
 
 // IPCParams Content
@@ -57,7 +47,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Client;
+   data?: Supplier;
 }
 
 // Page
@@ -70,14 +60,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Client|null;
+   data: Supplier|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: Client;
+   data: Supplier;
    ok: boolean;
    message: string;
 }
@@ -86,29 +76,29 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface ClientResponse {
+interface SupplierResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface ClientOneResponse {
-   data: Client;
+interface SupplierOneResponse {
+   data: Supplier;
    error: ResponseError;
 }
-interface ClientsResponse {
-   data: Array<Client>;
+interface SuppliersResponse {
+   data: Array<Supplier>;
    error: ResponseError;
 }
 
 export {
-   Client,
-   ClientMySQL,
+   Supplier,
+   SupplierMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
-   ClientResponse,
-   ClientOneResponse,
-   ClientsResponse,
+   SupplierResponse,
+   SupplierOneResponse,
+   SuppliersResponse,
    WindowResponse,
    Page,
-   ClientField
+   SupplierField
 };

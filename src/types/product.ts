@@ -1,9 +1,9 @@
-import { Category } from "@/interfaces/category/category";
-import { InputFieldString, InputFieldNumber, InputFieldBoolean } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
-import { User } from "@/interfaces/user/user";
-import { Pos } from "@/interfaces/pos/pos";
-import { SaleProduct } from "@/interfaces/sale-product/sale-product";
+import { InputFieldString, InputFieldNumber, InputFieldBoolean } from "@/types/general";
+import { Category } from "@/types/category";
+import { Branch } from "@/types/branch";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { SaleProduct } from "@/types/sale-product";
 
 // Main
 interface MainProduct {

@@ -1,6 +1,6 @@
 import { Connection, MysqlError } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { Branch, BranchMySQL } from "@/interfaces/branch/branch";
+import { Branch, BranchMySQL } from "@/types/branch";
 
 export const get_branch_by_id = async(connection:Connection, id:number) => {
    const promise_get_branch_by_id = new Promise<Branch>((resolve) => {

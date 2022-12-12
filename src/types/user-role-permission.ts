@@ -1,4 +1,4 @@
-import { InputFieldString } from "@/interfaces/general";
+import { InputFieldString } from "@/types/general";
 
 // Main
 interface MainUserRolePermission {

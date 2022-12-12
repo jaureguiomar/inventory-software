@@ -1,37 +1,36 @@
-import { InputFieldString } from "@/interfaces/general";
+import { InputFieldString } from "@/types/general";
 
 // Main
-interface MainActivityLogAccess {
+interface MainBranch {
    id: number;
    is_active: number;
    name: string;
+   telephone: string;
+   address: string;
 }
-interface ActivityLogAccess extends MainActivityLogAccess {
+interface Branch extends MainBranch {
    created: string;
    updated: string;
 }
-interface ActivityLogAccessMySQL extends MainActivityLogAccess {
+interface BranchMySQL extends MainBranch {
    is_sync: number;
-   sync_type: "add"|"update"|"delete"|null;
+   sync_type: "add"|"update"|"delete";
    created: Date;
    updated: Date;
 }
-interface ActivityLogAccessMySQLDelete { // Make it as global interface? (MySQLDelete)
-   id: number;
-   is_sync: number;
-   sync_type: "add"|"update"|"delete"|null;
-}
 
 // Props
-interface ActivityLogAccessField {
+interface BranchField {
    name: InputFieldString;
+   telephone: InputFieldString;
+   address: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: ActivityLogAccess;
+   data: Branch;
 }
 
 // IPCParams Content
@@ -43,7 +42,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: ActivityLogAccess;
+   data?: Branch;
 }
 
 // Page
@@ -56,14 +55,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: ActivityLogAccess|null;
+   data: Branch|null;
    result: string;
    type: string;
 }
 
 // Axios response
 interface ResponseOk {
-   data: ActivityLogAccess;
+   data: Branch;
    ok: boolean;
    message: string;
 }
@@ -72,30 +71,29 @@ interface ResponseError {
    message: string|null;
    no_error: number;
 }
-interface ActivityLogAccessResponse {
+interface BranchResponse {
    data: ResponseOk;
    error: ResponseError;
 }
-interface ActivityLogAccessOneResponse {
-   data: ActivityLogAccess;
+interface BranchOneResponse {
+   data: Branch;
    error: ResponseError;
 }
-interface ActivityLogAccessesResponse {
-   data: Array<ActivityLogAccess>;
+interface BranchesResponse {
+   data: Array<Branch>;
    error: ResponseError;
 }
 
 export {
-   ActivityLogAccess,
-   ActivityLogAccessMySQL,
-   ActivityLogAccessMySQLDelete,
+   Branch,
+   BranchMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
-   ActivityLogAccessResponse,
-   ActivityLogAccessOneResponse,
-   ActivityLogAccessesResponse,
+   BranchResponse,
+   BranchOneResponse,
+   BranchesResponse,
    WindowResponse,
    Page,
-   ActivityLogAccessField
+   BranchField
 };

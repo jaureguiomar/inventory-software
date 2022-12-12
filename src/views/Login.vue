@@ -38,8 +38,8 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { create_activity_log } from "@/plugins/mixins/activity-log";
-import { UserAuthResponse } from "@/interfaces/user/user";
-import { SessionStore, UserRoleStore } from "@/interfaces/store";
+import { UserAuthResponse } from "@/types/user";
+import { SessionStore, UserRoleStore } from "@/types/store";
 
 export default defineComponent({
    name: "login-component",

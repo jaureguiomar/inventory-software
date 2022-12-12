@@ -6,9 +6,9 @@ import {
 } from "@/background/mysql/category";
 import { get_branch_by_id } from '@/background/mysql/branch';
 import { parseStringField } from "@/background/mysql/functions";
-import { Category } from "@/interfaces/category/category";
-import { Branch } from "@/interfaces/branch/branch";
-import { MySQLOfflineField } from "@/interfaces/general";
+import { Category } from "@/types/category";
+import { Branch } from "@/types/branch";
+import { MySQLOfflineField } from "@/types/general";
 
 const mysql_connection = {
    host: "localhost",

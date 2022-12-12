@@ -1,5 +1,5 @@
-import { InputFieldString } from "@/interfaces/general";
-import { Branch } from "@/interfaces/branch/branch";
+import { InputFieldString } from "@/types/general";
+import { Branch } from "@/types/branch";
 
 // Main
 interface MainPos {
