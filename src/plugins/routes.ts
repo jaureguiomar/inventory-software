@@ -29,6 +29,7 @@ import UserRoleSee from "@/windows/user-role/UserRoleSee.vue";
 import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import SaleProduct from "@/views/SaleProduct.vue";
+import SaleProductSee from "@/windows/sale-product/SaleProductSee.vue";
 import store from "@/plugins/store";
 import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
 import { AuthTokenStore, BranchStore, PosStore, SessionStore } from "@/types/store";
@@ -331,6 +332,14 @@ const routes = [
          requiresAuth: true
       },
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
+   },
+   {
+      path: "/sale-product-see/:id",
+      component: SaleProductSee,
+      name: "sale-product-see",
+      meta: {
+         requiresAuth: false
+      }
    }
 ];
 

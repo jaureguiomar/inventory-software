@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld(
             "client-module-window", "supplier-module-window",
             "product-module-window", "category-module-window",
             "user-module-window", "user-role-module-window",
-            "print-sale"
+            "sale-product-module-window", "print-sale"
          ];
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);
@@ -23,7 +23,8 @@ contextBridge.exposeInMainWorld(
 
             "main-window-client-module-reply", "main-window-supplier-module-reply",
             "main-window-product-module-reply", "main-window-category-module-reply",
-            "main-window-user-module-reply", "main-window-user-role-module-reply"
+            "main-window-user-module-reply", "main-window-user-role-module-reply",
+            "main-window-sale-product-module-reply"
          ];
          if(validChannels.includes(channel))
             ipcRenderer.on(channel, (event, ...args) => func(...args));

@@ -418,7 +418,7 @@ const i18n = createI18n({
                   }
                },
                see: {
-                  title: "See Catetgory",
+                  title: "See User Role",
                   subtitle: "The user roles in the system",
                },
                field: {
@@ -426,6 +426,69 @@ const i18n = createI18n({
                   created: "Date Created",
                   updated: "Date Updated",
                   name: "Name"
+               },
+               button: {
+                  clear: "Clear",
+                  close: "Close"
+               }
+            }
+         },
+         sale_product: {
+            title: "Sale Products",
+            subtitle: "Description about the sale products view",
+            table: {
+               search: "Search...",
+               field: {
+                  id: "Id Sale Product",
+                  created: "Created",
+                  updated: "Updated",
+                  total: "Total",
+                  show_details: "Show details",
+                  actions: "Actions"
+               },
+               content: {
+                  id: "# User Role",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  total: "Total",
+                  details: {
+                     show_details: "Show details",
+                     hide_details: "Hide details",
+                     empty: "Theres no data to display"
+                  }
+               }
+            },
+            window: {
+               add: {
+                  title: "Add Sale Product",
+                  subtitle: "The sale products that will be added for the use of the system",
+                  button: {
+                     add: "Add"
+                  }
+               },
+               update: {
+                  title: "Update Sale Product",
+                  subtitle: "The sale products that will be updated for the use of the system",
+                  button: {
+                     update: "Update"
+                  }
+               },
+               delete: {
+                  title: "Delete Sale Product",
+                  subtitle: "The sale products that will be deleted from the system",
+                  button: {
+                     delete: "Delete",
+                  }
+               },
+               see: {
+                  title: "See Sale Product",
+                  subtitle: "The sale products in the system",
+               },
+               field: {
+                  id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  total: "Total"
                },
                button: {
                   clear: "Clear",

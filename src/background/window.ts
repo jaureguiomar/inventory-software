@@ -39,6 +39,12 @@ export const window = {
       update: null as any,
       delete: null as any,
       see: null as any
+   },
+   sale_product: {
+      // add: null as any,
+      // update: null as any,
+      // delete: null as any,
+      see: null as any
    }
 };
 
@@ -400,6 +406,66 @@ ipcMain.on("user-role-module-window-close", function(e, data) {
    window.user_role[data.type].destroy();
    window.user_role[data.type] = null;
    window.main.webContents.send("main-window-user-role-module-reply", data);
+});
+
+//////////////////
+// Sale Product //
+ipcMain.on("sale-product-module-window", function(e, data) {
+   if(!window.sale_product[data.type] || window.sale_product[data.type].isDestroyed()) {
+      window.sale_product[data.type] = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preloadSaleProduct.js")
+         }
+      });
+      window.sale_product[data.type].removeMenu();
+      window.sale_product[data.type].maximize();
+
+      let setURL = "";
+      // if(data.type === "add")
+      //    setURL = buildAppRoute() + "/sale-product-add";
+      // else if(data.type === "update")
+      //    setURL = buildAppRoute() + `/sale-product-update/${ data.id }`;
+      // else if(data.type === "delete")
+      //    setURL = buildAppRoute() + `/sale-product-delete/${ data.id }`;
+      if(data.type === "see")
+         setURL = buildAppRoute() + `/sale-product-see/${ data.id }`;
+
+      window.sale_product[data.type].loadURL(setURL);
+      window.sale_product[data.type].show();
+      if(!process.env.IS_TEST)
+         window.sale_product[data.type].webContents.openDevTools();
+
+      window.sale_product[data.type].webContents.once("did-finish-load", function () {
+         window.sale_product[data.type].webContents.send("sale-product-module-window-reply", data);
+      });
+      window.sale_product[data.type].once("close", function () {
+         window.sale_product[data.type].destroy();
+         window.sale_product[data.type] = null;
+      });
+   } else {
+      window.sale_product[data.type].focus();
+   }
+});
+ipcMain.on("sale-product-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.sale_product[data.type], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: data.message,
+   }).then(() => {
+      e.sender.send("sale-product-module-window-dialog-reply");
+   });
+});
+ipcMain.on("sale-product-module-window-close", function(e, data) {
+   window.sale_product[data.type].destroy();
+   window.sale_product[data.type] = null;
+   window.main.webContents.send("main-window-sale-product-module-reply", data);
 });
 
 ///////////////
