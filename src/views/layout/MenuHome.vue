@@ -42,7 +42,7 @@
          </div>
          <div class="bottom">Roles</div>
       </router-link>
-      <router-link to="/sale-report">
+      <router-link to="/sale-product">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-chart-line" size="4x" />
          </div>

@@ -28,7 +28,7 @@ import UserRole from "@/views/UserRole.vue";
 import UserRoleSee from "@/windows/user-role/UserRoleSee.vue";
 import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
-import SaleReport from "@/views/SaleReport.vue";
+import SaleProduct from "@/views/SaleProduct.vue";
 import store from "@/plugins/store";
 import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
 import { AuthTokenStore, BranchStore, PosStore, SessionStore } from "@/types/store";
@@ -324,9 +324,9 @@ const routes = [
       }
    },
    {
-      path: "/sale-report",
-      component: SaleReport,
-      name: "sale-report",
+      path: "/sale-product",
+      component: SaleProduct,
+      name: "sale-product",
       meta: {
          requiresAuth: true
       },
