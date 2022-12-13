@@ -4,7 +4,7 @@ import { UserRole } from "@/types/user-role";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
 import { Sale } from "@/types/sale";
-import { Product } from "@/types/product";
+import { Product, ProductM2M } from "@/types/product";
 import { CashCutoff } from "@/types/cash-cutoff";
 
 export const format_sale = (sale:Sale|null) => {
@@ -57,6 +57,53 @@ export const format_product = (product:Product|null) => {
          user: null,
          pos: null,
          branch: null
+      }
+   }
+   return formatted_data;
+};
+
+export const format_product_m2m = (product_m2m:ProductM2M|null) => {
+   let formatted_data:ProductM2M|null = null;
+   const curr_data = (product_m2m) ? product_m2m : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         is_favorite: Number(curr_data.is_favorite),
+         code: curr_data.code,
+         name: curr_data.name,
+         description: curr_data.description,
+         buy_price: curr_data.buy_price,
+         sale_price: curr_data.sale_price,
+         quantity: Number(curr_data.quantity),
+         id_category: Number(curr_data.id_category),
+         id_user: Number(curr_data.id_user),
+         id_pos: Number(curr_data.id_pos),
+         id_branch: Number(curr_data.id_branch),
+         category: null,
+         user: null,
+         pos: null,
+         branch: null,
+         sale: {
+            id: Number(curr_data.sale.id),
+            is_active: Number(curr_data.sale.is_active),
+            created: curr_data.sale.created,
+            updated: curr_data.sale.updated,
+            quantity: Number(curr_data.sale.quantity),
+            id_sale: Number(curr_data.sale.id_sale),
+            id_product: Number(curr_data.sale.id_product),
+            id_user: Number(curr_data.sale.id_user),
+            id_pos: Number(curr_data.sale.id_pos),
+            id_branch: Number(curr_data.sale.id_branch),
+            sale: null,
+            product: null,
+            user: null,
+            pos: null,
+            branch: null
+         }
       }
    }
    return formatted_data;

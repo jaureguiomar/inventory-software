@@ -3,7 +3,7 @@ import { Branch } from "@/types/branch";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { Sale } from "@/types/sale";
-import { MainProductM2M, Product } from "@/types/product";
+import { ProductM2M, Product } from "@/types/product";
 
 // Main
 interface MainSaleProduct {
@@ -25,14 +25,14 @@ interface SaleProduct extends MainSaleProduct {
    created: string;
    updated: string;
 }
+interface SaleProductM2M extends Sale {
+   product: Array<ProductM2M>;
+}
 interface SaleProductMySQL extends MainSaleProduct {
    is_sync: number;
    sync_type: "add"|"update"|"delete";
    created: Date;
    updated: Date;
-}
-interface SaleProductM2M extends Sale {
-   product: Array<MainProductM2M>;
 }
 
 // Props

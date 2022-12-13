@@ -3,6 +3,7 @@ import { Branch } from "@/types/branch";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { CashCutoff } from "@/types/cash-cutoff";
+import { ProductM2M } from "@/types/product";
 
 // Main
 interface MainSale {
@@ -22,6 +23,11 @@ interface MainSale {
 interface Sale extends MainSale {
    created: string;
    updated: string;
+}
+interface SaleM2M extends MainSale {
+   created: string;
+   updated: string;
+   product: ProductM2M[];
 }
 interface SaleMySQL extends MainSale {
    is_sync: number;
@@ -68,6 +74,12 @@ interface WindowResponse {
    result: string;
    type: string;
 }
+interface WindowResponseM2M {
+   id: number;
+   data: SaleM2M|null;
+   result: string;
+   type: string;
+}
 
 // Axios response
 interface ResponseOk {
@@ -92,9 +104,14 @@ interface SalesResponse {
    data: Array<Sale>;
    error: ResponseError;
 }
+interface SalesM2MResponse {
+   data: Array<SaleM2M>;
+   error: ResponseError;
+}
 
 export {
    Sale,
+   SaleM2M,
    SaleMySQL,
    Content,
    IPCParams,
@@ -102,7 +119,9 @@ export {
    SaleResponse,
    SaleOneResponse,
    SalesResponse,
+   SalesM2MResponse,
    WindowResponse,
+   WindowResponseM2M,
    Page,
    SaleField
 };

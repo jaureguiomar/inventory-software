@@ -73,7 +73,7 @@
                         @click="onSaleProductSeeWindowClick(props.row)"
                      >
                      </q-btn>
-                     <q-btn
+                     <!-- <q-btn
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -86,7 +86,7 @@
                         label="Delete"
                         @click="onSaleProductDeleteWindowClick(props.row)"
                      >
-                     </q-btn>
+                     </q-btn> -->
                   </q-td>
                </template>
 
@@ -112,13 +112,16 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user, format_sale, format_product } from "@/plugins/mixins/format";
-import { SaleProductsResponse, WindowResponse, SaleProduct } from "@/types/sale-product";
+import {
+   format_branch, format_pos, format_user,
+   format_product_m2m, format_cash_cutoff
+} from "@/plugins/mixins/format";
+import { SaleM2M, SalesM2MResponse, WindowResponseM2M } from "@/types/sale";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
-import { Sale } from "@/types/sale";
-import { Product } from "@/types/product";
+import { ProductM2M } from "@/types/product";
+import { CashCutoff } from "@/types/cash-cutoff";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -133,8 +136,8 @@ export default defineComponent({
    setup() {
       const { t } = useI18n();
       const store = useStore(key);
-      const saleProduct = ref<SaleProduct[]>([]);
-      const saleProductVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "name", "actions" ]);
+      const saleProduct = ref<SaleM2M[]>([]);
+      const saleProductVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "total", "actions" ]);
       const saleProductFilter = ref("");
       const saleProductPagination = reactive({
          sortBy: "desc",
@@ -178,11 +181,14 @@ export default defineComponent({
             }
          },
          {
-            name: "name",
-            label: t("sale_product.table.field.name"),
+            name: "total",
+            label: t("sale_product.table.field.total"),
             align: "center",
-            field: "name",
-            sortable: true
+            field: "total",
+            sortable: true,
+            format: (total:string) => {
+               return `$${ total }`;
+            }
          },
          {
             name: "actions",
@@ -205,7 +211,7 @@ export default defineComponent({
       const onRefreshData = () => {
          saleProduct.value = [];
 
-         axios.get<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/select-all.php`,
+         axios.get<SalesM2MResponse>(`${ getServer.value }/sale_product/v3/select-all.php`,
             {
                headers: {
                   'Authorization': `Bearer ${ getAuthToken.value.access_token }`
@@ -215,30 +221,35 @@ export default defineComponent({
             if(response) {
                if(!response.data.error.is_error) {
                   const data = response.data.data;
-                  let formatted_sale_product:Array<SaleProduct> = [];
+                  let formatted_sale_product:Array<SaleM2M> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_sale:Sale|null = format_sale(data[i].sale);
-                     const formatted_product:Product|null = format_product(data[i].product);
+                     const formatted_cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i].cash_cutoff);
                      const formatted_user:User|null = format_user(data[i].user);
                      const formatted_pos:Pos|null = format_pos(data[i].pos);
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
+                     let formatted_product_m2m:ProductM2M[] = [];
+                     for(let i = 0; i < data[i].product.length; i++) {
+                        const curr_product_m2m:ProductM2M|null = format_product_m2m(data[i].product[i]);
+                        if(curr_product_m2m)
+                           formatted_product_m2m.push();
+                     }
 
                      formatted_sale_product.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
                         created: data[i].created,
                         updated: data[i].updated,
-                        quantity: Number(data[i].quantity),
-                        id_sale: Number(data[i].id_sale),
-                        id_product: Number(data[i].id_product),
+                        total: data[i].total,
+                        is_supplier: Number(data[i].is_supplier),
+                        id_cash_cutoff: Number(data[i].id_cash_cutoff),
                         id_user: Number(data[i].id_user),
                         id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
-                        sale: formatted_sale,
-                        product: formatted_product,
+                        cash_cutoff: formatted_cash_cutoff,
                         user: formatted_user,
                         pos: formatted_pos,
-                        branch: formatted_branch
+                        branch: formatted_branch,
+                        product: formatted_product_m2m
                      });
                   }
                   saleProduct.value = formatted_sale_product;
@@ -275,7 +286,7 @@ export default defineComponent({
             data: null
          });
       };
-      const onSaleProductSeeWindowClick = (item:SaleProduct) => {
+      const onSaleProductSeeWindowClick = (item:SaleM2M) => {
          window.api.send("sale-product-module-window", {
             id: item.id,
             type: "see",
@@ -284,74 +295,62 @@ export default defineComponent({
                is_active: item.is_active,
                created: item.created,
                updated: item.updated,
-               quantity: item.quantity,
-               id_sale: item.id_sale,
-               id_product: item.id_product,
+               total: item.total,
+               is_supplier: item.is_supplier,
+               id_cash_cutoff: item.id_cash_cutoff,
                id_user: item.id_user,
                id_pos: item.id_pos,
                id_branch: item.id_branch,
-               sale: { ...item.sale },
-               product: { ...item.product },
-               user: { ...item.user },
-               pos: { ...item.pos },
-               branch: { ...item.branch }
+               product: { ...item.product }
             }
          });
       };
-      const onSaleProductUpdateWindowClick = (item:SaleProduct) => {
-         window.api.send("sale-product-module-window", {
-            id: item.id,
-            type: "update",
-            content: {
-               title: t("sale_product.window.update.title"),
-               description: t("sale_product.window.update.subtitle")
-            },
-            data: {
-               id: item.id,
-               is_active: item.is_active,
-               created: item.created,
-               updated: item.updated,
-               quantity: item.quantity,
-               id_sale: item.id_sale,
-               id_product: item.id_product,
-               id_user: item.id_user,
-               id_pos: item.id_pos,
-               id_branch: item.id_branch,
-               sale: { ...item.sale },
-               product: { ...item.product },
-               user: { ...item.user },
-               pos: { ...item.pos },
-               branch: { ...item.branch }
-            }
-         });
-      };
-      const onSaleProductDeleteWindowClick = (item:SaleProduct) => {
-         window.api.send("sale-product-module-window", {
-            id: item.id,
-            type: "delete",
-            data: {
-               id: item.id,
-               is_active: item.is_active,
-               created: item.created,
-               updated: item.updated,
-               quantity: item.quantity,
-               id_sale: item.id_sale,
-               id_product: item.id_product,
-               id_user: item.id_user,
-               id_pos: item.id_pos,
-               id_branch: item.id_branch,
-               sale: { ...item.sale },
-               product: { ...item.product },
-               user: { ...item.user },
-               pos: { ...item.pos },
-               branch: { ...item.branch }
-            }
-         });
-      };
+      // const onSaleProductUpdateWindowClick = (item:SaleM2M) => {
+      //    window.api.send("sale-product-module-window", {
+      //       id: item.id,
+      //       type: "update",
+      //       content: {
+      //          title: t("sale_product.window.update.title"),
+      //          description: t("sale_product.window.update.subtitle")
+      //       },
+      //       data: {
+      //          id: item.id,
+      //          is_active: item.is_active,
+      //          created: item.created,
+      //          updated: item.updated,
+      //          total: item.total,
+      //          is_supplier: item.is_supplier,
+      //          id_cash_cutoff: item.id_cash_cutoff,
+      //          id_user: item.id_user,
+      //          id_pos: item.id_pos,
+      //          id_branch: item.id_branch,
+      //          product: { ...item.product }
+      //       }
+      //    });
+      // };
+      // const onSaleProductDeleteWindowClick = (item:SaleM2M) => {
+      //    window.api.send("sale-product-module-window", {
+      //       id: item.id,
+      //       type: "delete",
+      //       data: {
+      //          id: item.id,
+      //          is_active: item.is_active,
+      //          created: item.created,
+      //          updated: item.updated,
+      //          total: item.total,
+      //          is_supplier: item.is_supplier,
+      //          id_cash_cutoff: item.id_cash_cutoff,
+      //          id_user: item.id_user,
+      //          id_pos: item.id_pos,
+      //          id_branch: item.id_branch,
+      //          product: { ...item.product }
+      //       }
+      //    });
+      // };
 
       onRefreshData();
       if(!getSaleProductLoadedReply.value) {
-         window.api.receive("main-window-sale-product-module-reply", (data:WindowResponse) => {
+         window.api.receive("main-window-sale-product-module-reply", (data:WindowResponseM2M) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
@@ -371,17 +370,13 @@ export default defineComponent({
                         saleProduct.value[finded_index].is_active = data.data.is_active;
                         saleProduct.value[finded_index].created = data.data.created;
                         saleProduct.value[finded_index].updated = data.data.updated;
-                        saleProduct.value[finded_index].quantity = data.data.quantity;
-                        saleProduct.value[finded_index].id_sale = data.data.id_sale;
-                        saleProduct.value[finded_index].id_product = data.data.id_product;
+                        saleProduct.value[finded_index].total = data.data.total;
+                        saleProduct.value[finded_index].is_supplier = data.data.is_supplier;
+                        saleProduct.value[finded_index].id_cash_cutoff = data.data.id_cash_cutoff;
                         saleProduct.value[finded_index].id_user = data.data.id_user;
                         saleProduct.value[finded_index].id_pos = data.data.id_pos;
                         saleProduct.value[finded_index].id_branch = data.data.id_branch;
-                        saleProduct.value[finded_index].sale = data.data.sale;
                         saleProduct.value[finded_index].product = data.data.product;
-                        saleProduct.value[finded_index].user = data.data.user;
-                        saleProduct.value[finded_index].pos = data.data.pos;
-                        saleProduct.value[finded_index].branch = data.data.branch;
                      }
                   }
                } else if(data.type === "delete") {
@@ -411,8 +406,8 @@ export default defineComponent({
          onRefreshData,
          onSaleProductAddWindowClick,
          onSaleProductSeeWindowClick,
-         onSaleProductUpdateWindowClick,
-         onSaleProductDeleteWindowClick,
+         // onSaleProductUpdateWindowClick,
+         // onSaleProductDeleteWindowClick,
          getFormattedDate,
          getFormattedDateString
       }

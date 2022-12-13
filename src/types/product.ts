@@ -25,12 +25,14 @@ interface MainProduct {
    pos: Pos|null;
    branch: Branch|null;
 }
-interface MainProductM2M extends MainProduct {
-   sale: SaleProduct
-}
 interface Product extends MainProduct {
    created: string;
    updated: string;
+}
+interface ProductM2M extends MainProduct {
+   created: string;
+   updated: string;
+   sale: SaleProduct;
 }
 interface ProductMySQL extends MainProduct {
    is_sync: number;
@@ -110,8 +112,8 @@ interface ProductsResponse {
 }
 
 export {
-   MainProductM2M,
    Product,
+   ProductM2M,
    ProductMySQL,
    Content,
    IPCParams,
