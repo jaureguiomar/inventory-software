@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("sale_product.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onUserRoleAddWindowClick">
+            <a class="q-mr-sm text-white cursor-pointer" @click="onSaleProductAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -24,7 +24,7 @@
       <Content>
          <template #content>
             <q-table
-               title="User Roles List"
+               title="Sale Products List"
                :rows="saleProduct"
                :columns="saleProductColumns"
                :no-data-label="t('sale_product.table.content.details.empty')"
@@ -38,7 +38,7 @@
                :filter="saleProductFilter"
             >
                <template #top>
-                  <h6 class="q-ma-none q-mr-md">User Roles List</h6>
+                  <h6 class="q-ma-none q-mr-md">Sale Products List</h6>
                   <q-input v-model="saleProductFilter" dense debounce="300" placeholder="Search">
                      <template #append>
                         <font-awesome-icon icon="fa-solid fa-search" size="1x" />
@@ -70,21 +70,21 @@
                         class="q-mr-sm"
                         color="primary"
                         label="See"
-                        @click="onUserRoleSeeWindowClick(props.row)"
+                        @click="onSaleProductSeeWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
-                        @click="onUserRoleUpdateWindowClick(props.row)"
+                        @click="onSaleProductUpdateWindowClick(props.row)"
                      >
                      </q-btn>
                      <q-btn
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
-                        @click="onUserRoleDeleteWindowClick(props.row)"
+                        @click="onSaleProductDeleteWindowClick(props.row)"
                      >
                      </q-btn>
                   </q-td>
@@ -112,7 +112,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
+import { format_branch, format_pos, format_user, format_sale, format_product } from "@/plugins/mixins/format";
 import { SaleProductsResponse, WindowResponse, SaleProduct } from "@/types/sale-product";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -122,7 +122,6 @@ import { Product } from "@/types/product";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
-import { format_sale, format_product } from '../plugins/mixins/format';
 
 export default defineComponent({
    name: "sale-product-component",
@@ -199,8 +198,8 @@ export default defineComponent({
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
-      const getSaleLoadedReply = computed(() => {
-         return store.getters["getSaleLoadedReply"];
+      const getSaleProductLoadedReply = computed(() => {
+         return store.getters["getSaleProductLoadedReply"];
       });
 
       const onRefreshData = () => {
@@ -265,8 +264,8 @@ export default defineComponent({
             });
          });
       };
-      const onUserRoleAddWindowClick = () => {
-         window.api.send("user-role-module-window", {
+      const onSaleProductAddWindowClick = () => {
+         window.api.send("sale-product-module-window", {
             id: -1,
             type: "add",
             content: {
@@ -276,8 +275,8 @@ export default defineComponent({
             data: null
          });
       };
-      const onUserRoleSeeWindowClick = (item:SaleProduct) => {
-         window.api.send("user-role-module-window", {
+      const onSaleProductSeeWindowClick = (item:SaleProduct) => {
+         window.api.send("sale-product-module-window", {
             id: item.id,
             type: "see",
             data: {
@@ -299,8 +298,8 @@ export default defineComponent({
             }
          });
       };
-      const onUserRoleUpdateWindowClick = (item:SaleProduct) => {
-         window.api.send("user-role-module-window", {
+      const onSaleProductUpdateWindowClick = (item:SaleProduct) => {
+         window.api.send("sale-product-module-window", {
             id: item.id,
             type: "update",
             content: {
@@ -326,8 +325,8 @@ export default defineComponent({
             }
          });
       };
-      const onUserRoleDeleteWindowClick = (item:SaleProduct) => {
-         window.api.send("user-role-module-window", {
+      const onSaleProductDeleteWindowClick = (item:SaleProduct) => {
+         window.api.send("sale-product-module-window", {
             id: item.id,
             type: "delete",
             data: {
@@ -351,8 +350,8 @@ export default defineComponent({
       };
 
       onRefreshData();
-      if(!getSaleLoadedReply.value) {
-         window.api.receive("main-window-user-role-module-reply", (data:WindowResponse) => {
+      if(!getSaleProductLoadedReply.value) {
+         window.api.receive("main-window-sale-product-module-reply", (data:WindowResponse) => {
             if(data.result === "success") {
                if(data.type === "add") {
                   if(data.data)
@@ -399,7 +398,7 @@ export default defineComponent({
                }
             }
          });
-         store.commit("SET_USER_ROLE_LOADED_REPLY", true);
+         store.commit("SET_SALE_PRODUCT_LOADED_REPLY", true);
       }
 
       return {
@@ -410,10 +409,10 @@ export default defineComponent({
          saleProductFilter,
          saleProductPagination,
          onRefreshData,
-         onUserRoleAddWindowClick,
-         onUserRoleSeeWindowClick,
-         onUserRoleUpdateWindowClick,
-         onUserRoleDeleteWindowClick,
+         onSaleProductAddWindowClick,
+         onSaleProductSeeWindowClick,
+         onSaleProductUpdateWindowClick,
+         onSaleProductDeleteWindowClick,
          getFormattedDate,
          getFormattedDateString
       }

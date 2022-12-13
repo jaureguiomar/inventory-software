@@ -68,6 +68,9 @@ const store = createStore<State>({
          },
          user_role: {
             loaded_reply: false
+         },
+         sale_product: {
+            loaded_reply: false
          }
       }
    },
@@ -137,6 +140,9 @@ const store = createStore<State>({
       },
       getUserLRoleoadedReply(state:State) {
          return state.user_role.loaded_reply;
+      },
+      getSaleProductLoadedReply(state:State) {
+         return state.sale_product.loaded_reply;
       }
    },
    mutations: {
@@ -240,6 +246,9 @@ const store = createStore<State>({
       },
       SET_USER_ROLE_LOADED_REPLY: (state:State, data:boolean) => {
          state.user_role.loaded_reply = data;
+      },
+      SET_SALE_PRODUCT_LOADED_REPLY: (state:State, data:boolean) => {
+         state.sale_product.loaded_reply = data;
       }
    }
 });
