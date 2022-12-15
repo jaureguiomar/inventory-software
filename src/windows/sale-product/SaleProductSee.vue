@@ -316,9 +316,6 @@ export default defineComponent({
             saleProduct.user = data.data.user;
             saleProduct.pos = data.data.pos;
             saleProduct.branch = data.data.branch;
-
-            console.error("---");
-            console.log("saleProduct", saleProduct);
          }
          loaded.value = true;
       });
