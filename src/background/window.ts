@@ -68,13 +68,13 @@ ipcMain.on("client-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = buildAppRoute() + "/client-add";
+         setURL = buildAppRoute() + "/client/add";
       else if(data.type === "update")
-         setURL = buildAppRoute() + `/client-update/${ data.id }`;
+         setURL = buildAppRoute() + `/client/update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = buildAppRoute() + `/client-delete/${ data.id }`;
+         setURL = buildAppRoute() + `/client/delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = buildAppRoute() + `/client-see/${ data.id }`;
+         setURL = buildAppRoute() + `/client/see/${ data.id }`;
 
       window.client[data.type].loadURL(setURL);
       window.client[data.type].show();
@@ -128,13 +128,13 @@ ipcMain.on("supplier-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = buildAppRoute() + "/supplier-add";
+         setURL = buildAppRoute() + "/supplier/add";
       else if(data.type === "update")
-         setURL = buildAppRoute() + `/supplier-update/${ data.id }`;
+         setURL = buildAppRoute() + `/supplier/update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = buildAppRoute() + `/supplier-delete/${ data.id }`;
+         setURL = buildAppRoute() + `/supplier/delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = buildAppRoute() + `/supplier-see/${ data.id }`;
+         setURL = buildAppRoute() + `/supplier/see/${ data.id }`;
 
       window.supplier[data.type].loadURL(setURL);
       window.supplier[data.type].show();
@@ -188,13 +188,13 @@ ipcMain.on("product-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = buildAppRoute() + "/product-add";
+         setURL = buildAppRoute() + "/product/add";
       else if(data.type === "update")
-         setURL = buildAppRoute() + `/product-update/${ data.id }`;
+         setURL = buildAppRoute() + `/product/update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = buildAppRoute() + `/product-delete/${ data.id }`;
+         setURL = buildAppRoute() + `/product/delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = buildAppRoute() + `/product-see/${ data.id }`;
+         setURL = buildAppRoute() + `/product/see/${ data.id }`;
 
       window.product[data.type].loadURL(setURL);
       window.product[data.type].show();
@@ -248,13 +248,13 @@ ipcMain.on("category-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = buildAppRoute() + "/category-add";
+         setURL = buildAppRoute() + "/category/add";
       else if(data.type === "update")
-         setURL = buildAppRoute() + `/category-update/${ data.id }`;
+         setURL = buildAppRoute() + `/category/update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = buildAppRoute() + `/category-delete/${ data.id }`;
+         setURL = buildAppRoute() + `/category/delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = buildAppRoute() + `/category-see/${ data.id }`;
+         setURL = buildAppRoute() + `/category/see/${ data.id }`;
 
       window.category[data.type].loadURL(setURL);
       window.category[data.type].show();
@@ -308,13 +308,13 @@ ipcMain.on("user-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = buildAppRoute() + "/user-add";
+         setURL = buildAppRoute() + "/user/add";
       else if(data.type === "update")
-         setURL = buildAppRoute() + `/user-update/${ data.id }`;
+         setURL = buildAppRoute() + `/user/update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = buildAppRoute() + `/user-delete/${ data.id }`;
+         setURL = buildAppRoute() + `/user/delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = buildAppRoute() + `/user-see/${ data.id }`;
+         setURL = buildAppRoute() + `/user/see/${ data.id }`;
 
       window.user[data.type].loadURL(setURL);
       window.user[data.type].show();
@@ -368,13 +368,13 @@ ipcMain.on("user-role-module-window", function(e, data) {
 
       let setURL = "";
       if(data.type === "add")
-         setURL = buildAppRoute() + "/user-role-add";
+         setURL = buildAppRoute() + "/user-role/add";
       else if(data.type === "update")
-         setURL = buildAppRoute() + `/user-role-update/${ data.id }`;
+         setURL = buildAppRoute() + `/user-role/update/${ data.id }`;
       else if(data.type === "delete")
-         setURL = buildAppRoute() + `/user-role-delete/${ data.id }`;
+         setURL = buildAppRoute() + `/user-role/delete/${ data.id }`;
       else if(data.type === "see")
-         setURL = buildAppRoute() + `/user-role-see/${ data.id }`;
+         setURL = buildAppRoute() + `/user-role/see/${ data.id }`;
 
       window.user_role[data.type].loadURL(setURL);
       window.user_role[data.type].show();
@@ -428,13 +428,13 @@ ipcMain.on("sale-product-module-window", function(e, data) {
 
       let setURL = "";
       // if(data.type === "add")
-      //    setURL = buildAppRoute() + "/sale-product-add";
+      //    setURL = buildAppRoute() + "/sale-product/add";
       // else if(data.type === "update")
-      //    setURL = buildAppRoute() + `/sale-product-update/${ data.id }`;
+      //    setURL = buildAppRoute() + `/sale-product/update/${ data.id }`;
       // else if(data.type === "delete")
-      //    setURL = buildAppRoute() + `/sale-product-delete/${ data.id }`;
+      //    setURL = buildAppRoute() + `/sale-product/delete/${ data.id }`;
       if(data.type === "see")
-         setURL = buildAppRoute() + `/sale-product-see/${ data.id }`;
+         setURL = buildAppRoute() + `/sale-product/see/${ data.id }`;
 
       window.sale_product[data.type].loadURL(setURL);
       window.sale_product[data.type].show();

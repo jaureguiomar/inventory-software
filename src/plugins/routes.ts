@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, _RouteLocationBase } from "vue-router";
+import { createRouter, RouteRecordRaw, createWebHashHistory, _RouteLocationBase } from "vue-router";
 import Login from "@/views/Login.vue";
 import BranchSelect from "@/views/BranchSelect.vue";
 import BranchDisabled from "@/views/BranchDisabled.vue";
@@ -34,7 +34,7 @@ import store from "@/plugins/store";
 import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
 import { AuthTokenStore, BranchStore, PosStore, SessionStore } from "@/types/store";
 
-const routes = [
+const routes:RouteRecordRaw[] = [
    {
       path: "/login",
       component: Login,
@@ -88,15 +88,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/client-see/:id",
-      component: ClientSee,
-      name: "client-see",
-      meta: {
-         requiresAuth: false
-      }
-   },
-   {
-      path: "/client-add",
+      path: "/client/add",
       component: ClientAddUpdate,
       name: "client-add",
       meta: {
@@ -104,7 +96,7 @@ const routes = [
       }
    },
    {
-      path: "/client-update/:id",
+      path: "/client/update/:id",
       component: ClientAddUpdate,
       name: "client-update",
       meta: {
@@ -112,9 +104,17 @@ const routes = [
       }
    },
    {
-      path: "/client-delete/:id",
+      path: "/client/delete/:id",
       component: ClientDelete,
       name: "client-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/client/see/:id",
+      component: ClientSee,
+      name: "client-see",
       meta: {
          requiresAuth: false
       }
@@ -129,15 +129,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/supplier-see/:id",
-      component: SupplierSee,
-      name: "supplier-see",
-      meta: {
-         requiresAuth: false
-      }
-   },
-   {
-      path: "/supplier-add",
+      path: "/supplier/add",
       component: SupplierAddUpdate,
       name: "supplier-add",
       meta: {
@@ -145,7 +137,7 @@ const routes = [
       }
    },
    {
-      path: "/supplier-update/:id",
+      path: "/supplier/update/:id",
       component: SupplierAddUpdate,
       name: "supplier-update",
       meta: {
@@ -153,9 +145,17 @@ const routes = [
       }
    },
    {
-      path: "/supplier-delete/:id",
+      path: "/supplier/delete/:id",
       component: SupplierDelete,
       name: "supplier-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/supplier/see/:id",
+      component: SupplierSee,
+      name: "supplier-see",
       meta: {
          requiresAuth: false
       }
@@ -170,15 +170,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/product-see/:id",
-      component: ProductSee,
-      name: "product-see",
-      meta: {
-         requiresAuth: false
-      }
-   },
-   {
-      path: "/product-add",
+      path: "/product/add",
       component: ProductAddUpdate,
       name: "product-add",
       meta: {
@@ -186,7 +178,7 @@ const routes = [
       }
    },
    {
-      path: "/product-update/:id",
+      path: "/product/update/:id",
       component: ProductAddUpdate,
       name: "product-update",
       meta: {
@@ -194,9 +186,17 @@ const routes = [
       }
    },
    {
-      path: "/product-delete/:id",
+      path: "/product/delete/:id",
       component: ProductDelete,
       name: "product-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/product/see/:id",
+      component: ProductSee,
+      name: "product-see",
       meta: {
          requiresAuth: false
       }
@@ -211,15 +211,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/category-see/:id",
-      component: CategorySee,
-      name: "category-see",
-      meta: {
-         requiresAuth: false
-      }
-   },
-   {
-      path: "/category-add",
+      path: "/category/add",
       component: CategoryAddUpdate,
       name: "category-add",
       meta: {
@@ -227,7 +219,7 @@ const routes = [
       }
    },
    {
-      path: "/category-update/:id",
+      path: "/category/update/:id",
       component: CategoryAddUpdate,
       name: "category-update",
       meta: {
@@ -235,9 +227,17 @@ const routes = [
       }
    },
    {
-      path: "/category-delete/:id",
+      path: "/category/delete/:id",
       component: CategoryDelete,
       name: "category-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/category/see/:id",
+      component: CategorySee,
+      name: "category-see",
       meta: {
          requiresAuth: false
       }
@@ -252,15 +252,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/user-see/:id",
-      component: UserSee,
-      name: "user-see",
-      meta: {
-         requiresAuth: false
-      }
-   },
-   {
-      path: "/user-add",
+      path: "/user/add",
       component: UserAddUpdate,
       name: "user-add",
       meta: {
@@ -268,7 +260,7 @@ const routes = [
       }
    },
    {
-      path: "/user-update/:id",
+      path: "/user/update/:id",
       component: UserAddUpdate,
       name: "user-update",
       meta: {
@@ -276,9 +268,17 @@ const routes = [
       }
    },
    {
-      path: "/user-delete/:id",
+      path: "/user/delete/:id",
       component: UserDelete,
       name: "user-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user/see/:id",
+      component: UserSee,
+      name: "user-see",
       meta: {
          requiresAuth: false
       }
@@ -293,15 +293,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/user-role-see/:id",
-      component: UserRoleSee,
-      name: "user-role-see",
-      meta: {
-         requiresAuth: false
-      }
-   },
-   {
-      path: "/user-role-add",
+      path: "/user-role/add",
       component: UserRoleAddUpdate,
       name: "user-role-add",
       meta: {
@@ -309,7 +301,7 @@ const routes = [
       }
    },
    {
-      path: "/user-role-update/:id",
+      path: "/user-role/update/:id",
       component: UserRoleAddUpdate,
       name: "user-role-update",
       meta: {
@@ -317,9 +309,17 @@ const routes = [
       }
    },
    {
-      path: "/user-role-delete/:id",
+      path: "/user-role/delete/:id",
       component: UserRoleDelete,
       name: "user-role-delete",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/user-role/see/:id",
+      component: UserRoleSee,
+      name: "user-role-see",
       meta: {
          requiresAuth: false
       }
@@ -334,7 +334,7 @@ const routes = [
       beforeEnter: [ validateBranchSelect, validateBranchActive ]
    },
    {
-      path: "/sale-product-see/:id",
+      path: "/sale-product/see/:id",
       component: SaleProductSee,
       name: "sale-product-see",
       meta: {
