@@ -227,11 +227,12 @@ export default defineComponent({
                      const formatted_user:User|null = format_user(data[i].user);
                      const formatted_pos:Pos|null = format_pos(data[i].pos);
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
-                     let formatted_product_m2m:ProductM2M[] = [];
-                     for(let i = 0; i < data[i].product.length; i++) {
-                        const curr_product_m2m:ProductM2M|null = format_product_m2m(data[i].product[i]);
+                     const formatted_product_m2m:ProductM2M[] = [];
+
+                     for(let j = 0; j < data[i].product.length; j++) {
+                        const curr_product_m2m:ProductM2M|null = format_product_m2m(data[i].product[j]);
                         if(curr_product_m2m)
-                           formatted_product_m2m.push();
+                           formatted_product_m2m.push(curr_product_m2m);
                      }
 
                      formatted_sale_product.push({
@@ -301,7 +302,11 @@ export default defineComponent({
                id_user: item.id_user,
                id_pos: item.id_pos,
                id_branch: item.id_branch,
-               product: { ...item.product }
+               product: JSON.parse(JSON.stringify(item.product)),
+               cash_cutoff: { ...item.cash_cutoff },
+               user: { ...item.user },
+               pos: { ...item.pos },
+               branch: { ...item.branch }
             }
          });
       };
@@ -324,7 +329,11 @@ export default defineComponent({
       //          id_user: item.id_user,
       //          id_pos: item.id_pos,
       //          id_branch: item.id_branch,
-      //          product: { ...item.product }
+      //          product: JSON.parse(JSON.stringify(item.product)),
+      //          cash_cutoff: { ...item.cash_cutoff },
+      //          user: { ...item.user },
+      //          pos: { ...item.pos },
+      //          branch: { ...item.branch }
       //       }
       //    });
       // };
@@ -343,7 +352,11 @@ export default defineComponent({
       //          id_user: item.id_user,
       //          id_pos: item.id_pos,
       //          id_branch: item.id_branch,
-      //          product: { ...item.product }
+      //          product: JSON.parse(JSON.stringify(item.product)),
+      //          cash_cutoff: { ...item.cash_cutoff },
+      //          user: { ...item.user },
+      //          pos: { ...item.pos },
+      //          branch: { ...item.branch }
       //       }
       //    });
       // };

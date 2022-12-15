@@ -47,6 +47,11 @@ interface IPCParams {
    type: string;
    data: Sale;
 }
+interface IPCParamsM2M {
+   id: number;
+   type: string;
+   data: SaleM2M;
+}
 
 // IPCParams Content
 interface Content {
@@ -115,6 +120,7 @@ export {
    SaleMySQL,
    Content,
    IPCParams,
+   IPCParamsM2M,
    IPCParamsContent,
    SaleResponse,
    SaleOneResponse,
