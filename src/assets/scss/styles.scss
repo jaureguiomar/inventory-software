@@ -7,6 +7,8 @@
   display: block;
   padding: 16px;
   background: #5cdb94;
+  overflow: hidden;
+  overflow-y: auto;
 }
 .position-relative {
   position: relative;

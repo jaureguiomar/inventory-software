@@ -13,7 +13,7 @@
 
          <Content>
             <template #content>
-               <!-- <div class="row">
+               <div class="row">
                   <div class="col-md-2 col-12">
                      <q-input
                         v-if="saleProduct.id > 0"
@@ -25,7 +25,7 @@
                      </q-input>
                   </div>
                </div>
-               <div class="row">
+               <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
                         v-model="saleProduct.created"
@@ -37,8 +37,8 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="saleProduct.updated"
-                        :label="t('sale_product.window.field.updated') + ':'"
+                        v-model="saleProduct.total"
+                        :label="t('sale_product.window.field.total') + ':'"
                         type="text"
                         readonly
                      >
@@ -47,34 +47,16 @@
                </div>
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
-                     <q-input
-                        v-model="saleProduct.name"
-                        :label="t('sale_product.window.field.name') + ':'"
-                        type="text"
-                        readonly
+                     <q-checkbox
+                        v-model="saleProduct.is_supplier"
+                        :label="t('sale_product.window.field.is_supplier')"
                      >
-                     </q-input>
-                  </div>
-                  <div class="col-md-6 col-12">
-                     <q-input
-                        v-model="saleProduct.branch.name"
-                        label="Created in:"
-                        type="text"
-                        readonly
-                     >
-                     </q-input>
+                     </q-checkbox>
                   </div>
                </div>
-               <div class="text-center">
-                  <q-btn
-                     color="primary"
-                     :label="t('sale_product.window.button.close')"
-                     @click="onClose"
-                  >
-                  </q-btn>
-               </div> -->
 
                <q-table
+                  class="q-mb-md"
                   title="Sale Products List"
                   :rows="saleProduct.product"
                   :columns="productColumns"
@@ -124,6 +106,15 @@
                      </div>
                   </template>
                </q-table>
+
+               <div class="text-center">
+                  <q-btn
+                     color="primary"
+                     :label="t('sale_product.window.button.close')"
+                     @click="onClose"
+                  >
+                  </q-btn>
+               </div>
             </template>
          </Content>
       </div>

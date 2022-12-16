@@ -442,6 +442,10 @@ const i18n = createI18n({
                   id: "Id Sale Product",
                   created: "Created",
                   updated: "Updated",
+                  code: "Code",
+                  name: "Name",
+                  description: "Description",
+                  sale_price: "Sale price",
                   total: "Total",
                   show_details: "Show details",
                   actions: "Actions"
@@ -459,27 +463,27 @@ const i18n = createI18n({
                }
             },
             window: {
-               add: {
-                  title: "Add Sale Product",
-                  subtitle: "The sale products that will be added for the use of the system",
-                  button: {
-                     add: "Add"
-                  }
-               },
-               update: {
-                  title: "Update Sale Product",
-                  subtitle: "The sale products that will be updated for the use of the system",
-                  button: {
-                     update: "Update"
-                  }
-               },
-               delete: {
-                  title: "Delete Sale Product",
-                  subtitle: "The sale products that will be deleted from the system",
-                  button: {
-                     delete: "Delete",
-                  }
-               },
+               // add: {
+               //    title: "Add Sale Product",
+               //    subtitle: "The sale products that will be added for the use of the system",
+               //    button: {
+               //       add: "Add"
+               //    }
+               // },
+               // update: {
+               //    title: "Update Sale Product",
+               //    subtitle: "The sale products that will be updated for the use of the system",
+               //    button: {
+               //       update: "Update"
+               //    }
+               // },
+               // delete: {
+               //    title: "Delete Sale Product",
+               //    subtitle: "The sale products that will be deleted from the system",
+               //    button: {
+               //       delete: "Delete",
+               //    }
+               // },
                see: {
                   title: "See Sale Product",
                   subtitle: "The sale products in the system",
@@ -488,7 +492,8 @@ const i18n = createI18n({
                   id: "ID",
                   created: "Date Created",
                   updated: "Date Updated",
-                  total: "Total"
+                  total: "Total",
+                  is_supplier: "Is a supplier sale"
                },
                button: {
                   clear: "Clear",
