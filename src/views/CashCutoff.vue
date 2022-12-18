@@ -9,9 +9,9 @@
             <p class="q-ma-none">{{ t("cash_cutoff.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onCashCutoffAddWindowClick">
+            <!-- <a class="q-mr-sm text-white cursor-pointer" @click="onCashCutoffAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
-            </a>
+            </a> -->
             <a class="text-white cursor-pointer" @click="onRefreshData">
                <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
             </a>
@@ -329,17 +329,17 @@ export default defineComponent({
             });
          });
       };
-      const onCashCutoffAddWindowClick = () => {
-         window.api.send("cash-cutoff-module-window", {
-            id: -1,
-            type: "add",
-            content: {
-               title: t("cash_cutoff.window.add.title"),
-               description: t("cash_cutoff.window.add.subtitle")
-            },
-            data: null
-         });
-      };
+      // const onCashCutoffAddWindowClick = () => {
+      //    window.api.send("cash-cutoff-module-window", {
+      //       id: -1,
+      //       type: "add",
+      //       content: {
+      //          title: t("cash_cutoff.window.add.title"),
+      //          description: t("cash_cutoff.window.add.subtitle")
+      //       },
+      //       data: null
+      //    });
+      // };
       const onCashCutoffSeeWindowClick = (item:CashCutoff) => {
          window.api.send("cash-cutoff-module-window", {
             id: item.id,
@@ -486,7 +486,7 @@ export default defineComponent({
          cashCutoffFilter,
          cashCutoffPagination,
          onRefreshData,
-         onCashCutoffAddWindowClick,
+         // onCashCutoffAddWindowClick,
          onCashCutoffSeeWindowClick,
          // onCashCutoffUpdateWindowClick,
          // onCashCutoffDeleteWindowClick,

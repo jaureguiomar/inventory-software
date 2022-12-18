@@ -45,6 +45,12 @@ export const window = {
       // update: null as any,
       // delete: null as any,
       see: null as any
+   },
+   cash_cutoff: {
+      // add: null as any,
+      // update: null as any,
+      // delete: null as any,
+      see: null as any
    }
 };
 
@@ -466,6 +472,66 @@ ipcMain.on("sale-product-module-window-close", function(e, data) {
    window.sale_product[data.type].destroy();
    window.sale_product[data.type] = null;
    window.main.webContents.send("main-window-sale-product-module-reply", data);
+});
+
+/////////////////
+// Cash Cutoff //
+ipcMain.on("cash-cutoff-module-window", function(e, data) {
+   if(!window.cash_cutoff[data.type] || window.cash_cutoff[data.type].isDestroyed()) {
+      window.cash_cutoff[data.type] = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preloadCashCutoff.js")
+         }
+      });
+      window.cash_cutoff[data.type].removeMenu();
+      window.cash_cutoff[data.type].maximize();
+
+      let setURL = "";
+      // if(data.type === "add")
+      //    setURL = buildAppRoute() + "/cash-cutoff/add";
+      // else if(data.type === "update")
+      //    setURL = buildAppRoute() + `/cash-cutoff/update/${ data.id }`;
+      // else if(data.type === "delete")
+      //    setURL = buildAppRoute() + `/cash-cutoff/delete/${ data.id }`;
+      if(data.type === "see")
+         setURL = buildAppRoute() + `/cash-cutoff/see/${ data.id }`;
+
+      window.cash_cutoff[data.type].loadURL(setURL);
+      window.cash_cutoff[data.type].show();
+      if(!process.env.IS_TEST)
+         window.cash_cutoff[data.type].webContents.openDevTools();
+
+      window.cash_cutoff[data.type].webContents.once("did-finish-load", function () {
+         window.cash_cutoff[data.type].webContents.send("cash-cutoff-module-window-reply", data);
+      });
+      window.cash_cutoff[data.type].once("close", function () {
+         window.cash_cutoff[data.type].destroy();
+         window.cash_cutoff[data.type] = null;
+      });
+   } else {
+      window.cash_cutoff[data.type].focus();
+   }
+});
+ipcMain.on("cash-cutoff-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.cash_cutoff[data.type], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: data.message,
+   }).then(() => {
+      e.sender.send("cash-cutoff-module-window-dialog-reply");
+   });
+});
+ipcMain.on("cash-cutoff-module-window-close", function(e, data) {
+   window.cash_cutoff[data.type].destroy();
+   window.cash_cutoff[data.type] = null;
+   window.main.webContents.send("main-window-cash-cutoff-module-reply", data);
 });
 
 ///////////////

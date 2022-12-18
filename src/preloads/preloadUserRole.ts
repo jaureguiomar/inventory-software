@@ -2,12 +2,12 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
    "api", {
-      send: (channel:string, data) => {
+      send: (channel:string, data:any) => {
          const validChannels:Array<string> = ["user-role-module-window-dialog", "user-role-module-window-close"];
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);
       },
-      receive: (channel:string, func) => {
+      receive: (channel:string, func:any) => {
          const validChannels:Array<string> = ["user-role-module-window-dialog-reply", "user-role-module-window-reply"];
          if(validChannels.includes(channel))
             ipcRenderer.on(channel, (event, ...args) => func(...args));

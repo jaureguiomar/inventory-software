@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
    "api", {
-      send: (channel:string, data) => {
+      send: (channel:string, data:any) => {
          const validChannels:Array<string> = [
             "category-module-window-dialog", "category-module-window-close",
 
@@ -12,7 +12,7 @@ contextBridge.exposeInMainWorld(
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);
       },
-      receive: (channel:string, func) => {
+      receive: (channel:string, func:any) => {
          const validChannels:Array<string> = [
             "category-module-window-dialog-reply", "category-module-window-reply",
 

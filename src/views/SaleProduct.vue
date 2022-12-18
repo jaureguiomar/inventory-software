@@ -9,9 +9,9 @@
             <p class="q-ma-none">{{ t("sale_product.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onSaleProductAddWindowClick">
+            <!-- <a class="q-mr-sm text-white cursor-pointer" @click="onSaleProductAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
-            </a>
+            </a> -->
             <a class="text-white cursor-pointer" @click="onRefreshData">
                <font-awesome-icon icon="fa-solid fa-arrows-rotate"></font-awesome-icon>
             </a>
@@ -314,17 +314,17 @@ export default defineComponent({
             });
          });
       };
-      const onSaleProductAddWindowClick = () => {
-         window.api.send("sale-product-module-window", {
-            id: -1,
-            type: "add",
-            content: {
-               title: t("sale_product.window.add.title"),
-               description: t("sale_product.window.add.subtitle")
-            },
-            data: null
-         });
-      };
+      // const onSaleProductAddWindowClick = () => {
+      //    window.api.send("sale-product-module-window", {
+      //       id: -1,
+      //       type: "add",
+      //       content: {
+      //          title: t("sale_product.window.add.title"),
+      //          description: t("sale_product.window.add.subtitle")
+      //       },
+      //       data: null
+      //    });
+      // };
       const onSaleProductSeeWindowClick = (item:SaleM2M) => {
          window.api.send("sale-product-module-window", {
             id: item.id,
@@ -458,7 +458,7 @@ export default defineComponent({
          saleProductFilter,
          saleProductPagination,
          onRefreshData,
-         onSaleProductAddWindowClick,
+         // onSaleProductAddWindowClick,
          onSaleProductSeeWindowClick,
          // onSaleProductUpdateWindowClick,
          // onSaleProductDeleteWindowClick,
