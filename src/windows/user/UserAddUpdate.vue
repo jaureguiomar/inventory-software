@@ -399,7 +399,7 @@ export default defineComponent({
       axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
          {
             headers: {
-               'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               "Authorization": `Bearer ${ getAuthToken.value.access_token }`
             }
          }
       ).then((response) => {
@@ -587,7 +587,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -659,7 +659,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -721,7 +721,7 @@ export default defineComponent({
             let response = await axios.get<UserRoleOneResponse>(`${ getServer.value }/user_role/v3/select-one.php?id=${ formatted_data.id_role }`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );

@@ -203,7 +203,7 @@ export default defineComponent({
             axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
             ).then((response) => {

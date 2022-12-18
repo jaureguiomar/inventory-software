@@ -245,7 +245,7 @@ export default defineComponent({
          axios.get<SalesM2MResponse>(`${ getServer.value }/sale_product/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {

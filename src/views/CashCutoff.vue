@@ -270,7 +270,7 @@ export default defineComponent({
          axios.get<CashCutoffsResponse>(`${ getServer.value }/cash_cutoff/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {

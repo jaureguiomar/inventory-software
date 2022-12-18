@@ -195,7 +195,7 @@ export default {
                   id_branch: getBranchId.value
                },
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
@@ -252,7 +252,7 @@ export default {
          axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
@@ -372,7 +372,7 @@ export default {
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -396,7 +396,7 @@ export default {
                         query: lastCashCutoff.id
                      },
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -440,7 +440,7 @@ export default {
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );

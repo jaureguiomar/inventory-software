@@ -353,7 +353,7 @@ export default defineComponent({
          axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
@@ -418,7 +418,7 @@ export default defineComponent({
          axios.get<ProductsResponse>(`${ getServer.value }/product/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
@@ -493,7 +493,7 @@ export default defineComponent({
                   id_branch: getBranchId.value
                },
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
@@ -609,7 +609,7 @@ export default defineComponent({
                   query: getBranchId.value
                },
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
@@ -750,7 +750,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -791,7 +791,7 @@ export default defineComponent({
                      },
                      {
                         headers: {
-                           'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                         }
                      }
                   );

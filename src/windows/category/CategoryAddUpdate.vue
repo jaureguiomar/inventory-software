@@ -315,7 +315,7 @@ export default defineComponent({
                      },
                      {
                         headers: {
-                           'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                         }
                      }
                   );
@@ -415,7 +415,7 @@ export default defineComponent({
                      },
                      {
                         headers: {
-                           'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                           "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                         }
                      }
                   );

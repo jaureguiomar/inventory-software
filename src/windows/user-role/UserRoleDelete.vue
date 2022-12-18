@@ -531,7 +531,7 @@ export default defineComponent({
             axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             ).then((response) => {
@@ -609,7 +609,7 @@ export default defineComponent({
                      data: userRole.id
                   },
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );

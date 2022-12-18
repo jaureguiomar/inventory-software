@@ -124,7 +124,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -149,7 +149,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -171,7 +171,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -201,7 +201,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -226,7 +226,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -248,7 +248,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -278,7 +278,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -303,7 +303,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -325,7 +325,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -355,7 +355,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -380,7 +380,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -402,7 +402,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -432,7 +432,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -457,7 +457,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -479,7 +479,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -509,7 +509,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -534,7 +534,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -556,7 +556,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -586,7 +586,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -611,7 +611,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -633,7 +633,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -663,7 +663,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -688,7 +688,7 @@ export default defineComponent({
                         },
                         {
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -710,7 +710,7 @@ export default defineComponent({
                               data: curr_data.id
                            },
                            headers: {
-                              'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                              "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                            }
                         }
                      );
@@ -791,7 +791,7 @@ export default defineComponent({
             let response = await axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -847,7 +847,7 @@ export default defineComponent({
             let response = await axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -898,7 +898,7 @@ export default defineComponent({
             let response = await axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -953,7 +953,7 @@ export default defineComponent({
                      query: getBranchId.value
                   },
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -1017,7 +1017,7 @@ export default defineComponent({
                      query: getBranchId.value
                   },
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -1076,7 +1076,7 @@ export default defineComponent({
                      query: getBranchId.value
                   },
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -1133,7 +1133,7 @@ export default defineComponent({
             let response = await axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );
@@ -1188,7 +1188,7 @@ export default defineComponent({
             let response = await axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );

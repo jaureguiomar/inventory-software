@@ -13,7 +13,7 @@ export const create_activity_log = async(log_data:ActivityLogInsert) => {
          },
          {
             headers: {
-               'Authorization': `Bearer ${ log_data.access_token }`
+               "Authorization": `Bearer ${ log_data.access_token }`
             }
          }
       );

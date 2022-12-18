@@ -190,7 +190,7 @@ export default defineComponent({
                         data: category.id
                      },
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );

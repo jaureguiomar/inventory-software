@@ -537,7 +537,7 @@ export default defineComponent({
          axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          )
@@ -730,7 +730,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -798,7 +798,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );

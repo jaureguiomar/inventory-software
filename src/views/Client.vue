@@ -248,7 +248,7 @@ export default defineComponent({
          axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`,
             {
                headers: {
-                  'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {

@@ -445,7 +445,7 @@ export default defineComponent({
       axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
          {
             headers: {
-               'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               "Authorization": `Bearer ${ getAuthToken.value.access_token }`
             }
          }
       ).then((response) => {
@@ -667,7 +667,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -743,7 +743,7 @@ export default defineComponent({
                   },
                   {
                      headers: {
-                        'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                      }
                   }
                );
@@ -807,7 +807,7 @@ export default defineComponent({
             let response = await axios.get<CategoryOneResponse>(`${ getServer.value }/category/v3/select-one.php?id=${ formatted_data.id_category }`,
                {
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );

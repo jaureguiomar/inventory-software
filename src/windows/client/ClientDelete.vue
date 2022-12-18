@@ -250,7 +250,7 @@ export default defineComponent({
                      data: client.id
                   },
                   headers: {
-                     'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
                }
             );

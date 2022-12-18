@@ -274,7 +274,7 @@ export default defineComponent({
                query: getBranchId.value
             },
             headers: {
-               'Authorization': `Bearer ${ getAuthToken.value.access_token }`
+               "Authorization": `Bearer ${ getAuthToken.value.access_token }`
             }
          }).then((response) => {
             if(response) {
