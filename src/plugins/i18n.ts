@@ -512,7 +512,13 @@ const i18n = createI18n({
                   id: "Id Cash Cutoff",
                   created: "Created",
                   updated: "Updated",
-                  // Code here...
+                  amount: "Amounts (Open / Close)",
+                  amount_open: "Amount open",
+                  amount_close: "Amount close",
+                  date_close: "Date close",
+                  amount_sale: "Amount Sale",
+                  amount_supplier: "Amount Supplier",
+                  user: "Users (Open / Close)",
                   show_details: "Show details",
                   actions: "Actions"
                },
@@ -520,7 +526,13 @@ const i18n = createI18n({
                   id: "# User Role",
                   created: "Date Created",
                   updated: "Date Updated",
-                  // Code here...
+                  amount: "Amounts",
+                  amount_open: "Amount open",
+                  amount_close: "Amount close",
+                  date_close: "Date close",
+                  amount_sale: "Amount Sale",
+                  amount_supplier: "Amount Supplier",
+                  user: "Users",
                   details: {
                      show_details: "Show details",
                      hide_details: "Hide details",
@@ -558,7 +570,13 @@ const i18n = createI18n({
                   id: "ID",
                   created: "Date Created",
                   updated: "Date Updated",
-                  // Code here...
+                  amount: "Amounts",
+                  amount_open: "Amount open",
+                  amount_close: "Amount close",
+                  date_close: "Date close",
+                  amount_sale: "Amount Sale",
+                  amount_supplier: "Amount Supplier",
+                  user: "Users",
                },
                button: {
                   clear: "Clear",

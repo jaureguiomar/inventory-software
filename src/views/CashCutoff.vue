@@ -64,23 +64,28 @@
                   </q-select>
                </template>
 
-               <template #body-cell-total="props">
+               <template #body-cell-amount="props">
                   <q-td :props="props">
                      <span>
-                        ${{ props.row.total }}
-                        <q-badge
-                           v-if="props.row.is_supplier === 0"
-                           color="primary"
-                           align="top"
-                        >
-                           Sale
+                        <q-badge color="primary q-pa-sm q-mr-sm" align="top">
+                           ${{ (props.row.amount_open) ? props.row.amount_open : '0.00' }}
                         </q-badge>
-                        <q-badge
-                           v-else
-                           color="secondary"
-                           align="top"
-                        >
-                           Supplier Sale
+                        <span class="q-mr-sm">/</span>
+                        <q-badge class="q-pa-sm" color="primary" align="top">
+                           ${{ (props.row.amount_close) ? props.row.amount_close : '0.00' }}
+                        </q-badge>
+                     </span>
+                  </q-td>
+               </template>
+               <template #body-cell-user="props">
+                  <q-td :props="props">
+                     <span>
+                        <q-badge color="primary q-pa-sm q-mr-sm" align="top">
+                           {{ (props.row.user_open.username) ? props.row.user_open.username : "Not yet" }}
+                        </q-badge>
+                        <span class="q-mr-sm">/</span>
+                        <q-badge class="q-pa-sm" color="primary" align="top">
+                           {{ (props.row.user_open.username) ? props.row.user_open.username : "Not yet" }}
                         </q-badge>
                      </span>
                   </q-td>
@@ -154,8 +159,8 @@ export default defineComponent({
       const store = useStore(key);
       const cashCutoff = ref<CashCutoff[]>([]);
       const cashCutoffVisibleColumns = ref<Array<string>>([
-         "id", "created", "updated", "amount_open", "amount_close",
-         "date_close", "amount_sale", "amount_supplier", "user", "actions"
+         "id", "created", "updated", "amount", "date_close",
+         "amount_sale", "amount_supplier", "user", "actions"
       ]);
       const cashCutoffFilter = ref<string>("");
       const cashCutoffPagination = reactive({
@@ -200,17 +205,9 @@ export default defineComponent({
             }
          },
          {
-            name: "amount_open",
-            label: t("cash_cutoff.table.field.amount_open"),
+            name: "amount",
+            label: t("cash_cutoff.table.field.amount"),
             align: "center",
-            field: "amount_open",
-            sortable: true
-         },
-         {
-            name: "amount_close",
-            label: t("cash_cutoff.table.field.amount_close"),
-            align: "center",
-            field: "amount_close",
             sortable: true
          },
          {
@@ -218,21 +215,30 @@ export default defineComponent({
             label: t("cash_cutoff.table.field.date_close"),
             align: "center",
             field: "date_close",
-            sortable: true
+            sortable: true,
+            format: (date:string) => {
+               return getFormattedDateString(date, 0, 0, true);
+            }
          },
          {
             name: "amount_sale",
             label: t("cash_cutoff.table.field.amount_sale"),
             align: "center",
             field: "amount_sale",
-            sortable: true
+            sortable: true,
+            format: (amount_sale:string) => {
+               return (amount_sale) ? "$" + amount_sale : "$0.00";
+            }
          },
          {
             name: "amount_supplier",
             label: t("cash_cutoff.table.field.amount_supplier"),
             align: "center",
             field: "amount_supplier",
-            sortable: true
+            sortable: true,
+            format: (amount_supplier:string) => {
+               return (amount_supplier) ? "$" + amount_supplier : "$0.00";
+            }
          },
          {
             name: "user",
