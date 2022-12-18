@@ -503,6 +503,69 @@ const i18n = createI18n({
                }
             }
          },
+         cash_cutoff: {
+            title: "Cash Cutoff",
+            subtitle: "Description about the cash cutoffs view",
+            table: {
+               search: "Search...",
+               field: {
+                  id: "Id Cash Cutoff",
+                  created: "Created",
+                  updated: "Updated",
+                  // Code here...
+                  show_details: "Show details",
+                  actions: "Actions"
+               },
+               content: {
+                  id: "# User Role",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  // Code here...
+                  details: {
+                     show_details: "Show details",
+                     hide_details: "Hide details",
+                     empty: "Theres no data to display"
+                  }
+               }
+            },
+            window: {
+               // add: {
+               //    title: "Add Cash Cutoff",
+               //    subtitle: "The cash cutoffs that will be added for the use of the system",
+               //    button: {
+               //       add: "Add"
+               //    }
+               // },
+               // update: {
+               //    title: "Update Cash Cutoff",
+               //    subtitle: "The cash cutoffs that will be updated for the use of the system",
+               //    button: {
+               //       update: "Update"
+               //    }
+               // },
+               // delete: {
+               //    title: "Delete Cash Cutoff",
+               //    subtitle: "The cash cutoffs that will be deleted from the system",
+               //    button: {
+               //       delete: "Delete",
+               //    }
+               // },
+               see: {
+                  title: "See Cash Cutoff",
+                  subtitle: "The cash cutoffs in the system",
+               },
+               field: {
+                  id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  // Code here...
+               },
+               button: {
+                  clear: "Clear",
+                  close: "Close"
+               }
+            }
+         },
          global: {
             default_error: "An unexpected error has occurred. Please, try again"
          }

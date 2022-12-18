@@ -30,6 +30,8 @@ import UserRoleAddUpdate from "@/windows/user-role/UserRoleAddUpdate.vue";
 import UserRoleDelete from "@/windows/user-role/UserRoleDelete.vue";
 import SaleProduct from "@/views/SaleProduct.vue";
 import SaleProductSee from "@/windows/sale-product/SaleProductSee.vue";
+import CashCutoff from "@/views/CashCutoff.vue";
+// import CashCutoffSee from "@/windows/cash-cutoff/CashCutoffSee.vue";
 import store from "@/plugins/store";
 import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
 import { AuthTokenStore, BranchStore, PosStore, SessionStore } from "@/types/store";
@@ -340,7 +342,24 @@ const routes:RouteRecordRaw[] = [
       meta: {
          requiresAuth: false
       }
-   }
+   },
+   {
+      path: "/cash-cutoff",
+      component: CashCutoff,
+      name: "cash-cutoff",
+      meta: {
+         requiresAuth: true
+      },
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
+   },
+   // {
+   //    path: "/cash-cutoff/see/:id",
+   //    component: CashCutoffSee,
+   //    name: "cash-cutoff-see",
+   //    meta: {
+   //       requiresAuth: false
+   //    }
+   // }
 ];
 
 const router = createRouter({
