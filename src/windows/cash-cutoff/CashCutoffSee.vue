@@ -6,9 +6,9 @@
          <Banner />
          <Menu>
             <template #left-content>
-               <p class="q-ma-none">{{ t("category.window.see.title") }}</p>
+               <p class="q-ma-none">{{ t("cash_cutoff.window.see.title") }}</p>
             </template>
-            <template #subtitle>{{ t("category.window.see.subtitle") }}</template>
+            <template #subtitle>{{ t("cash_cutoff.window.see.subtitle") }}</template>
          </Menu>
 
          <Content>
@@ -16,9 +16,9 @@
                <div class="row">
                   <div class="col-md-2 col-12">
                      <q-input
-                        v-if="category.id > 0"
-                        v-model="category.id"
-                        :label="t('category.window.field.id') + ':'"
+                        v-if="cashCutoff.id > 0"
+                        v-model="cashCutoff.id"
+                        :label="t('cash_cutoff.window.field.id') + ':'"
                         type="text"
                         readonly
                      >
@@ -28,8 +28,8 @@
                <div class="row">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.created"
-                        :label="t('category.window.field.created') + ':'"
+                        v-model="cashCutoff.created"
+                        :label="t('cash_cutoff.window.field.created') + ':'"
                         type="text"
                         readonly
                      >
@@ -37,8 +37,8 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.updated"
-                        :label="t('category.window.field.updated') + ':'"
+                        v-model="cashCutoff.updated"
+                        :label="t('cash_cutoff.window.field.updated') + ':'"
                         type="text"
                         readonly
                      >
@@ -48,8 +48,8 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.name"
-                        :label="t('category.window.field.name') + ':'"
+                        v-model="cashCutoff.amount_open"
+                        :label="t('cash_cutoff.window.field.amount_open') + ':'"
                         type="text"
                         readonly
                      >
@@ -57,8 +57,79 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="category.branch.name"
-                        label="Created in:"
+                        v-model="cashCutoff.amount_sale"
+                        :label="t('cash_cutoff.window.field.amount_sale') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="cashCutoff.amount_supplier"
+                        :label="t('cash_cutoff.window.field.amount_supplier') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="cashCutoff.amount_close"
+                        :label="t('cash_cutoff.window.field.amount_close') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="cashCutoff.date_close"
+                        :label="t('cash_cutoff.window.field.date_close') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="idTypeParsed"
+                        :label="t('cash_cutoff.window.field.id_type') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="cashCutoff.user_open.username"
+                        :label="t('cash_cutoff.window.field.user_open.username') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="cashCutoff.user_close.username"
+                        :label="t('cash_cutoff.window.field.user_close.username') + ':'"
+                        type="text"
+                        readonly
+                     >
+                     </q-input>
+                  </div>
+               </div>
+               <div class="row q-mb-md">
+                  <div class="col-md-6 col-12">
+                     <q-input
+                        v-model="cashCutoff.branch.name"
+                        :label="t('cash_cutoff.window.field.branch.name') + ':'"
                         type="text"
                         readonly
                      >
@@ -68,7 +139,7 @@
                <div class="text-center">
                   <q-btn
                      color="primary"
-                     :label="t('category.window.button.close')"
+                     :label="t('cash_cutoff.window.button.close')"
                      @click="onClose"
                   >
                   </q-btn>
@@ -83,14 +154,14 @@
 import { defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n/index";
 import { getFormattedDateString } from "@/plugins/mixins/general";
-import { Category, IPCParams } from "@/types/category";
+import { CashCutoff, IPCParams } from "@/types/cash-cutoff";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
 import Loader from "@/views/components/Loader.vue";
 
 export default defineComponent({
-   name: "category-see-component",
+   name: "cash-cutoff-component",
    components: {
       Banner,
       Menu,
@@ -99,16 +170,41 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
-      const category = reactive<Category>({
+      const cashCutoff = reactive<CashCutoff>({
          id: -1,
          is_active: -1,
          created: "",
          updated: "",
-         name: "",
-         id_user: -1,
+         amount_open: "",
+         amount_sale: "",
+         amount_supplier: "",
+         amount_close: "",
+         date_close: "",
+         id_type: -1,
+         id_user_open: -1,
+         id_user_close: -1,
          id_pos: -1,
          id_branch: -1,
-         user: {
+         user_open: {
+            id: -1,
+            is_active: -1,
+            created: "",
+            updated: "",
+            username: "",
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+            id_role: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            role: null,
+            user: null,
+            pos: null,
+            branch: null
+         },
+         user_close: {
             id: -1,
             is_active: -1,
             created: "",
@@ -148,29 +244,39 @@ export default defineComponent({
             address: ""
          }
       });
+      const idTypeParsed = ref<string>("");
       const loaded = ref(false);
 
-      window.api.receive("category-module-window-reply", (data:IPCParams) => {
-         category.id = data.id;
+      window.api.receive("cash-cutoff-module-window-reply", (data:IPCParams) => {
+         cashCutoff.id = data.id;
          if(data.data) {
-            category.id = data.data.id;
-            category.is_active = data.data.is_active;
-            category.created = getFormattedDateString(data.data.created);
-            category.updated = getFormattedDateString(data.data.updated);
-            category.name = data.data.name;
-            category.id_user = data.data.id_user;
-            category.id_pos = data.data.id_pos;
-            category.id_branch = data.data.id_branch;
-            category.user = data.data.user;
-            category.pos = data.data.pos;
-            category.branch = data.data.branch;
+            cashCutoff.id = data.data.id;
+            cashCutoff.is_active = data.data.is_active;
+            cashCutoff.created = getFormattedDateString(data.data.created);
+            cashCutoff.updated = getFormattedDateString(data.data.updated);
+            cashCutoff.amount_open = "$" + data.data.amount_open;
+            cashCutoff.amount_sale = "$" + data.data.amount_sale;
+            cashCutoff.amount_supplier = "$" + data.data.amount_supplier;
+            cashCutoff.amount_close = "$" + data.data.amount_close;
+            cashCutoff.date_close = getFormattedDateString(data.data.date_close, 0, 0, true);
+            cashCutoff.id_type = data.data.id_type;
+            cashCutoff.id_user_open = data.data.id_user_open;
+            cashCutoff.id_user_close = data.data.id_user_close;
+            cashCutoff.id_pos = data.data.id_pos;
+            cashCutoff.id_branch = data.data.id_branch;
+            cashCutoff.user_open = data.data.user_open;
+            cashCutoff.user_close = data.data.user_close;
+            cashCutoff.pos = data.data.pos;
+            cashCutoff.branch = data.data.branch;
+
+            idTypeParsed.value = (data.data.id_type === 1) ? "Opened" : "Closed";
          }
          loaded.value = true;
       });
 
       const onClose = () => {
-         window.api.send("category-module-window-close", {
-            id: category.id,
+         window.api.send("cash-cutoff-module-window-close", {
+            id: cashCutoff.id,
             data: null,
             result: "closed",
             type: "see"
@@ -179,7 +285,8 @@ export default defineComponent({
 
       return {
          t,
-         category,
+         cashCutoff,
+         idTypeParsed,
          loaded,
          onClose
       };

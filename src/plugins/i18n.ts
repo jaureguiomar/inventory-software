@@ -570,13 +570,21 @@ const i18n = createI18n({
                   id: "ID",
                   created: "Date Created",
                   updated: "Date Updated",
-                  amount: "Amounts",
                   amount_open: "Amount open",
-                  amount_close: "Amount close",
-                  date_close: "Date close",
                   amount_sale: "Amount Sale",
                   amount_supplier: "Amount Supplier",
-                  user: "Users",
+                  amount_close: "Amount close",
+                  date_close: "Date Close",
+                  id_type: "Type",
+                  user_open: {
+                     username: "User Open"
+                  },
+                  user_close: {
+                     username: "User Close"
+                  },
+                  branch: {
+                     name: "Name"
+                  }
                },
                button: {
                   clear: "Clear",
