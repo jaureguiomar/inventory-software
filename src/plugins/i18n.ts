@@ -447,6 +447,7 @@ const i18n = createI18n({
                   description: "Description",
                   sale_price: "Sale price",
                   total: "Total",
+                  is_supplier: "Is Supplier",
                   show_details: "Show details",
                   actions: "Actions"
                },
@@ -455,6 +456,7 @@ const i18n = createI18n({
                   created: "Date Created",
                   updated: "Date Updated",
                   total: "Total",
+                  is_supplier: "Is Supplier",
                   details: {
                      show_details: "Show details",
                      hide_details: "Hide details",

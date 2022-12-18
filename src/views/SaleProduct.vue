@@ -25,7 +25,10 @@
          <template #content>
             <q-table
                title="Sale Products List"
-               :rows="saleProduct"
+               :rows="
+                  (saleProductType === 'all') ? saleProduct :
+                  (saleProductType === 'sale') ? saleProductSale : saleProductSupplier
+               "
                :columns="saleProductColumns"
                :no-data-label="t('sale_product.table.content.details.empty')"
                :no-results-label="t('sale_product.table.content.details.empty')"
@@ -47,6 +50,12 @@
 
                   <q-space></q-space>
 
+                  <q-radio v-model="saleProductType" val="all" label="All"></q-radio>
+                  <q-radio v-model="saleProductType" val="sale" label="Sale"></q-radio>
+                  <q-radio v-model="saleProductType" val="supplier" label="Supplier Sale"></q-radio>
+
+                  <q-space></q-space>
+
                   <q-select
                      v-model="saleProductVisibleColumns"
                      multiple
@@ -64,6 +73,27 @@
                   </q-select>
                </template>
 
+               <template #body-cell-total="props">
+                  <q-td :props="props">
+                     <span>
+                        ${{ props.row.total }}
+                        <q-badge
+                           v-if="props.row.is_supplier === 0"
+                           color="primary"
+                           align="top"
+                        >
+                           Sale
+                        </q-badge>
+                        <q-badge
+                           v-else
+                           color="secondary"
+                           align="top"
+                        >
+                           Supplier Sale
+                        </q-badge>
+                     </span>
+                  </q-td>
+               </template>
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
@@ -137,8 +167,11 @@ export default defineComponent({
       const { t } = useI18n();
       const store = useStore(key);
       const saleProduct = ref<SaleM2M[]>([]);
+      const saleProductSale = ref<SaleM2M[]>([]);
+      const saleProductSupplier = ref<SaleM2M[]>([]);
+      const saleProductType = ref<string>("all");
       const saleProductVisibleColumns = ref<Array<string>>([ "id", "created", "updated", "total", "actions" ]);
-      const saleProductFilter = ref("");
+      const saleProductFilter = ref<string>("");
       const saleProductPagination = reactive({
          sortBy: "desc",
          descending: false,
@@ -184,11 +217,7 @@ export default defineComponent({
             name: "total",
             label: t("sale_product.table.field.total"),
             align: "center",
-            field: "total",
-            sortable: true,
-            format: (total:string) => {
-               return `$${ total }`;
-            }
+            sortable: true
          },
          {
             name: "actions",
@@ -210,6 +239,8 @@ export default defineComponent({
 
       const onRefreshData = () => {
          saleProduct.value = [];
+         saleProductSale.value = [];
+         saleProductSupplier.value = [];
 
          axios.get<SalesM2MResponse>(`${ getServer.value }/sale_product/v3/select-all.php`,
             {
@@ -253,7 +284,14 @@ export default defineComponent({
                         product: formatted_product_m2m
                      });
                   }
+
                   saleProduct.value = formatted_sale_product;
+                  for(let i = 0; i < formatted_sale_product.length; i++) {
+                     if(formatted_sale_product[i].is_supplier)
+                        saleProductSupplier.value.push(formatted_sale_product[i]);
+                     else
+                        saleProductSale.value.push(formatted_sale_product[i]);
+                  }
                } else {
                   Swal.fire({
                      title: "Error",
@@ -412,6 +450,9 @@ export default defineComponent({
       return {
          t,
          saleProduct,
+         saleProductSale,
+         saleProductSupplier,
+         saleProductType,
          saleProductVisibleColumns,
          saleProductColumns,
          saleProductFilter,
