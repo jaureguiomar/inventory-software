@@ -37,7 +37,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
-import { create_activity_log } from "@/plugins/mixins/activity-log";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UserAuthResponse } from "@/types/user";
 import { SessionStore, UserRoleStore } from "@/types/store";
 
@@ -99,8 +99,8 @@ export default defineComponent({
                   create_activity_log({
                      name: "The user has loggued in",
                      extra_data: "",
-                     id_operation: 5,
-                     id_access: 12,
+                     id_operation: ACTIVITY_LOG_ACCESS.LOGIN,
+                     id_access: ACTIVITY_LOG_OPERATION.LOGIN,
                      id_user: new_user.user.id,
                      server: getServer.value,
                      access_token: token.access_token

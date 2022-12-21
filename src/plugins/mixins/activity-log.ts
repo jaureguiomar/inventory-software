@@ -27,3 +27,27 @@ export const create_activity_log = async(log_data:ActivityLogInsert) => {
       console.log("activity-log-create-error #3", error);
    }
 };
+
+export const ACTIVITY_LOG_OPERATION = {
+   HOME: 1,
+   SALE: 2,
+   CLIENT_REPORT: 3,
+   SUPPLIER_REPORT: 4,
+   PRODUCT_REPORT: 5,
+   CATEGORY_REPORT: 6,
+   USER_REPORT: 7,
+   USER_ROLE_REPORT: 8,
+   SALE_REPORT: 9,
+   // SUPPLIER_REPORT: 10,
+   ACTIVITY_LOG_REPORT: 11,
+   LOGIN: 12,
+   LOGOUT: 13
+};
+
+export const ACTIVITY_LOG_ACCESS = {
+   SEE: 1,
+   ADD: 2,
+   UPDATE: 3,
+   DELETE: 4,
+   LOGIN: 5
+};
