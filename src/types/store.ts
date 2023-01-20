@@ -78,6 +78,7 @@ interface State {
    user_role: GenericStore;
    sale_product: GenericStore;
    cash_cutoff: GenericStore;
+   activity_log: GenericStore;
 }
 
 export {

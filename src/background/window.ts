@@ -51,6 +51,12 @@ export const window = {
       // update: null as any,
       // delete: null as any,
       see: null as any
+   },
+   activity_log: {
+      // add: null as any,
+      // update: null as any,
+      // delete: null as any,
+      see: null as any
    }
 };
 
@@ -532,6 +538,66 @@ ipcMain.on("cash-cutoff-module-window-close", function(e, data) {
    window.cash_cutoff[data.type].destroy();
    window.cash_cutoff[data.type] = null;
    window.main.webContents.send("main-window-cash-cutoff-module-reply", data);
+});
+
+//////////////////
+// Activity Log //
+ipcMain.on("activity-log-module-window", function(e, data) {
+   if(!window.activity_log[data.type] || window.activity_log[data.type].isDestroyed()) {
+      window.activity_log[data.type] = new BrowserWindow({
+         width: 1024,
+         height: 768,
+         // fullscreen: true,
+         // icon: icon_path,
+         webPreferences: {
+            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+            contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+            preload: path.join(__dirname, "preloadActivityLog.js")
+         }
+      });
+      window.activity_log[data.type].removeMenu();
+      window.activity_log[data.type].maximize();
+
+      let setURL = "";
+      // if(data.type === "add")
+      //    setURL = buildAppRoute() + "/activity-log/add";
+      // else if(data.type === "update")
+      //    setURL = buildAppRoute() + `/activity-log/update/${ data.id }`;
+      // else if(data.type === "delete")
+      //    setURL = buildAppRoute() + `/activity-log/delete/${ data.id }`;
+      if(data.type === "see")
+         setURL = buildAppRoute() + `/activity-log/see/${ data.id }`;
+
+      window.activity_log[data.type].loadURL(setURL);
+      window.activity_log[data.type].show();
+      if(!process.env.IS_TEST)
+         window.activity_log[data.type].webContents.openDevTools();
+
+      window.activity_log[data.type].webContents.once("did-finish-load", function () {
+         window.activity_log[data.type].webContents.send("activity-log-module-window-reply", data);
+      });
+      window.activity_log[data.type].once("close", function () {
+         window.activity_log[data.type].destroy();
+         window.activity_log[data.type] = null;
+      });
+   } else {
+      window.activity_log[data.type].focus();
+   }
+});
+ipcMain.on("activity-log-module-window-dialog", function(e, data) {
+   dialog.showMessageBox(window.activity_log[data.type], {
+      title: "System message",
+      buttons: ["Ok"],
+      type: "info",
+      message: data.message,
+   }).then(() => {
+      e.sender.send("activity-log-module-window-dialog-reply");
+   });
+});
+ipcMain.on("activity-log-module-window-close", function(e, data) {
+   window.activity_log[data.type].destroy();
+   window.activity_log[data.type] = null;
+   window.main.webContents.send("main-window-activity-log-module-reply", data);
 });
 
 ///////////////

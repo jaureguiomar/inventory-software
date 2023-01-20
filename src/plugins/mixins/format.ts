@@ -6,6 +6,9 @@ import { Branch } from "@/types/branch";
 import { Sale } from "@/types/sale";
 import { Product, ProductM2M } from "@/types/product";
 import { CashCutoff } from "@/types/cash-cutoff";
+import { ActivityLog } from "@/types/activity-log";
+import { ActivityLogOperation } from "@/types/activity-log-operation";
+import { ActivityLogAccess } from "@/types/activity-log-access";
 
 export const format_sale = (sale:Sale|null) => {
    let formatted_data:Sale|null = null;
@@ -247,6 +250,61 @@ export const format_cash_cutoff = (cash_cutoff:CashCutoff|null) => {
          user_close: null,
          pos: null,
          branch: null
+      }
+   }
+   return formatted_data;
+};
+
+export const format_activity_log = (activity_log:ActivityLog|null) => {
+   let formatted_data:ActivityLog|null = null;
+   const curr_data = (activity_log) ? activity_log : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         name: curr_data.name,
+         extra_data: curr_data.extra_data,
+         id_operation: Number(curr_data.id_operation),
+         id_access: Number(curr_data.id_access),
+         id_user: Number(curr_data.id_user),
+         operation: curr_data.operation,
+         access: curr_data.access,
+         user: curr_data.user
+      }
+   }
+   return formatted_data;
+};
+
+export const format_activity_log_operation = (activity_log_operation:ActivityLogOperation|null) => {
+   let formatted_data:ActivityLogOperation|null = null;
+   const curr_data = (activity_log_operation) ? activity_log_operation : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         name: curr_data.name
+      }
+   }
+   return formatted_data;
+};
+
+export const format_activity_log_access = (activity_log_access:ActivityLogAccess|null) => {
+   let formatted_data:ActivityLogAccess|null = null;
+   const curr_data = (activity_log_access) ? activity_log_access : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         name: curr_data.name
       }
    }
    return formatted_data;

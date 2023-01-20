@@ -74,6 +74,9 @@ const store = createStore<State>({
          },
          cash_cutoff: {
             loaded_reply: false
+         },
+         activity_log: {
+            loaded_reply: false
          }
       }
    },
@@ -149,6 +152,9 @@ const store = createStore<State>({
       },
       getCashCutoffLoadedReply(state:State) {
          return state.cash_cutoff.loaded_reply;
+      },
+      getActivityLogLoadedReply(state:State) {
+         return state.activity_log.loaded_reply;
       }
    },
    mutations: {
@@ -258,6 +264,9 @@ const store = createStore<State>({
       },
       SET_CASH_CUTOFF_LOADED_REPLY: (state:State, data:boolean) => {
          state.cash_cutoff.loaded_reply = data;
+      },
+      SET_ACTIVITY_LOG_LOADED_REPLY: (state:State, data:boolean) => {
+         state.activity_log.loaded_reply = data;
       }
    }
 });

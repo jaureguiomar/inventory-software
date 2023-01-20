@@ -592,6 +592,95 @@ const i18n = createI18n({
                }
             }
          },
+         activity_log: {
+            title: "Activity Log",
+            subtitle: "Description about the activity logs view",
+            table: {
+               search: "Search...",
+               field: {
+                  id: "Id Activity Log",
+                  created: "Created",
+                  updated: "Updated",
+                  // amount: "Amounts (Open / Close)",
+                  // amount_open: "Amount open",
+                  // amount_close: "Amount close",
+                  // date_close: "Date close",
+                  // amount_sale: "Amount Sale",
+                  // amount_supplier: "Amount Supplier",
+                  // user: "Users (Open / Close)",
+                  show_details: "Show details",
+                  actions: "Actions"
+               },
+               content: {
+                  id: "# Activity Log",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  // amount: "Amounts",
+                  // amount_open: "Amount open",
+                  // amount_close: "Amount close",
+                  // date_close: "Date close",
+                  // amount_sale: "Amount Sale",
+                  // amount_supplier: "Amount Supplier",
+                  // user: "Users",
+                  details: {
+                     show_details: "Show details",
+                     hide_details: "Hide details",
+                     empty: "Theres no data to display"
+                  }
+               }
+            },
+            window: {
+               // add: {
+               //    title: "Add Activity Log",
+               //    subtitle: "The activity logs that will be added for the use of the system",
+               //    button: {
+               //       add: "Add"
+               //    }
+               // },
+               // update: {
+               //    title: "Update Activity Log",
+               //    subtitle: "The activity logs that will be updated for the use of the system",
+               //    button: {
+               //       update: "Update"
+               //    }
+               // },
+               // delete: {
+               //    title: "Delete Activity Log",
+               //    subtitle: "The activity logs that will be deleted from the system",
+               //    button: {
+               //       delete: "Delete",
+               //    }
+               // },
+               see: {
+                  title: "See Activity Log",
+                  subtitle: "The activity logs in the system",
+               },
+               field: {
+                  id: "ID",
+                  created: "Date Created",
+                  updated: "Date Updated",
+                  // amount_open: "Amount open",
+                  // amount_sale: "Amount Sale",
+                  // amount_supplier: "Amount Supplier",
+                  // amount_close: "Amount close",
+                  // date_close: "Date Close",
+                  // id_type: "Type",
+                  // user_open: {
+                  //    username: "User Open"
+                  // },
+                  // user_close: {
+                  //    username: "User Close"
+                  // },
+                  // branch: {
+                  //    name: "Name"
+                  // }
+               },
+               button: {
+                  clear: "Clear",
+                  close: "Close"
+               }
+            }
+         },
          global: {
             default_error: "An unexpected error has occurred. Please, try again"
          }

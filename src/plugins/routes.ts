@@ -32,6 +32,8 @@ import SaleProduct from "@/views/SaleProduct.vue";
 import SaleProductSee from "@/windows/sale-product/SaleProductSee.vue";
 import CashCutoff from "@/views/CashCutoff.vue";
 import CashCutoffSee from "@/windows/cash-cutoff/CashCutoffSee.vue";
+import ActivityLog from "@/views/ActivityLog.vue";
+import ActivityLogSee from "@/windows/activity-log/ActivityLogSee.vue";
 import store from "@/plugins/store";
 import { validateBranchSelect, validateBranchActive } from "@/plugins/mixins/router-guard";
 import { AuthTokenStore, BranchStore, PosStore, SessionStore } from "@/types/store";
@@ -356,6 +358,23 @@ const routes:RouteRecordRaw[] = [
       path: "/cash-cutoff/see/:id",
       component: CashCutoffSee,
       name: "cash-cutoff-see",
+      meta: {
+         requiresAuth: false
+      }
+   },
+   {
+      path: "/activity-log",
+      component: ActivityLog,
+      name: "activity-log",
+      meta: {
+         requiresAuth: true
+      },
+      beforeEnter: [ validateBranchSelect, validateBranchActive ]
+   },
+   {
+      path: "/activity-log/see/:id",
+      component: ActivityLogSee,
+      name: "activity-log-see",
       meta: {
          requiresAuth: false
       }

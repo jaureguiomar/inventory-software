@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld(
             "product-module-window", "category-module-window",
             "user-module-window", "user-role-module-window",
             "sale-product-module-window", "cash-cutoff-module-window",
-            "print-sale"
+            "activity-log-module-window", "print-sale"
          ];
          if(validChannels.includes(channel))
             ipcRenderer.send(channel, data);
@@ -25,7 +25,8 @@ contextBridge.exposeInMainWorld(
             "main-window-client-module-reply", "main-window-supplier-module-reply",
             "main-window-product-module-reply", "main-window-category-module-reply",
             "main-window-user-module-reply", "main-window-user-role-module-reply",
-            "main-window-sale-product-module-reply", "main-window-cash-cutoff-module-reply"
+            "main-window-sale-product-module-reply", "main-window-cash-cutoff-module-reply",
+            "main-window-activity-log-module-reply"
          ];
          if(validChannels.includes(channel))
             ipcRenderer.on(channel, (event, ...args) => func(...args));
