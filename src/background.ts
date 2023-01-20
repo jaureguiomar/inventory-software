@@ -11,6 +11,8 @@ import fs from "fs";
 import { window } from "@/background/window";
 import "@/background/printer";
 import "@/background/mysql/mysql";
+
+// const lockInstance = app.requestSingleInstanceLock();
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 protocol.registerSchemesAsPrivileged([
@@ -18,6 +20,9 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 async function createWindow() {
+   // if(lockInstance)
+   //    app.quit()
+
    window.main = new BrowserWindow({
       width: 1024,
       height: 768,
