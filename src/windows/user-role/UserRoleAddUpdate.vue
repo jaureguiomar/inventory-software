@@ -60,7 +60,7 @@
                   </div>
                   <div v-if="page.id > 0" class="col-md-6 col-12">
                      <q-input
-                        v-model="userRole.branch.name"
+                        :model-value="userRole.branch?.name"
                         label="Created in:"
                         type="text"
                         readonly

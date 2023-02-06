@@ -108,7 +108,7 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="client.branch.name"
+                        :model-value="client.branch?.name"
                         label="Created in:"
                         type="text"
                         readonly

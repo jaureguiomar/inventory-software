@@ -108,7 +108,7 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="cashCutoff.user_open.username"
+                        :model-value="cashCutoff.user_open?.username"
                         :label="t('cash_cutoff.window.field.user_open.username') + ':'"
                         type="text"
                         readonly
@@ -117,7 +117,7 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="cashCutoff.user_close.username"
+                        :model-value="cashCutoff.user_close?.username"
                         :label="t('cash_cutoff.window.field.user_close.username') + ':'"
                         type="text"
                         readonly
@@ -128,7 +128,7 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="cashCutoff.branch.name"
+                        :model-value="cashCutoff.branch?.name"
                         :label="t('cash_cutoff.window.field.branch.name') + ':'"
                         type="text"
                         readonly

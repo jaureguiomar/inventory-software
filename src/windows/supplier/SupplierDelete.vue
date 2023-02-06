@@ -57,7 +57,7 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="supplier.branch.name"
+                        :model-value="supplier.branch?.name"
                         label="Created in:"
                         type="text"
                         readonly

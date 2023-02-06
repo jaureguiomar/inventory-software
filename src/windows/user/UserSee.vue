@@ -97,7 +97,7 @@
                   </div>
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="user.role.name"
+                        :model-value="user.role?.name"
                         :label="t('user.window.field.role_name') + ':'"
                         type="text"
                         readonly
@@ -108,7 +108,7 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="user.branch.name"
+                        :model-value="user.branch?.name"
                         label="Created in:"
                         type="text"
                         readonly

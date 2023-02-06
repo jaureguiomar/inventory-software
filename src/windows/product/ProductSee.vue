@@ -108,7 +108,7 @@
                <div class="row q-mb-md">
                   <div class="col-md-6 col-12">
                      <q-input
-                        v-model="product.category.name"
+                        :model-value="product.category?.name"
                         :label="t('product.window.field.category_name') + ':'"
                         type="text"
                         readonly
