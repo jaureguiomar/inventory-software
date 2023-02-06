@@ -145,6 +145,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Client, ClientResponse, IPCParams } from "@/types/client";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -217,6 +218,15 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("client-module-window-reply", (data:IPCParams) => {
          client.id = data.id;
@@ -237,6 +247,16 @@ export default defineComponent({
             client.user = data.data.user;
             client.pos = data.data.pos;
             client.branch = data.data.branch;
+
+            create_activity_log({
+               name: "The user has access to client delete report",
+               extra_data: JSON.stringify(client),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.CLIENT_REPORT_DELETE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });
@@ -302,13 +322,6 @@ export default defineComponent({
             type: "delete"
          });
       };
-
-      const getServer = computed(() => {
-         return store.getters["getServer"];
-      });
-      const getAuthToken = computed(() => {
-         return store.getters["getAuthToken"];
-      });
 
       return {
          t,

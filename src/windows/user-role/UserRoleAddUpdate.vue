@@ -407,6 +407,7 @@ import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { format_user_permissions } from "@/plugins/mixins/permission";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, UserRoleField, UserRole, UserRoleResponse } from "@/types/user-role";
 import { UserRolePermission, UserRolePermissionsResponse } from "@/types/user-role-permission";
 import { User } from "@/types/user";
@@ -533,6 +534,15 @@ export default defineComponent({
 
             field.name.text = data.data.name;
          }
+         create_activity_log({
+            name: `The user has access to user role ${(page.id > 0) ? 'add' : 'update'} report`,
+            extra_data: JSON.stringify(userRole),
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.USER_ROLE_REPORT_ADD_UPDATE,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
 
          axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
             {

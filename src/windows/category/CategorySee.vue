@@ -80,9 +80,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
+import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Category, IPCParams } from "@/types/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -98,6 +101,7 @@ export default defineComponent({
       Loader
    },
    setup() {
+      const store = useStore(key);
       const { t } = useI18n();
       const category = reactive<Category>({
          id: -1,
@@ -149,6 +153,15 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("category-module-window-reply", (data:IPCParams) => {
          category.id = data.id;
@@ -164,6 +177,16 @@ export default defineComponent({
             category.user = data.data.user;
             category.pos = data.data.pos;
             category.branch = data.data.branch;
+
+            create_activity_log({
+               name: "The user has access to category see report",
+               extra_data: JSON.stringify(category),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.CATEGORY_REPORT_SEE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });

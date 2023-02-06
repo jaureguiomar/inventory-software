@@ -184,6 +184,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/types/client";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -346,6 +347,16 @@ export default defineComponent({
             field.cellphone.text = data.data.cellphone;
             field.cellphone2.text = (data.data.cellphone2) ? data.data.cellphone2 : "";
             field.email.text = data.data.email;
+
+            create_activity_log({
+               name: `The user has access to client ${(page.id > 0) ? 'add' : 'update'} report`,
+               extra_data: JSON.stringify(client),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.CLIENT_REPORT_ADD_UPDATE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });

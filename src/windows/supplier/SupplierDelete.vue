@@ -94,6 +94,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Supplier, SupplierResponse, IPCParams } from "@/types/supplier";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -161,6 +162,15 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("supplier-module-window-reply", (data:IPCParams) => {
          supplier.id = data.id;
@@ -176,6 +186,16 @@ export default defineComponent({
             supplier.user = data.data.user;
             supplier.pos = data.data.pos;
             supplier.branch = data.data.branch;
+
+            create_activity_log({
+               name: "The user has access to supplier delete report",
+               extra_data: JSON.stringify(supplier),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.SUPPLIER_REPORT_DELETE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });
@@ -241,13 +261,6 @@ export default defineComponent({
             type: "delete"
          });
       };
-
-      const getServer = computed(() => {
-         return store.getters["getServer"];
-      });
-      const getAuthToken = computed(() => {
-         return store.getters["getAuthToken"];
-      });
 
       return {
          t,

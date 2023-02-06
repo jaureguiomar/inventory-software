@@ -153,6 +153,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Product, ProductResponse, IPCParams } from "@/types/product";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -241,6 +242,15 @@ export default defineComponent({
       });
       const is_favorite = ref(false);
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("product-module-window-reply", (data:IPCParams) => {
          product.id = data.id;
@@ -265,6 +275,16 @@ export default defineComponent({
             product.pos = data.data.pos;
             product.branch = data.data.branch;
             is_favorite.value = (product.is_favorite === 1) ? true : false;
+
+            create_activity_log({
+               name: "The user has access to product delete report",
+               extra_data: JSON.stringify(product),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.PRODUCT_REPORT_DELETE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });
@@ -330,13 +350,6 @@ export default defineComponent({
             type: "delete"
          });
       };
-
-      const getServer = computed(() => {
-         return store.getters["getServer"];
-      });
-      const getAuthToken = computed(() => {
-         return store.getters["getAuthToken"];
-      });
 
       return {
          t,

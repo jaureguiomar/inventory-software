@@ -131,9 +131,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
+import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Client, IPCParams } from "@/types/client";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -149,6 +152,7 @@ export default defineComponent({
       Loader
    },
    setup() {
+      const store = useStore(key);
       const { t } = useI18n();
       const client = reactive<Client>({
          id: -1,
@@ -205,6 +209,15 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("client-module-window-reply", (data:IPCParams) => {
          client.id = data.id;
@@ -225,6 +238,16 @@ export default defineComponent({
             client.user = data.data.user;
             client.pos = data.data.pos;
             client.branch = data.data.branch;
+
+            create_activity_log({
+               name: "The user has access to client see report",
+               extra_data: JSON.stringify(client),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.CLIENT_REPORT_SEE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });

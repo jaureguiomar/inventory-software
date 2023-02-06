@@ -71,9 +71,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
+import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { ActivityLog, IPCParams } from "@/types/activity-log";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -90,6 +93,7 @@ export default defineComponent({
    },
    setup() {
       const { t } = useI18n();
+      const store = useStore(key);
       const activityLog = reactive<ActivityLog>({
          id: -1,
          is_active: -1,
@@ -135,6 +139,15 @@ export default defineComponent({
          }
       });
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("activity-log-module-window-reply", (data:IPCParams) => {
          activityLog.id = data.id;
@@ -151,6 +164,16 @@ export default defineComponent({
             activityLog.operation = data.data.operation;
             activityLog.access = data.data.access;
             activityLog.user = data.data.user;
+
+            create_activity_log({
+               name: "The user has access to activity log see report",
+               extra_data: JSON.stringify(activityLog),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.ACTIVITY_LOG_REPORT_SEE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });

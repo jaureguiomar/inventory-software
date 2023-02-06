@@ -122,9 +122,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n/index";
+import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { SaleM2M, IPCParamsM2M } from "@/types/sale";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -140,6 +143,7 @@ export default defineComponent({
       Loader
    },
    setup() {
+      const store = useStore(key);
       const { t } = useI18n();
       const saleProduct = reactive<SaleM2M>({
          id: 0,
@@ -289,6 +293,15 @@ export default defineComponent({
          }
       ];
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("sale-product-module-window-reply", (data:IPCParamsM2M) => {
          saleProduct.id = data.id;
@@ -307,6 +320,16 @@ export default defineComponent({
             saleProduct.user = data.data.user;
             saleProduct.pos = data.data.pos;
             saleProduct.branch = data.data.branch;
+
+            create_activity_log({
+               name: "The user has access to product see report",
+               extra_data: JSON.stringify(saleProduct),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.SALE_PRODUCT_REPORT_SEE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
          }
          loaded.value = true;
       });

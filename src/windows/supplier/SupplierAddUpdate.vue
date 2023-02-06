@@ -105,6 +105,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, SupplierField, SupplierResponse, Supplier } from "@/types/supplier";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -229,6 +230,15 @@ export default defineComponent({
 
             field.name.text = data.data.name;
          }
+         create_activity_log({
+            name: `The user has access to suppllier ${(page.id > 0) ? 'add' : 'update'} report`,
+            extra_data: JSON.stringify(supplier),
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.SUPPLIER_REPORT_ADD_UPDATE,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
          loaded.value = true;
       });
 

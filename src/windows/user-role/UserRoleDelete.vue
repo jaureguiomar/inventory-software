@@ -427,6 +427,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user_permissions } from '@/plugins/mixins/permission';
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UserRole, UserRoleResponse, IPCParams } from "@/types/user-role";
 import { UserRolePermission, UserRolePermissionsResponse } from "@/types/user-role-permission";
 import Banner from "@/views/layout/Banner.vue";
@@ -508,6 +509,15 @@ export default defineComponent({
          access: {}
       });
       const loaded = ref(false);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
 
       window.api.receive("user-role-module-window-reply", (data:IPCParams) => {
          userRole.id = data.id;
@@ -527,6 +537,16 @@ export default defineComponent({
             userRole.user = data.data.user;
             userRole.pos = data.data.pos;
             userRole.branch = data.data.branch;
+
+            create_activity_log({
+               name: "The user has access to user role delete report",
+               extra_data: JSON.stringify(userRole),
+               id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+               id_access: ACTIVITY_LOG_OPERATION.USER_ROLE_REPORT_DELETE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
 
             axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
                {
@@ -661,13 +681,6 @@ export default defineComponent({
             type: "delete"
          });
       };
-
-      const getServer = computed(() => {
-         return store.getters["getServer"];
-      });
-      const getAuthToken = computed(() => {
-         return store.getters["getAuthToken"];
-      });
 
       return {
          t,
