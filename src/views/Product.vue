@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -124,6 +124,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { ProductsResponse, WindowResponse, Product } from "@/types/product";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -251,7 +252,6 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -261,8 +261,78 @@ export default defineComponent({
       const getBranchId = computed(() => {
          return store.getters["getBranchId"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getProductLoadedReply = computed(() => {
          return store.getters["getProductLoadedReply"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to product report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.PRODUCT_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getProductLoadedReply.value) {
+            window.api.receive("main-window-product-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        product.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < product.value.length; i++) {
+                        const curr_product = product.value[i];
+                        if(curr_product.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           product.value[finded_index].id = data.data.id;
+                           product.value[finded_index].is_active = data.data.is_active;
+                           product.value[finded_index].created = data.data.created;
+                           product.value[finded_index].updated = data.data.updated;
+                           product.value[finded_index].code = data.data.code;
+                           product.value[finded_index].is_favorite = data.data.is_favorite;
+                           product.value[finded_index].name = data.data.name;
+                           product.value[finded_index].description = data.data.description;
+                           product.value[finded_index].buy_price = data.data.buy_price;
+                           product.value[finded_index].sale_price = data.data.sale_price;
+                           product.value[finded_index].quantity = data.data.quantity;
+                           product.value[finded_index].id_category = data.data.id_category;
+                           product.value[finded_index].id_user = data.data.id_user;
+                           product.value[finded_index].id_pos = data.data.id_pos;
+                           product.value[finded_index].id_branch = data.data.id_branch;
+                           product.value[finded_index].category = data.data.category;
+                           product.value[finded_index].user = data.data.user;
+                           product.value[finded_index].pos = data.data.pos;
+                           product.value[finded_index].branch = data.data.branch;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < product.value.length; i++) {
+                        const curr_product = product.value[i];
+                        if(curr_product.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                        product.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_PRODUCT_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -428,62 +498,6 @@ export default defineComponent({
             }
          });
       };
-
-      onRefreshData();
-      if(!getProductLoadedReply.value) {
-         window.api.receive("main-window-product-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     product.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < product.value.length; i++) {
-                     const curr_product = product.value[i];
-                     if(curr_product.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        product.value[finded_index].id = data.data.id;
-                        product.value[finded_index].is_active = data.data.is_active;
-                        product.value[finded_index].created = data.data.created;
-                        product.value[finded_index].updated = data.data.updated;
-                        product.value[finded_index].code = data.data.code;
-                        product.value[finded_index].is_favorite = data.data.is_favorite;
-                        product.value[finded_index].name = data.data.name;
-                        product.value[finded_index].description = data.data.description;
-                        product.value[finded_index].buy_price = data.data.buy_price;
-                        product.value[finded_index].sale_price = data.data.sale_price;
-                        product.value[finded_index].quantity = data.data.quantity;
-                        product.value[finded_index].id_category = data.data.id_category;
-                        product.value[finded_index].id_user = data.data.id_user;
-                        product.value[finded_index].id_pos = data.data.id_pos;
-                        product.value[finded_index].id_branch = data.data.id_branch;
-                        product.value[finded_index].category = data.data.category;
-                        product.value[finded_index].user = data.data.user;
-                        product.value[finded_index].pos = data.data.pos;
-                        product.value[finded_index].branch = data.data.branch;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < product.value.length; i++) {
-                     const curr_product = product.value[i];
-                     if(curr_product.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                     product.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_PRODUCT_LOADED_REPLY", true);
-      }
 
       return {
          t,

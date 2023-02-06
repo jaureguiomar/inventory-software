@@ -105,12 +105,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_activity_log_operation, format_activity_log_access } from "@/plugins/mixins/format";
 import { ActivityLogsResponse, WindowResponse, ActivityLog } from "@/types/activity-log";
@@ -189,21 +190,82 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getActivityLogLoadedReply = computed(() => {
          return store.getters["getActivityLogLoadedReply"];
       });
 
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to cash cutoff report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.CASH_CUTOFF,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getActivityLogLoadedReply.value) {
+            window.api.receive("main-window-activity-log-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        activityLog.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < activityLog.value.length; i++) {
+                        const curr_activity_log = activityLog.value[i];
+                        if(curr_activity_log.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           activityLog.value[finded_index].id = data.data.id;
+                           activityLog.value[finded_index].is_active = data.data.is_active;
+                           activityLog.value[finded_index].created = data.data.created;
+                           activityLog.value[finded_index].updated = data.data.updated;
+                           activityLog.value[finded_index].name = data.data.name;
+                           activityLog.value[finded_index].extra_data = data.data.extra_data;
+                           activityLog.value[finded_index].id_operation = data.data.id_operation;
+                           activityLog.value[finded_index].id_access = data.data.id_access;
+                           activityLog.value[finded_index].id_user = data.data.id_user;
+                           activityLog.value[finded_index].operation = data.data.operation;
+                           activityLog.value[finded_index].access = data.data.access;
+                           activityLog.value[finded_index].user = data.data.user;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < activityLog.value.length; i++) {
+                        const curr_activity_log = activityLog.value[i];
+                        if(curr_activity_log.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                        activityLog.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_ACTIVITY_LOG_LOADED_REPLY", true);
+         }
+      });
+
       const onRefreshData = () => {
          activityLog.value = [];
-
-         axios.get<ActivityLogsResponse>(`${ getServer.value }/activity-log/v3/select-all.php`,
+         axios.get<ActivityLogsResponse>(`${ getServer.value }/activity_log/v3/select-all.php`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -332,55 +394,6 @@ export default defineComponent({
             }
          });
       };
-
-      onRefreshData();
-      if(!getActivityLogLoadedReply.value) {
-         window.api.receive("main-window-activity-log-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     activityLog.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < activityLog.value.length; i++) {
-                     const curr_activity_log = activityLog.value[i];
-                     if(curr_activity_log.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        activityLog.value[finded_index].id = data.data.id;
-                        activityLog.value[finded_index].is_active = data.data.is_active;
-                        activityLog.value[finded_index].created = data.data.created;
-                        activityLog.value[finded_index].updated = data.data.updated;
-                        activityLog.value[finded_index].name = data.data.name;
-                        activityLog.value[finded_index].extra_data = data.data.extra_data;
-                        activityLog.value[finded_index].id_operation = data.data.id_operation;
-                        activityLog.value[finded_index].id_access = data.data.id_access;
-                        activityLog.value[finded_index].id_user = data.data.id_user;
-                        activityLog.value[finded_index].operation = data.data.operation;
-                        activityLog.value[finded_index].access = data.data.access;
-                        activityLog.value[finded_index].user = data.data.user;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < activityLog.value.length; i++) {
-                     const curr_activity_log = activityLog.value[i];
-                     if(curr_activity_log.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                     activityLog.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_ACTIVITY_LOG_LOADED_REPLY", true);
-      }
 
       return {
          t,

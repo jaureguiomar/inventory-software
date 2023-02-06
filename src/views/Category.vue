@@ -105,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -113,6 +113,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { CategoriesResponse, WindowResponse, Category } from "@/types/category";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -189,7 +190,6 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -199,11 +199,73 @@ export default defineComponent({
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getCategoryLoadedReply = computed(() => {
          return store.getters["getCategoryLoadedReply"];
       });
       const getCategoryLoadedGet = computed(() => {
          return store.getters["getCategoryLoadedGet"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to category report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.CATEGORY_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getCategoryLoadedReply.value) {
+            window.api.receive("main-window-category-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        category.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < category.value.length; i++) {
+                        const curr_category = category.value[i];
+                        if(curr_category.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           category.value[finded_index].id = data.data.id;
+                           category.value[finded_index].is_active = data.data.is_active;
+                           category.value[finded_index].created = data.data.created;
+                           category.value[finded_index].updated = data.data.updated;
+                           category.value[finded_index].name = data.data.name;
+                           category.value[finded_index].id_user = data.data.id_user;
+                           category.value[finded_index].id_pos = data.data.id_pos;
+                           category.value[finded_index].id_branch = data.data.id_branch;
+                           category.value[finded_index].user = data.data.user;
+                           category.value[finded_index].pos = data.data.pos;
+                           category.value[finded_index].branch = data.data.branch;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < category.value.length; i++) {
+                        const curr_category = category.value[i];
+                        if(curr_category.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                        category.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_CATEGORY_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -344,54 +406,6 @@ export default defineComponent({
             }
          });
       };
-
-      onRefreshData();
-      if(!getCategoryLoadedReply.value) {
-         window.api.receive("main-window-category-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     category.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < category.value.length; i++) {
-                     const curr_category = category.value[i];
-                     if(curr_category.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        category.value[finded_index].id = data.data.id;
-                        category.value[finded_index].is_active = data.data.is_active;
-                        category.value[finded_index].created = data.data.created;
-                        category.value[finded_index].updated = data.data.updated;
-                        category.value[finded_index].name = data.data.name;
-                        category.value[finded_index].id_user = data.data.id_user;
-                        category.value[finded_index].id_pos = data.data.id_pos;
-                        category.value[finded_index].id_branch = data.data.id_branch;
-                        category.value[finded_index].user = data.data.user;
-                        category.value[finded_index].pos = data.data.pos;
-                        category.value[finded_index].branch = data.data.branch;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < category.value.length; i++) {
-                     const curr_category = category.value[i];
-                     if(curr_category.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                     category.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_CATEGORY_LOADED_REPLY", true);
-      }
 
       return {
          t,

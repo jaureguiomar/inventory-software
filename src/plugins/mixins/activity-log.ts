@@ -28,6 +28,15 @@ export const create_activity_log = async(log_data:ActivityLogInsert) => {
    }
 };
 
+export const ACTIVITY_LOG_ACCESS = {
+   LOGIN: 1,
+   ACCESS: 2,
+   SEE: 3,
+   ADD: 4,
+   UPDATE: 5,
+   DELETE: 6
+};
+
 export const ACTIVITY_LOG_OPERATION = {
    HOME: 1,
    SALE: 2,
@@ -41,13 +50,7 @@ export const ACTIVITY_LOG_OPERATION = {
    // SUPPLIER_REPORT: 10,
    ACTIVITY_LOG_REPORT: 11,
    LOGIN: 12,
-   LOGOUT: 13
-};
-
-export const ACTIVITY_LOG_ACCESS = {
-   SEE: 1,
-   ADD: 2,
-   UPDATE: 3,
-   DELETE: 4,
-   LOGIN: 5
+   LOGOUT: 13,
+   CASH_CUTOFF: 14,
+   SALE_PRODUCT_REPORT: 15
 };

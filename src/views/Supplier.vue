@@ -105,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -113,6 +113,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { SuppliersResponse, WindowResponse, Supplier } from "@/types/supplier";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -189,15 +190,76 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getSupplierLoadedReply = computed(() => {
          return store.getters["getSupplierLoadedReply"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to supplier report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.SUPPLIER_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getSupplierLoadedReply.value) {
+            window.api.receive("main-window-supplier-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        supplier.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < supplier.value.length; i++) {
+                        const curr_supplier = supplier.value[i];
+                        if(curr_supplier.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           supplier.value[finded_index].id = data.data.id;
+                           supplier.value[finded_index].is_active = data.data.is_active;
+                           supplier.value[finded_index].created = data.data.created;
+                           supplier.value[finded_index].updated = data.data.updated;
+                           supplier.value[finded_index].name = data.data.name;
+                           supplier.value[finded_index].id_user = data.data.id_user;
+                           supplier.value[finded_index].id_pos = data.data.id_pos;
+                           supplier.value[finded_index].id_branch = data.data.id_branch;
+                           supplier.value[finded_index].user = data.data.user;
+                           supplier.value[finded_index].pos = data.data.pos;
+                           supplier.value[finded_index].branch = data.data.branch;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < supplier.value.length; i++) {
+                        const curr_supplier = supplier.value[i];
+                        if(curr_supplier.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                        supplier.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_SUPPLIER_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -328,54 +390,6 @@ export default defineComponent({
             }
          });
       };
-
-      onRefreshData();
-      if(!getSupplierLoadedReply.value) {
-         window.api.receive("main-window-supplier-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     supplier.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < supplier.value.length; i++) {
-                     const curr_supplier = supplier.value[i];
-                     if(curr_supplier.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        supplier.value[finded_index].id = data.data.id;
-                        supplier.value[finded_index].is_active = data.data.is_active;
-                        supplier.value[finded_index].created = data.data.created;
-                        supplier.value[finded_index].updated = data.data.updated;
-                        supplier.value[finded_index].name = data.data.name;
-                        supplier.value[finded_index].id_user = data.data.id_user;
-                        supplier.value[finded_index].id_pos = data.data.id_pos;
-                        supplier.value[finded_index].id_branch = data.data.id_branch;
-                        supplier.value[finded_index].user = data.data.user;
-                        supplier.value[finded_index].pos = data.data.pos;
-                        supplier.value[finded_index].branch = data.data.branch;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < supplier.value.length; i++) {
-                     const curr_supplier = supplier.value[i];
-                     if(curr_supplier.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                     supplier.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_SUPPLIER_LOADED_REPLY", true);
-      }
 
       return {
          t,

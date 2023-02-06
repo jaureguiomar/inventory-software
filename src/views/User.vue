@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -124,6 +124,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UsersResponse, WindowResponse, User } from "@/types/user";
 import { UserRole } from "@/types/user-role";
 import { Pos } from "@/types/pos";
@@ -231,15 +232,82 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getUserLoadedReply = computed(() => {
          return store.getters["getUserLoadedReply"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to user report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.USER_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getUserLoadedReply.value) {
+            window.api.receive("main-window-user-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        user.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < user.value.length; i++) {
+                        const curr_user = user.value[i];
+                        if(curr_user.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           user.value[finded_index].id = data.data.id;
+                           user.value[finded_index].is_active = data.data.is_active;
+                           user.value[finded_index].created = data.data.created;
+                           user.value[finded_index].updated = data.data.updated;
+                           user.value[finded_index].username = data.data.username;
+                           user.value[finded_index].email = data.data.email;
+                           user.value[finded_index].password = data.data.password;
+                           user.value[finded_index].first_name = data.data.first_name;
+                           user.value[finded_index].last_name = data.data.last_name;
+                           user.value[finded_index].id_role = data.data.id_role;
+                           user.value[finded_index].id_user = data.data.id_user;
+                           user.value[finded_index].id_pos = data.data.id_pos;
+                           user.value[finded_index].id_branch = data.data.id_branch;
+                           user.value[finded_index].role = data.data.role;
+                           user.value[finded_index].user = data.data.user;
+                           user.value[finded_index].pos = data.data.pos;
+                           user.value[finded_index].branch = data.data.branch;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < user.value.length; i++) {
+                        const curr_user = user.value[i];
+                        if(curr_user.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                        user.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_USER_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -395,60 +463,6 @@ export default defineComponent({
             }
          });
       };
-
-      onRefreshData();
-      if(!getUserLoadedReply.value) {
-         window.api.receive("main-window-user-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     user.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < user.value.length; i++) {
-                     const curr_user = user.value[i];
-                     if(curr_user.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        user.value[finded_index].id = data.data.id;
-                        user.value[finded_index].is_active = data.data.is_active;
-                        user.value[finded_index].created = data.data.created;
-                        user.value[finded_index].updated = data.data.updated;
-                        user.value[finded_index].username = data.data.username;
-                        user.value[finded_index].email = data.data.email;
-                        user.value[finded_index].password = data.data.password;
-                        user.value[finded_index].first_name = data.data.first_name;
-                        user.value[finded_index].last_name = data.data.last_name;
-                        user.value[finded_index].id_role = data.data.id_role;
-                        user.value[finded_index].id_user = data.data.id_user;
-                        user.value[finded_index].id_pos = data.data.id_pos;
-                        user.value[finded_index].id_branch = data.data.id_branch;
-                        user.value[finded_index].role = data.data.role;
-                        user.value[finded_index].user = data.data.user;
-                        user.value[finded_index].pos = data.data.pos;
-                        user.value[finded_index].branch = data.data.branch;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < user.value.length; i++) {
-                     const curr_user = user.value[i];
-                     if(curr_user.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                     user.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_USER_LOADED_REPLY", true);
-      }
 
       return {
          t,

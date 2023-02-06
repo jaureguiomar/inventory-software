@@ -15,7 +15,7 @@ const mysql_connection = {
    user: "root",
    password: "12345",
    database: "inventory_system_local",
-   port: 3310
+   port: 3306
 };
 
 ipcMain.on("mysql-offline-bakup", function(e, data) {

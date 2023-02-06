@@ -601,13 +601,11 @@ const i18n = createI18n({
                   id: "Id Activity Log",
                   created: "Created",
                   updated: "Updated",
-                  // amount: "Amounts (Open / Close)",
-                  // amount_open: "Amount open",
-                  // amount_close: "Amount close",
-                  // date_close: "Date close",
-                  // amount_sale: "Amount Sale",
-                  // amount_supplier: "Amount Supplier",
-                  // user: "Users (Open / Close)",
+                  name: "Name",
+                  extra_data: "Extra Data",
+                  id_operation: "ID Operation",
+                  id_access: "ID Access",
+                  id_user: "id User",
                   show_details: "Show details",
                   actions: "Actions"
                },
@@ -615,13 +613,11 @@ const i18n = createI18n({
                   id: "# Activity Log",
                   created: "Date Created",
                   updated: "Date Updated",
-                  // amount: "Amounts",
-                  // amount_open: "Amount open",
-                  // amount_close: "Amount close",
-                  // date_close: "Date close",
-                  // amount_sale: "Amount Sale",
-                  // amount_supplier: "Amount Supplier",
-                  // user: "Users",
+                  name: "Name",
+                  extra_data: "Extra Data",
+                  id_operation: "ID Operation",
+                  id_access: "ID Access",
+                  id_user: "id User",
                   details: {
                      show_details: "Show details",
                      hide_details: "Hide details",
@@ -659,21 +655,11 @@ const i18n = createI18n({
                   id: "ID",
                   created: "Date Created",
                   updated: "Date Updated",
-                  // amount_open: "Amount open",
-                  // amount_sale: "Amount Sale",
-                  // amount_supplier: "Amount Supplier",
-                  // amount_close: "Amount close",
-                  // date_close: "Date Close",
-                  // id_type: "Type",
-                  // user_open: {
-                  //    username: "User Open"
-                  // },
-                  // user_close: {
-                  //    username: "User Close"
-                  // },
-                  // branch: {
-                  //    name: "Name"
-                  // }
+                  name: "Name",
+                  extra_data: "Extra Data",
+                  id_operation: "ID Operation",
+                  id_access: "ID Access",
+                  id_user: "id User",
                },
                button: {
                   clear: "Clear",

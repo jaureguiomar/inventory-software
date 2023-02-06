@@ -131,7 +131,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -139,6 +139,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { CashCutoff, CashCutoffsResponse, WindowResponse } from "@/types/cash-cutoff";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -253,15 +254,83 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getCashCutoffLoadedReply = computed(() => {
          return store.getters["getCashCutoffLoadedReply"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to activity log report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.ACTIVITY_LOG_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getCashCutoffLoadedReply.value) {
+            window.api.receive("main-window-cash-cutoff-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        cashCutoff.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < cashCutoff.value.length; i++) {
+                        const curr_user_role = cashCutoff.value[i];
+                        if(curr_user_role.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           cashCutoff.value[finded_index].id = data.data.id;
+                           cashCutoff.value[finded_index].is_active = data.data.is_active;
+                           cashCutoff.value[finded_index].created = data.data.created;
+                           cashCutoff.value[finded_index].updated = data.data.updated;
+                           cashCutoff.value[finded_index].amount_open = data.data.amount_open;
+                           cashCutoff.value[finded_index].amount_sale = data.data.amount_sale;
+                           cashCutoff.value[finded_index].amount_supplier = data.data.amount_supplier;
+                           cashCutoff.value[finded_index].amount_close = data.data.amount_close;
+                           cashCutoff.value[finded_index].date_close = data.data.date_close;
+                           cashCutoff.value[finded_index].id_type = data.data.id_type;
+                           cashCutoff.value[finded_index].id_user_open = data.data.id_user_open;
+                           cashCutoff.value[finded_index].id_user_close = data.data.id_user_close;
+                           cashCutoff.value[finded_index].id_pos = data.data.id_pos;
+                           cashCutoff.value[finded_index].id_branch = data.data.id_branch;
+                           cashCutoff.value[finded_index].user_open = data.data.user_open;
+                           cashCutoff.value[finded_index].user_close = data.data.user_close;
+                           cashCutoff.value[finded_index].pos = data.data.pos;
+                           cashCutoff.value[finded_index].branch = data.data.branch;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < cashCutoff.value.length; i++) {
+                        const curr_user_role = cashCutoff.value[i];
+                        if(curr_user_role.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                     cashCutoff.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_CASH_CUTOFF_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -422,61 +491,6 @@ export default defineComponent({
       //       }
       //    });
       // };
-
-      onRefreshData();
-      if(!getCashCutoffLoadedReply.value) {
-         window.api.receive("main-window-cash-cutoff-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     cashCutoff.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < cashCutoff.value.length; i++) {
-                     const curr_user_role = cashCutoff.value[i];
-                     if(curr_user_role.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        cashCutoff.value[finded_index].id = data.data.id;
-                        cashCutoff.value[finded_index].is_active = data.data.is_active;
-                        cashCutoff.value[finded_index].created = data.data.created;
-                        cashCutoff.value[finded_index].updated = data.data.updated;
-                        cashCutoff.value[finded_index].amount_open = data.data.amount_open;
-                        cashCutoff.value[finded_index].amount_sale = data.data.amount_sale;
-                        cashCutoff.value[finded_index].amount_supplier = data.data.amount_supplier;
-                        cashCutoff.value[finded_index].amount_close = data.data.amount_close;
-                        cashCutoff.value[finded_index].date_close = data.data.date_close;
-                        cashCutoff.value[finded_index].id_type = data.data.id_type;
-                        cashCutoff.value[finded_index].id_user_open = data.data.id_user_open;
-                        cashCutoff.value[finded_index].id_user_close = data.data.id_user_close;
-                        cashCutoff.value[finded_index].id_pos = data.data.id_pos;
-                        cashCutoff.value[finded_index].id_branch = data.data.id_branch;
-                        cashCutoff.value[finded_index].user_open = data.data.user_open;
-                        cashCutoff.value[finded_index].user_close = data.data.user_close;
-                        cashCutoff.value[finded_index].pos = data.data.pos;
-                        cashCutoff.value[finded_index].branch = data.data.branch;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < cashCutoff.value.length; i++) {
-                     const curr_user_role = cashCutoff.value[i];
-                     if(curr_user_role.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                  cashCutoff.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_CASH_CUTOFF_LOADED_REPLY", true);
-      }
 
       return {
          t,

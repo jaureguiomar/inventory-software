@@ -135,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -146,6 +146,7 @@ import {
    format_branch, format_pos, format_user,
    format_product_m2m, format_cash_cutoff
 } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { SaleM2M, SalesM2MResponse, WindowResponseM2M } from "@/types/sale";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -226,15 +227,76 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getSaleProductLoadedReply = computed(() => {
          return store.getters["getSaleProductLoadedReply"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to sale product report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.SALE_PRODUCT_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getSaleProductLoadedReply.value) {
+            window.api.receive("main-window-sale-product-module-reply", (data:WindowResponseM2M) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        saleProduct.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < saleProduct.value.length; i++) {
+                        const curr_user_role = saleProduct.value[i];
+                        if(curr_user_role.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           saleProduct.value[finded_index].id = data.data.id;
+                           saleProduct.value[finded_index].is_active = data.data.is_active;
+                           saleProduct.value[finded_index].created = data.data.created;
+                           saleProduct.value[finded_index].updated = data.data.updated;
+                           saleProduct.value[finded_index].total = data.data.total;
+                           saleProduct.value[finded_index].is_supplier = data.data.is_supplier;
+                           saleProduct.value[finded_index].id_cash_cutoff = data.data.id_cash_cutoff;
+                           saleProduct.value[finded_index].id_user = data.data.id_user;
+                           saleProduct.value[finded_index].id_pos = data.data.id_pos;
+                           saleProduct.value[finded_index].id_branch = data.data.id_branch;
+                           saleProduct.value[finded_index].product = data.data.product;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < saleProduct.value.length; i++) {
+                        const curr_user_role = saleProduct.value[i];
+                        if(curr_user_role.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                     saleProduct.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_SALE_PRODUCT_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -398,54 +460,6 @@ export default defineComponent({
       //       }
       //    });
       // };
-
-      onRefreshData();
-      if(!getSaleProductLoadedReply.value) {
-         window.api.receive("main-window-sale-product-module-reply", (data:WindowResponseM2M) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     saleProduct.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < saleProduct.value.length; i++) {
-                     const curr_user_role = saleProduct.value[i];
-                     if(curr_user_role.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        saleProduct.value[finded_index].id = data.data.id;
-                        saleProduct.value[finded_index].is_active = data.data.is_active;
-                        saleProduct.value[finded_index].created = data.data.created;
-                        saleProduct.value[finded_index].updated = data.data.updated;
-                        saleProduct.value[finded_index].total = data.data.total;
-                        saleProduct.value[finded_index].is_supplier = data.data.is_supplier;
-                        saleProduct.value[finded_index].id_cash_cutoff = data.data.id_cash_cutoff;
-                        saleProduct.value[finded_index].id_user = data.data.id_user;
-                        saleProduct.value[finded_index].id_pos = data.data.id_pos;
-                        saleProduct.value[finded_index].id_branch = data.data.id_branch;
-                        saleProduct.value[finded_index].product = data.data.product;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < saleProduct.value.length; i++) {
-                     const curr_user_role = saleProduct.value[i];
-                     if(curr_user_role.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                  saleProduct.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_SALE_PRODUCT_LOADED_REPLY", true);
-      }
 
       return {
          t,

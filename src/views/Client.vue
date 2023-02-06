@@ -105,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from "vue"
+import { defineComponent, ref, computed, reactive, onMounted } from "vue"
 import { useI18n } from "vue-i18n/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -113,6 +113,7 @@ import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { ClientsResponse, WindowResponse, Client } from "@/types/client";
 import { Branch } from "@/types/branch";
 import { User } from "@/types/user";
@@ -231,15 +232,81 @@ export default defineComponent({
             sortable: true
          }
       ];
-
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
       });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
+      });
       const getClientLoadedReply = computed(() => {
          return store.getters["getClientLoadedReply"];
+      });
+
+      onMounted(() => {
+         create_activity_log({
+            name: "The user has access to category report",
+            extra_data: "",
+            id_operation: ACTIVITY_LOG_ACCESS.ACCESS,
+            id_access: ACTIVITY_LOG_OPERATION.CLIENT_REPORT,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+         onRefreshData();
+         if(!getClientLoadedReply.value) {
+            window.api.receive("main-window-client-module-reply", (data:WindowResponse) => {
+               if(data.result === "success") {
+                  if(data.type === "add") {
+                     if(data.data)
+                        client.value.push(data.data);
+                  } else if(data.type === "update") {
+                     let finded_index = -1;
+                     for(let i = 0; i < client.value.length; i++) {
+                        const curr_client = client.value[i];
+                        if(curr_client.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0) {
+                        if(data.data) {
+                           client.value[finded_index].id = data.data.id;
+                           client.value[finded_index].is_active = data.data.is_active;
+                           client.value[finded_index].created = data.data.created;
+                           client.value[finded_index].updated = data.data.updated;
+                           client.value[finded_index].first_name = data.data.first_name;
+                           client.value[finded_index].last_name = data.data.last_name;
+                           client.value[finded_index].address = data.data.address;
+                           client.value[finded_index].cellphone = data.data.cellphone;
+                           client.value[finded_index].cellphone2 = data.data.cellphone2;
+                           client.value[finded_index].email = data.data.email;
+                           client.value[finded_index].id_user = data.data.id_user;
+                           client.value[finded_index].id_pos = data.data.id_pos;
+                           client.value[finded_index].id_branch = data.data.id_branch;
+                           client.value[finded_index].user = data.data.user;
+                           client.value[finded_index].pos = data.data.pos;
+                           client.value[finded_index].branch = data.data.branch;
+                        }
+                     }
+                  } else if(data.type === "delete") {
+                     let finded_index = -1;
+                     for(let i = 0; i < client.value.length; i++) {
+                        const curr_client = client.value[i];
+                        if(curr_client.id == data.id) {
+                           finded_index = i;
+                           break;
+                        }
+                     }
+                     if(finded_index >= 0)
+                        client.value.splice(finded_index, 1);
+                  }
+               }
+            });
+            store.commit("SET_CLIENT_LOADED_REPLY", true);
+         }
       });
 
       const onRefreshData = () => {
@@ -390,59 +457,6 @@ export default defineComponent({
             }
          });
       };
-
-      onRefreshData();
-      if(!getClientLoadedReply.value) {
-         window.api.receive("main-window-client-module-reply", (data:WindowResponse) => {
-            if(data.result === "success") {
-               if(data.type === "add") {
-                  if(data.data)
-                     client.value.push(data.data);
-               } else if(data.type === "update") {
-                  let finded_index = -1;
-                  for(let i = 0; i < client.value.length; i++) {
-                     const curr_client = client.value[i];
-                     if(curr_client.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0) {
-                     if(data.data) {
-                        client.value[finded_index].id = data.data.id;
-                        client.value[finded_index].is_active = data.data.is_active;
-                        client.value[finded_index].created = data.data.created;
-                        client.value[finded_index].updated = data.data.updated;
-                        client.value[finded_index].first_name = data.data.first_name;
-                        client.value[finded_index].last_name = data.data.last_name;
-                        client.value[finded_index].address = data.data.address;
-                        client.value[finded_index].cellphone = data.data.cellphone;
-                        client.value[finded_index].cellphone2 = data.data.cellphone2;
-                        client.value[finded_index].email = data.data.email;
-                        client.value[finded_index].id_user = data.data.id_user;
-                        client.value[finded_index].id_pos = data.data.id_pos;
-                        client.value[finded_index].id_branch = data.data.id_branch;
-                        client.value[finded_index].user = data.data.user;
-                        client.value[finded_index].pos = data.data.pos;
-                        client.value[finded_index].branch = data.data.branch;
-                     }
-                  }
-               } else if(data.type === "delete") {
-                  let finded_index = -1;
-                  for(let i = 0; i < client.value.length; i++) {
-                     const curr_client = client.value[i];
-                     if(curr_client.id == data.id) {
-                        finded_index = i;
-                        break;
-                     }
-                  }
-                  if(finded_index >= 0)
-                     client.value.splice(finded_index, 1);
-               }
-            }
-         });
-         store.commit("SET_CLIENT_LOADED_REPLY", true);
-      }
 
       return {
          t,
