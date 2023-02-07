@@ -300,6 +300,16 @@ export default defineComponent({
             return;
          }
 
+         create_activity_log({
+            name: "The user has deleted a client item",
+            extra_data: JSON.stringify(client),
+            id_operation: ACTIVITY_LOG_ACCESS.DELETE,
+            id_access: ACTIVITY_LOG_OPERATION.CLIENT_REPORT_DELETE,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+
          window.api.send("client-module-window-dialog", {
             type: "delete",
             message: "The client has been deleted properly"

@@ -659,6 +659,16 @@ export default defineComponent({
             return;
          }
 
+         create_activity_log({
+            name: "The user has deleted a user role item",
+            extra_data: JSON.stringify(userRole),
+            id_operation: ACTIVITY_LOG_ACCESS.DELETE,
+            id_access: ACTIVITY_LOG_OPERATION.USER_ROLE_REPORT_DELETE,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+
          window.api.send("user-role-module-window-dialog", {
             type: "delete",
             message: "The user role has been deleted properly"

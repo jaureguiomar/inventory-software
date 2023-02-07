@@ -768,6 +768,16 @@ export default defineComponent({
                         pos: formatted_pos,
                         branch: formatted_branch
                      };
+
+                     create_activity_log({
+                        name: `The user has added a user role item`,
+                        extra_data: JSON.stringify(formatted_data),
+                        id_operation: ACTIVITY_LOG_ACCESS.ADD,
+                        id_access: ACTIVITY_LOG_OPERATION.USER_ROLE_REPORT_ADD_UPDATE,
+                        id_user: getSessionUserId.value,
+                        server: getServer.value,
+                        access_token: getAuthToken.value.access_token
+                     });
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -836,6 +846,16 @@ export default defineComponent({
                         pos: formatted_pos,
                         branch: formatted_branch
                      };
+
+                     create_activity_log({
+                        name: `The user has updated a user role item`,
+                        extra_data: JSON.stringify(formatted_data),
+                        id_operation: ACTIVITY_LOG_ACCESS.UPDATE,
+                        id_access: ACTIVITY_LOG_OPERATION.USER_ROLE_REPORT_ADD_UPDATE,
+                        id_user: getSessionUserId.value,
+                        server: getServer.value,
+                        access_token: getAuthToken.value.access_token
+                     });
                   } else {
                      Swal.fire({
                         title: "Error",

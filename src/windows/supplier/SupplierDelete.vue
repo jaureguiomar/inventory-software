@@ -239,6 +239,16 @@ export default defineComponent({
             return;
          }
 
+         create_activity_log({
+            name: "The user has deleted a supplier item",
+            extra_data: JSON.stringify(supplier),
+            id_operation: ACTIVITY_LOG_ACCESS.DELETE,
+            id_access: ACTIVITY_LOG_OPERATION.SUPPLIER_REPORT_DELETE,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
+
          window.api.send("supplier-module-window-dialog", {
             type: "delete",
             message: "The supplier has been deleted properly"

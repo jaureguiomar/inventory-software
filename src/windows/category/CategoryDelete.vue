@@ -243,6 +243,16 @@ export default defineComponent({
                return;
             }
 
+            create_activity_log({
+               name: "The user has deleted a category item",
+               extra_data: JSON.stringify(category),
+               id_operation: ACTIVITY_LOG_ACCESS.DELETE,
+               id_access: ACTIVITY_LOG_OPERATION.CATEGORY_REPORT_DELETE,
+               id_user: getSessionUserId.value,
+               server: getServer.value,
+               access_token: getAuthToken.value.access_token
+            });
+
             window.api.send("category-module-window-dialog", {
                type: "delete",
                message: "The category has been deleted properly"
