@@ -271,6 +271,7 @@ import { defineComponent, getCurrentInstance, ref, reactive, computed, onMounted
 import { key } from "@/plugins/store";
 import { findValueBy } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Product, ProductsResponse } from "@/types/product";
 import { Sale, SaleResponse } from "@/types/sale";
 import { User } from "@/types/user";
@@ -757,6 +758,16 @@ export default defineComponent({
                if(response) {
                   if(!response.data.error.is_error) {
                      created_sale = response.data.data.data;
+
+                     create_activity_log({
+                        name: "The user has added a sale item",
+                        extra_data: JSON.stringify(created_sale),
+                        id_operation: ACTIVITY_LOG_ACCESS.ADD,
+                        id_access: ACTIVITY_LOG_OPERATION.SALE_REPORT,
+                        id_user: getSessionUserId.value,
+                        server: getServer.value,
+                        access_token: getAuthToken.value.access_token
+                     });
                   } else {
                      Swal.fire({
                         title: "Error",

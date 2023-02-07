@@ -132,6 +132,7 @@ import { useDialogPluginComponent } from "quasar";
 import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { key } from "@/plugins/store";
+import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UserRole } from "@/types/user-role";
 import { User, UsersResponse } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -185,6 +186,21 @@ export default {
          user_close: null,
          pos: null,
          branch: null
+      });
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+      const getBranchId = computed(() => {
+         return store.getters["getBranchId"];
+      });
+      const getPosId = computed(() => {
+         return store.getters["getPosId"];
+      });
+      const getSessionUserId = computed(() => {
+         return store.getters["getSessionUserId"];
       });
 
       onMounted(() => {
@@ -349,7 +365,13 @@ export default {
          let username:string = field.username.text;
          let error_amount:boolean = false;
          let error_username:boolean = false;
-         let error_id_user:boolean =false;
+         let error_id_user:boolean = false;
+         const log_data = {
+            text: "",
+            data: {},
+            id_operation: -1,
+            id_access: -1
+         };
 
          error_amount = validateAmount(amount);
          error_username = validateUsername(username);
@@ -361,6 +383,7 @@ export default {
             return false;
 
          if(type === "open") {
+            log_data.text = "opened";
             try {
                let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/create.php`,
                   {
@@ -377,8 +400,13 @@ export default {
                   }
                );
                if(response) {
-                  if(response.data.error.is_error)
+                  if(!response.data.error.is_error) {
+                     log_data.data = response.data.data.data;
+                     log_data.id_operation = ACTIVITY_LOG_OPERATION.CASH_CUTOFF_SALE;
+                     log_data.id_access = ACTIVITY_LOG_ACCESS.ADD;
+                  } else {
                      return false;
+                  }
                } else {
                   return false;
                }
@@ -388,6 +416,8 @@ export default {
          } else if(type === "close") {
             let amount_sale:number|string = 0;
             let amount_supplier:number|string = 0;
+            log_data.text = "closed";
+
             try {
                let response = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale_product/v3/find-by-sale.php`,
                   {
@@ -413,6 +443,10 @@ export default {
                      }
                      amount_sale = amount_sale.toFixed(2);
                      amount_supplier = amount_supplier.toFixed(2);
+
+                     log_data.data = response.data.data;
+                     log_data.id_operation = ACTIVITY_LOG_OPERATION.CASH_CUTOFF_SALE;
+                     log_data.id_access = ACTIVITY_LOG_ACCESS.UPDATE;
                   } else {
                      return false;
                   }
@@ -455,6 +489,15 @@ export default {
             }
          }
 
+         create_activity_log({
+            name: `The user has ${ log_data.text } a cash cutoff item`,
+            extra_data: JSON.stringify(log_data.data),
+            id_operation: log_data.id_operation,
+            id_access: log_data.id_access,
+            id_user: getSessionUserId.value,
+            server: getServer.value,
+            access_token: getAuthToken.value.access_token
+         });
          return true;
       };
       const onOpenCashCutOff = async() => {
@@ -485,19 +528,6 @@ export default {
          field.username.error.message = result.message;
          return result.error;
       };
-
-      const getServer = computed(() => {
-         return store.getters["getServer"];
-      });
-      const getAuthToken = computed(() => {
-         return store.getters["getAuthToken"];
-      });
-      const getBranchId = computed(() => {
-         return store.getters["getBranchId"];
-      });
-      const getPosId = computed(() => {
-         return store.getters["getPosId"];
-      });
 
       return {
          field,
