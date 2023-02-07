@@ -15,7 +15,11 @@ export const get_categories = async(connection:Connection) => {
                   created: parseDate(rows[i].created),
                   updated: parseDate(rows[i].updated),
                   name: rows[i].name,
+                  id_user: Number(rows[i].id_user),
+                  id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
+                  user: null,
+                  pos: null,
                   branch: {
                      id: -1,
                      is_active: -1,
@@ -23,9 +27,7 @@ export const get_categories = async(connection:Connection) => {
                      updated: "",
                      name: "",
                      telephone: "",
-                     address: "",
-                     machine_id: "",
-                     mac_address: ""
+                     address: ""
                   }
                });
             }
@@ -46,7 +48,11 @@ export const get_category_by_id = async(connection:Connection, id:number) => {
             created: "",
             updated: "",
             name: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
+            user: null,
+            pos: null,
             branch: {
                id: -1,
                is_active: -1,
@@ -54,9 +60,7 @@ export const get_category_by_id = async(connection:Connection, id:number) => {
                updated: "",
                name: "",
                telephone: "",
-               address: "",
-               machine_id: "",
-               mac_address: ""
+               address: ""
             }
          };
 
@@ -88,7 +92,11 @@ export const get_category_mysql_by_id = async(connection:Connection, id:number) 
             created: new Date(),
             updated: new Date(),
             name: "",
+            id_user: -1,
+            id_pos: -1,
             id_branch: -1,
+            user: null,
+            pos: null,
             branch: {
                id: -1,
                is_active: -1,
@@ -96,9 +104,7 @@ export const get_category_mysql_by_id = async(connection:Connection, id:number) 
                updated: "",
                name: "",
                telephone: "",
-               address: "",
-               machine_id: "",
-               mac_address: ""
+               address: ""
             }
          };
 

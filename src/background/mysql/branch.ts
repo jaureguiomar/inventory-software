@@ -13,9 +13,7 @@ export const get_branch_by_id = async(connection:Connection, id:number) => {
             updated: "",
             name: "",
             telephone: "",
-            address: "",
-            machine_id: "",
-            mac_address: ""
+            address: ""
          };
 
          if(!error) {

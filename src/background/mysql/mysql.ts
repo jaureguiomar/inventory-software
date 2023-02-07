@@ -384,7 +384,11 @@ ipcMain.on("mysql-update-category", async function(e, data) {
       created: "",
       updated: "",
       name: "",
+      id_user: 0,
+      id_pos: 0,
       id_branch: -1,
+      user: null,
+      pos: null,
       branch: {
          id: -1,
          is_active: -1,
@@ -392,9 +396,7 @@ ipcMain.on("mysql-update-category", async function(e, data) {
          updated: "",
          name: "",
          telephone: "",
-         address: "",
-         machine_id: "",
-         mac_address: ""
+         address: ""
       }
    };
    let branch_data:Branch = {
@@ -404,9 +406,7 @@ ipcMain.on("mysql-update-category", async function(e, data) {
       updated: "",
       name: "",
       telephone: "",
-      address: "",
-      machine_id: "",
-      mac_address: ""
+      address: ""
    };
 
    const old_category_mysql_data = await get_category_mysql_by_id(connection, data.id);

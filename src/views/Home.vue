@@ -67,7 +67,10 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store"
-import { format_category, format_user, format_pos, format_branch, format_user_role, format_product, format_sale, format_cash_cutoff } from "@/plugins/mixins/format";
+import {
+   format_category, format_user, format_pos, format_branch,
+   format_user_role, format_product, format_sale, format_cash_cutoff
+} from "@/plugins/mixins/format";
 import { Branch, BranchesResponse } from "@/types/branch";
 import { Client, ClientsResponse } from "@/types/client";
 import { Supplier, SuppliersResponse } from "@/types/supplier";
