@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("user_role.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onUserRoleAddWindowClick">
+            <a v-if="permissionUserRoleSee" class="q-mr-sm text-white cursor-pointer" @click="onUserRoleAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -67,6 +67,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionUserRoleAdd"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -74,6 +75,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionUserRoleUpdate"
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -81,6 +83,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionUserRoleDelete"
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
@@ -114,6 +117,7 @@ import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { UserRolesResponse, WindowResponse, UserRole } from "@/types/user-role";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -190,6 +194,10 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionUserRoleSee = ref(false);
+      const permissionUserRoleAdd = ref(false);
+      const permissionUserRoleUpdate = ref(false);
+      const permissionUserRoleDelete = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -199,11 +207,26 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getUserRoleLoadedReply = computed(() => {
          return store.getters["getUserRoleLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(31, getSessionPermission.value);
+         const permission2 = get_permission_by_id(37, getSessionPermission.value);
+         const permission3 = get_permission_by_id(38, getSessionPermission.value);
+         const permission4 = get_permission_by_id(39, getSessionPermission.value);
+         permissionUserRoleSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionUserRoleAdd.value = validate_permission(getSessionUserRole.value.atributes_2, permission2.attr_value);
+         permissionUserRoleUpdate.value = validate_permission(getSessionUserRole.value.atributes_2, permission3.attr_value);
+         permissionUserRoleDelete.value = validate_permission(getSessionUserRole.value.atributes_2, permission4.attr_value);
+
          create_activity_log({
             name: "The user has access to user role report",
             extra_data: "",
@@ -418,6 +441,10 @@ export default defineComponent({
          userRoleColumns,
          userRoleFilter,
          userRolePagination,
+         permissionUserRoleSee,
+         permissionUserRoleAdd,
+         permissionUserRoleUpdate,
+         permissionUserRoleDelete,
          onRefreshData,
          onUserRoleAddWindowClick,
          onUserRoleSeeWindowClick,

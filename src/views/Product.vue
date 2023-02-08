@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("product.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onProductAddWindowClick">
+            <a v-if="permissionProductSee" class="q-mr-sm text-white cursor-pointer" @click="onProductAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -78,6 +78,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionProductAdd"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -85,6 +86,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionProductUpdate"
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -92,6 +94,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionProductDelete"
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
@@ -125,6 +128,7 @@ import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { ProductsResponse, WindowResponse, Product } from "@/types/product";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -252,6 +256,10 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionProductSee = ref(false);
+      const permissionProductAdd = ref(false);
+      const permissionProductUpdate = ref(false);
+      const permissionProductDelete = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -264,11 +272,26 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getProductLoadedReply = computed(() => {
          return store.getters["getProductLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(19, getSessionPermission.value);
+         const permission2 = get_permission_by_id(20, getSessionPermission.value);
+         const permission3 = get_permission_by_id(21, getSessionPermission.value);
+         const permission4 = get_permission_by_id(22, getSessionPermission.value);
+         permissionProductSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionProductAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+         permissionProductUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+         permissionProductDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
+
          create_activity_log({
             name: "The user has access to product report",
             extra_data: "",
@@ -506,6 +529,10 @@ export default defineComponent({
          productColumns,
          productFilter,
          productPagination,
+         permissionProductSee,
+         permissionProductAdd,
+         permissionProductUpdate,
+         permissionProductDelete,
          onRefreshData,
          onProductAddWindowClick,
          onProductSeeWindowClick,

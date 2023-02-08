@@ -260,14 +260,14 @@ export default defineComponent({
       });
 
       onMounted(() => {
-         const permission11 = get_permission_by_id(11, getSessionPermission.value);
-         const permission12 = get_permission_by_id(12, getSessionPermission.value);
-         const permission13 = get_permission_by_id(13, getSessionPermission.value);
-         const permission14 = get_permission_by_id(14, getSessionPermission.value);
-         permissionClientSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission11.attr_value);
-         permissionClientAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission12.attr_value);
-         permissionClientUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission13.attr_value);
-         permissionClientDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission14.attr_value);
+         const permission1 = get_permission_by_id(11, getSessionPermission.value);
+         const permission2 = get_permission_by_id(12, getSessionPermission.value);
+         const permission3 = get_permission_by_id(13, getSessionPermission.value);
+         const permission4 = get_permission_by_id(14, getSessionPermission.value);
+         permissionClientSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionClientAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+         permissionClientUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+         permissionClientDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
 
          create_activity_log({
             name: "The user has access to category report",

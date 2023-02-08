@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("user.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onUserAddWindowClick">
+            <a v-if="permissionUserSee" class="q-mr-sm text-white cursor-pointer" @click="onUserAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -78,6 +78,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionUserAdd"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -85,6 +86,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionUserUpdate"
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -92,6 +94,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionUserDelete"
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
@@ -125,6 +128,7 @@ import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { UsersResponse, WindowResponse, User } from "@/types/user";
 import { UserRole } from "@/types/user-role";
 import { Pos } from "@/types/pos";
@@ -232,6 +236,10 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionUserSee = ref(false);
+      const permissionUserAdd = ref(false);
+      const permissionUserUpdate = ref(false);
+      const permissionUserDelete = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -241,11 +249,26 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getUserLoadedReply = computed(() => {
          return store.getters["getUserLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(27, getSessionPermission.value);
+         const permission2 = get_permission_by_id(28, getSessionPermission.value);
+         const permission3 = get_permission_by_id(29, getSessionPermission.value);
+         const permission4 = get_permission_by_id(30, getSessionPermission.value);
+         permissionUserSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionUserAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+         permissionUserUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+         permissionUserDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
+
          create_activity_log({
             name: "The user has access to user report",
             extra_data: "",
@@ -471,6 +494,10 @@ export default defineComponent({
          userColumns,
          userFilter,
          userPagination,
+         permissionUserSee,
+         permissionUserAdd,
+         permissionUserUpdate,
+         permissionUserDelete,
          onRefreshData,
          onUserAddWindowClick,
          onUserSeeWindowClick,

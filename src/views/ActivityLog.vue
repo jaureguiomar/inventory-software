@@ -67,13 +67,14 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionActivityLogSee"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
                         @click="onActivityLogSeeWindowClick(props.row)"
                      >
                      </q-btn>
-                     <q-btn
+                     <!-- <q-btn
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -86,7 +87,7 @@
                         label="Delete"
                         @click="onActivityLogDeleteWindowClick(props.row)"
                      >
-                     </q-btn>
+                     </q-btn> -->
                   </q-td>
                </template>
 
@@ -114,6 +115,7 @@ import { key } from "@/plugins/store";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_activity_log_operation, format_activity_log_access } from "@/plugins/mixins/format";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { ActivityLogsResponse, WindowResponse, ActivityLog } from "@/types/activity-log";
 import { User } from "@/types/user";
 import Banner from "@/views/layout/Banner.vue";
@@ -190,6 +192,7 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionActivityLogSee = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -199,11 +202,20 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getActivityLogLoadedReply = computed(() => {
          return store.getters["getActivityLogLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(42, getSessionPermission.value);
+         permissionActivityLogSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+
          create_activity_log({
             name: "The user has access to cash cutoff report",
             extra_data: "",
@@ -350,50 +362,50 @@ export default defineComponent({
             }
          });
       };
-      const onActivityLogUpdateWindowClick = (item:ActivityLog) => {
-         window.api.send("activity-log-module-window", {
-            id: item.id,
-            type: "update",
-            content: {
-               title: t("activity_log.window.update.title"),
-               description: t("activity_log.window.update.subtitle")
-            },
-            data: {
-               id: item.id,
-               is_active: item.is_active,
-               created: item.created,
-               updated: item.updated,
-               name: item.name,
-               extra_data: item.extra_data,
-               id_operation: item.id_operation,
-               id_access: item.id_access,
-               id_user: item.id_user,
-               operation: { ...item.operation },
-               access: { ...item.access },
-               user: { ...item.user }
-            }
-         });
-      };
-      const onActivityLogDeleteWindowClick = (item:ActivityLog) => {
-         window.api.send("activity-log-module-window", {
-            id: item.id,
-            type: "delete",
-            data: {
-               id: item.id,
-               is_active: item.is_active,
-               created: item.created,
-               updated: item.updated,
-               name: item.name,
-               extra_data: item.extra_data,
-               id_operation: item.id_operation,
-               id_access: item.id_access,
-               id_user: item.id_user,
-               operation: { ...item.operation },
-               access: { ...item.access },
-               user: { ...item.user }
-            }
-         });
-      };
+      // const onActivityLogUpdateWindowClick = (item:ActivityLog) => {
+      //    window.api.send("activity-log-module-window", {
+      //       id: item.id,
+      //       type: "update",
+      //       content: {
+      //          title: t("activity_log.window.update.title"),
+      //          description: t("activity_log.window.update.subtitle")
+      //       },
+      //       data: {
+      //          id: item.id,
+      //          is_active: item.is_active,
+      //          created: item.created,
+      //          updated: item.updated,
+      //          name: item.name,
+      //          extra_data: item.extra_data,
+      //          id_operation: item.id_operation,
+      //          id_access: item.id_access,
+      //          id_user: item.id_user,
+      //          operation: { ...item.operation },
+      //          access: { ...item.access },
+      //          user: { ...item.user }
+      //       }
+      //    });
+      // };
+      // const onActivityLogDeleteWindowClick = (item:ActivityLog) => {
+      //    window.api.send("activity-log-module-window", {
+      //       id: item.id,
+      //       type: "delete",
+      //       data: {
+      //          id: item.id,
+      //          is_active: item.is_active,
+      //          created: item.created,
+      //          updated: item.updated,
+      //          name: item.name,
+      //          extra_data: item.extra_data,
+      //          id_operation: item.id_operation,
+      //          id_access: item.id_access,
+      //          id_user: item.id_user,
+      //          operation: { ...item.operation },
+      //          access: { ...item.access },
+      //          user: { ...item.user }
+      //       }
+      //    });
+      // };
 
       return {
          t,
@@ -402,11 +414,12 @@ export default defineComponent({
          activityLogColumns,
          activityLogFilter,
          activityLogPagination,
+         permissionActivityLogSee,
          onRefreshData,
          onActivityLogAddWindowClick,
          onActivityLogSeeWindowClick,
-         onActivityLogUpdateWindowClick,
-         onActivityLogDeleteWindowClick,
+         // onActivityLogUpdateWindowClick,
+         // onActivityLogDeleteWindowClick,
          getFormattedDate,
          getFormattedDateString
       }

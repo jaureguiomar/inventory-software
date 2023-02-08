@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("supplier.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onSupplierAddWindowClick">
+            <a v-if="permissionSupplierSee" class="q-mr-sm text-white cursor-pointer" @click="onSupplierAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -67,6 +67,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionSupplierAdd"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -74,6 +75,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionSupplierUpdate"
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -81,6 +83,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionSupplierDelete"
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
@@ -114,6 +117,7 @@ import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { SuppliersResponse, WindowResponse, Supplier } from "@/types/supplier";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -190,6 +194,10 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionSupplierSee = ref(false);
+      const permissionSupplierAdd = ref(false);
+      const permissionSupplierUpdate = ref(false);
+      const permissionSupplierDelete = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -199,11 +207,26 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getSupplierLoadedReply = computed(() => {
          return store.getters["getSupplierLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(15, getSessionPermission.value);
+         const permission2 = get_permission_by_id(16, getSessionPermission.value);
+         const permission3 = get_permission_by_id(17, getSessionPermission.value);
+         const permission4 = get_permission_by_id(18, getSessionPermission.value);
+         permissionSupplierSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionSupplierAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+         permissionSupplierUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+         permissionSupplierDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
+
          create_activity_log({
             name: "The user has access to supplier report",
             extra_data: "",
@@ -398,6 +421,10 @@ export default defineComponent({
          supplierColumns,
          supplierFilter,
          supplierPagination,
+         permissionSupplierSee,
+         permissionSupplierAdd,
+         permissionSupplierUpdate,
+         permissionSupplierDelete,
          onRefreshData,
          onSupplierAddWindowClick,
          onSupplierSeeWindowClick,

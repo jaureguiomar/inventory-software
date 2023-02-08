@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("category.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onCategoryAddWindowClick">
+            <a v-if="permissionCategorySee" class="q-mr-sm text-white cursor-pointer" @click="onCategoryAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -67,6 +67,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionCategoryAdd"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -74,6 +75,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionCategoryUpdate"
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -81,6 +83,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionCategoryDelete"
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
@@ -114,6 +117,7 @@ import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { CategoriesResponse, WindowResponse, Category } from "@/types/category";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -190,6 +194,10 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionCategorySee = ref(false);
+      const permissionCategoryAdd = ref(false);
+      const permissionCategoryUpdate = ref(false);
+      const permissionCategoryDelete = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -202,6 +210,12 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getCategoryLoadedReply = computed(() => {
          return store.getters["getCategoryLoadedReply"];
       });
@@ -210,6 +224,15 @@ export default defineComponent({
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(23, getSessionPermission.value);
+         const permission2 = get_permission_by_id(24, getSessionPermission.value);
+         const permission3 = get_permission_by_id(25, getSessionPermission.value);
+         const permission4 = get_permission_by_id(26, getSessionPermission.value);
+         permissionCategorySee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionCategoryAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+         permissionCategoryUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+         permissionCategoryDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
+
          create_activity_log({
             name: "The user has access to category report",
             extra_data: "",
@@ -414,6 +437,10 @@ export default defineComponent({
          categoryColumns,
          categoryFilter,
          categoryPagination,
+         permissionCategorySee,
+         permissionCategoryAdd,
+         permissionCategoryUpdate,
+         permissionCategoryDelete,
          onRefreshData,
          onCategoryAddWindowClick,
          onCategorySeeWindowClick,

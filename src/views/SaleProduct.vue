@@ -97,6 +97,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionSaleProductSee"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -147,6 +148,7 @@ import {
    format_product_m2m, format_cash_cutoff
 } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { SaleM2M, SalesM2MResponse, WindowResponseM2M } from "@/types/sale";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -227,6 +229,7 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionSaleProductSee = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -236,11 +239,20 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getSaleProductLoadedReply = computed(() => {
          return store.getters["getSaleProductLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(40, getSessionPermission.value);
+         permissionSaleProductSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+
          create_activity_log({
             name: "The user has access to sale product report",
             extra_data: "",
@@ -471,6 +483,7 @@ export default defineComponent({
          saleProductColumns,
          saleProductFilter,
          saleProductPagination,
+         permissionSaleProductSee,
          onRefreshData,
          // onSaleProductAddWindowClick,
          onSaleProductSeeWindowClick,

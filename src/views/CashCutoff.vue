@@ -93,6 +93,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionCashCutoffSee"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -140,6 +141,7 @@ import { key } from "@/plugins/store";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { CashCutoff, CashCutoffsResponse, WindowResponse } from "@/types/cash-cutoff";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
@@ -254,6 +256,7 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionCashCutoffSee = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -263,11 +266,20 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getCashCutoffLoadedReply = computed(() => {
          return store.getters["getCashCutoffLoadedReply"];
       });
 
       onMounted(() => {
+         const permission1 = get_permission_by_id(41, getSessionPermission.value);
+         permissionCashCutoffSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+
          create_activity_log({
             name: "The user has access to activity log report",
             extra_data: "",
@@ -499,6 +511,7 @@ export default defineComponent({
          cashCutoffColumns,
          cashCutoffFilter,
          cashCutoffPagination,
+         permissionCashCutoffSee,
          onRefreshData,
          // onCashCutoffAddWindowClick,
          onCashCutoffSeeWindowClick,
