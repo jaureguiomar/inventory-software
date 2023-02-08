@@ -110,7 +110,6 @@ export default defineComponent({
          const permission8 = get_permission_by_id(8, getSessionPermission.value);
          const permission9 = get_permission_by_id(9, getSessionPermission.value);
          const permission10 = get_permission_by_id(10, getSessionPermission.value);
-
          permissionSaleAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
          permissionClientAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
          permissionSupplierAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);

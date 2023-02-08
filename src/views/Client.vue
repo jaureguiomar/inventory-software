@@ -9,7 +9,7 @@
             <p class="q-ma-none">{{ t("client.title") }}</p>
          </template>
          <template #right-content>
-            <a class="q-mr-sm text-white cursor-pointer" @click="onClientAddWindowClick">
+            <a v-if="permissionClientSee" class="q-mr-sm text-white cursor-pointer" @click="onClientAddWindowClick">
                <font-awesome-icon icon="fa-solid fa-plus"></font-awesome-icon>
             </a>
             <a class="text-white cursor-pointer" @click="onRefreshData">
@@ -67,6 +67,7 @@
                <template #body-cell-actions="props">
                   <q-td :props="props">
                      <q-btn
+                        v-if="permissionClientAdd"
                         class="q-mr-sm"
                         color="primary"
                         label="See"
@@ -74,6 +75,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionClientUpdate"
                         class="q-mr-sm"
                         color="secondary"
                         label="Update"
@@ -81,6 +83,7 @@
                      >
                      </q-btn>
                      <q-btn
+                        v-if="permissionClientDelete"
                         class="q-mr-sm"
                         color="negative"
                         label="Delete"
@@ -114,6 +117,7 @@ import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { ClientsResponse, WindowResponse, Client } from "@/types/client";
 import { Branch } from "@/types/branch";
 import { User } from "@/types/user";
@@ -232,6 +236,10 @@ export default defineComponent({
             sortable: true
          }
       ];
+      const permissionClientSee = ref(false);
+      const permissionClientAdd = ref(false);
+      const permissionClientUpdate = ref(false);
+      const permissionClientDelete = ref(false);
       const getServer = computed(() => {
          return store.getters["getServer"];
       });
@@ -241,11 +249,26 @@ export default defineComponent({
       const getSessionUserId = computed(() => {
          return store.getters["getSessionUserId"];
       });
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
       const getClientLoadedReply = computed(() => {
          return store.getters["getClientLoadedReply"];
       });
 
       onMounted(() => {
+         const permission11 = get_permission_by_id(11, getSessionPermission.value);
+         const permission12 = get_permission_by_id(12, getSessionPermission.value);
+         const permission13 = get_permission_by_id(13, getSessionPermission.value);
+         const permission14 = get_permission_by_id(14, getSessionPermission.value);
+         permissionClientSee.value = validate_permission(getSessionUserRole.value.atributes_1, permission11.attr_value);
+         permissionClientAdd.value = validate_permission(getSessionUserRole.value.atributes_1, permission12.attr_value);
+         permissionClientUpdate.value = validate_permission(getSessionUserRole.value.atributes_1, permission13.attr_value);
+         permissionClientDelete.value = validate_permission(getSessionUserRole.value.atributes_1, permission14.attr_value);
+
          create_activity_log({
             name: "The user has access to category report",
             extra_data: "",
@@ -465,6 +488,10 @@ export default defineComponent({
          clientColumns,
          clientFilter,
          clientPagination,
+         permissionClientSee,
+         permissionClientAdd,
+         permissionClientUpdate,
+         permissionClientDelete,
          onRefreshData,
          onClientAddWindowClick,
          onClientSeeWindowClick,
