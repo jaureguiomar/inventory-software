@@ -1,60 +1,60 @@
 <template>
    <div class="menu-home">
-      <router-link to="/sale">
+      <router-link v-if="permissionSaleAccess" to="/sale">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-cart-shopping" size="4x" />
          </div>
          <div class="bottom">Sale</div>
       </router-link>
-      <router-link to="/client">
+      <router-link v-if="permissionClientAccess" to="/client">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-users" size="4x" />
          </div>
          <div class="bottom">Clients</div>
       </router-link>
-      <router-link to="/supplier">
+      <router-link v-if="permissionSupplierAccess" to="/supplier">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-truck-field" size="4x" />
          </div>
          <div class="bottom">Suppliers</div>
       </router-link>
-      <router-link to="/product">
+      <router-link v-if="permissionProductsAccess" to="/product">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-boxes-stacked" size="4x" />
          </div>
          <div class="bottom">Products</div>
       </router-link>
-      <router-link to="/category">
+      <router-link v-if="permissionCategoriesAccess" to="/category">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-book" size="4x" />
          </div>
          <div class="bottom">Categories</div>
       </router-link>
-      <router-link to="/user">
+      <router-link v-if="permissionUsersAccess" to="/user">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-user-tie" size="4x" />
          </div>
          <div class="bottom">Users</div>
       </router-link>
-      <router-link to="/user-role">
+      <router-link v-if="permissionRolesAccess" to="/user-role">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-address-book" size="4x" />
          </div>
          <div class="bottom">Roles</div>
       </router-link>
-      <router-link to="/sale-product">
+      <router-link v-if="permissionSalesAccess" to="/sale-product">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-chart-line" size="4x" />
          </div>
          <div class="bottom">Sales</div>
       </router-link>
-      <router-link to="/cash-cutoff">
+      <router-link v-if="permissionCashCutoffAccess" to="/cash-cutoff">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-cash-register" size="4x" />
          </div>
          <div class="bottom">Cash Cutoff</div>
       </router-link>
-      <router-link to="/activity-log">
+      <router-link v-if="permissionActivityLogAccess" to="/activity-log">
          <div class="top">
             <font-awesome-icon icon="fa-solid fa-history" size="4x" />
          </div>
