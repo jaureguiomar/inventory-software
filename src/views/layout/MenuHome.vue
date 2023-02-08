@@ -94,10 +94,10 @@ export default defineComponent({
                role: {
                   id: -1,
                   name: "",
-                  // atributes_1: -1,
-                  // atributes_2: -1,
-                  // atributes_3: -1,
-                  // atributes_4: -1
+                  atributes_1: -1,
+                  atributes_2: -1,
+                  atributes_3: -1,
+                  atributes_4: -1
                }
             }
          }

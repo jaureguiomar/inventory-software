@@ -413,7 +413,11 @@ router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function
          "last_name": "",
          "role": {
             "id": -1,
-            "name": ""
+            "name": "",
+            "atributes_1": -1,
+            "atributes_2": -1,
+            "atributes_3": -1,
+            "atributes_4": -1
          }
       }
    }`);

@@ -42,10 +42,10 @@ interface PosStore {
 interface UserRoleStore {
    id: number;
    name: string;
-   // atributes_1: number;
-   // atributes_2: number;
-   // atributes_3: number;
-   // atributes_4: number;
+   atributes_1: number;
+   atributes_2: number;
+   atributes_3: number;
+   atributes_4: number;
 }
 interface UserStore {
    id: number;

@@ -80,7 +80,11 @@ export default defineComponent({
                   if(curr_role) {
                      formatted_role_store = {
                         id: Number(curr_role.id),
-                        name: curr_role.name
+                        name: curr_role.name,
+                        atributes_1: curr_role.atributes_1,
+                        atributes_2: curr_role.atributes_2,
+                        atributes_3: curr_role.atributes_3,
+                        atributes_4: curr_role.atributes_4
                      };
                   }
 
