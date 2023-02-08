@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n/index";
@@ -40,6 +40,7 @@ import { key } from "@/plugins/store";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UserAuthResponse } from "@/types/user";
 import { SessionStore, UserRoleStore } from "@/types/store";
+import { UserRolePermission, UserRolePermissionsResponse } from "@/types/user-role-permission";
 
 export default defineComponent({
    name: "login-component",
@@ -49,6 +50,32 @@ export default defineComponent({
       const router = useRouter();
       const email = ref("");
       const password = ref("");
+      const userRolePermission = ref<UserRolePermission[]>([]);
+      const getServer = computed(() => {
+         return store.getters["getServer"];
+      });
+      const getAuthToken = computed(() => {
+         return store.getters["getAuthToken"];
+      });
+
+      onMounted(async() => {
+         let response = await axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
+            {
+               headers: {
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+               }
+            }
+         );
+         if(response) {
+            if(!response.data.error.is_error) {
+               userRolePermission.value = [];
+               for(let i = 0; i < response.data.data.length; i++) {
+                  const curr_data = response.data.data[i];
+                  userRolePermission.value.push(curr_data);
+               }
+            }
+         }
+      });
 
       const onEmailKeyup = () => {
          onLogin();
@@ -57,6 +84,8 @@ export default defineComponent({
          onLogin();
       };
       const onLogin = () => {
+         console.log("userRolePermission", userRolePermission);
+
          if(!email.value || !password.value) {
             Swal.fire({
                title: "Error",
@@ -97,7 +126,8 @@ export default defineComponent({
                         first_name: data.first_name,
                         last_name: data.last_name,
                         role: formatted_role_store
-                     }
+                     },
+                     permission: userRolePermission.value
                   }
 
                   create_activity_log({
@@ -136,10 +166,6 @@ export default defineComponent({
             });
          });
       }
-
-      const getServer = computed(() => {
-         return store.getters["getServer"];
-      });
 
       return {
          email,

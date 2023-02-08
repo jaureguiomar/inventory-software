@@ -44,7 +44,8 @@ const store = createStore<State>({
                   atributes_3: -1,
                   atributes_4: -1
                }
-            }
+            },
+            permission: []
          },
          sale: {
             curr_sale: {
@@ -117,6 +118,9 @@ const store = createStore<State>({
       },
       getSessionUserId(state:State) {
          return state.session.user.id;
+      },
+      getSessionUserRole(state:State) {
+         return state.session.user.role;
       },
       getSessionUser(state:State) {
          return state.session.user;

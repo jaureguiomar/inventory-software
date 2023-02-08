@@ -70,10 +70,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { key } from "@/plugins/store";
+import { validate_atributes_permission } from "@/plugins/mixins/permission";
 import { SessionStore } from "@/types/store";
 
 export default defineComponent({
@@ -81,6 +82,18 @@ export default defineComponent({
    setup() {
       const store = useStore(key);
       const router = useRouter();
+      const getSessionUserRole = computed(() => {
+         return store.getters["getSessionUserRole"];
+      });
+
+      onMounted(() => {
+         validate_atributes_permission([
+            getSessionUserRole.value.atributes_1,
+            getSessionUserRole.value.atributes_2,
+            getSessionUserRole.value.atributes_3,
+            getSessionUserRole.value.atributes_4
+         ], "");
+      });
 
       const onLogout = () => {
          const new_session:SessionStore = {
@@ -99,7 +112,8 @@ export default defineComponent({
                   atributes_3: -1,
                   atributes_4: -1
                }
-            }
+            },
+            permission: []
          }
 
          localStorage.setItem("session", JSON.stringify(new_session));
@@ -114,6 +128,8 @@ export default defineComponent({
       }
 
       return {
+         getSessionUserRole,
+         validate_atributes_permission,
          onLogout
       };
    }

@@ -1,5 +1,15 @@
 import { UserRolePermission, UserRolePermissionAttributes } from "@/types/user-role-permission";
 
+export const validate_atributes_permission = (user_permissions:Array<number>, attr_value:string) => {
+   for(let i = 0; i < user_permissions.length; i++) {
+      const curr_atribute = user_permissions[i];
+      const is_error = !validate_permission(curr_atribute, attr_value);
+      if(is_error)
+         return false;
+   }
+   return true;
+}
+
 export const validate_permission = (user_permissions:number, attr_value:string) => {
    const attr_value_parsed:number = parseInt(attr_value, 16);
    if((user_permissions & attr_value_parsed) == attr_value_parsed)

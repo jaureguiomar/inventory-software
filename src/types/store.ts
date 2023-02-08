@@ -1,4 +1,5 @@
 import { Product } from "@/types/product";
+import { UserRolePermission } from "@/types/user-role-permission";
 
 interface SaleProductStore extends Product {
    sale_quantity: number;
@@ -58,6 +59,7 @@ interface UserStore {
 interface SessionStore {
    loggued_in: boolean;
    user: UserStore;
+   permission: Array<UserRolePermission>
 }
 
 interface State {

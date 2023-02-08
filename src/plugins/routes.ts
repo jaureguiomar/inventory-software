@@ -418,7 +418,8 @@ router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function
             "atributes_2": -1,
             "atributes_3": -1,
             "atributes_4": -1
-         }
+         },
+         "permission": []
       }
    }`);
    store.commit("SET_SERVER_DATA", server);
