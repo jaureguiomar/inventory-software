@@ -99,6 +99,10 @@ interface SaleProductsResponse {
    data: Array<SaleProduct>;
    error: ResponseError;
 }
+interface SaleProductM2MResponse {
+   data: SaleProductM2M;
+   error: ResponseError;
+}
 interface SaleProductsM2MResponse {
    data: Array<SaleProductM2M>;
    error: ResponseError;
@@ -114,6 +118,7 @@ export {
    SaleProductResponse,
    SaleProductOneResponse,
    SaleProductsResponse,
+   SaleProductM2MResponse,
    SaleProductsM2MResponse,
    WindowResponse,
    Page,

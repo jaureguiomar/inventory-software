@@ -1,93 +1,94 @@
 import { ipcMain } from "electron";
 import escpos from "escpos";
+import { getFormattedDateString } from "@/plugins/mixins/general";
+
 escpos.USB = require("escpos-usb");
 
 ipcMain.on("print-sale", async function(e, data) {
    const device  = new escpos.USB();
-   const options = { encoding: "utf8" }
+   const options = { encoding: "utf8" };
    const printer = new escpos.Printer(device, options);
 
    device.open(function() {
       printer.size(0, 0);
       printer.align("CT");
-      printer.text("Fecha");
-      printer.text("20 de Agosto del 2022 13:22:22");
+      printer.text(data.sale.branch.name);
+      printer.text("POS");
+      printer.text(data.sale.pos.name);
+      printer.text("Date");
+      printer.text(getFormattedDateString(data.sale.created, 0, 0, true));
       printer.feed();
-      printer.text("GUERRERO 25 CENTRO 47980");
-      printer.text("DEGOLLADO JALISCO");
+      printer.text(data.sale.branch.address);
+      printer.text("Telephone");
+      printer.text(data.sale.branch.telephone);
       // printer.feed();
-      printer.text("Mesero");
-      printer.text("Omar Misael Torres Jauregui");
+      printer.text("Cashier");
+      printer.text(data.sale.user.first_name + " " + data.sale.user.last_name);
       // printer.feed();
-      printer.text("Id de venta");
-      printer.text("#111");
-      // printer.feed();
-      printer.text("Mesa");
-      printer.text("Cocina #1");
+      printer.text("ID Sale");
+      printer.text(`#${ data.sale.id }`);
       printer.text("------------------------------");
       printer.text("------------------------------");
       printer.align("CT");
-      printer.text("Cantidad - Producto - Total");
+      printer.text("Quantity - Product - Total");
       printer.text("------------------------------");
       printer.align("LT");
 
-      // let total = 0;
-      // for(let i = 0; i < data["comanda"].length; i++) {
-      //    const curr_comanda = data["comanda"][i];
-      //    const curr_subtotal = ((parseFloat(curr_comanda["subtotal_modificado"]) != 0) ? curr_comanda["subtotal_modificado"] : curr_comanda["subtotal"]);
-      //    total += parseFloat(curr_subtotal);
+      let total = 0;
+      for(let i = 0; i < data.sale_product_m2m.product.length; i++) {
+         const curr_product = data.sale_product_m2m.product[i];
+         total += parseFloat(curr_product.sale_price);
 
-      //    printer.text(
-      //    curr_comanda["cantidad"] + ".-" + curr_comanda["producto"]["producto"] + " $" + curr_subtotal
-      //    // curr_comanda["cantidad"] + ".- " + curr_comanda["producto"]["producto"] + " $" + curr_subtotal + " ($" + curr_comanda["precio"] + " c/u)"
-      //    );
-      //    // if(i < (data["comanda"].length - 1))
-      //    //   printer.feed();
-      // }
+         printer.text(
+            curr_product.quantity + ".-" + curr_product.name + " $" + curr_product.sale_price
+            // curr_product.quantity + ".- " + curr_product.name + " $" + curr_product.sale_price + " ($" + curr_product.sale_price + " c/u)"
+         );
+         if(i < (curr_product.length - 1))
+           printer.feed();
+      }
 
-      printer.align("CT")
-      printer.text("------------------------------");
-      printer.text("------------------------------");
-      printer.align("LT")
-      printer.tableCustom(
-         [
-            { text: "Subtotal:", align: "LEFT", width: 0.33 },
-            { text: "$1,200.00", align: "RIGHT", width: 0.33 }
-         ]
-      );
-      printer.tableCustom(
-         [
-            { text: "Impuestos:", align: "LEFT", width: 0.33 },
-            { text: "$0.00", align: "RIGHT", width: 0.33 }
-         ]
-      );
+      // printer.align("CT")
+      // printer.text("------------------------------");
+      // printer.text("------------------------------");
+      // printer.align("LT")
+      // printer.tableCustom(
+      //    [
+      //       { text: "Subtotal:", align: "LEFT", width: 0.33 },
+      //       { text: "$1,200.00", align: "RIGHT", width: 0.33 }
+      //    ]
+      // );
+      // printer.tableCustom(
+      //    [
+      //       { text: "Taxes:", align: "LEFT", width: 0.33 },
+      //       { text: "$0.00", align: "RIGHT", width: 0.33 }
+      //    ]
+      // );
       printer.align("CT");
       printer.text("------------------------------");
       printer.text("------------------------------");
       printer.align("LT");
       printer.tableCustom(
          [
-            { text: "Metodo pago:", align: "LEFT", width: 0.33 },
+            { text: "Payment Method:", align: "LEFT", width: 0.33 },
             { text: "Efectivo", align: "RIGHT", width: 0.33 }
          ]
       );
       printer.tableCustom(
          [
-            { text: "Total pagado:", align: "LEFT", width: 0.33 },
-            { text: "$1,500.00", align: "RIGHT", width: 0.33 }
+            { text: "Total paid:", align: "LEFT", width: 0.33 },
+            { text: `$${ total }`, align: "RIGHT", width: 0.33 }
          ]
       );
-      printer.tableCustom(
-         [
-            { text: "Cambio:", align: "LEFT", width: 0.33 },
-            { text: "$10.00", align: "RIGHT", width: 0.33 }
-         ]
-      );
+      // printer.tableCustom(
+      //    [
+      //       { text: "Change:", align: "LEFT", width: 0.33 },
+      //       { text: "$10.00", align: "RIGHT", width: 0.33 }
+      //    ]
+      // );
       printer.align("CT");
       printer.text("------------------------------");
       printer.text("------------------------------");
-      printer.text("GRACIAS POR SU");
-      printer.text("COMPRA");
+      printer.text("THANK YOU");
       printer.text("------------------------------");
       printer.text("------------------------------");
       printer.feed();

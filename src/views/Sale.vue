@@ -279,6 +279,7 @@ import { Pos } from "@/types/pos";
 import { Category } from "@/types/category";
 import { Branch } from "@/types/branch";
 import { CashCutoff, CashCutoffOneResponse } from "@/types/cash-cutoff";
+import { SaleProduct, SaleProductM2M, SaleProductResponse, SaleProductsM2MResponse } from "@/types/sale-product";
 import { SaleContentStore } from "@/types/store";
 // import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
@@ -740,7 +741,7 @@ export default defineComponent({
                   pos: null,
                   branch: null
                };
-               let response = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`,
+               let responseSale = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`,
                   {
                      total: calculateTotal.value,
                      is_supplier: (isSupplier.value) ? 1 : 0,
@@ -755,9 +756,9 @@ export default defineComponent({
                      }
                   }
                );
-               if(response) {
-                  if(!response.data.error.is_error) {
-                     created_sale = response.data.data.data;
+               if(responseSale) {
+                  if(!responseSale.data.error.is_error) {
+                     created_sale = responseSale.data.data.data;
 
                      create_activity_log({
                         name: "The user has added a sale item",
@@ -786,10 +787,27 @@ export default defineComponent({
                }
 
                // Create sale-products
+               let created_sale_product:SaleProduct = {
+                  id: 0,
+                  is_active: 0,
+                  created: "",
+                  updated: "",
+                  quantity: 0,
+                  id_sale: 0,
+                  id_product: 0,
+                  id_user: 0,
+                  id_pos: 0,
+                  id_branch: 0,
+                  sale: null,
+                  product: null,
+                  user: null,
+                  pos: null,
+                  branch: null
+               };
                let sale_product_error = false;
                for(let i = 0; i < getSaleCurrSaleProduct.value.length; i++) {
                   const curr_sale = getSaleCurrSaleProduct.value[i];
-                  response = await axios.put<SaleResponse>(`${ getServer.value }/sale_product/v3/create.php`,
+                  let responseSaleProduct = await axios.put<SaleProductResponse>(`${ getServer.value }/sale_product/v3/create.php`,
                      {
                         quantity: curr_sale.sale_quantity,
                         is_supplier: (isSupplier.value) ? 1 : 0,
@@ -806,8 +824,10 @@ export default defineComponent({
                         }
                      }
                   );
-                  if(response) {
-                     if(response.data.error.is_error)
+                  if(responseSaleProduct) {
+                     if(!responseSaleProduct.data.error.is_error)
+                        created_sale_product = responseSaleProduct.data.data.data;
+                     else
                         sale_product_error = true;
                   } else {
                      Swal.fire({
@@ -819,8 +839,64 @@ export default defineComponent({
                   }
                }
 
+               // Retrieve sale-products
+               let sale_product_m2m:SaleProductM2M = {
+                  id: 0,
+                  is_active: 0,
+                  created: "",
+                  updated: "",
+                  id_user: 0,
+                  id_pos: 0,
+                  id_branch: 0,
+                  product: [],
+                  total: "",
+                  is_supplier: 0,
+                  id_cash_cutoff: 0,
+                  cash_cutoff: null,
+                  user: null,
+                  pos: null,
+                  branch: null
+               };
+               let sale_product_m2m_array:SaleProductM2M[] = [];
+               let responseSaleProductM2M = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale_product/v3/find-by-sale.php`,
+                  {
+                     params: {
+                        type: "id",
+                        query: created_sale.id
+                     },
+                     headers: {
+                        "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+                     }
+                  }
+               );
+               if(responseSaleProductM2M) {
+                  if(!responseSaleProductM2M.data.error.is_error) {
+                     sale_product_m2m_array = responseSaleProductM2M.data.data;
+                     if(sale_product_m2m_array.length > 0)
+                        sale_product_m2m = sale_product_m2m_array[0];
+                  } else {
+                     Swal.fire({
+                        title: "Error",
+                        text: t("global.default_error"),
+                        icon: "error"
+                     });
+                     return;
+                  }
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+                  return;
+               }
+
                if(!sale_product_error) {
-                  window.api.send("print-sale");
+                  window.api.send("print-sale", {
+                     sale: created_sale,
+                     sale_product: created_sale_product,
+                     sale_product_m2m: JSON.parse(JSON.stringify(sale_product_m2m))
+                  });
                   store.commit("SET_SALE_CURR_SALE_PRODUCT", []);
                   Swal.fire({
                      title: "Ok",
