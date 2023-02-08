@@ -84,8 +84,6 @@ export default defineComponent({
          onLogin();
       };
       const onLogin = () => {
-         console.log("userRolePermission", userRolePermission);
-
          if(!email.value || !password.value) {
             Swal.fire({
                title: "Error",
