@@ -1,4 +1,4 @@
-import { InputFieldNumber } from '@/types/general';
+import { InputFieldNumber } from "@/types/general";
 import { Branch } from "@/types/branch";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";

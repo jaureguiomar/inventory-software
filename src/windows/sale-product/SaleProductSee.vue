@@ -146,16 +146,16 @@ export default defineComponent({
       const store = useStore(key);
       const { t } = useI18n();
       const saleProduct = reactive<SaleM2M>({
-         id: 0,
-         is_active: 0,
+         id: -1,
+         is_active: -1,
          created: "",
          updated: "",
          total: "",
-         is_supplier: 0,
-         id_cash_cutoff: 0,
-         id_user: 0,
-         id_pos: 0,
-         id_branch: 0,
+         is_supplier: -1,
+         id_cash_cutoff: -1,
+         id_user:-10,
+         id_pos: -1,
+         id_branch: -1,
          product: [],
          cash_cutoff: {
             id: -1,

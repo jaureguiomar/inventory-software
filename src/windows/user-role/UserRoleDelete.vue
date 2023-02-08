@@ -426,7 +426,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDateString } from "@/plugins/mixins/general";
-import { format_user_permissions } from '@/plugins/mixins/permission';
+import { format_user_permissions } from "@/plugins/mixins/permission";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UserRole, UserRoleResponse, IPCParams } from "@/types/user-role";
 import { UserRolePermission, UserRolePermissionsResponse } from "@/types/user-role-permission";

@@ -4,7 +4,7 @@ import {
    get_categories, get_category_by_id, get_category_mysql_by_id,
    insert_category, update_category, delete_category
 } from "@/background/mysql/category";
-import { get_branch_by_id } from '@/background/mysql/branch';
+import { get_branch_by_id } from "@/background/mysql/branch";
 import { parseStringField } from "@/background/mysql/functions";
 import { Category } from "@/types/category";
 import { Branch } from "@/types/branch";

@@ -9,6 +9,7 @@ import { CashCutoff } from "@/types/cash-cutoff";
 import { ActivityLog } from "@/types/activity-log";
 import { ActivityLogOperation } from "@/types/activity-log-operation";
 import { ActivityLogAccess } from "@/types/activity-log-access";
+import { UserRolePermission } from "@/types/user-role-permission";
 
 export const format_sale = (sale:Sale|null) => {
    let formatted_data:Sale|null = null;
@@ -183,6 +184,26 @@ export const format_user_role = (user_role:UserRole|null) => {
          user: null,
          pos: null,
          branch: null
+      }
+   }
+   return formatted_data;
+};
+
+export const format_user_role_permission = (user_role_permission:UserRolePermission|null) => {
+   let formatted_data:UserRolePermission|null = null;
+   const curr_data = (user_role_permission) ? user_role_permission : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         name: curr_data.name,
+         shortname: curr_data.shortname,
+         description: curr_data.description,
+         attr_value: curr_data.attr_value,
+         attr_level: Number(curr_data.attr_level)
       }
    }
    return formatted_data;

@@ -68,11 +68,25 @@ export default defineComponent({
          );
          if(response) {
             if(!response.data.error.is_error) {
+               let formatted_data:UserRolePermission[] = [];
                userRolePermission.value = [];
+
                for(let i = 0; i < response.data.data.length; i++) {
                   const curr_data = response.data.data[i];
-                  userRolePermission.value.push(curr_data);
+                  const curr_formatted_data = {
+                     id: Number(curr_data.id),
+                     is_active: Number(curr_data.is_active),
+                     created: curr_data.created,
+                     updated: curr_data.updated,
+                     name: curr_data.name,
+                     shortname: curr_data.shortname,
+                     description: curr_data.description,
+                     attr_value: curr_data.attr_value,
+                     attr_level: Number(curr_data.attr_level)
+                  };
+                  formatted_data.push(curr_formatted_data);
                }
+               userRolePermission.value = formatted_data;
             }
          }
       });

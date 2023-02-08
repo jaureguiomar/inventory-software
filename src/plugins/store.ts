@@ -5,6 +5,7 @@ import {
    PosStore, SaleContentStore, AuthTokenStore
 } from "@/types/store";
 import { findValueBy } from "@/plugins/mixins/general";
+import { UserRolePermission } from "@/types/user-role-permission";
 
 const store = createStore<State>({
    state() {
@@ -122,6 +123,9 @@ const store = createStore<State>({
       getSessionUserRole(state:State) {
          return state.session.user.role;
       },
+      getSessionPermission(state:State) {
+         return state.session.permission;
+      },
       getSessionUser(state:State) {
          return state.session.user;
       },
@@ -192,6 +196,9 @@ const store = createStore<State>({
       },
       SET_SESSION_USER_DATA: (state:State, data:UserStore) => {
          state.session.user = data;
+      },
+      SET_SESSION_PERMISSION_DATA: (state:State, data:UserRolePermission[]) => {
+         state.session.permission = data;
       },
       SET_SALE_CURR_SALE: (state:State, data:SaleContentStore) => {
          state.sale.curr_sale = data;

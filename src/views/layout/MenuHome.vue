@@ -70,11 +70,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { key } from "@/plugins/store";
-import { validate_atributes_permission } from "@/plugins/mixins/permission";
+import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { SessionStore } from "@/types/store";
 
 export default defineComponent({
@@ -82,17 +82,45 @@ export default defineComponent({
    setup() {
       const store = useStore(key);
       const router = useRouter();
+      const permissionSaleAccess = ref(false);
+      const permissionClientAccess = ref(false);
+      const permissionSupplierAccess = ref(false);
+      const permissionProductsAccess = ref(false);
+      const permissionCategoriesAccess = ref(false);
+      const permissionUsersAccess = ref(false);
+      const permissionRolesAccess = ref(false);
+      const permissionSalesAccess = ref(false);
+      const permissionCashCutoffAccess = ref(false);
+      const permissionActivityLogAccess = ref(false);
       const getSessionUserRole = computed(() => {
          return store.getters["getSessionUserRole"];
       });
+      const getSessionPermission = computed(() => {
+         return store.getters["getSessionPermission"];
+      });
 
       onMounted(() => {
-         validate_atributes_permission([
-            getSessionUserRole.value.atributes_1,
-            getSessionUserRole.value.atributes_2,
-            getSessionUserRole.value.atributes_3,
-            getSessionUserRole.value.atributes_4
-         ], "");
+         const permission1 = get_permission_by_id(1, getSessionPermission.value);
+         const permission2 = get_permission_by_id(2, getSessionPermission.value);
+         const permission3 = get_permission_by_id(3, getSessionPermission.value);
+         const permission4 = get_permission_by_id(4, getSessionPermission.value);
+         const permission5 = get_permission_by_id(5, getSessionPermission.value);
+         const permission6 = get_permission_by_id(6, getSessionPermission.value);
+         const permission7 = get_permission_by_id(7, getSessionPermission.value);
+         const permission8 = get_permission_by_id(8, getSessionPermission.value);
+         const permission9 = get_permission_by_id(9, getSessionPermission.value);
+         const permission10 = get_permission_by_id(10, getSessionPermission.value);
+
+         permissionSaleAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+         permissionClientAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+         permissionSupplierAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+         permissionProductsAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
+         permissionCategoriesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission5.attr_value);
+         permissionUsersAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission6.attr_value);
+         permissionRolesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission7.attr_value);
+         permissionSalesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission8.attr_value);
+         permissionCashCutoffAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission9.attr_value);
+         permissionActivityLogAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission10.attr_value);
       });
 
       const onLogout = () => {
@@ -128,8 +156,17 @@ export default defineComponent({
       }
 
       return {
-         getSessionUserRole,
-         validate_atributes_permission,
+         permissionSaleAccess,
+         permissionClientAccess,
+         permissionSupplierAccess,
+         permissionProductsAccess,
+         permissionCategoriesAccess,
+         permissionUsersAccess,
+         permissionRolesAccess,
+         permissionSalesAccess,
+         permissionCashCutoffAccess,
+         permissionActivityLogAccess,
+         validate_permission,
          onLogout
       };
    }

@@ -1,14 +1,14 @@
 import { UserRolePermission, UserRolePermissionAttributes } from "@/types/user-role-permission";
 
-export const validate_atributes_permission = (user_permissions:Array<number>, attr_value:string) => {
-   for(let i = 0; i < user_permissions.length; i++) {
-      const curr_atribute = user_permissions[i];
-      const is_error = !validate_permission(curr_atribute, attr_value);
-      if(is_error)
-         return false;
-   }
-   return true;
-}
+// export const validate_atributes_permission = (user_permissions:Array<number>, attr_value:string) => {
+//    for(let i = 0; i < user_permissions.length; i++) {
+//       const curr_atribute = user_permissions[i];
+//       const is_error = !validate_permission(curr_atribute, attr_value);
+//       if(is_error)
+//          return false;
+//    }
+//    return true;
+// }
 
 export const validate_permission = (user_permissions:number, attr_value:string) => {
    const attr_value_parsed:number = parseInt(attr_value, 16);
@@ -71,4 +71,26 @@ export const format_user_permissions = (all_permissions:Array<UserRolePermission
    result_data.ints = ints;
    result_data.access = access;
    return result_data;
+};
+
+export const get_permission_by_id = (id:number, all_permissions:Array<UserRolePermission>) => {
+   let finded_permission:UserRolePermission = {
+      id: -1,
+      is_active: -1,
+      created: "",
+      updated: "",
+      name: "",
+      shortname: "",
+      description: "",
+      attr_value: "",
+      attr_level: -1
+   };
+   for(let i = 0; i < all_permissions.length; i++) {
+      const curr_permission = all_permissions[i];
+      if(curr_permission.id === id) {
+         finded_permission = curr_permission;
+         break;
+      }
+   }
+   return finded_permission;
 };

@@ -428,6 +428,7 @@ router.beforeEach((to:_RouteLocationBase, from:_RouteLocationBase, next:Function
    store.commit("SET_POS_DATA", pos);
    store.commit("SET_SESSION_LOGGUED_IN_DATA", session.loggued_in);
    store.commit("SET_SESSION_USER_DATA", session.user);
+   store.commit("SET_SESSION_PERMISSION_DATA", session.permission);
 
    if(!to.name) {
       if(session.loggued_in)
