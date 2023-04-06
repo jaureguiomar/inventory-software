@@ -316,7 +316,7 @@ export default defineComponent({
          saleProductSale.value = [];
          saleProductSupplier.value = [];
 
-         axios.get<SalesM2MResponse>(`${ getServer.value }/sale_product/v3/select-all.php`,
+         axios.get<SalesM2MResponse>(`${ getServer.value }/sale-product`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -324,7 +324,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_sale_product:Array<SaleM2M> = [];
                   for(let i = 0; i < data.length; i++) {

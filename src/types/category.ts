@@ -71,27 +71,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Category;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Category;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface CategoryResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface CategoryResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Category;
 }
 interface CategoryOneResponse {
    data: Category;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface CategoriesResponse {
    data: Array<Category>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

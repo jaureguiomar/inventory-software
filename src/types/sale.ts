@@ -87,31 +87,34 @@ interface WindowResponseM2M {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Sale;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Sale;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface SaleResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface SaleResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Sale;
 }
 interface SaleOneResponse {
    data: Sale;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface SalesResponse {
    data: Array<Sale>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface SalesM2MResponse {
    data: Array<SaleM2M>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

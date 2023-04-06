@@ -62,27 +62,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: ActivityLogOperation;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: ActivityLogOperation;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface ActivityLogOperationResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface ActivityLogOperationResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: ActivityLogOperation;
 }
 interface ActivityLogOperationOneResponse {
    data: ActivityLogOperation;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface ActivityLogOperationsResponse {
    data: Array<ActivityLogOperation>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

@@ -544,7 +544,7 @@ export default defineComponent({
             access_token: getAuthToken.value.access_token
          });
 
-         axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
+         axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user-role-permission`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -553,7 +553,7 @@ export default defineComponent({
          )
          .then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_user_role_permissions:Array<UserRolePermission> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -727,7 +727,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<UserRoleResponse>(`${ getServer.value }/user_role/v3/create.php`,
+               let response = await axios.put<UserRoleResponse>(`${ getServer.value }/user-role`,
                   {
                      name: field.name.text,
                      atributes_1: total_atributes_1,
@@ -745,8 +745,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:UserRole = response.data.data.data;
+                  if(response.data.data) {
+                     const data:UserRole = response.data.data;
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
                      const formatted_branch:Branch|null = format_branch(data.branch);
@@ -804,7 +804,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<UserRoleResponse>(`${ getServer.value }/user_role/v3/update.php`,
+               let response = await axios.post<UserRoleResponse>(`${ getServer.value }/user-role`,
                   {
                      id: page.id,
                      name: field.name.text,
@@ -823,8 +823,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:UserRole = response.data.data.data;
+                  if(response.data.data) {
+                     const data:UserRole = response.data.data;
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
                      const formatted_branch:Branch|null = format_branch(data.branch);

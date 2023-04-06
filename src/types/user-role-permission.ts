@@ -64,27 +64,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: UserRolePermission;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: UserRolePermission;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface UserRolePermissionResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface UserRolePermissionResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: UserRolePermission;
 }
 interface UserRolePermissionOneResponse {
    data: UserRolePermission;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface UserRolePermissionsResponse {
    data: Array<UserRolePermission>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 // Other

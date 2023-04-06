@@ -348,7 +348,7 @@ export default defineComponent({
       const onRefreshData = () => {
          cashCutoff.value = [];
 
-         axios.get<CashCutoffsResponse>(`${ getServer.value }/cash_cutoff/v3/select-all.php`,
+         axios.get<CashCutoffsResponse>(`${ getServer.value }/cash-cutoff`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -356,7 +356,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_cash_cutoff:Array<CashCutoff> = [];
                   for(let i = 0; i < data.length; i++) {

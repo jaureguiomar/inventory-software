@@ -335,7 +335,7 @@ export default defineComponent({
       const onRefreshData = () => {
          client.value = [];
 
-         axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`,
+         axios.get<ClientsResponse>(`${ getServer.value }/client`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -343,7 +343,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_clients:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {

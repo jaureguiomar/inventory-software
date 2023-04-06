@@ -206,7 +206,7 @@ export default defineComponent({
       const onDelete = async() => {
          if(getIsOnline.value) {
             try {
-               let response = await axios.delete<CategoryResponse>(`${ getServer.value }/category/v3/delete.php`,
+               let response = await axios.delete<CategoryResponse>(`${ getServer.value }/category`,
                   {
                      params: {
                         field: "id",
@@ -218,7 +218,7 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(response.data.error.is_error) {
+                  if(!response.data.data) {
                      Swal.fire({
                         title: "Error",
                         text: t("global.default_error"),

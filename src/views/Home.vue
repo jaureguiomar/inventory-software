@@ -118,7 +118,7 @@ export default defineComponent({
                const curr_data = data.user_role[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user_role/v3/create.php`,
+                     let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user-role`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -132,7 +132,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("user-role-create-error #1");
                      } else {
                         console.log("user-role-create-error #2");
@@ -142,7 +142,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user_role/v3/update.php`,
+                     let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user-role`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -157,7 +157,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("user-role-update-error #1");
                      } else {
                         console.log("user-role-update-error #2");
@@ -167,7 +167,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<UserRolesResponse>(`${ getServer.value }/user_role/v3/delete.php`,
+                     let response = await axios.delete<UserRolesResponse>(`${ getServer.value }/user-role`,
                         {
                            params: {
                               field: "id",
@@ -179,7 +179,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("user-role-delete-error #1");
                      } else {
                         console.log("user-role-delete-error #2");
@@ -195,7 +195,7 @@ export default defineComponent({
                const curr_data = data.user[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<UsersResponse>(`${ getServer.value }/user/v3/create.php`,
+                     let response = await axios.put<UsersResponse>(`${ getServer.value }/user`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -209,7 +209,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("user-create-error #1");
                      } else {
                         console.log("user-create-error #2");
@@ -219,7 +219,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<UsersResponse>(`${ getServer.value }/user/v3/update.php`,
+                     let response = await axios.post<UsersResponse>(`${ getServer.value }/user`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -234,7 +234,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("user-create-error #1");
                      } else {
                         console.log("user-create-error #2");
@@ -244,7 +244,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<UsersResponse>(`${ getServer.value }/user/v3/delete.php`,
+                     let response = await axios.delete<UsersResponse>(`${ getServer.value }/user`,
                         {
                            params: {
                               field: "id",
@@ -256,7 +256,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("user-create-error #1");
                      } else {
                         console.log("user-create-error #2");
@@ -272,7 +272,7 @@ export default defineComponent({
                const curr_data = data.category[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category/v3/create.php`,
+                     let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -286,7 +286,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("category-create-error #1");
                      } else {
                         console.log("category-create-error #2");
@@ -296,7 +296,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category/v3/update.php`,
+                     let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -311,7 +311,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("category-create-error #1");
                      } else {
                         console.log("category-create-error #2");
@@ -321,7 +321,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<CategoriesResponse>(`${ getServer.value }/category/v3/delete.php`,
+                     let response = await axios.delete<CategoriesResponse>(`${ getServer.value }/category`,
                         {
                            params: {
                               field: "id",
@@ -333,7 +333,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("category-create-error #1");
                      } else {
                         console.log("category-create-error #2");
@@ -349,7 +349,7 @@ export default defineComponent({
                const curr_data = data.product[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<ProductsResponse>(`${ getServer.value }/product/v3/create.php`,
+                     let response = await axios.put<ProductsResponse>(`${ getServer.value }/product`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -363,7 +363,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("product-create-error #1");
                      } else {
                         console.log("product-create-error #2");
@@ -373,7 +373,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<ProductsResponse>(`${ getServer.value }/product/v3/update.php`,
+                     let response = await axios.post<ProductsResponse>(`${ getServer.value }/product`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -388,7 +388,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("product-create-error #1");
                      } else {
                         console.log("product-create-error #2");
@@ -398,7 +398,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<ProductsResponse>(`${ getServer.value }/product/v3/delete.php`,
+                     let response = await axios.delete<ProductsResponse>(`${ getServer.value }/product`,
                         {
                            params: {
                               field: "id",
@@ -410,7 +410,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("product-create-error #1");
                      } else {
                         console.log("product-create-error #2");
@@ -426,7 +426,7 @@ export default defineComponent({
                const curr_data = data.sale[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<SalesResponse>(`${ getServer.value }/sale/v3/create.php`,
+                     let response = await axios.put<SalesResponse>(`${ getServer.value }/sale`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -440,7 +440,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("sale-create-error #1");
                      } else {
                         console.log("sale-create-error #2");
@@ -450,7 +450,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<SalesResponse>(`${ getServer.value }/sale/v3/update.php`,
+                     let response = await axios.post<SalesResponse>(`${ getServer.value }/sale`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -465,7 +465,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("sale-create-error #1");
                      } else {
                         console.log("sale-create-error #2");
@@ -475,7 +475,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<SalesResponse>(`${ getServer.value }/sale/v3/delete.php`,
+                     let response = await axios.delete<SalesResponse>(`${ getServer.value }/sale`,
                         {
                            params: {
                               field: "id",
@@ -487,7 +487,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("sale-create-error #1");
                      } else {
                         console.log("sale-create-error #2");
@@ -503,7 +503,7 @@ export default defineComponent({
                const curr_data = data.sale_product[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/create.php`,
+                     let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale-product`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -517,7 +517,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("sale-product-create-error #1");
                      } else {
                         console.log("sale-product-create-error #2");
@@ -527,7 +527,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/update.php`,
+                     let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale-product`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -542,7 +542,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("sale-product-create-error #1");
                      } else {
                         console.log("sale-product-create-error #2");
@@ -552,7 +552,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/delete.php`,
+                     let response = await axios.delete<SaleProductsResponse>(`${ getServer.value }/sale-product`,
                         {
                            params: {
                               field: "id",
@@ -564,7 +564,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("sale-product-create-error #1");
                      } else {
                         console.log("sale-product-create-error #2");
@@ -580,7 +580,7 @@ export default defineComponent({
                const curr_data = data.supplier[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier/v3/create.php`,
+                     let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -594,7 +594,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("supplier-create-error #1");
                      } else {
                         console.log("supplier-create-error #2");
@@ -604,7 +604,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier/v3/update.php`,
+                     let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -619,7 +619,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("supplier-create-error #1");
                      } else {
                         console.log("supplier-create-error #2");
@@ -629,7 +629,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<SuppliersResponse>(`${ getServer.value }/supplier/v3/delete.php`,
+                     let response = await axios.delete<SuppliersResponse>(`${ getServer.value }/supplier`,
                         {
                            params: {
                               field: "id",
@@ -641,7 +641,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("supplier-create-error #1");
                      } else {
                         console.log("supplier-create-error #2");
@@ -657,7 +657,7 @@ export default defineComponent({
                const curr_data = data.client[i];
                if(curr_data.sync_type === "add") {
                   try {
-                     let response = await axios.put<ClientsResponse>(`${ getServer.value }/client/v3/create.php`,
+                     let response = await axios.put<ClientsResponse>(`${ getServer.value }/client`,
                         {
                            total: curr_data.total,
                            id_user: curr_data.id_user,
@@ -671,7 +671,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("client-create-error #1");
                      } else {
                         console.log("client-create-error #2");
@@ -681,7 +681,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "update") {
                   try {
-                     let response = await axios.post<ClientsResponse>(`${ getServer.value }/client/v3/update.php`,
+                     let response = await axios.post<ClientsResponse>(`${ getServer.value }/client`,
                         {
                            id: curr_data.id,
                            total: curr_data.total,
@@ -696,7 +696,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("client-create-error #1");
                      } else {
                         console.log("client-create-error #2");
@@ -706,7 +706,7 @@ export default defineComponent({
                   }
                } else if(curr_data.sync_type === "delete") {
                   try {
-                     let response = await axios.delete<ClientsResponse>(`${ getServer.value }/client/v3/delete.php`,
+                     let response = await axios.delete<ClientsResponse>(`${ getServer.value }/client`,
                         {
                            params: {
                               field: "id",
@@ -718,7 +718,7 @@ export default defineComponent({
                         }
                      );
                      if(response) {
-                        if(response.data.error.is_error)
+                        if(!response.data.data)
                            console.log("client-create-error #1");
                      } else {
                         console.log("client-create-error #2");
@@ -754,9 +754,9 @@ export default defineComponent({
 
          // Get Branches
          try {
-            let response = await axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`);
+            let response = await axios.get<BranchesResponse>(`${ getServer.value }/branch`);
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<Branch> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -791,7 +791,7 @@ export default defineComponent({
 
          // Get Clients
          try {
-            let response = await axios.get<ClientsResponse>(`${ getServer.value }/client/v3/select-all.php`,
+            let response = await axios.get<ClientsResponse>(`${ getServer.value }/client`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -799,7 +799,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -847,7 +847,7 @@ export default defineComponent({
 
          // Get Suppliers
          try {
-            let response = await axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`,
+            let response = await axios.get<SuppliersResponse>(`${ getServer.value }/supplier`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -855,7 +855,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<Supplier> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -898,7 +898,7 @@ export default defineComponent({
 
          // Get Categories
          try {
-            let response = await axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
+            let response = await axios.get<CategoriesResponse>(`${ getServer.value }/category`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -906,7 +906,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<Category> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -949,7 +949,7 @@ export default defineComponent({
 
          // Get Products
          try {
-            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`,
+            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/find`,
                {
                   params: {
                      type: "id_branch",
@@ -961,7 +961,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -1013,7 +1013,7 @@ export default defineComponent({
 
          // Get Sales
          try {
-            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/v3/find.php`,
+            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/find`,
                {
                   params: {
                      type: "id_branch",
@@ -1025,7 +1025,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<Sale> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -1072,7 +1072,7 @@ export default defineComponent({
 
          // Get Sale Products
          try {
-            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale_product/v3/find.php`,
+            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale-product/find`,
                {
                   params: {
                      type: "id_branch",
@@ -1084,7 +1084,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<SaleProduct> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -1133,7 +1133,7 @@ export default defineComponent({
 
          // Get User Roles
          try {
-            let response = await axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
+            let response = await axios.get<UserRolesResponse>(`${ getServer.value }/user-role`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -1141,7 +1141,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<UserRole> = [];
                   for(let i = 0; i < data.length; i++) {
@@ -1188,7 +1188,7 @@ export default defineComponent({
 
          // Get Users
          try {
-            let response = await axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`,
+            let response = await axios.get<UsersResponse>(`${ getServer.value }/user`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -1196,7 +1196,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_data:Array<User> = [];
                   for(let i = 0; i < data.length; i++) {

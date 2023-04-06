@@ -76,27 +76,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Client;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Client;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface ClientResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface ClientResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Client;
 }
 interface ClientOneResponse {
    data: Client;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface ClientsResponse {
    data: Array<Client>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

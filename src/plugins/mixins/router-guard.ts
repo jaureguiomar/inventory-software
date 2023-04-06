@@ -30,7 +30,7 @@ export const validateBranchActive = async(to:_RouteLocationBase, from:_RouteLoca
 
    if(branch.id > 0) {
       try {
-         await axios.get<BranchOneResponse>(`${ store.getters.getServer }/branch/v3/select-one.php?id=${ branch.id }`);
+         await axios.get<BranchOneResponse>(`${ store.getters.getServer }/branch/${ branch.id }`);
          next();
       } catch (error) {
          if(to.name !== "branch-disabled")

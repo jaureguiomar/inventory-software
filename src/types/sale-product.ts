@@ -77,35 +77,38 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: SaleProduct;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: SaleProduct;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface SaleProductResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface SaleProductResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: SaleProduct;
 }
 interface SaleProductOneResponse {
    data: SaleProduct;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface SaleProductsResponse {
    data: Array<SaleProduct>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface SaleProductM2MResponse {
    data: SaleProductM2M;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface SaleProductsM2MResponse {
    data: Array<SaleProductM2M>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

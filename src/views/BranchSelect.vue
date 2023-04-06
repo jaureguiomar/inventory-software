@@ -200,7 +200,7 @@ export default defineComponent({
             // Get branches
             branchOptions.value = [];
             branchFilteredOptions.value = [];
-            axios.get<BranchesResponse>(`${ getServer.value }/branch/v3/select-all.php`,
+            axios.get<BranchesResponse>(`${ getServer.value }/branch`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -208,8 +208,9 @@ export default defineComponent({
             }
             ).then((response) => {
                if(response) {
-                  if(!response.data.error.is_error) {
+                  if(response.data.data) {
                      const data = response.data.data;
+                     response.data.data
                      let formatted_branches:Array<Branch> = [];
 
                      for(let i = 0; i < data.length; i++) {
@@ -256,7 +257,7 @@ export default defineComponent({
          const finded_index_pos = findValueBy(pos.value, posField.name.text, "name");
 
          if(finded_index_branch >= 0 && finded_index_pos >= 0) {
-            axios.post<PosResponse>(`${ getServer.value }/pos/v3/update.php`, {
+            axios.post<PosResponse>(`${ getServer.value }/pos`, {
                id: pos.value[finded_index_pos].id,
                name: pos.value[finded_index_pos].name,
                machine_id: posField.machine_id.text,
@@ -264,8 +265,8 @@ export default defineComponent({
                id_branch: pos.value[finded_index_pos].id_branch
             }).then((response) => {
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data = response.data.data.data;
+                  if(response.data.data) {
+                     const data = response.data.data;
                      const new_branch:BranchStore = {
                        id: Number(branch.value[finded_index_branch].id),
                        name: branch.value[finded_index_branch].name,
@@ -338,14 +339,14 @@ export default defineComponent({
          clearPos();
 
          if(finded_index >= 0) {
-            axios.get<PossResponse>(`${ getServer.value }/pos/v3/find.php`, {
+            axios.get<PossResponse>(`${ getServer.value }/pos/find`, {
                params: {
-                  type: "id_branch",
+                  field: "id_branch",
                   query: id_branch
                }
             }).then((response) => {
                if(response) {
-                  if(!response.data.error.is_error) {
+                  if(response.data.data) {
                      const data = response.data.data;
                      let formatted_poss:Array<Pos> = [];
 

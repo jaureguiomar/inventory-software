@@ -3,7 +3,7 @@ import { ActivityLogInsert, ActivityLogResponse } from "@/types/activity-log";
 
 export const create_activity_log = async(log_data:ActivityLogInsert) => {
    try {
-      const response = await axios.put<ActivityLogResponse>(`${ log_data.server }/activity_log/v3/create.php`,
+      const response = await axios.put<ActivityLogResponse>(`${ log_data.server }/activity-log`,
          {
             name: log_data.name,
             extra_data: log_data.extra_data,
@@ -18,7 +18,7 @@ export const create_activity_log = async(log_data:ActivityLogInsert) => {
          }
       );
       if(response) {
-         if(response.data.error.is_error)
+         if(!response.data.data)
             console.log("activity-log-create-error #1");
       } else {
          console.log("activity-log-create-error #2");

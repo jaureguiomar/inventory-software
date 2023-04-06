@@ -88,27 +88,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Product;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Product;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface ProductResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface ProductResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Product;
 }
 interface ProductOneResponse {
    data: Product;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface ProductsResponse {
    data: Array<Product>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

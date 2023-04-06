@@ -64,27 +64,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Pos;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Pos;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface PosResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface PosResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Pos;
 }
 interface PosOneResponse {
    data: Pos;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface PossResponse {
    data: Array<Pos>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

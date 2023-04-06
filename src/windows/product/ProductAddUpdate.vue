@@ -453,7 +453,7 @@ export default defineComponent({
             updateBarcode.value = true;
          loaded.value = true;
       });
-      axios.get<CategoriesResponse>(`${ getServer.value }/category/v3/select-all.php`,
+      axios.get<CategoriesResponse>(`${ getServer.value }/category`,
          {
             headers: {
                "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -461,7 +461,7 @@ export default defineComponent({
          }
       ).then((response) => {
          if(response) {
-            if(!response.data.error.is_error) {
+            if(response.data.data) {
                const data = response.data.data;
                let formatted_categories:Array<Category> = [];
 
@@ -662,7 +662,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<ProductResponse>(`${ getServer.value }/product/v3/create.php`,
+               let response = await axios.put<ProductResponse>(`${ getServer.value }/product`,
                   {
                      is_favorite: (field.is_favorite.text) ? 1 : 0,
                      code: field.code.text,
@@ -683,8 +683,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:Product = response.data.data.data;
+                  if(response.data.data) {
+                     const data:Product = response.data.data;
                      const formatted_category:Category|null = format_category(data.category);
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
@@ -747,7 +747,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<ProductResponse>(`${ getServer.value }/product/v3/update.php`,
+               let response = await axios.post<ProductResponse>(`${ getServer.value }/product`,
                   {
                      id: page.id,
                      is_favorite: (field.is_favorite.text) ? 1 : 0,
@@ -769,8 +769,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:Product = response.data.data.data;
+                  if(response.data.data) {
+                     const data:Product = response.data.data;
                      const formatted_category:Category|null = format_category(data.category);
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
@@ -835,7 +835,7 @@ export default defineComponent({
 
          // Get Category
          try {
-            let response = await axios.get<CategoryOneResponse>(`${ getServer.value }/category/v3/select-one.php?id=${ formatted_data.id_category }`,
+            let response = await axios.get<CategoryOneResponse>(`${ getServer.value }/category/${ formatted_data.id_category }`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -843,7 +843,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data:Category = response.data.data;
                   // const formatted_user:User|null = format_user(data.user);
                   // const formatted_pos:Pos|null = format_pos(data.pos);

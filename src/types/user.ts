@@ -77,42 +77,55 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
+// interface ResponseOk {
+//    data: User;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseAuthOk {
+//    data: User;
+//    token: ResponseAuthToken;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface ResponseAuthToken {
+//    access_token: string;
+//    refresh_token: string;
+//    expires_in: number;
+// }
+// interface UserResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
+// interface UserAuthResponse {
+//    data: ResponseAuthOk;
+//    // error: ResponseError;
+// }
+interface UserResponse {
    data: User;
-   ok: boolean;
-   message: string;
 }
-interface ResponseAuthOk {
+interface UserAuthResponse {
    data: User;
-   token: ResponseAuthToken;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
-interface ResponseAuthToken {
    access_token: string;
    refresh_token: string;
    expires_in: number;
 }
-interface UserResponse {
-   data: ResponseOk;
-   error: ResponseError;
-}
-interface UserAuthResponse {
-   data: ResponseAuthOk;
-   error: ResponseError;
-}
+// interface UserAuthResponse {
+//    data: ResponseAuthOk;
+//    error: ResponseError;
+// }
 interface UserOneResponse {
    data: User;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface UsersResponse {
    data: Array<User>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

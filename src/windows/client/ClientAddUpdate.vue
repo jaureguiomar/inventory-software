@@ -471,7 +471,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<ClientResponse>(`${ getServer.value }/client/v3/create.php`,
+               let response = await axios.put<ClientResponse>(`${ getServer.value }/client`,
                   {
                      first_name: field.first_name.text,
                      last_name: field.last_name.text,
@@ -490,8 +490,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:Client = response.data.data.data;
+                  if(response.data.data) {
+                     const data:Client = response.data.data;
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
                      const formatted_branch:Branch|null = format_branch(data.branch);
@@ -550,7 +550,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<ClientResponse>(`${ getServer.value }/client/v3/update.php`,
+               let response = await axios.post<ClientResponse>(`${ getServer.value }/client`,
                   {
                      id: page.id,
                      first_name: field.first_name.text,
@@ -570,8 +570,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:Client = response.data.data.data;
+                  if(response.data.data) {
+                     const data:Client = response.data.data;
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
                      const formatted_branch:Branch|null = format_branch(data.branch);

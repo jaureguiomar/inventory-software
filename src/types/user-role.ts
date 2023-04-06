@@ -70,27 +70,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: UserRole;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: UserRole;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface UserRoleResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface UserRoleResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: UserRole;
 }
 interface UserRoleOneResponse {
    data: UserRole;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface UserRolesResponse {
    data: Array<UserRole>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

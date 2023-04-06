@@ -352,15 +352,19 @@ export default defineComponent({
          getLastCashCutoff();
          barcodeScanner.init(onBarcodeScanned);
 
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php?type=is_favorite&query=1`,
+         axios.get<ProductsResponse>(`${ getServer.value }/product/find`,
             {
+               params: {
+                  field: "is_favorite",
+                  query: "1"
+               },
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_products:Array<Product> = [];
                   let formatted_products_input:Array<string> = [];
@@ -417,7 +421,7 @@ export default defineComponent({
             });
          });
 
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/select-all.php`,
+         axios.get<ProductsResponse>(`${ getServer.value }/product`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -425,7 +429,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_products:Array<Product> = [];
                   let formatted_products_input:Array<string> = [];
@@ -488,19 +492,19 @@ export default defineComponent({
       });
 
       const getLastCashCutoff = () => {
-         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`,
+         axios.post<CashCutoffOneResponse>(`${ getServer.value }/cash-cutoff/last`,
             {
-               params: {
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               },
+               id_pos: getPosId.value,
+               id_branch: getBranchId.value
+            },
+            {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   if(data) {
                      const formatted_user_open:User|null = format_user(data.user_open);
@@ -604,7 +608,7 @@ export default defineComponent({
       };
       const onRefreshProducts = () => {
          all_products.value = [];
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`,
+         axios.get<ProductsResponse>(`${ getServer.value }/product/find`,
             {
                params: {
                   type: "id_branch",
@@ -616,7 +620,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   all_products.value = data;
                } else {
@@ -741,7 +745,7 @@ export default defineComponent({
                   pos: null,
                   branch: null
                };
-               let responseSale = await axios.put<SaleResponse>(`${ getServer.value }/sale/v3/create.php`,
+               let responseSale = await axios.put<SaleResponse>(`${ getServer.value }/sale`,
                   {
                      total: calculateTotal.value,
                      is_supplier: (isSupplier.value) ? 1 : 0,
@@ -757,8 +761,8 @@ export default defineComponent({
                   }
                );
                if(responseSale) {
-                  if(!responseSale.data.error.is_error) {
-                     created_sale = responseSale.data.data.data;
+                  if(responseSale.data.data) {
+                     created_sale = responseSale.data.data;
 
                      create_activity_log({
                         name: "The user has added a sale item",
@@ -807,7 +811,7 @@ export default defineComponent({
                let sale_product_error = false;
                for(let i = 0; i < getSaleCurrSaleProduct.value.length; i++) {
                   const curr_sale = getSaleCurrSaleProduct.value[i];
-                  let responseSaleProduct = await axios.put<SaleProductResponse>(`${ getServer.value }/sale_product/v3/create.php`,
+                  let responseSaleProduct = await axios.put<SaleProductResponse>(`${ getServer.value }/sale-product`,
                      {
                         quantity: curr_sale.sale_quantity,
                         is_supplier: (isSupplier.value) ? 1 : 0,
@@ -825,8 +829,8 @@ export default defineComponent({
                      }
                   );
                   if(responseSaleProduct) {
-                     if(!responseSaleProduct.data.error.is_error)
-                        created_sale_product = responseSaleProduct.data.data.data;
+                     if(responseSaleProduct.data.data)
+                        created_sale_product = responseSaleProduct.data.data;
                      else
                         sale_product_error = true;
                   } else {
@@ -858,7 +862,7 @@ export default defineComponent({
                   branch: null
                };
                let sale_product_m2m_array:SaleProductM2M[] = [];
-               let responseSaleProductM2M = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale_product/v3/find-by-sale.php`,
+               let responseSaleProductM2M = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale-product/find-by-sale`,
                   {
                      params: {
                         type: "id",
@@ -870,7 +874,7 @@ export default defineComponent({
                   }
                );
                if(responseSaleProductM2M) {
-                  if(!responseSaleProductM2M.data.error.is_error) {
+                  if(responseSaleProductM2M.data.data) {
                      sale_product_m2m_array = responseSaleProductM2M.data.data;
                      if(sale_product_m2m_array.length > 0)
                         sale_product_m2m = sale_product_m2m_array[0];

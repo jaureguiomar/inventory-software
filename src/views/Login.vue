@@ -59,7 +59,7 @@ export default defineComponent({
       });
 
       onMounted(async() => {
-         let response = await axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
+         let response = await axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user-role-permission`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -67,7 +67,7 @@ export default defineComponent({
             }
          );
          if(response) {
-            if(!response.data.error.is_error) {
+            if(response.data.data) {
                let formatted_data:UserRolePermission[] = [];
                userRolePermission.value = [];
 
@@ -107,14 +107,18 @@ export default defineComponent({
             return;
          }
 
-         axios.post<UserAuthResponse>(`${ getServer.value }/auth/v3/auth.php`, {
+         axios.post<UserAuthResponse>(`${ getServer.value }/auth-token/auth`, {
             username: email.value,
             password: password.value
          }).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
-                  const data = response.data.data.data;
-                  const token = response.data.data.token;
+               if(response.data.data) {
+                  const data = response.data.data;
+                  const token = {
+                     access_token: response.data.access_token,
+                     refresh_token: response.data.refresh_token,
+                     expires_in: response.data.expires_in
+                  };
                   let formatted_role_store:UserRoleStore|null = null;
                   const curr_role = (data.role) ? data.role : null;
 

@@ -361,7 +361,7 @@ export default defineComponent({
       const onRefreshData = () => {
          product.value = [];
 
-         axios.get<ProductsResponse>(`${ getServer.value }/product/v3/find.php`, {
+         axios.get<ProductsResponse>(`${ getServer.value }/product/find`, {
             params: {
                type: "id_branch",
                query: getBranchId.value
@@ -371,7 +371,7 @@ export default defineComponent({
             }
          }).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_products:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {

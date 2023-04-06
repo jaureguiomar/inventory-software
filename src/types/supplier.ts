@@ -66,27 +66,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Supplier;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Supplier;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface SupplierResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface SupplierResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Supplier;
 }
 interface SupplierOneResponse {
    data: Supplier;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface SuppliersResponse {
    data: Array<Supplier>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

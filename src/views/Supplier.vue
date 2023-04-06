@@ -288,7 +288,7 @@ export default defineComponent({
       const onRefreshData = () => {
          supplier.value = [];
 
-         axios.get<SuppliersResponse>(`${ getServer.value }/supplier/v3/select-all.php`,
+         axios.get<SuppliersResponse>(`${ getServer.value }/supplier`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -296,7 +296,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_suppliers:Array<Supplier> = [];
                   for(let i = 0; i < data.length; i++) {

@@ -548,7 +548,7 @@ export default defineComponent({
                access_token: getAuthToken.value.access_token
             });
 
-            axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user_role_permission/v3/select-all.php`,
+            axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user-role-permission`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -556,7 +556,7 @@ export default defineComponent({
                }
             ).then((response) => {
                if(response) {
-                  if(!response.data.error.is_error) {
+                  if(response.data.data) {
                      const data = response.data.data;
                      let formatted_user_role_permissions:Array<UserRolePermission> = [];
                      for(let i = 0; i < data.length; i++) {
@@ -622,7 +622,7 @@ export default defineComponent({
 
       const onDelete = async() => {
          try {
-            let response = await axios.delete<UserRoleResponse>(`${ getServer.value }/user_role/v3/delete.php`,
+            let response = await axios.delete<UserRoleResponse>(`${ getServer.value }/user-role`,
                {
                   params: {
                      field: "id",
@@ -634,7 +634,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(response.data.error.is_error) {
+               if(!response.data.data) {
                   Swal.fire({
                      title: "Error",
                      text: t("global.default_error"),

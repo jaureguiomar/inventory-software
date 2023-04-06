@@ -406,7 +406,7 @@ export default defineComponent({
          });
          loaded.value = true;
       });
-      axios.get<UserRolesResponse>(`${ getServer.value }/user_role/v3/select-all.php`,
+      axios.get<UserRolesResponse>(`${ getServer.value }/user-role`,
          {
             headers: {
                "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -414,7 +414,7 @@ export default defineComponent({
          }
       ).then((response) => {
          if(response) {
-            if(!response.data.error.is_error) {
+            if(response.data.data) {
                const data = response.data.data;
                let formatted_roles:Array<UserRole> = [];
 
@@ -583,7 +583,7 @@ export default defineComponent({
 
          if(page.id <= 0) {
             try {
-               let response = await axios.put<UserResponse>(`${ getServer.value }/user/v3/create.php`,
+               let response = await axios.put<UserResponse>(`${ getServer.value }/user`,
                   {
                      username: field.username.text,
                      email: field.email.text,
@@ -602,8 +602,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:User = response.data.data.data;
+                  if(response.data.data) {
+                     const data:User = response.data.data;
                      const formatted_role:UserRole|null = format_user_role(data.role);
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
@@ -664,7 +664,7 @@ export default defineComponent({
             }
          } else {
             try {
-               let response = await axios.post<UserResponse>(`${ getServer.value }/user/v3/update.php`,
+               let response = await axios.post<UserResponse>(`${ getServer.value }/user`,
                   {
                      id: page.id,
                      username: field.username.text,
@@ -684,8 +684,8 @@ export default defineComponent({
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     const data:User = response.data.data.data;
+                  if(response.data.data) {
+                     const data:User = response.data.data;
                      const formatted_role:UserRole|null = format_user_role(data.role);
                      const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
@@ -748,7 +748,7 @@ export default defineComponent({
 
          // Get role
          try {
-            let response = await axios.get<UserRoleOneResponse>(`${ getServer.value }/user_role/v3/select-one.php?id=${ formatted_data.id_role }`,
+            let response = await axios.get<UserRoleOneResponse>(`${ getServer.value }/user-role/${ formatted_data.id_role }`,
                {
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -756,7 +756,7 @@ export default defineComponent({
                }
             );
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data:UserRole = response.data.data;
                   // const formatted_user:User|null = format_user(data.user);
                   // const formatted_pos:Pos|null = format_pos(data.pos);

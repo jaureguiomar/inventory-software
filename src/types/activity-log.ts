@@ -83,22 +83,25 @@ interface ResponseOk {
    ok: boolean;
    message: string;
 }
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface ActivityLogResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface ActivityLogResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: ActivityLog;
 }
 interface ActivityLogOneResponse {
    data: ActivityLog;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface ActivityLogsResponse {
    data: Array<ActivityLog>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

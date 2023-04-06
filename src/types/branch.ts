@@ -61,27 +61,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: Branch;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: Branch;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface BranchResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface BranchResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: Branch;
 }
 interface BranchOneResponse {
    data: Branch;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface BranchesResponse {
    data: Array<Branch>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {

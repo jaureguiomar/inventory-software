@@ -277,7 +277,7 @@ export default defineComponent({
 
       const onRefreshData = () => {
          activityLog.value = [];
-         axios.get<ActivityLogsResponse>(`${ getServer.value }/activity_log/v3/select-all.php`,
+         axios.get<ActivityLogsResponse>(`${ getServer.value }/activity-log`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -285,7 +285,7 @@ export default defineComponent({
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_categories:Array<ActivityLog> = [];
                   for(let i = 0; i < data.length; i++) {

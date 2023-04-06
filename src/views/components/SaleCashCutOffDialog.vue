@@ -204,19 +204,19 @@ export default {
       });
 
       onMounted(() => {
-         axios.get<CashCutoffOneResponse>(`${ getServer.value }/cash_cutoff/v3/last.php`,
+         axios.post<CashCutoffOneResponse>(`${ getServer.value }/cash-cutoff/last`,
             {
-               params: {
-                  id_pos: getPosId.value,
-                  id_branch: getBranchId.value
-               },
+               id_pos: getPosId.value,
+               id_branch: getBranchId.value
+            },
+            {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                }
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   if(data) {
                      const formatted_user_open:User|null = format_user(data.user_open);
@@ -265,7 +265,7 @@ export default {
             // });
          });
 
-         axios.get<UsersResponse>(`${ getServer.value }/user/v3/select-all.php`,
+         axios.get<UsersResponse>(`${ getServer.value }/user`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
@@ -273,7 +273,7 @@ export default {
             }
          ).then((response) => {
             if(response) {
-               if(!response.data.error.is_error) {
+               if(response.data.data) {
                   const data = response.data.data;
                   let formatted_users:Array<User> = [];
                   let formatted_users_input:Array<string> = [];
@@ -385,7 +385,7 @@ export default {
          if(type === "open") {
             log_data.text = "opened";
             try {
-               let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/create.php`,
+               let response = await axios.put<CashCutoffResponse>(`${ getServer.value }/cash-cutoff`,
                   {
                      amount_open: field.amount.text,
                      id_type: 1,
@@ -400,8 +400,8 @@ export default {
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
-                     log_data.data = response.data.data.data;
+                  if(response.data.data) {
+                     log_data.data = response.data.data;
                      log_data.id_operation = ACTIVITY_LOG_OPERATION.CASH_CUTOFF_SALE;
                      log_data.id_access = ACTIVITY_LOG_ACCESS.ADD;
                   } else {
@@ -419,7 +419,7 @@ export default {
             log_data.text = "closed";
 
             try {
-               let response = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale_product/v3/find-by-sale.php`,
+               let response = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale-product/find-by-sale`,
                   {
                      params: {
                         type: "id_cash_cutoff",
@@ -431,9 +431,8 @@ export default {
                   }
                );
                if(response) {
-                  if(!response.data.error.is_error) {
+                  if(response.data.data) {
                      const data = response.data.data;
-
                      for(let i = 0; i < data.length; i++) {
                         const curr_sale = data[i];
                         if(curr_sale.is_supplier === 0)
@@ -458,7 +457,7 @@ export default {
             }
 
             try {
-               let response = await axios.post<CashCutoffResponse>(`${ getServer.value }/cash_cutoff/v3/update.php`,
+               let response = await axios.post<CashCutoffResponse>(`${ getServer.value }/cash-cutoff`,
                   {
                      id: lastCashCutoff.id,
                      amount_open: lastCashCutoff.amount_open,
@@ -479,7 +478,7 @@ export default {
                   }
                );
                if(response) {
-                  if(response.data.error.is_error)
+                  if(!response.data.data)
                      return false;
                } else {
                   return false;

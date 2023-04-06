@@ -82,27 +82,30 @@ interface WindowResponse {
 }
 
 // Axios response
-interface ResponseOk {
-   data: CashCutoff;
-   ok: boolean;
-   message: string;
-}
-interface ResponseError {
-   is_error: boolean;
-   message: string|null;
-   no_error: number;
-}
+// interface ResponseOk {
+//    data: CashCutoff;
+//    ok: boolean;
+//    message: string;
+// }
+// interface ResponseError {
+//    is_error: boolean;
+//    message: string|null;
+//    no_error: number;
+// }
+// interface CashCutoffResponse {
+//    data: ResponseOk;
+//    error: ResponseError;
+// }
 interface CashCutoffResponse {
-   data: ResponseOk;
-   error: ResponseError;
+   data: CashCutoff;
 }
 interface CashCutoffOneResponse {
    data: CashCutoff;
-   error: ResponseError;
+   // error: ResponseError;
 }
 interface CashCutoffsResponse {
    data: Array<CashCutoff>;
-   error: ResponseError;
+   // error: ResponseError;
 }
 
 export {
