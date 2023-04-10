@@ -290,7 +290,7 @@ export default defineComponent({
                            saleProduct.value[finded_index].id_user = data.data.id_user;
                            saleProduct.value[finded_index].id_pos = data.data.id_pos;
                            saleProduct.value[finded_index].id_branch = data.data.id_branch;
-                           saleProduct.value[finded_index].product = data.data.product;
+                           saleProduct.value[finded_index].products = data.data.products;
                         }
                      }
                   } else if(data.type === "delete") {
@@ -334,8 +334,8 @@ export default defineComponent({
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
                      const formatted_product_m2m:ProductM2M[] = [];
 
-                     for(let j = 0; j < data[i].product.length; j++) {
-                        const curr_product_m2m:ProductM2M|null = format_product_m2m(data[i].product[j]);
+                     for(let j = 0; j < data[i].products.length; j++) {
+                        const curr_product_m2m:ProductM2M|null = format_product_m2m(data[i].products[j]);
                         if(curr_product_m2m)
                            formatted_product_m2m.push(curr_product_m2m);
                      }
@@ -355,7 +355,7 @@ export default defineComponent({
                         user: formatted_user,
                         pos: formatted_pos,
                         branch: formatted_branch,
-                        product: formatted_product_m2m
+                        products: formatted_product_m2m
                      });
                   }
 
@@ -414,7 +414,7 @@ export default defineComponent({
                id_user: item.id_user,
                id_pos: item.id_pos,
                id_branch: item.id_branch,
-               product: JSON.parse(JSON.stringify(item.product)),
+               product: JSON.parse(JSON.stringify(item.products)),
                cash_cutoff: { ...item.cash_cutoff },
                user: { ...item.user },
                pos: { ...item.pos },

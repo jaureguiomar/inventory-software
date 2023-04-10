@@ -58,7 +58,7 @@
                <q-table
                   class="q-mb-md"
                   title="Sale Products List"
-                  :rows="saleProduct.product"
+                  :rows="saleProduct.products"
                   :columns="productColumns"
                   :no-data-label="t('sale_product.table.content.details.empty')"
                   :no-results-label="t('sale_product.table.content.details.empty')"
@@ -156,7 +156,7 @@ export default defineComponent({
          id_user:-10,
          id_pos: -1,
          id_branch: -1,
-         product: [],
+         products: [],
          cash_cutoff: {
             id: -1,
             is_active: -1,
@@ -316,7 +316,7 @@ export default defineComponent({
             saleProduct.id_user = data.data.id_user;
             saleProduct.id_pos = data.data.id_pos;
             saleProduct.id_branch = data.data.id_branch;
-            saleProduct.product = data.data.product;
+            saleProduct.products = data.data.products;
             saleProduct.user = data.data.user;
             saleProduct.pos = data.data.pos;
             saleProduct.branch = data.data.branch;

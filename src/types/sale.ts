@@ -27,7 +27,7 @@ interface Sale extends MainSale {
 interface SaleM2M extends MainSale {
    created: string;
    updated: string;
-   product: ProductM2M[];
+   products: ProductM2M[];
 }
 interface SaleMySQL extends MainSale {
    is_sync: number;

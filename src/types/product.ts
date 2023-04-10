@@ -32,7 +32,7 @@ interface Product extends MainProduct {
 interface ProductM2M extends MainProduct {
    created: string;
    updated: string;
-   sale: SaleProduct;
+   sale_product: SaleProduct;
 }
 interface ProductMySQL extends MainProduct {
    is_sync: number;
