@@ -316,7 +316,7 @@ export default defineComponent({
          saleProductSale.value = [];
          saleProductSupplier.value = [];
 
-         axios.get<SalesM2MResponse>(`${ getServer.value }/sale-product`,
+         axios.get<SalesM2MResponse>(`${ getServer.value }/sale-product/m2m`,
             {
                headers: {
                   "Authorization": `Bearer ${ getAuthToken.value.access_token }`
