@@ -952,7 +952,7 @@ export default defineComponent({
             let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/find`,
                {
                   params: {
-                     type: "id_branch",
+                     field: "id_branch",
                      query: getBranchId.value
                   },
                   headers: {
@@ -1016,7 +1016,7 @@ export default defineComponent({
             let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/find`,
                {
                   params: {
-                     type: "id_branch",
+                     field: "id_branch",
                      query: getBranchId.value
                   },
                   headers: {
@@ -1075,7 +1075,7 @@ export default defineComponent({
             let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale-product/find`,
                {
                   params: {
-                     type: "id_branch",
+                     field: "id_branch",
                      query: getBranchId.value
                   },
                   headers: {

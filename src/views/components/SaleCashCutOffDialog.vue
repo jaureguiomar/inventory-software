@@ -419,10 +419,10 @@ export default {
             log_data.text = "closed";
 
             try {
-               let response = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale-product/find-by-sale`,
+               let response = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale-product/find-m2m`,
                   {
                      params: {
-                        type: "id_cash_cutoff",
+                        field: "id_cash_cutoff",
                         query: lastCashCutoff.id
                      },
                      headers: {

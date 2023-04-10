@@ -611,7 +611,7 @@ export default defineComponent({
          axios.get<ProductsResponse>(`${ getServer.value }/product/find`,
             {
                params: {
-                  type: "id_branch",
+                  field: "id_branch",
                   query: getBranchId.value
                },
                headers: {
@@ -862,10 +862,10 @@ export default defineComponent({
                   branch: null
                };
                let sale_product_m2m_array:SaleProductM2M[] = [];
-               let responseSaleProductM2M = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale-product/find-by-sale`,
+               let responseSaleProductM2M = await axios.get<SaleProductsM2MResponse>(`${ getServer.value }/sale-product/find-m2m`,
                   {
                      params: {
-                        type: "id",
+                        field: "id",
                         query: created_sale.id
                      },
                      headers: {
