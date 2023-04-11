@@ -25,11 +25,6 @@ interface CategoryMySQL extends MainCategory {
    created: Date;
    updated: Date;
 }
-interface CategoryMySQLDelete { // Make it as global interface? (MySQLDelete)
-   id: number;
-   is_sync: number;
-   sync_type: "add"|"update"|"delete"|null;
-}
 
 // Props
 interface CategoryField {
@@ -100,7 +95,6 @@ interface CategoriesResponse {
 export {
    Category,
    CategoryMySQL,
-   CategoryMySQLDelete,
    Content,
    IPCParams,
    IPCParamsContent,

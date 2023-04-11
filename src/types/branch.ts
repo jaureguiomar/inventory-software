@@ -14,7 +14,7 @@ interface Branch extends MainBranch {
 }
 interface BranchMySQL extends MainBranch {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }

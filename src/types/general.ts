@@ -23,10 +23,16 @@ interface MySQLOfflineField {
    is_sync: number;
    sync_type: "add"|"update"|"delete"|null;
 }
+interface MySQLDelete {
+   id: number;
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
+}
 
 export {
    InputFieldString,
    InputFieldNumber,
    InputFieldBoolean,
-   MySQLOfflineField
+   MySQLOfflineField,
+   MySQLDelete
 };

@@ -1,6 +1,7 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { Category, CategoryMySQL, CategoryMySQLDelete } from "@/types/category";
+import { Category, CategoryMySQL } from "@/types/category";
+import { MySQLDelete } from "@/types/general";
 
 export const get_categories = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<Category>>((resolve) => {
@@ -20,15 +21,7 @@ export const get_categories = async(connection:Connection) => {
                   id_branch: Number(rows[i].id_branch),
                   user: null,
                   pos: null,
-                  branch: {
-                     id: -1,
-                     is_active: -1,
-                     created: "",
-                     updated: "",
-                     name: "",
-                     telephone: "",
-                     address: ""
-                  }
+                  branch: null
                });
             }
          }
@@ -159,7 +152,7 @@ export const update_category = async(connection:Connection, data:CategoryMySQL) 
    return await promise_update_category;
 };
 
-export const delete_category = async(connection:Connection, data:CategoryMySQLDelete) => {
+export const delete_category = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_category = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update category set ";
