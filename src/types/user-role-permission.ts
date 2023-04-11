@@ -16,7 +16,7 @@ interface UserRolePermission extends MainUserRolePermission {
 }
 interface UserRolePermissionMySQL extends MainUserRolePermission {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }

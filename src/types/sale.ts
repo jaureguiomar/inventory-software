@@ -31,7 +31,7 @@ interface SaleM2M extends MainSale {
 }
 interface SaleMySQL extends MainSale {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }

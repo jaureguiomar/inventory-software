@@ -25,7 +25,7 @@ interface UserRole extends MainUserRole {
 }
 interface UserMySQL extends MainUserRole {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }

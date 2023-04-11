@@ -27,7 +27,7 @@ interface User extends MainUser {
 }
 interface UserMySQL extends MainUser {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }

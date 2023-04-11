@@ -36,7 +36,7 @@ interface ProductM2M extends MainProduct {
 }
 interface ProductMySQL extends MainProduct {
    is_sync: number;
-   sync_type: "add"|"update"|"delete";
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }
