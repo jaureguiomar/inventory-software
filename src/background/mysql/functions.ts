@@ -15,7 +15,7 @@ export const parseDate = (date:Date) => {
    return year + "-" + month + "-" + day;
 }
 
-export const formattedDateToDate = (date:string) => {
+export const formattedStringDateToDate = (date:string) => {
    console.log("date", date);
    return new Date();
 }

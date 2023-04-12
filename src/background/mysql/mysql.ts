@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import mysql from "mysql";
 import { mysql_connection } from "@/background/mysql/connection";
+import { formattedStringDateToDate } from "@/background/mysql/functions";
 import { update_sync_unsync_data, delete_table } from "@/background/mysql/queries/global";
 import { get_user_roles_mysql_unsync, insert_user_role_mysql } from "@/background/mysql/queries/user-role";
 import { get_users_mysql_unsync, insert_user_mysql } from "@/background/mysql/queries/user";
@@ -35,7 +36,6 @@ import "@/background/mysql/events/supplier";
 import "@/background/mysql/events/user";
 import "@/background/mysql/events/user-role";
 import "@/background/mysql/events/user-role-permission";
-import { formattedDateToDate } from "./functions";
 
 ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    const connection = mysql.createConnection(mysql_connection);
@@ -80,8 +80,8 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
          ...curr_data,
          is_sync: 1,
          sync_type: null,
-         created: formattedDateToDate(curr_data.created),
-         updated: formattedDateToDate(curr_data.updated)
+         created: formattedStringDateToDate(curr_data.created),
+         updated: formattedStringDateToDate(curr_data.updated)
       });
       if(new_id <= 0)
          console.log("data", curr_data);
