@@ -1,15 +1,24 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
+import { get_activity_log_operation_by_id } from "@/background/mysql/activity-log-operation";
+import { get_activity_log_access_by_id } from "@/background/mysql/activity-log-access";
+import { get_user_by_id } from "@/background/mysql/user";
 import { ActivityLog, ActivityLogMySQL } from "@/types/activity-log";
 import { MySQLDelete } from "@/types/general";
+import { ActivityLogOperation } from "@/types/activity-log-operation";
+import { ActivityLogAccess } from "@/types/activity-log-access";
+import { User } from "@/types/user";
 
 export const get_activity_logs = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<ActivityLog>>((resolve) => {
       const query = "select * from activity_log where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<ActivityLogMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<ActivityLogMySQL>) => {
          const data:Array<ActivityLog> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
+               const activity_log_operation:ActivityLogOperation = await get_activity_log_operation_by_id(connection, rows[i].id_operation);
+               const activity_log_access:ActivityLogAccess = await get_activity_log_access_by_id(connection, rows[i].id_access);
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -20,9 +29,9 @@ export const get_activity_logs = async(connection:Connection) => {
                   id_operation: Number(rows[i].id_operation),
                   id_access: Number(rows[i].id_access),
                   id_user: Number(rows[i].id_user),
-                  operation: null,
-                  access: null,
-                  user: null
+                  operation: activity_log_operation,
+                  access: activity_log_access,
+                  user: user
                });
             }
          }
@@ -35,7 +44,7 @@ export const get_activity_logs = async(connection:Connection) => {
 export const get_activity_log_by_id = async(connection:Connection, id:number) => {
    const promise_get_activity_log_by_id = new Promise<ActivityLog>((resolve) => {
       const query = "select * from activity_log where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<ActivityLogMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<ActivityLogMySQL>) => {
          let result_activity_log:ActivityLog = {
             id: -1,
             is_active: -1,
@@ -54,10 +63,16 @@ export const get_activity_log_by_id = async(connection:Connection, id:number) =>
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
+               const activity_log_operation:ActivityLogOperation = await get_activity_log_operation_by_id(connection, curr_row.id_operation);
+               const activity_log_access:ActivityLogAccess = await get_activity_log_access_by_id(connection, curr_row.id_access);
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
                result_activity_log = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated)
+                  updated: parseDate(curr_row.updated),
+                  operation: activity_log_operation,
+                  access: activity_log_access,
+                  user: user
                };
             }
          }
@@ -70,7 +85,7 @@ export const get_activity_log_by_id = async(connection:Connection, id:number) =>
 export const get_activity_log_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_activity_log_mysql_by_id = new Promise<ActivityLogMySQL>((resolve) => {
       const query = "select * from activity_log where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<ActivityLogMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<ActivityLogMySQL>) => {
          let result_activity_log:ActivityLogMySQL = {
             id: -1,
             is_active: -1,
@@ -91,7 +106,15 @@ export const get_activity_log_mysql_by_id = async(connection:Connection, id:numb
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_activity_log = { ...curr_row };
+               const activity_log_operation:ActivityLogOperation = await get_activity_log_operation_by_id(connection, curr_row.id_operation);
+               const activity_log_access:ActivityLogAccess = await get_activity_log_access_by_id(connection, curr_row.id_access);
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               result_activity_log = {
+                  ...curr_row,
+                  operation: activity_log_operation,
+                  access: activity_log_access,
+                  user: user
+               };
             }
          }
          resolve(result_activity_log);

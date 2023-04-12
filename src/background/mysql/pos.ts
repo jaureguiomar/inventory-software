@@ -1,15 +1,18 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
+import { get_branch_by_id } from "@/background/mysql/branch";
 import { Pos, PosMySQL } from "@/types/pos";
 import { MySQLDelete } from "@/types/general";
+import { Branch } from "@/types/branch";
 
 export const get_poss = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<Pos>>((resolve) => {
       const query = "select * from pos where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<PosMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
          const data:Array<Pos> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -19,7 +22,7 @@ export const get_poss = async(connection:Connection) => {
                   machine_id: rows[i].machine_id,
                   mac_address: rows[i].mac_address,
                   id_branch: Number(rows[i].id_branch),
-                  branch: null
+                  branch: branch
                });
             }
          }
@@ -32,7 +35,7 @@ export const get_poss = async(connection:Connection) => {
 export const get_pos_by_id = async(connection:Connection, id:number) => {
    const promise_get_pos_by_id = new Promise<Pos>((resolve) => {
       const query = "select * from pos where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<PosMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
          let result_pos:Pos = {
             id: -1,
             is_active: -1,
@@ -48,10 +51,12 @@ export const get_pos_by_id = async(connection:Connection, id:number) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_pos = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated)
+                  updated: parseDate(curr_row.updated),
+                  branch: branch
                };
             }
          }
@@ -64,7 +69,7 @@ export const get_pos_by_id = async(connection:Connection, id:number) => {
 export const get_pos_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_pos_mysql_by_id = new Promise<PosMySQL>((resolve) => {
       const query = "select * from pos where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<PosMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
          let result_pos:PosMySQL = {
             id: -1,
             is_active: -1,
@@ -82,7 +87,11 @@ export const get_pos_mysql_by_id = async(connection:Connection, id:number) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_pos = { ...curr_row };
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_pos = {
+                  ...curr_row,
+                  branch: branch
+               };
             }
          }
          resolve(result_pos);

@@ -2,14 +2,24 @@ import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
 import { User, UserMySQL } from "@/types/user";
 import { MySQLDelete } from "@/types/general";
+import { UserRole } from "@/types/user-role";
+import { Pos } from "@/types/pos";
+import { Branch } from "@/types/branch";
+import { get_user_role_by_id } from "./user-role";
+import { get_pos_by_id } from "./pos";
+import { get_branch_by_id } from "./branch";
 
 export const get_useres = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<User>>((resolve) => {
       const query = "select * from user where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<UserMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          const data:Array<User> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
+               const user_role:UserRole = await get_user_role_by_id(connection, rows[i].id_role);
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -24,10 +34,10 @@ export const get_useres = async(connection:Connection) => {
                   id_user: Number(rows[i].id_user),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
-                  role: null,
-                  user: null,
-                  pos: null,
-                  branch: null
+                  role: user_role,
+                  user: user,
+                  pos: pos,
+                  branch: branch
                });
             }
          }
@@ -40,7 +50,7 @@ export const get_useres = async(connection:Connection) => {
 export const get_user_by_id = async(connection:Connection, id:number) => {
    const promise_get_user_by_id = new Promise<User>((resolve) => {
       const query = "select * from user where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<UserMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          let result_user:User = {
             id: -1,
             is_active: -1,
@@ -63,11 +73,18 @@ export const get_user_by_id = async(connection:Connection, id:number) => {
 
          if(!error) {
             if(rows.length > 0) {
-               const curr_row = rows[0];
+               const curr_row = rows[0];const user_role:UserRole = await get_user_role_by_id(connection, curr_row.id_role);
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_user = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated)
+                  updated: parseDate(curr_row.updated),
+                  role: user_role,
+                  user: user,
+                  pos: pos,
+                  branch: branch
                };
             }
          }
@@ -80,7 +97,7 @@ export const get_user_by_id = async(connection:Connection, id:number) => {
 export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_user_mysql_by_id = new Promise<UserMySQL>((resolve) => {
       const query = "select * from user where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<UserMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          let result_user:UserMySQL = {
             id: -1,
             is_active: -1,
@@ -106,7 +123,17 @@ export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_user = { ...curr_row };
+               const user_role:UserRole = await get_user_role_by_id(connection, curr_row.id_role);
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_user = {
+                  ...curr_row,
+                  role: user_role,
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               };
             }
          }
          resolve(result_user);

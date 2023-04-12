@@ -1,15 +1,25 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
+import { get_user_by_id } from "@/background/mysql/user";
+import { get_pos_by_id } from "@/background/mysql/pos";
+import { get_branch_by_id } from "@/background/mysql/branch";
 import { CashCutoff, CashCutoffMySQL } from "@/types/cash-cutoff";
 import { MySQLDelete } from "@/types/general";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { Branch } from "@/types/branch";
 
 export const get_cash_cutoffs = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<CashCutoff>>((resolve) => {
       const query = "select * from cash_cutoff where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<CashCutoffMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<CashCutoffMySQL>) => {
          const data:Array<CashCutoff> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
+               const user_open:User = await get_user_by_id(connection, rows[i].id_user_open);
+               const user_close:User = await get_user_by_id(connection, parseInt(rows[i].id_user_close?.toString() || "0"));
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -25,10 +35,10 @@ export const get_cash_cutoffs = async(connection:Connection) => {
                   id_user_close: Number(rows[i].id_user_close),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
-                  user_open: null,
-                  user_close: null,
-                  pos: null,
-                  branch: null
+                  user_open: user_open,
+                  user_close: user_close,
+                  pos: pos,
+                  branch: branch
                });
             }
          }
@@ -41,7 +51,7 @@ export const get_cash_cutoffs = async(connection:Connection) => {
 export const get_cash_cutoff_by_id = async(connection:Connection, id:number) => {
    const promise_get_cash_cutoff_by_id = new Promise<CashCutoff>((resolve) => {
       const query = "select * from cash_cutoff where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<CashCutoffMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<CashCutoffMySQL>) => {
          let result_cash_cutoff:CashCutoff = {
             id: -1,
             is_active: -1,
@@ -66,10 +76,18 @@ export const get_cash_cutoff_by_id = async(connection:Connection, id:number) => 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
+               const user_open:User = await get_user_by_id(connection, curr_row.id_user_open);
+               const user_close:User = await get_user_by_id(connection, parseInt(curr_row.id_user_close?.toString() || "0"));
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_cash_cutoff = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated)
+                  updated: parseDate(curr_row.updated),
+                  user_open: user_open,
+                  user_close: user_close,
+                  pos: pos,
+                  branch: branch
                };
             }
          }
@@ -82,7 +100,7 @@ export const get_cash_cutoff_by_id = async(connection:Connection, id:number) => 
 export const get_cash_cutoff_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_cash_cutoff_mysql_by_id = new Promise<CashCutoffMySQL>((resolve) => {
       const query = "select * from cash_cutoff where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<CashCutoffMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<CashCutoffMySQL>) => {
          let result_cash_cutoff:CashCutoffMySQL = {
             id: -1,
             is_active: -1,
@@ -109,7 +127,17 @@ export const get_cash_cutoff_mysql_by_id = async(connection:Connection, id:numbe
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_cash_cutoff = { ...curr_row };
+               const user_open:User = await get_user_by_id(connection, curr_row.id_user_open);
+               const user_close:User = await get_user_by_id(connection, parseInt(curr_row.id_user_close?.toString() || "0"));
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_cash_cutoff = {
+                  ...curr_row,
+                  user_open: user_open,
+                  user_close: user_close,
+                  pos: pos,
+                  branch: branch
+               };
             }
          }
          resolve(result_cash_cutoff);

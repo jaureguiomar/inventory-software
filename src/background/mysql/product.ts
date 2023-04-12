@@ -1,15 +1,27 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
+import { get_category_by_id } from "@/background/mysql/category";
+import { get_user_by_id } from "@/background/mysql/user";
+import { get_pos_by_id } from "@/background/mysql/pos";
+import { get_branch_by_id } from "@/background/mysql/branch";
 import { Product, ProductMySQL } from "@/types/product";
 import { MySQLDelete } from "@/types/general";
+import { Category } from "@/types/category";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { Branch } from "@/types/branch";
 
 export const get_products = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<Product>>((resolve) => {
       const query = "select * from product where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<ProductMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<ProductMySQL>) => {
          const data:Array<Product> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
+               const category:Category = await get_category_by_id(connection, rows[i].id_category);
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -26,10 +38,10 @@ export const get_products = async(connection:Connection) => {
                   id_user: Number(rows[i].id_user),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
-                  category: null,
-                  user: null,
-                  pos: null,
-                  branch: null,
+                  category: category,
+                  user: user,
+                  pos: pos,
+                  branch: branch
                });
             }
          }
@@ -42,7 +54,7 @@ export const get_products = async(connection:Connection) => {
 export const get_product_by_id = async(connection:Connection, id:number) => {
    const promise_get_product_by_id = new Promise<Product>((resolve) => {
       const query = "select * from product where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<ProductMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<ProductMySQL>) => {
          let result_product:Product = {
             id: -1,
             is_active: -1,
@@ -68,10 +80,18 @@ export const get_product_by_id = async(connection:Connection, id:number) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
+               const category:Category = await get_category_by_id(connection, curr_row.id_category);
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_product = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated)
+                  updated: parseDate(curr_row.updated),
+                  category: category,
+                  user: user,
+                  pos: pos,
+                  branch: branch
                };
             }
          }
@@ -84,7 +104,7 @@ export const get_product_by_id = async(connection:Connection, id:number) => {
 export const get_product_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_product_mysql_by_id = new Promise<ProductMySQL>((resolve) => {
       const query = "select * from product where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<ProductMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<ProductMySQL>) => {
          let result_product:ProductMySQL = {
             id: -1,
             is_active: -1,
@@ -112,7 +132,17 @@ export const get_product_mysql_by_id = async(connection:Connection, id:number) =
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_product = { ...curr_row };
+               const category:Category = await get_category_by_id(connection, curr_row.id_category);
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_product = {
+                  ...curr_row,
+                  category: category,
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               };
             }
          }
          resolve(result_product);

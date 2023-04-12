@@ -1,15 +1,24 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
+import { get_user_by_id } from "@/background/mysql/user";
+import { get_pos_by_id } from "@/background/mysql/pos";
+import { get_branch_by_id } from "@/background/mysql/branch";
 import { Supplier, SupplierMySQL } from "@/types/supplier";
 import { MySQLDelete } from "@/types/general";
+import { User } from "@/types/user";
+import { Pos } from "@/types/pos";
+import { Branch } from "@/types/branch";
 
 export const get_suppliers = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<Supplier>>((resolve) => {
       const query = "select * from supplier where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<SupplierMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
          const data:Array<Supplier> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -19,9 +28,9 @@ export const get_suppliers = async(connection:Connection) => {
                   id_user: Number(rows[i].id_user),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
-                  user: null,
-                  pos: null,
-                  branch: null
+                  user: user,
+                  pos: pos,
+                  branch: branch
                });
             }
          }
@@ -34,7 +43,7 @@ export const get_suppliers = async(connection:Connection) => {
 export const get_supplier_by_id = async(connection:Connection, id:number) => {
    const promise_get_supplier_by_id = new Promise<Supplier>((resolve) => {
       const query = "select * from supplier where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<SupplierMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
          let result_supplier:Supplier = {
             id: -1,
             is_active: -1,
@@ -52,10 +61,16 @@ export const get_supplier_by_id = async(connection:Connection, id:number) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_supplier = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated)
+                  updated: parseDate(curr_row.updated),
+                  user: user,
+                  pos: pos,
+                  branch: branch
                };
             }
          }
@@ -68,7 +83,7 @@ export const get_supplier_by_id = async(connection:Connection, id:number) => {
 export const get_supplier_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_supplier_mysql_by_id = new Promise<SupplierMySQL>((resolve) => {
       const query = "select * from supplier where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<SupplierMySQL>) {
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
          let result_supplier:SupplierMySQL = {
             id: -1,
             is_active: -1,
@@ -88,7 +103,15 @@ export const get_supplier_mysql_by_id = async(connection:Connection, id:number) 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_supplier = { ...curr_row };
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_supplier = {
+                  ...curr_row,
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               };
             }
          }
          resolve(result_supplier);
