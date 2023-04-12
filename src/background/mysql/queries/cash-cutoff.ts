@@ -1,8 +1,8 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { get_user_by_id } from "@/background/mysql/user";
-import { get_pos_by_id } from "@/background/mysql/pos";
-import { get_branch_by_id } from "@/background/mysql/branch";
+import { get_user_by_id } from "@/background/mysql/queries/user";
+import { get_pos_by_id } from "@/background/mysql/queries/pos";
+import { get_branch_by_id } from "@/background/mysql/queries/branch";
 import { CashCutoff, CashCutoffMySQL } from "@/types/cash-cutoff";
 import { MySQLDelete } from "@/types/general";
 import { User } from "@/types/user";

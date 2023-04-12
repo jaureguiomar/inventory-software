@@ -172,10 +172,10 @@ export default {
          is_active: -1,
          created: "",
          updated: "",
-         amount_open: "",
-         amount_sale: "",
-         amount_supplier: "",
-         amount_close: "",
+         amount_open: -1,
+         amount_sale: -1,
+         amount_supplier: -1,
+         amount_close: -1,
          date_close: "",
          id_type: -1,
          id_user_open: -1,
@@ -436,9 +436,9 @@ export default {
                      for(let i = 0; i < data.length; i++) {
                         const curr_sale = data[i];
                         if(curr_sale.is_supplier === 0)
-                           amount_sale += parseFloat(curr_sale.total);
+                           amount_sale += parseFloat(curr_sale.total.toString());
                         else
-                           amount_supplier += parseFloat(curr_sale.total);
+                           amount_supplier += parseFloat(curr_sale.total.toString());
                      }
                      amount_sale = amount_sale.toFixed(2);
                      amount_supplier = amount_supplier.toFixed(2);

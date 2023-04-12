@@ -363,7 +363,7 @@ export default defineComponent({
 
          axios.get<ProductsResponse>(`${ getServer.value }/product/find`, {
             params: {
-               type: "id_branch",
+               field: "id_branch",
                query: getBranchId.value
             },
             headers: {

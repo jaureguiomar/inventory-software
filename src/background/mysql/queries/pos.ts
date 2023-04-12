@@ -1,6 +1,6 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { get_branch_by_id } from "@/background/mysql/branch";
+import { get_branch_by_id } from "@/background/mysql/queries/branch";
 import { Pos, PosMySQL } from "@/types/pos";
 import { MySQLDelete } from "@/types/general";
 import { Branch } from "@/types/branch";

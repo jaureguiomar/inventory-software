@@ -232,11 +232,11 @@ const store = createStore<State>({
             state.sale.curr_sale.product.push({
                ...data,
                sale_quantity: 1,
-               sale_total: data.sale_price
+               sale_total: data.sale_price.toString()
             });
          } else {
             state.sale.curr_sale.product[finded_index].sale_quantity ++;
-            state.sale.curr_sale.product[finded_index].sale_total = (parseFloat(state.sale.curr_sale.product[finded_index].sale_price) * state.sale.curr_sale.product[finded_index].sale_quantity).toFixed(2);
+            state.sale.curr_sale.product[finded_index].sale_total = (parseFloat(state.sale.curr_sale.product[finded_index].sale_price.toString()) * state.sale.curr_sale.product[finded_index].sale_quantity).toFixed(2);
          }
       },
       MINUS_SALE_CURR_SALE_PRODUCT_QUANTITY: (state:State, id_product:number) => {
@@ -244,7 +244,7 @@ const store = createStore<State>({
          if(finded_index >= 0) {
             if(state.sale.curr_sale.product[finded_index].sale_quantity > 1) {
                state.sale.curr_sale.product[finded_index].sale_quantity --;
-               state.sale.curr_sale.product[finded_index].sale_total = (parseFloat(state.sale.curr_sale.product[finded_index].sale_price) * state.sale.curr_sale.product[finded_index].sale_quantity).toFixed(2);
+               state.sale.curr_sale.product[finded_index].sale_total = (parseFloat(state.sale.curr_sale.product[finded_index].sale_price.toString()) * state.sale.curr_sale.product[finded_index].sale_quantity).toFixed(2);
             }
          }
       },

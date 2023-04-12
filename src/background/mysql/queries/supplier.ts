@@ -1,19 +1,19 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { get_user_by_id } from "@/background/mysql/user";
-import { get_pos_by_id } from "@/background/mysql/pos";
-import { get_branch_by_id } from "@/background/mysql/branch";
-import { Category, CategoryMySQL } from "@/types/category";
+import { get_user_by_id } from "@/background/mysql/queries/user";
+import { get_pos_by_id } from "@/background/mysql/queries/pos";
+import { get_branch_by_id } from "@/background/mysql/queries/branch";
+import { Supplier, SupplierMySQL } from "@/types/supplier";
 import { MySQLDelete } from "@/types/general";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
 
-export const get_categories = async(connection:Connection) => {
-   const promise_get_categories = new Promise<Array<Category>>((resolve) => {
-      const query = "select * from category where is_active = 1";
-      connection.query(query, async(error:MysqlError, rows:Array<CategoryMySQL>) => {
-         const data:Array<Category> = [];
+export const get_suppliers = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<Supplier>>((resolve) => {
+      const query = "select * from supplier where is_active = 1";
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
+         const data:Array<Supplier> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                const user:User = await get_user_by_id(connection, rows[i].id_user);
@@ -40,11 +40,11 @@ export const get_categories = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_category_by_id = async(connection:Connection, id:number) => {
-   const promise_get_category_by_id = new Promise<Category>((resolve) => {
-      const query = "select * from category where is_active = 1 and id = " + id;
-      connection.query(query, async(error:MysqlError, rows:Array<CategoryMySQL>) => {
-         let result_category:Category = {
+export const get_supplier_by_id = async(connection:Connection, id:number) => {
+   const promise_get_supplier_by_id = new Promise<Supplier>((resolve) => {
+      const query = "select * from supplier where is_active = 1 and id = " + id;
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
+         let result_supplier:Supplier = {
             id: -1,
             is_active: -1,
             created: "",
@@ -55,15 +55,7 @@ export const get_category_by_id = async(connection:Connection, id:number) => {
             id_branch: -1,
             user: null,
             pos: null,
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            branch: null
          };
 
          if(!error) {
@@ -72,7 +64,7 @@ export const get_category_by_id = async(connection:Connection, id:number) => {
                const user:User = await get_user_by_id(connection, curr_row.id_user);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
-               result_category = {
+               result_supplier = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
                   updated: parseDate(curr_row.updated),
@@ -82,17 +74,17 @@ export const get_category_by_id = async(connection:Connection, id:number) => {
                };
             }
          }
-         resolve(result_category);
+         resolve(result_supplier);
       });
    });
-   return await promise_get_category_by_id;
+   return await promise_get_supplier_by_id;
 };
 
-export const get_category_mysql_by_id = async(connection:Connection, id:number) => {
-   const promise_get_category_mysql_by_id = new Promise<CategoryMySQL>((resolve) => {
-      const query = "select * from category where is_active = 1 and id = " + id;
-      connection.query(query, async(error:MysqlError, rows:Array<CategoryMySQL>) => {
-         let result_category:CategoryMySQL = {
+export const get_supplier_mysql_by_id = async(connection:Connection, id:number) => {
+   const promise_get_supplier_mysql_by_id = new Promise<SupplierMySQL>((resolve) => {
+      const query = "select * from supplier where is_active = 1 and id = " + id;
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
+         let result_supplier:SupplierMySQL = {
             id: -1,
             is_active: -1,
             is_sync: -1,
@@ -105,15 +97,7 @@ export const get_category_mysql_by_id = async(connection:Connection, id:number) 
             id_branch: -1,
             user: null,
             pos: null,
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            branch: null
          };
 
          if(!error) {
@@ -122,7 +106,7 @@ export const get_category_mysql_by_id = async(connection:Connection, id:number) 
                const user:User = await get_user_by_id(connection, curr_row.id_user);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
-               result_category = {
+               result_supplier = {
                   ...curr_row,
                   user: user,
                   pos: pos,
@@ -130,19 +114,21 @@ export const get_category_mysql_by_id = async(connection:Connection, id:number) 
                };
             }
          }
-         resolve(result_category);
+         resolve(result_supplier);
       });
    });
-   return await promise_get_category_mysql_by_id;
+   return await promise_get_supplier_mysql_by_id;
 };
 
-export const insert_category = async(connection:Connection, data:Category) => {
-   const promise_insert_category = new Promise<number>((resolve) => {
+export const insert_supplier = async(connection:Connection, data:Supplier) => {
+   const promise_insert_supplier = new Promise<number>((resolve) => {
       let query = "";
-      query += "insert into category set ";
+      query += "insert into supplier set ";
       query += "is_sync = 0, ";
       query += "sync_type = 'add', ";
       query += "name = '" + data.name + "', ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
       query += "id_branch = " + data.id_branch;
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {
@@ -152,17 +138,19 @@ export const insert_category = async(connection:Connection, data:Category) => {
          resolve(new_id);
       });
    });
-   return await promise_insert_category;
+   return await promise_insert_supplier;
 };
 
-export const update_category = async(connection:Connection, data:CategoryMySQL) => {
-   const promise_update_category = new Promise<boolean>((resolve) => {
+export const update_supplier = async(connection:Connection, data:SupplierMySQL) => {
+   const promise_update_supplier = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update category set ";
+      query += "update supplier set ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "', ";
       query += "name = '" + data.name + "', ";
-      query += "id_branch = " + data.id_branch + " ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
       query += "where id = " + data.id;
 
       connection.query(query, function(error) {
@@ -172,13 +160,13 @@ export const update_category = async(connection:Connection, data:CategoryMySQL) 
          resolve(is_ok);
       });
    });
-   return await promise_update_category;
+   return await promise_update_supplier;
 };
 
-export const delete_category = async(connection:Connection, data:MySQLDelete) => {
-   const promise_delete_category = new Promise<boolean>((resolve) => {
+export const delete_supplier = async(connection:Connection, data:MySQLDelete) => {
+   const promise_delete_supplier = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update category set ";
+      query += "update supplier set ";
       query += "is_active = 0, ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "' ";
@@ -191,5 +179,5 @@ export const delete_category = async(connection:Connection, data:MySQLDelete) =>
          resolve(is_ok);
       });
    });
-   return await promise_delete_category;
+   return await promise_delete_supplier;
 };

@@ -262,8 +262,8 @@ export default defineComponent({
          code: "",
          name: "",
          description: "",
-         buy_price: "",
-         sale_price: "",
+         buy_price: -1,
+         sale_price: -1,
          quantity: 0,
          id_category: -1,
          id_user: -1,
@@ -430,8 +430,8 @@ export default defineComponent({
             field.code.text = data.data.code;
             field.name.text = data.data.name;
             field.description.text = (data.data.description) ? data.data.description : "";
-            field.buy_price.text = data.data.buy_price;
-            field.sale_price.text = data.data.sale_price;
+            field.buy_price.text = data.data.buy_price.toString();
+            field.sale_price.text = data.data.sale_price.toString();
             field.quantity.text = data.data.quantity.toString();
             if(data.data.category)
                field.id_category.text = data.data.category.name;
@@ -592,8 +592,8 @@ export default defineComponent({
             code: "",
             name: "",
             description: "",
-            buy_price: "",
-            sale_price: "",
+            buy_price: -1,
+            sale_price: -1,
             quantity: -1,
             id_category: -1,
             id_user: -1,

@@ -1,8 +1,8 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { get_activity_log_operation_by_id } from "@/background/mysql/activity-log-operation";
-import { get_activity_log_access_by_id } from "@/background/mysql/activity-log-access";
-import { get_user_by_id } from "@/background/mysql/user";
+import { get_activity_log_operation_by_id } from "@/background/mysql/queries/activity-log-operation";
+import { get_activity_log_access_by_id } from "@/background/mysql/queries/activity-log-access";
+import { get_user_by_id } from "@/background/mysql/queries/user";
 import { ActivityLog, ActivityLogMySQL } from "@/types/activity-log";
 import { MySQLDelete } from "@/types/general";
 import { ActivityLogOperation } from "@/types/activity-log-operation";

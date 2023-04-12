@@ -1,22 +1,21 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { User, UserMySQL } from "@/types/user";
+import { get_user_by_id } from "@/background/mysql/queries/user";
+import { get_pos_by_id } from "@/background/mysql/queries/pos";
+import { get_branch_by_id } from "@/background/mysql/queries/branch";
+import { Client, ClientMySQL } from "@/types/client";
 import { MySQLDelete } from "@/types/general";
-import { UserRole } from "@/types/user-role";
+import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
-import { get_user_role_by_id } from "./user-role";
-import { get_pos_by_id } from "./pos";
-import { get_branch_by_id } from "./branch";
 
-export const get_useres = async(connection:Connection) => {
-   const promise_get_categories = new Promise<Array<User>>((resolve) => {
-      const query = "select * from user where is_active = 1";
-      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
-         const data:Array<User> = [];
+export const get_clients = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<Client>>((resolve) => {
+      const query = "select * from client where is_active = 1";
+      connection.query(query, async(error:MysqlError, rows:Array<ClientMySQL>) => {
+         const data:Array<Client> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
-               const user_role:UserRole = await get_user_role_by_id(connection, rows[i].id_role);
                const user:User = await get_user_by_id(connection, rows[i].id_user);
                const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
                const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
@@ -25,16 +24,15 @@ export const get_useres = async(connection:Connection) => {
                   is_active: rows[i].is_active,
                   created: parseDate(rows[i].created),
                   updated: parseDate(rows[i].updated),
-                  username: rows[i].username,
-                  email: rows[i].email,
-                  password: rows[i].password,
                   first_name: rows[i].first_name,
                   last_name: rows[i].last_name,
-                  id_role: Number(rows[i].id_role),
+                  address: rows[i].address,
+                  cellphone: rows[i].cellphone,
+                  cellphone2: rows[i].cellphone2,
+                  email: rows[i].email,
                   id_user: Number(rows[i].id_user),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
-                  role: user_role,
                   user: user,
                   pos: pos,
                   branch: branch
@@ -47,74 +45,24 @@ export const get_useres = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_user_by_id = async(connection:Connection, id:number) => {
-   const promise_get_user_by_id = new Promise<User>((resolve) => {
-      const query = "select * from user where is_active = 1 and id = " + id;
-      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
-         let result_user:User = {
+export const get_client_by_id = async(connection:Connection, id:number) => {
+   const promise_get_client_by_id = new Promise<Client>((resolve) => {
+      const query = "select * from client where is_active = 1 and id = " + id;
+      connection.query(query, async(error:MysqlError, rows:Array<ClientMySQL>) => {
+         let result_client:Client = {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
-            username: "",
-            email: "",
-            password: "",
             first_name: "",
             last_name: "",
-            id_role: -1,
+            address: "",
+            cellphone: "",
+            cellphone2: "",
+            email: "",
             id_user: -1,
             id_pos: -1,
             id_branch: -1,
-            role: null,
-            user: null,
-            pos: null,
-            branch: null
-         };
-
-         if(!error) {
-            if(rows.length > 0) {
-               const curr_row = rows[0];const user_role:UserRole = await get_user_role_by_id(connection, curr_row.id_role);
-               const user:User = await get_user_by_id(connection, curr_row.id_user);
-               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
-               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
-               result_user = {
-                  ...curr_row,
-                  created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated),
-                  role: user_role,
-                  user: user,
-                  pos: pos,
-                  branch: branch
-               };
-            }
-         }
-         resolve(result_user);
-      });
-   });
-   return await promise_get_user_by_id;
-};
-
-export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
-   const promise_get_user_mysql_by_id = new Promise<UserMySQL>((resolve) => {
-      const query = "select * from user where is_active = 1 and id = " + id;
-      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
-         let result_user:UserMySQL = {
-            id: -1,
-            is_active: -1,
-            is_sync: -1,
-            sync_type: null,
-            created: new Date(),
-            updated: new Date(),
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
             user: null,
             pos: null,
             branch: null
@@ -123,37 +71,82 @@ export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               const user_role:UserRole = await get_user_role_by_id(connection, curr_row.id_role);
                const user:User = await get_user_by_id(connection, curr_row.id_user);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
-               result_user = {
+               result_client = {
                   ...curr_row,
-                  role: user_role,
+                  created: parseDate(curr_row.created),
+                  updated: parseDate(curr_row.updated),
                   user: user,
                   pos: pos,
                   branch: branch
                };
             }
          }
-         resolve(result_user);
+         resolve(result_client);
       });
    });
-   return await promise_get_user_mysql_by_id;
+   return await promise_get_client_by_id;
 };
 
-export const insert_user = async(connection:Connection, data:User) => {
-   const promise_insert_user = new Promise<number>((resolve) => {
+export const get_client_mysql_by_id = async(connection:Connection, id:number) => {
+   const promise_get_client_mysql_by_id = new Promise<ClientMySQL>((resolve) => {
+      const query = "select * from client where is_active = 1 and id = " + id;
+      connection.query(query, async(error:MysqlError, rows:Array<ClientMySQL>) => {
+         let result_client:ClientMySQL = {
+            id: -1,
+            is_active: -1,
+            is_sync: -1,
+            sync_type: null,
+            created: new Date(),
+            updated: new Date(),
+            first_name: "",
+            last_name: "",
+            address: "",
+            cellphone: "",
+            cellphone2: "",
+            email: "",
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            user: null,
+            pos: null,
+            branch: null
+         };
+
+         if(!error) {
+            if(rows.length > 0) {
+               const curr_row = rows[0];
+               const user:User = await get_user_by_id(connection, curr_row.id_user);
+               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_client = {
+                  ...curr_row,
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               };
+            }
+         }
+         resolve(result_client);
+      });
+   });
+   return await promise_get_client_mysql_by_id;
+};
+
+export const insert_client = async(connection:Connection, data:Client) => {
+   const promise_insert_client = new Promise<number>((resolve) => {
       let query = "";
-      query += "insert into user set ";
+      query += "insert into client set ";
       query += "is_sync = 0, ";
       query += "sync_type = 'add', ";
-      query += "username = '" + data.username + "', ";
-      query += "email = '" + data.email + "', ";
-      query += "password = '" + data.password + "', ";
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
-      query += "id_role = " + data.id_role + ", ";
+      query += "address = '" + data.address + "', ";
+      query += "cellphone = '" + data.cellphone + "', ";
+      query += "cellphone2 = '" + data.cellphone2 + "', ";
+      query += "email = '" + data.email + "', ";
       query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";
       query += "id_branch = " + data.id_branch;
@@ -165,21 +158,21 @@ export const insert_user = async(connection:Connection, data:User) => {
          resolve(new_id);
       });
    });
-   return await promise_insert_user;
+   return await promise_insert_client;
 };
 
-export const update_user = async(connection:Connection, data:UserMySQL) => {
-   const promise_update_user = new Promise<boolean>((resolve) => {
+export const update_client = async(connection:Connection, data:ClientMySQL) => {
+   const promise_update_client = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update user set ";
+      query += "update client set ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "', ";
-      query += "username = '" + data.username + "', ";
-      query += "email = '" + data.email + "', ";
-      query += "password = '" + data.password + "', ";
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
-      query += "id_role = " + data.id_role + ", ";
+      query += "address = '" + data.address + "', ";
+      query += "cellphone = '" + data.cellphone + "', ";
+      query += "cellphone2 = '" + data.cellphone2 + "', ";
+      query += "email = '" + data.email + "', ";
       query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";
       query += "id_branch = " + data.id_branch + " ";
@@ -192,13 +185,13 @@ export const update_user = async(connection:Connection, data:UserMySQL) => {
          resolve(is_ok);
       });
    });
-   return await promise_update_user;
+   return await promise_update_client;
 };
 
-export const delete_user = async(connection:Connection, data:MySQLDelete) => {
-   const promise_delete_user = new Promise<boolean>((resolve) => {
+export const delete_client = async(connection:Connection, data:MySQLDelete) => {
+   const promise_delete_client = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update user set ";
+      query += "update client set ";
       query += "is_active = 0, ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "' ";
@@ -211,5 +204,5 @@ export const delete_user = async(connection:Connection, data:MySQLDelete) => {
          resolve(is_ok);
       });
    });
-   return await promise_delete_user;
+   return await promise_delete_client;
 };

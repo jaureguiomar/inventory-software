@@ -179,10 +179,10 @@ export default defineComponent({
          is_active: -1,
          created: "",
          updated: "",
-         amount_open: "",
-         amount_sale: "",
-         amount_supplier: "",
-         amount_close: "",
+         amount_open: -1,
+         amount_sale: -1,
+         amount_supplier: -1,
+         amount_close: -1,
          date_close: "",
          id_type: -1,
          id_user_open: -1,
@@ -267,10 +267,10 @@ export default defineComponent({
             cashCutoff.is_active = data.data.is_active;
             cashCutoff.created = getFormattedDateString(data.data.created);
             cashCutoff.updated = getFormattedDateString(data.data.updated);
-            cashCutoff.amount_open = "$" + data.data.amount_open;
-            cashCutoff.amount_sale = "$" + data.data.amount_sale;
-            cashCutoff.amount_supplier = "$" + data.data.amount_supplier;
-            cashCutoff.amount_close = "$" + data.data.amount_close;
+            cashCutoff.amount_open = data.data.amount_open;
+            cashCutoff.amount_sale = data.data.amount_sale;
+            cashCutoff.amount_supplier = data.data.amount_supplier;
+            cashCutoff.amount_close = data.data.amount_close;
             cashCutoff.date_close = getFormattedDateString(data.data.date_close, 0, 0, true);
             cashCutoff.id_type = data.data.id_type;
             cashCutoff.id_user_open = data.data.id_user_open;
