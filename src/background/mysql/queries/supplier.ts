@@ -40,6 +40,39 @@ export const get_suppliers = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_suppliers_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<SupplierMySQL>>((resolve) => {
+      const query = "select * from supplier where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<SupplierMySQL>) => {
+         const data:Array<SupplierMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  id_user: Number(rows[i].id_user),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_supplier_by_id = async(connection:Connection, id:number) => {
    const promise_get_supplier_by_id = new Promise<Supplier>((resolve) => {
       const query = "select * from supplier where is_active = 1 and id = " + id;

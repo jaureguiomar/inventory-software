@@ -32,6 +32,35 @@ export const get_poss = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_poss_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<PosMySQL>>((resolve) => {
+      const query = "select * from pos where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
+         const data:Array<PosMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  // is_sync: Number(rows[i].is_sync),
+                  // sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  machine_id: rows[i].machine_id,
+                  mac_address: rows[i].mac_address,
+                  id_branch: Number(rows[i].id_branch),
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_pos_by_id = async(connection:Connection, id:number) => {
    const promise_get_pos_by_id = new Promise<Pos>((resolve) => {
       const query = "select * from pos where is_active = 1 and id = " + id;
@@ -73,8 +102,8 @@ export const get_pos_mysql_by_id = async(connection:Connection, id:number) => {
          let result_pos:PosMySQL = {
             id: -1,
             is_active: -1,
-            is_sync: -1,
-            sync_type: null,
+            // is_sync: -1,
+            // sync_type: null,
             created: new Date(),
             updated: new Date(),
             name: "",
@@ -125,8 +154,8 @@ export const update_pos = async(connection:Connection, data:PosMySQL) => {
    const promise_update_pos = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update pos set ";
-      query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      // query += "is_sync = " + data.is_sync + ", ";
+      // query += "sync_type = '" + data.sync_type + "', ";
       query += "name = '" + data.name + "', ";
       query += "machine_id = '" + data.machine_id + "', ";
       query += "mac_address = '" + data.mac_address + "', ";

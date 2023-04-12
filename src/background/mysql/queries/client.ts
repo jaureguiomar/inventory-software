@@ -45,6 +45,44 @@ export const get_clients = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_clients_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<ClientMySQL>>((resolve) => {
+      const query = "select * from client where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<ClientMySQL>) => {
+         const data:Array<ClientMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  first_name: rows[i].first_name,
+                  last_name: rows[i].last_name,
+                  address: rows[i].address,
+                  cellphone: rows[i].cellphone,
+                  cellphone2: rows[i].cellphone2,
+                  email: rows[i].email,
+                  id_user: Number(rows[i].id_user),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_client_by_id = async(connection:Connection, id:number) => {
    const promise_get_client_by_id = new Promise<Client>((resolve) => {
       const query = "select * from client where is_active = 1 and id = " + id;

@@ -41,6 +41,40 @@ export const get_activity_logs = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_activity_logs_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<ActivityLogMySQL>>((resolve) => {
+      const query = "select * from activity_log where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<ActivityLogMySQL>) => {
+         const data:Array<ActivityLogMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const activity_log_operation:ActivityLogOperation = await get_activity_log_operation_by_id(connection, rows[i].id_operation);
+               const activity_log_access:ActivityLogAccess = await get_activity_log_access_by_id(connection, rows[i].id_access);
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  extra_data: rows[i].extra_data,
+                  id_operation: Number(rows[i].id_operation),
+                  id_access: Number(rows[i].id_access),
+                  id_user: Number(rows[i].id_user),
+                  operation: activity_log_operation,
+                  access: activity_log_access,
+                  user: user
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_activity_log_by_id = async(connection:Connection, id:number) => {
    const promise_get_activity_log_by_id = new Promise<ActivityLog>((resolve) => {
       const query = "select * from activity_log where is_active = 1 and id = " + id;

@@ -27,6 +27,30 @@ export const get_branches = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_branches_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<BranchMySQL>>((resolve) => {
+      const query = "select * from branch where is_sync = 0";
+      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
+         const data:Array<BranchMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  telephone: rows[i].telephone,
+                  address: rows[i].address
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_branch_by_id = async(connection:Connection, id:number) => {
    const promise_get_branch_by_id = new Promise<Branch>((resolve) => {
       const query = "select * from branch where is_active = 1 and id = " + id;
@@ -57,33 +81,33 @@ export const get_branch_by_id = async(connection:Connection, id:number) => {
    return await promise_get_branch_by_id;
 };
 
-export const get_branch_mysql_by_id = async(connection:Connection, id:number) => {
-   const promise_get_branch_mysql_by_id = new Promise<BranchMySQL>((resolve) => {
-      const query = "select * from branch where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         let result_branch:BranchMySQL = {
-            id: -1,
-            is_active: -1,
-            is_sync: -1,
-            sync_type: null,
-            created: new Date(),
-            updated: new Date(),
-            name: "",
-            telephone: "",
-            address: ""
-         };
+// export const get_branch_mysql_by_id = async(connection:Connection, id:number) => {
+//    const promise_get_branch_mysql_by_id = new Promise<BranchMySQL>((resolve) => {
+//       const query = "select * from branch where is_active = 1 and id = " + id;
+//       connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
+//          let result_branch:BranchMySQL = {
+//             id: -1,
+//             is_active: -1,
+//             is_sync: -1,
+//             sync_type: null,
+//             created: new Date(),
+//             updated: new Date(),
+//             name: "",
+//             telephone: "",
+//             address: ""
+//          };
 
-         if(!error) {
-            if(rows.length > 0) {
-               const curr_row = rows[0];
-               result_branch = { ...curr_row };
-            }
-         }
-         resolve(result_branch);
-      });
-   });
-   return await promise_get_branch_mysql_by_id;
-};
+//          if(!error) {
+//             if(rows.length > 0) {
+//                const curr_row = rows[0];
+//                result_branch = { ...curr_row };
+//             }
+//          }
+//          resolve(result_branch);
+//       });
+//    });
+//    return await promise_get_branch_mysql_by_id;
+// };
 
 export const insert_branch = async(connection:Connection, data:Branch) => {
    const promise_insert_branch = new Promise<number>((resolve) => {
@@ -109,8 +133,8 @@ export const update_branch = async(connection:Connection, data:BranchMySQL) => {
    const promise_update_branch = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update branch set ";
-      query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      // query += "is_sync = " + data.is_sync + ", ";
+      // query += "sync_type = '" + data.sync_type + "', ";
       query += "name = '" + data.name + "', ";
       query += "telephone = '" + data.telephone + "', ";
       query += "address = '" + data.address + "' ";

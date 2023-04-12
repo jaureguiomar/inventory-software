@@ -25,6 +25,30 @@ export const get_activity_log_accesses = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_activity_log_accesses_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<ActivityLogAccessMySQL>>((resolve) => {
+      const query = "select * from activity_log_access where is_sync = 0";
+      connection.query(query, function(error:MysqlError, rows:Array<ActivityLogAccessMySQL>) {
+         const data:Array<ActivityLogAccessMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_activity_log_access_by_id = async(connection:Connection, id:number) => {
    const promise_get_activity_log_access_by_id = new Promise<ActivityLogAccess>((resolve) => {
       const query = "select * from activity_log_access where is_active = 1 and id = " + id;

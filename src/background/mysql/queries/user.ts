@@ -9,9 +9,9 @@ import { UserRole } from "@/types/user-role";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
 
-export const get_useres = async(connection:Connection) => {
+export const get_users = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<User>>((resolve) => {
-      const query = "select * from user where is_active = 1";
+      const query = "select * from users where is_active = 1";
       connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          const data:Array<User> = [];
          if(!error) {
@@ -47,9 +47,49 @@ export const get_useres = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_users_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<UserMySQL>>((resolve) => {
+      const query = "select * from users where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
+         const data:Array<UserMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const user_role:UserRole = await get_user_role_by_id(connection, rows[i].id_role);
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  username: rows[i].username,
+                  email: rows[i].email,
+                  password: rows[i].password,
+                  first_name: rows[i].first_name,
+                  last_name: rows[i].last_name,
+                  id_role: Number(rows[i].id_role),
+                  id_user: Number(rows[i].id_user),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  role: user_role,
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_user_by_id = async(connection:Connection, id:number) => {
    const promise_get_user_by_id = new Promise<User>((resolve) => {
-      const query = "select * from user where is_active = 1 and id = " + id;
+      const query = "select * from users where is_active = 1 and id = " + id;
       connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          let result_user:User = {
             id: -1,
@@ -96,7 +136,7 @@ export const get_user_by_id = async(connection:Connection, id:number) => {
 
 export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
    const promise_get_user_mysql_by_id = new Promise<UserMySQL>((resolve) => {
-      const query = "select * from user where is_active = 1 and id = " + id;
+      const query = "select * from users where is_active = 1 and id = " + id;
       connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          let result_user:UserMySQL = {
             id: -1,
@@ -145,7 +185,7 @@ export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
 export const insert_user = async(connection:Connection, data:User) => {
    const promise_insert_user = new Promise<number>((resolve) => {
       let query = "";
-      query += "insert into user set ";
+      query += "insert into users set ";
       query += "is_sync = 0, ";
       query += "sync_type = 'add', ";
       query += "username = '" + data.username + "', ";
@@ -171,7 +211,7 @@ export const insert_user = async(connection:Connection, data:User) => {
 export const update_user = async(connection:Connection, data:UserMySQL) => {
    const promise_update_user = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update user set ";
+      query += "update users set ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "', ";
       query += "username = '" + data.username + "', ";
@@ -198,7 +238,7 @@ export const update_user = async(connection:Connection, data:UserMySQL) => {
 export const delete_user = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_user = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update user set ";
+      query += "update users set ";
       query += "is_active = 0, ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "' ";

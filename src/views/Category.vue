@@ -293,6 +293,7 @@ export default defineComponent({
 
       const onRefreshData = () => {
          category.value = [];
+         console.log("getIsOnline", getIsOnline.value);
 
          if(getIsOnline.value) {
             axios.get<CategoriesResponse>(`${ getServer.value }/category`,
@@ -351,6 +352,7 @@ export default defineComponent({
             window.api.send("mysql-get-category");
             if(!getCategoryLoadedGet.value) {
                window.api.receive("mysql-get-category-reply", function(data:Category[]) {
+                  console.log("view-data", data);
                   category.value = data;
                });
                store.commit("SET_CATEGORY_LOADED_GET", true);

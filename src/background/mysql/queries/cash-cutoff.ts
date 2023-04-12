@@ -48,6 +48,47 @@ export const get_cash_cutoffs = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_cash_cutoffs_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<CashCutoffMySQL>>((resolve) => {
+      const query = "select * from cash_cutoff where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<CashCutoffMySQL>) => {
+         const data:Array<CashCutoffMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const user_open:User = await get_user_by_id(connection, rows[i].id_user_open);
+               const user_close:User = await get_user_by_id(connection, parseInt(rows[i].id_user_close?.toString() || "0"));
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  amount_open: rows[i].amount_open,
+                  amount_sale: rows[i].amount_sale,
+                  amount_supplier: rows[i].amount_supplier,
+                  amount_close: rows[i].amount_close,
+                  date_close: rows[i].date_close,
+                  id_type: Number(rows[i].id_type),
+                  id_user_open: Number(rows[i].id_user_open),
+                  id_user_close: Number(rows[i].id_user_close),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  user_open: user_open,
+                  user_close: user_close,
+                  pos: pos,
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_cash_cutoff_by_id = async(connection:Connection, id:number) => {
    const promise_get_cash_cutoff_by_id = new Promise<CashCutoff>((resolve) => {
       const query = "select * from cash_cutoff where is_active = 1 and id = " + id;

@@ -29,6 +29,34 @@ export const get_user_role_permissions = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_user_role_permissions_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<UserRolePermissionMySQL>>((resolve) => {
+      const query = "select * from user_role_permission where is_sync = 0";
+      connection.query(query, function(error:MysqlError, rows:Array<UserRolePermissionMySQL>) {
+         const data:Array<UserRolePermissionMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  shortname: rows[i].shortname,
+                  description: rows[i].description,
+                  attr_value: rows[i].attr_value,
+                  attr_level: Number(rows[i].attr_level)
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_user_role_permission_by_id = async(connection:Connection, id:number) => {
    const promise_get_user_role_permission_by_id = new Promise<UserRolePermission>((resolve) => {
       const query = "select * from user_role_permission where is_active = 1 and id = " + id;

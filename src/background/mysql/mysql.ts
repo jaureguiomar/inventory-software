@@ -2,6 +2,24 @@ import { ipcMain } from "electron";
 import mysql from "mysql";
 import { mysql_connection } from "@/background/mysql/connection";
 import { parseStringField } from "@/background/mysql/functions";
+import { delete_table, update_sync_unsync_data } from "@/background/mysql/queries/global";
+import { get_user_roles_unsync } from "@/background/mysql/queries/user-role";
+import { insert_branch } from "@/background/mysql/queries/branch";
+import { get_users_unsync } from "@/background/mysql/queries/user";
+import { get_categories_unsync } from "@/background/mysql/queries/category";
+import { get_products_unsync } from "@/background/mysql/queries/product";
+import { get_sales_unsync } from "@/background/mysql/queries/sale";
+import { get_sale_products_unsync } from "@/background/mysql/queries/sale-product";
+import { get_suppliers_unsync } from "@/background/mysql/queries/supplier";
+import { get_clients_unsync } from "@/background/mysql/queries/client";
+import { UserRoleMySQL } from "@/types/user-role";
+import { UserMySQL } from "@/types/user";
+import { CategoryMySQL } from "@/types/category";
+import { ProductMySQL } from "@/types/product";
+import { SaleMySQL } from "@/types/sale";
+import { SaleProductMySQL } from "@/types/sale-product";
+import { SupplierMySQL } from "@/types/supplier";
+import { ClientMySQL } from "@/types/client";
 import "@/background/mysql/events/activity-log";
 import "@/background/mysql/events/activity-log-access";
 import "@/background/mysql/events/activity-log-operation";
@@ -18,68 +36,42 @@ import "@/background/mysql/events/user";
 import "@/background/mysql/events/user-role";
 import "@/background/mysql/events/user-role-permission";
 
-ipcMain.on("mysql-offline-bakup", function(e, data) {
+ipcMain.on("mysql-offline-bakup", async(e, data) => {
    const connection = mysql.createConnection(mysql_connection);
    let query = "";
 
    // Delete data
-   query = "delete from client";
-   connection.query(query);
-   query = "delete from supplier";
-   connection.query(query);
-   query = "delete from sale_product";
-   connection.query(query);
-   query = "delete from sale";
-   connection.query(query);
-   query = "delete from product";
-   connection.query(query);
-   query = "delete from category";
-   connection.query(query);
-   query = "delete from users";
-   connection.query(query);
-   query = "delete from user_role";
-   connection.query(query);
-   query = "delete from branch";
-   connection.query(query);
+   await delete_table(connection, "client");
+   await delete_table(connection, "supplier");
+   await delete_table(connection, "sale_product");
+   await delete_table(connection, "sale");
+   await delete_table(connection, "product");
+   await delete_table(connection, "category");
+   await delete_table(connection, "users");
+   await delete_table(connection, "user_role");
+   await delete_table(connection, "branch");
 
-   // Reset auto_increments
-   // query = "alter table client auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table supplier auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table sale_product auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table sale auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table product auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table category auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table users auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table user_role auto_increment = 1";
-   // connection.query(query);
-   // query = "alter table branch auto_increment = 1";
-   // connection.query(query);
+   // // Reset auto_increments
+   // await reset_auto_increment(connection, "client");
+   // await reset_auto_increment(connection, "supplier");
+   // await reset_auto_increment(connection, "sale_product");
+   // await reset_auto_increment(connection, "sale");
+   // await reset_auto_increment(connection, "product");
+   // await reset_auto_increment(connection, "category");
+   // await reset_auto_increment(connection, "users");
+   // await reset_auto_increment(connection, "user_role");
+   // await reset_auto_increment(connection, "branch");
 
    // Add branches
+   console.log("############");
+   console.log("## Errors ##");
    for(let i = 0; i < data.branch.length; i++) {
       const curr_data = data.branch[i];
-      query = "";
-      query += "insert into branch set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "name = '" + curr_data.name + "', ";
-      query += "telephone = " + parseStringField(curr_data.telephone) + ", ";
-      query += "address = " + parseStringField(curr_data.address) + ", ";
-      query += "machine_id = " + parseStringField(curr_data.machine_id) + ", ";
-      query += "mac_address = " + parseStringField(curr_data.mac_address);
-
-      connection.query(query, function(error, rows) {
-         console.log("############");
-         console.log("## Branch ##");
-         console.log("error", error);
-         console.log("rows", rows);
-      });
+      const new_id = await insert_branch(connection, curr_data);
+      if(new_id <= 0) {
+         console.log("## Branch");
+         console.log("data", curr_data);
+      }
    }
 
    // Add user roles
@@ -258,101 +250,48 @@ ipcMain.on("mysql-offline-bakup", function(e, data) {
    });
 });
 
-ipcMain.on("mysql-get-unsync-data", function(e) {
+ipcMain.on("mysql-get-unsync-data", async(e) => {
    const connection = mysql.createConnection(mysql_connection);
-   let user_role = [];
-   let user = [];
-   let category = [];
-   let product = [];
-   let sale = [];
-   let sale_product = [];
-   let supplier = [];
-   let client = [];
-   let query = "";
+   let user_role:UserRoleMySQL[] = [];
+   let user:UserMySQL[] = [];
+   let category:CategoryMySQL[] = [];
+   let product:ProductMySQL[] = [];
+   let sale:SaleMySQL[] = [];
+   let sale_product:SaleProductMySQL[] = [];
+   let supplier:SupplierMySQL[] = [];
+   let client:ClientMySQL[] = [];
 
-   query = "select * from user_role where is_sync = 0";
-   connection.query(query, function(error, rows) {
-      if(!error)
-         user_role = rows;
+   user_role = await get_user_roles_unsync(connection);
+   user = await get_users_unsync(connection);
+   category = await get_categories_unsync(connection);
+   product = await get_products_unsync(connection);
+   sale = await get_sales_unsync(connection);
+   sale_product = await get_sale_products_unsync(connection);
+   supplier = await get_suppliers_unsync(connection);
+   client = await get_clients_unsync(connection);
 
-      query = "select * from users where is_sync = 0";
-      connection.query(query, function(error, rows) {
-         if(!error)
-            user = rows;
-
-         query = "select * from category where is_sync = 0";
-         connection.query(query, function(error, rows) {
-            if(!error)
-               category = rows;
-
-            query = "select * from product where is_sync = 0";
-            connection.query(query, function(error, rows) {
-               if(!error)
-                  product = rows;
-
-               query = "select * from sale where is_sync = 0";
-               connection.query(query, function(error, rows) {
-                  if(!error)
-                     sale = rows;
-
-                  query = "select * from sale_product where is_sync = 0";
-                  connection.query(query, function(error, rows) {
-                     if(!error)
-                        sale_product = rows;
-
-                     query = "select * from supplier where is_sync = 0";
-                     connection.query(query, function(error, rows) {
-                        if(!error)
-                           supplier = rows;
-
-                        query = "select * from client where is_sync = 0";
-                        connection.query(query, function(error, rows) {
-                           if(!error)
-                              client = rows;
-
-                           connection.end(function() {
-                              e.sender.send("mysql-get-unsync-data-reply", {
-                                 user_role: user_role,
-                                 user: user,
-                                 category: category,
-                                 product: product,
-                                 sale: sale,
-                                 sale_product: sale_product,
-                                 supplier: supplier,
-                                 client: client
-                              });
-                           });
-                        });
-                     });
-                  });
-               });
-            });
-         });
-      });
+   e.sender.send("mysql-get-unsync-data-reply", {
+      user_role: user_role,
+      user: user,
+      category: category,
+      product: product,
+      sale: sale,
+      sale_product: sale_product,
+      supplier: supplier,
+      client: client
    });
 });
 
-ipcMain.on("mysql-sync-unsync-data", function(e) {
+ipcMain.on("mysql-sync-unsync-data", async(e) => {
    const connection = mysql.createConnection(mysql_connection);
-   let query = "";
-
-   // Sync data
-   query = "update client set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update supplier set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update sale_product set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update sale set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update product set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update category set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update users set is_sync = 1, sync_type = null";
-   connection.query(query);
-   query = "update user_role set is_sync = 1, sync_type = null";
-   connection.query(query);
-
+   await update_sync_unsync_data(connection, "client");
+   await update_sync_unsync_data(connection, "supplier");
+   await update_sync_unsync_data(connection, "sale_product");
+   await update_sync_unsync_data(connection, "sale");
+   await update_sync_unsync_data(connection, "product");
+   await update_sync_unsync_data(connection, "category");
+   await update_sync_unsync_data(connection, "users");
+   await update_sync_unsync_data(connection, "user_role");
+   await update_sync_unsync_data(connection, "branch");
    e.sender.send("mysql-sync-unsync-data-reply");
 });

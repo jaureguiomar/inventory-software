@@ -44,6 +44,43 @@ export const get_user_roles = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
+export const get_user_roles_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<UserRoleMySQL>>((resolve) => {
+      const query = "select * from user_role where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<UserRoleMySQL>) => {
+         const data:Array<UserRoleMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const user:User = await get_user_by_id(connection, rows[i].id_user);
+               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  is_sync: Number(rows[i].is_sync),
+                  sync_type: rows[i].sync_type,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  atributes_1: Number(rows[i].atributes_1),
+                  atributes_2: Number(rows[i].atributes_2),
+                  atributes_3: Number(rows[i].atributes_3),
+                  atributes_4: Number(rows[i].atributes_4),
+                  id_user: Number(rows[i].id_user),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  user: user,
+                  pos: pos,
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
+
 export const get_user_role_by_id = async(connection:Connection, id:number) => {
    const promise_get_user_role_by_id = new Promise<UserRole>((resolve) => {
       const query = "select * from user_role where is_active = 1 and id = " + id;
