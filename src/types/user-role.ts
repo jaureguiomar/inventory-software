@@ -23,7 +23,7 @@ interface UserRole extends MainUserRole {
    created: string;
    updated: string;
 }
-interface UserMySQL extends MainUserRole {
+interface UserRoleMySQL extends MainUserRole {
    is_sync: number;
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
@@ -98,6 +98,7 @@ interface UserRolesResponse {
 
 export {
    UserRole,
+   UserRoleMySQL,
    Content,
    IPCParams,
    IPCParamsContent,

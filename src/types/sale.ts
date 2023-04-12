@@ -9,7 +9,7 @@ import { ProductM2M } from "@/types/product";
 interface MainSale {
    id: number;
    is_active: number;
-   total: string;
+   total: number;
    is_supplier: number;
    id_cash_cutoff: number;
    id_user: number;

@@ -1,13 +1,13 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { Branch, BranchMySQL } from "@/types/branch";
+import { CashCutoff, CashCutoffMySQL } from "@/types/cash-cutoff";
 import { MySQLDelete } from "@/types/general";
 
-export const get_branches = async(connection:Connection) => {
-   const promise_get_categories = new Promise<Array<Branch>>((resolve) => {
-      const query = "select * from branch where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         const data:Array<Branch> = [];
+export const get_cash_cutoffs = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<CashCutoff>>((resolve) => {
+      const query = "select * from cash_cutoff where is_active = 1";
+      connection.query(query, function(error:MysqlError, rows:Array<CashCutoffMySQL>) {
+         const data:Array<CashCutoff> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                data.push({
@@ -15,9 +15,20 @@ export const get_branches = async(connection:Connection) => {
                   is_active: rows[i].is_active,
                   created: parseDate(rows[i].created),
                   updated: parseDate(rows[i].updated),
-                  name: rows[i].name,
-                  telephone: rows[i].telephone,
-                  address: rows[i].address
+                  amount_open: rows[i].amount_open,
+                  amount_sale: rows[i].amount_sale,
+                  amount_supplier: rows[i].amount_supplier,
+                  amount_close: rows[i].amount_close,
+                  date_close: rows[i].date_close,
+                  id_type: Number(rows[i].id_type),
+                  id_user_open: Number(rows[i].id_user_open),
+                  id_user_close: Number(rows[i].id_user_close),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  user_open: null,
+                  user_close: null,
+                  pos: null,
+                  branch: null
                });
             }
          }
@@ -27,73 +38,102 @@ export const get_branches = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_branch_by_id = async(connection:Connection, id:number) => {
-   const promise_get_branch_by_id = new Promise<Branch>((resolve) => {
-      const query = "select * from branch where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         let result_branch:Branch = {
+export const get_cash_cutoff_by_id = async(connection:Connection, id:number) => {
+   const promise_get_cash_cutoff_by_id = new Promise<CashCutoff>((resolve) => {
+      const query = "select * from cash_cutoff where is_active = 1 and id = " + id;
+      connection.query(query, function(error:MysqlError, rows:Array<CashCutoffMySQL>) {
+         let result_cash_cutoff:CashCutoff = {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
-            name: "",
-            telephone: "",
-            address: ""
+            amount_open: -1,
+            amount_sale: -1,
+            amount_supplier: -1,
+            amount_close: -1,
+            date_close: "",
+            id_type: -1,
+            id_user_open: -1,
+            id_user_close: -1,
+            id_pos: -1,
+            id_branch: -1,
+            user_open: null,
+            user_close: null,
+            pos: null,
+            branch: null
          };
 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_branch = {
+               result_cash_cutoff = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
                   updated: parseDate(curr_row.updated)
                };
             }
          }
-         resolve(result_branch);
+         resolve(result_cash_cutoff);
       });
    });
-   return await promise_get_branch_by_id;
+   return await promise_get_cash_cutoff_by_id;
 };
 
-export const get_branch_mysql_by_id = async(connection:Connection, id:number) => {
-   const promise_get_branch_mysql_by_id = new Promise<BranchMySQL>((resolve) => {
-      const query = "select * from branch where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         let result_branch:BranchMySQL = {
+export const get_cash_cutoff_mysql_by_id = async(connection:Connection, id:number) => {
+   const promise_get_cash_cutoff_mysql_by_id = new Promise<CashCutoffMySQL>((resolve) => {
+      const query = "select * from cash_cutoff where is_active = 1 and id = " + id;
+      connection.query(query, function(error:MysqlError, rows:Array<CashCutoffMySQL>) {
+         let result_cash_cutoff:CashCutoffMySQL = {
             id: -1,
             is_active: -1,
             is_sync: -1,
             sync_type: null,
             created: new Date(),
             updated: new Date(),
-            name: "",
-            telephone: "",
-            address: ""
+            amount_open: -1,
+            amount_sale: -1,
+            amount_supplier: -1,
+            amount_close: -1,
+            date_close: "",
+            id_type: -1,
+            id_user_open: -1,
+            id_user_close: -1,
+            id_pos: -1,
+            id_branch: -1,
+            user_open: null,
+            user_close: null,
+            pos: null,
+            branch: null
          };
 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_branch = { ...curr_row };
+               result_cash_cutoff = { ...curr_row };
             }
          }
-         resolve(result_branch);
+         resolve(result_cash_cutoff);
       });
    });
-   return await promise_get_branch_mysql_by_id;
+   return await promise_get_cash_cutoff_mysql_by_id;
 };
 
-export const insert_branch = async(connection:Connection, data:Branch) => {
-   const promise_insert_branch = new Promise<number>((resolve) => {
+export const insert_cash_cutoff = async(connection:Connection, data:CashCutoff) => {
+   const promise_insert_cash_cutoff = new Promise<number>((resolve) => {
       let query = "";
-      query += "insert into branch set ";
+      query += "insert into cash_cutoff set ";
       query += "is_sync = 0, ";
       query += "sync_type = 'add', ";
-      query += "name = '" + data.name + "', ";
-      query += "telephone = '" + data.telephone + "', ";
-      query += "address = '" + data.address + "'";
+      query += "amount_open = " + data.amount_open + ", ";
+      query += "amount_sale = " + data.amount_sale + ", ";
+      query += "amount_supplier = " + data.amount_supplier + ", ";
+      query += "amount_close = " + data.amount_close + ", ";
+      query += "date_close = '" + data.date_close + "', ";
+      query += "id_type = " + data.id_type + ", ";
+      query += "id_user_open = " + data.id_user_open + ", ";
+      query += "id_user_close = " + data.id_user_close + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {
          let new_id:number = -1;
@@ -102,18 +142,25 @@ export const insert_branch = async(connection:Connection, data:Branch) => {
          resolve(new_id);
       });
    });
-   return await promise_insert_branch;
+   return await promise_insert_cash_cutoff;
 };
 
-export const update_branch = async(connection:Connection, data:BranchMySQL) => {
-   const promise_update_branch = new Promise<boolean>((resolve) => {
+export const update_cash_cutoff = async(connection:Connection, data:CashCutoffMySQL) => {
+   const promise_update_cash_cutoff = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update branch set ";
+      query += "update cash_cutoff set ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "', ";
-      query += "name = '" + data.name + "', ";
-      query += "telephone = '" + data.telephone + "', ";
-      query += "address = '" + data.address + "' ";
+      query += "amount_open = " + data.amount_open + ", ";
+      query += "amount_sale = " + data.amount_sale + ", ";
+      query += "amount_supplier = " + data.amount_supplier + ", ";
+      query += "amount_close = " + data.amount_close + ", ";
+      query += "date_close = '" + data.date_close + "', ";
+      query += "id_type = " + data.id_type + ", ";
+      query += "id_user_open = " + data.id_user_open + ", ";
+      query += "id_user_close = " + data.id_user_close + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch + " ";
       query += "where id = " + data.id;
 
       connection.query(query, function(error) {
@@ -123,13 +170,13 @@ export const update_branch = async(connection:Connection, data:BranchMySQL) => {
          resolve(is_ok);
       });
    });
-   return await promise_update_branch;
+   return await promise_update_cash_cutoff;
 };
 
-export const delete_branch = async(connection:Connection, data:MySQLDelete) => {
-   const promise_delete_branch = new Promise<boolean>((resolve) => {
+export const delete_cash_cutoff = async(connection:Connection, data:MySQLDelete) => {
+   const promise_delete_cash_cutoff = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update branch set ";
+      query += "update cash_cutoff set ";
       query += "is_active = 0, ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "' ";
@@ -142,5 +189,5 @@ export const delete_branch = async(connection:Connection, data:MySQLDelete) => {
          resolve(is_ok);
       });
    });
-   return await promise_delete_branch;
+   return await promise_delete_cash_cutoff;
 };

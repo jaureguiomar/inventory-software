@@ -13,8 +13,8 @@ interface MainProduct {
    code: string;
    name: string;
    description: string|null;
-   buy_price: string;
-   sale_price: string;
+   buy_price: number;
+   sale_price: number;
    quantity: number;
    id_category: number;
    id_user: number;

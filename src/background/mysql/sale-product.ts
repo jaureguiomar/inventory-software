@@ -1,13 +1,13 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { Branch, BranchMySQL } from "@/types/branch";
+import { SaleProduct, SaleProductMySQL } from "@/types/sale-product";
 import { MySQLDelete } from "@/types/general";
 
-export const get_branches = async(connection:Connection) => {
-   const promise_get_categories = new Promise<Array<Branch>>((resolve) => {
-      const query = "select * from branch where is_active = 1";
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         const data:Array<Branch> = [];
+export const get_sale_products = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<SaleProduct>>((resolve) => {
+      const query = "select * from sale_product where is_active = 1";
+      connection.query(query, function(error:MysqlError, rows:Array<SaleProductMySQL>) {
+         const data:Array<SaleProduct> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                data.push({
@@ -15,9 +15,17 @@ export const get_branches = async(connection:Connection) => {
                   is_active: rows[i].is_active,
                   created: parseDate(rows[i].created),
                   updated: parseDate(rows[i].updated),
-                  name: rows[i].name,
-                  telephone: rows[i].telephone,
-                  address: rows[i].address
+                  quantity: Number(rows[i].quantity),
+                  id_sale: Number(rows[i].id_sale),
+                  id_product: Number(rows[i].id_product),
+                  id_user: Number(rows[i].id_user),
+                  id_pos: Number(rows[i].id_pos),
+                  id_branch: Number(rows[i].id_branch),
+                  sale: null,
+                  product: null,
+                  user: null,
+                  pos: null,
+                  branch: null
                });
             }
          }
@@ -27,73 +35,92 @@ export const get_branches = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_branch_by_id = async(connection:Connection, id:number) => {
-   const promise_get_branch_by_id = new Promise<Branch>((resolve) => {
-      const query = "select * from branch where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         let result_branch:Branch = {
+export const get_sale_product_by_id = async(connection:Connection, id:number) => {
+   const promise_get_sale_product_by_id = new Promise<SaleProduct>((resolve) => {
+      const query = "select * from sale_product where is_active = 1 and id = " + id;
+      connection.query(query, function(error:MysqlError, rows:Array<SaleProductMySQL>) {
+         let result_sale_product:SaleProduct = {
             id: -1,
             is_active: -1,
             created: "",
             updated: "",
-            name: "",
-            telephone: "",
-            address: ""
+            quantity: -1,
+            id_sale: -1,
+            id_product: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            sale: null,
+            product: null,
+            user: null,
+            pos: null,
+            branch: null
          };
 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_branch = {
+               result_sale_product = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
                   updated: parseDate(curr_row.updated)
                };
             }
          }
-         resolve(result_branch);
+         resolve(result_sale_product);
       });
    });
-   return await promise_get_branch_by_id;
+   return await promise_get_sale_product_by_id;
 };
 
-export const get_branch_mysql_by_id = async(connection:Connection, id:number) => {
-   const promise_get_branch_mysql_by_id = new Promise<BranchMySQL>((resolve) => {
-      const query = "select * from branch where is_active = 1 and id = " + id;
-      connection.query(query, function(error:MysqlError, rows:Array<BranchMySQL>) {
-         let result_branch:BranchMySQL = {
+export const get_sale_product_mysql_by_id = async(connection:Connection, id:number) => {
+   const promise_get_sale_product_mysql_by_id = new Promise<SaleProductMySQL>((resolve) => {
+      const query = "select * from sale_product where is_active = 1 and id = " + id;
+      connection.query(query, function(error:MysqlError, rows:Array<SaleProductMySQL>) {
+         let result_sale_product:SaleProductMySQL = {
             id: -1,
             is_active: -1,
             is_sync: -1,
             sync_type: null,
             created: new Date(),
             updated: new Date(),
-            name: "",
-            telephone: "",
-            address: ""
+            quantity: -1,
+            id_sale: -1,
+            id_product: -1,
+            id_user: -1,
+            id_pos: -1,
+            id_branch: -1,
+            sale: null,
+            product: null,
+            user: null,
+            pos: null,
+            branch: null
          };
 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               result_branch = { ...curr_row };
+               result_sale_product = { ...curr_row };
             }
          }
-         resolve(result_branch);
+         resolve(result_sale_product);
       });
    });
-   return await promise_get_branch_mysql_by_id;
+   return await promise_get_sale_product_mysql_by_id;
 };
 
-export const insert_branch = async(connection:Connection, data:Branch) => {
-   const promise_insert_branch = new Promise<number>((resolve) => {
+export const insert_sale_product = async(connection:Connection, data:SaleProduct) => {
+   const promise_insert_sale_product = new Promise<number>((resolve) => {
       let query = "";
-      query += "insert into branch set ";
+      query += "insert into sale_product set ";
       query += "is_sync = 0, ";
       query += "sync_type = 'add', ";
-      query += "name = '" + data.name + "', ";
-      query += "telephone = '" + data.telephone + "', ";
-      query += "address = '" + data.address + "'";
+      query += "quantity = " + data.quantity + ", ";
+      query += "id_sale = " + data.id_sale + ", ";
+      query += "id_product = " + data.id_product + ", ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {
          let new_id:number = -1;
@@ -102,18 +129,21 @@ export const insert_branch = async(connection:Connection, data:Branch) => {
          resolve(new_id);
       });
    });
-   return await promise_insert_branch;
+   return await promise_insert_sale_product;
 };
 
-export const update_branch = async(connection:Connection, data:BranchMySQL) => {
-   const promise_update_branch = new Promise<boolean>((resolve) => {
+export const update_sale_product = async(connection:Connection, data:SaleProductMySQL) => {
+   const promise_update_sale_product = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update branch set ";
+      query += "update sale_product set ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "', ";
-      query += "name = '" + data.name + "', ";
-      query += "telephone = '" + data.telephone + "', ";
-      query += "address = '" + data.address + "' ";
+      query += "quantity = " + data.quantity + ", ";
+      query += "id_sale = " + data.id_sale + ", ";
+      query += "id_product = " + data.id_product + ", ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch + " ";
       query += "where id = " + data.id;
 
       connection.query(query, function(error) {
@@ -123,13 +153,13 @@ export const update_branch = async(connection:Connection, data:BranchMySQL) => {
          resolve(is_ok);
       });
    });
-   return await promise_update_branch;
+   return await promise_update_sale_product;
 };
 
-export const delete_branch = async(connection:Connection, data:MySQLDelete) => {
-   const promise_delete_branch = new Promise<boolean>((resolve) => {
+export const delete_sale_product = async(connection:Connection, data:MySQLDelete) => {
+   const promise_delete_sale_product = new Promise<boolean>((resolve) => {
       let query = "";
-      query += "update branch set ";
+      query += "update sale_product set ";
       query += "is_active = 0, ";
       query += "is_sync = " + data.is_sync + ", ";
       query += "sync_type = '" + data.sync_type + "' ";
@@ -142,5 +172,5 @@ export const delete_branch = async(connection:Connection, data:MySQLDelete) => {
          resolve(is_ok);
       });
    });
-   return await promise_delete_branch;
+   return await promise_delete_sale_product;
 };

@@ -7,10 +7,10 @@ import { Pos } from "@/types/pos";
 interface MainCashCutoffPermission {
    id: number;
    is_active: number;
-   amount_open: string;
-   amount_sale: string;
-   amount_supplier: string;
-   amount_close: string;
+   amount_open: number;
+   amount_sale: number;
+   amount_supplier: number;
+   amount_close: number;
    date_close: string;
    id_type: number;
    id_user_open: number;

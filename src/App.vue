@@ -26,10 +26,10 @@ export default defineComponent({
 
       const onOnline = () => {
          store.commit("SET_IS_ONLINE_DATA", true);
-      }
+      };
       const onOffline = () => {
          store.commit("SET_IS_ONLINE_DATA", false);
-      }
+      };
    }
 });
 </script>
