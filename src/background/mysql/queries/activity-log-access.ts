@@ -121,7 +121,25 @@ export const insert_activity_log_access = async(connection:Connection, data:Acti
    return await promise_insert_activity_log_access;
 };
 
-export const update_activity_log_access = async(connection:Connection, data:ActivityLogAccessMySQL) => {
+export const insert_activity_log_access_mysql = async(connection:Connection, data:ActivityLogAccessMySQL) => {
+   const promise_insert_activity_log_access = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into activity_log_access set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "name = '" + data.name + "'";
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_activity_log_access;
+};
+
+export const update_activity_log_access_mysql = async(connection:Connection, data:ActivityLogAccessMySQL) => {
    const promise_update_activity_log_access = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update activity_log_access set ";
@@ -140,7 +158,7 @@ export const update_activity_log_access = async(connection:Connection, data:Acti
    return await promise_update_activity_log_access;
 };
 
-export const delete_activity_log_access = async(connection:Connection, data:MySQLDelete) => {
+export const delete_activity_log_access_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_activity_log_access = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update activity_log_access set ";

@@ -141,7 +141,29 @@ export const insert_user_role_permission = async(connection:Connection, data:Use
    return await promise_insert_user_role_permission;
 };
 
-export const update_user_role_permission = async(connection:Connection, data:UserRolePermissionMySQL) => {
+export const insert_user_role_permission_mysql = async(connection:Connection, data:UserRolePermissionMySQL) => {
+   const promise_insert_user_role_permission = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into user_role_permission set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "name = '" + data.name + "', ";
+      query += "shortname = '" + data.shortname + "', ";
+      query += "description = '" + data.description + "', ";
+      query += "attr_value = '" + data.attr_value + "', ";
+      query += "attr_level = " + data.attr_level;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_user_role_permission;
+};
+
+export const update_user_role_permission_mysql = async(connection:Connection, data:UserRolePermissionMySQL) => {
    const promise_update_user_role_permission = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update user_role_permission set ";
@@ -164,7 +186,7 @@ export const update_user_role_permission = async(connection:Connection, data:Use
    return await promise_update_user_role_permission;
 };
 
-export const delete_user_role_permission = async(connection:Connection, data:MySQLDelete) => {
+export const delete_user_role_permission_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_user_role_permission = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update user_role_permission set ";

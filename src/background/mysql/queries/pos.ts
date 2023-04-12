@@ -144,7 +144,7 @@ export const insert_pos = async(connection:Connection, data:Pos) => {
    return await promise_insert_pos;
 };
 
-export const update_pos = async(connection:Connection, data:PosMySQL) => {
+export const update_pos = async(connection:Connection, data:Pos) => {
    const promise_update_pos = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update pos set ";

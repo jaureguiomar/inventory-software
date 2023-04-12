@@ -125,7 +125,7 @@ export const insert_branch = async(connection:Connection, data:Branch) => {
    return await promise_insert_branch;
 };
 
-export const update_branch = async(connection:Connection, data:BranchMySQL) => {
+export const update_branch = async(connection:Connection, data:Branch) => {
    const promise_update_branch = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update branch set ";

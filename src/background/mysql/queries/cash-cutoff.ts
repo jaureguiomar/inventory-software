@@ -214,7 +214,34 @@ export const insert_cash_cutoff = async(connection:Connection, data:CashCutoff) 
    return await promise_insert_cash_cutoff;
 };
 
-export const update_cash_cutoff = async(connection:Connection, data:CashCutoffMySQL) => {
+export const insert_cash_cutoff_mysql = async(connection:Connection, data:CashCutoffMySQL) => {
+   const promise_insert_cash_cutoff = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into cash_cutoff set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "amount_open = " + data.amount_open + ", ";
+      query += "amount_sale = " + data.amount_sale + ", ";
+      query += "amount_supplier = " + data.amount_supplier + ", ";
+      query += "amount_close = " + data.amount_close + ", ";
+      query += "date_close = '" + data.date_close + "', ";
+      query += "id_type = " + data.id_type + ", ";
+      query += "id_user_open = " + data.id_user_open + ", ";
+      query += "id_user_close = " + data.id_user_close + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_cash_cutoff;
+};
+
+export const update_cash_cutoff_mysql = async(connection:Connection, data:CashCutoffMySQL) => {
    const promise_update_cash_cutoff = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update cash_cutoff set ";
@@ -242,7 +269,7 @@ export const update_cash_cutoff = async(connection:Connection, data:CashCutoffMy
    return await promise_update_cash_cutoff;
 };
 
-export const delete_cash_cutoff = async(connection:Connection, data:MySQLDelete) => {
+export const delete_cash_cutoff_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_cash_cutoff = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update cash_cutoff set ";

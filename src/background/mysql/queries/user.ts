@@ -208,7 +208,33 @@ export const insert_user = async(connection:Connection, data:User) => {
    return await promise_insert_user;
 };
 
-export const update_user = async(connection:Connection, data:UserMySQL) => {
+export const insert_user_mysql = async(connection:Connection, data:UserMySQL) => {
+   const promise_insert_user = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into users set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "username = '" + data.username + "', ";
+      query += "email = '" + data.email + "', ";
+      query += "password = '" + data.password + "', ";
+      query += "first_name = '" + data.first_name + "', ";
+      query += "last_name = '" + data.last_name + "', ";
+      query += "id_role = " + data.id_role + ", ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_user;
+};
+
+export const update_user_mysql = async(connection:Connection, data:UserMySQL) => {
    const promise_update_user = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update users set ";
@@ -235,7 +261,7 @@ export const update_user = async(connection:Connection, data:UserMySQL) => {
    return await promise_update_user;
 };
 
-export const delete_user = async(connection:Connection, data:MySQLDelete) => {
+export const delete_user_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_user = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update users set ";

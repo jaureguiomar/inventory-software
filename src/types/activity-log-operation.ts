@@ -16,11 +16,6 @@ interface ActivityLogOperationMySQL extends MainActivityLogOperation {
    created: Date;
    updated: Date;
 }
-interface ActivityLogOperationMySQLDelete { // Make it as global interface? (MySQLDelete)
-   id: number;
-   is_sync: number;
-   sync_type: "add"|"update"|"delete"|null;
-}
 
 // Props
 interface ActivityLogOperationField {
@@ -91,7 +86,6 @@ interface ActivityLogOperationsResponse {
 export {
    ActivityLogOperation,
    ActivityLogOperationMySQL,
-   ActivityLogOperationMySQLDelete,
    Content,
    IPCParams,
    IPCParamsContent,

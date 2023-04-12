@@ -174,7 +174,28 @@ export const insert_supplier = async(connection:Connection, data:Supplier) => {
    return await promise_insert_supplier;
 };
 
-export const update_supplier = async(connection:Connection, data:SupplierMySQL) => {
+export const insert_supplier_mysql = async(connection:Connection, data:SupplierMySQL) => {
+   const promise_insert_supplier = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into supplier set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "name = '" + data.name + "', ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_supplier;
+};
+
+export const update_supplier_mysql = async(connection:Connection, data:SupplierMySQL) => {
    const promise_update_supplier = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update supplier set ";
@@ -196,7 +217,7 @@ export const update_supplier = async(connection:Connection, data:SupplierMySQL) 
    return await promise_update_supplier;
 };
 
-export const delete_supplier = async(connection:Connection, data:MySQLDelete) => {
+export const delete_supplier_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_supplier = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update supplier set ";

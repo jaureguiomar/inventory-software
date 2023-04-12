@@ -188,7 +188,26 @@ export const insert_category = async(connection:Connection, data:Category) => {
    return await promise_insert_category;
 };
 
-export const update_category = async(connection:Connection, data:CategoryMySQL) => {
+export const insert_category_mysql = async(connection:Connection, data:CategoryMySQL) => {
+   const promise_insert_category = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into category set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "name = '" + data.name + "', ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_category;
+};
+
+export const update_category_mysql = async(connection:Connection, data:CategoryMySQL) => {
    const promise_update_category = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update category set ";
@@ -208,7 +227,7 @@ export const update_category = async(connection:Connection, data:CategoryMySQL) 
    return await promise_update_category;
 };
 
-export const delete_category = async(connection:Connection, data:MySQLDelete) => {
+export const delete_category_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_category = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update category set ";

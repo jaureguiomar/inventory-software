@@ -196,7 +196,30 @@ export const insert_sale = async(connection:Connection, data:Sale) => {
    return await promise_insert_sale;
 };
 
-export const update_sale = async(connection:Connection, data:SaleMySQL) => {
+export const insert_sale_mysql = async(connection:Connection, data:SaleMySQL) => {
+   const promise_insert_sale = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into sale set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "total = " + data.total + ", ";
+      query += "is_supplier = " + data.is_supplier + ", ";
+      query += "id_cash_cutoff = " + data.id_cash_cutoff + ", ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_sale;
+};
+
+export const update_sale_mysql = async(connection:Connection, data:SaleMySQL) => {
    const promise_update_sale = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update sale set ";
@@ -220,7 +243,7 @@ export const update_sale = async(connection:Connection, data:SaleMySQL) => {
    return await promise_update_sale;
 };
 
-export const delete_sale = async(connection:Connection, data:MySQLDelete) => {
+export const delete_sale_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_sale = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update sale set ";

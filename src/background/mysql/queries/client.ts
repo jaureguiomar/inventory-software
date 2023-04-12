@@ -199,7 +199,33 @@ export const insert_client = async(connection:Connection, data:Client) => {
    return await promise_insert_client;
 };
 
-export const update_client = async(connection:Connection, data:ClientMySQL) => {
+export const insert_client_mysql = async(connection:Connection, data:ClientMySQL) => {
+   const promise_insert_client = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into client set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "first_name = '" + data.first_name + "', ";
+      query += "last_name = '" + data.last_name + "', ";
+      query += "address = '" + data.address + "', ";
+      query += "cellphone = '" + data.cellphone + "', ";
+      query += "cellphone2 = '" + data.cellphone2 + "', ";
+      query += "email = '" + data.email + "', ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_client;
+};
+
+export const update_client_mysql = async(connection:Connection, data:ClientMySQL) => {
    const promise_update_client = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update client set ";
@@ -226,7 +252,7 @@ export const update_client = async(connection:Connection, data:ClientMySQL) => {
    return await promise_update_client;
 };
 
-export const delete_client = async(connection:Connection, data:MySQLDelete) => {
+export const delete_client_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_client = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update client set ";

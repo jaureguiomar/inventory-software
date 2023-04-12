@@ -221,7 +221,35 @@ export const insert_product = async(connection:Connection, data:Product) => {
    return await promise_insert_product;
 };
 
-export const update_product = async(connection:Connection, data:ProductMySQL) => {
+export const insert_product_mysql = async(connection:Connection, data:ProductMySQL) => {
+   const promise_insert_product = new Promise<number>((resolve) => {
+      let query = "";
+      query += "insert into product set ";
+      query += "is_sync = " + data.is_sync + ", ";
+      query += "sync_type = '" + data.sync_type + "', ";
+      query += "is_favorite = '" + data.is_favorite + "', ";
+      query += "code = '" + data.code + "', ";
+      query += "name = '" + data.name + "', ";
+      query += "description = '" + data.description + "', ";
+      query += "buy_price = " + data.buy_price + ", ";
+      query += "sale_price = " + data.sale_price + ", ";
+      query += "quantity = " + data.quantity + ", ";
+      query += "id_category = " + data.id_category + ", ";
+      query += "id_user = " + data.id_user + ", ";
+      query += "id_pos = " + data.id_pos + ", ";
+      query += "id_branch = " + data.id_branch;
+
+      connection.query(query, function(error:MysqlError, result:OkPacket) {
+         let new_id:number = -1;
+         if(!error)
+            new_id = result.insertId;
+         resolve(new_id);
+      });
+   });
+   return await promise_insert_product;
+};
+
+export const update_product_mysql = async(connection:Connection, data:ProductMySQL) => {
    const promise_update_product = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update product set ";
@@ -250,7 +278,7 @@ export const update_product = async(connection:Connection, data:ProductMySQL) =>
    return await promise_update_product;
 };
 
-export const delete_product = async(connection:Connection, data:MySQLDelete) => {
+export const delete_product_mysql = async(connection:Connection, data:MySQLDelete) => {
    const promise_delete_product = new Promise<boolean>((resolve) => {
       let query = "";
       query += "update product set ";
