@@ -29,7 +29,7 @@ export const get_user_role_permissions = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_user_role_permissions_unsync = async(connection:Connection) => {
+export const get_user_role_permissions_mysql_unsync = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<UserRolePermissionMySQL>>((resolve) => {
       const query = "select * from user_role_permission where is_sync = 0";
       connection.query(query, function(error:MysqlError, rows:Array<UserRolePermissionMySQL>) {

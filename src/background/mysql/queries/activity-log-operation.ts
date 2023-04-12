@@ -25,7 +25,7 @@ export const get_activity_log_operations = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_activity_log_operations_unsync = async(connection:Connection) => {
+export const get_activity_log_operations_mysql_unsync = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<ActivityLogOperationMySQL>>((resolve) => {
       const query = "select * from activity_log_operation where is_sync = 0";
       connection.query(query, function(error:MysqlError, rows:Array<ActivityLogOperationMySQL>) {

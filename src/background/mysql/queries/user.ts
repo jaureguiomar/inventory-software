@@ -47,7 +47,7 @@ export const get_users = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_users_unsync = async(connection:Connection) => {
+export const get_users_mysql_unsync = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<UserMySQL>>((resolve) => {
       const query = "select * from users where is_sync = 0";
       connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {

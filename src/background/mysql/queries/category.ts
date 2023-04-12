@@ -40,7 +40,7 @@ export const get_categories = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_categories_unsync = async(connection:Connection) => {
+export const get_categories_mysql_unsync = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<CategoryMySQL>>((resolve) => {
       const query = "select * from category where is_sync = 0";
       connection.query(query, async(error:MysqlError, rows:Array<CategoryMySQL>) => {

@@ -1,4 +1,4 @@
-export const parseStringField = (value:string) => {
+export const parseStringField = (value:string|null) => {
    if(!value)
       return null;
    return "'" + value + "'";

@@ -44,7 +44,7 @@ export const get_user_roles = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_user_roles_unsync = async(connection:Connection) => {
+export const get_user_roles_mysql_unsync = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<UserRoleMySQL>>((resolve) => {
       const query = "select * from user_role where is_sync = 0";
       connection.query(query, async(error:MysqlError, rows:Array<UserRoleMySQL>) => {

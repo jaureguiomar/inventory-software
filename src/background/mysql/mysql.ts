@@ -1,17 +1,17 @@
 import { ipcMain } from "electron";
 import mysql from "mysql";
 import { mysql_connection } from "@/background/mysql/connection";
-import { parseStringField } from "@/background/mysql/functions";
-import { delete_table, update_sync_unsync_data } from "@/background/mysql/queries/global";
-import { get_user_roles_unsync } from "@/background/mysql/queries/user-role";
-import { insert_branch } from "@/background/mysql/queries/branch";
-import { get_users_unsync } from "@/background/mysql/queries/user";
-import { get_categories_unsync } from "@/background/mysql/queries/category";
-import { get_products_unsync } from "@/background/mysql/queries/product";
-import { get_sales_unsync } from "@/background/mysql/queries/sale";
-import { get_sale_products_unsync } from "@/background/mysql/queries/sale-product";
-import { get_suppliers_unsync } from "@/background/mysql/queries/supplier";
-import { get_clients_unsync } from "@/background/mysql/queries/client";
+import { update_sync_unsync_data, delete_table } from "@/background/mysql/queries/global";
+import { get_user_roles_mysql_unsync, insert_user_role_sync } from "@/background/mysql/queries/user-role";
+import { get_users_mysql_unsync, insert_user_sync } from "@/background/mysql/queries/user";
+import { get_categories_mysql_unsync, insert_category_sync } from "@/background/mysql/queries/category";
+import { get_products_mysql_unsync, insert_product_sync } from "@/background/mysql/queries/product";
+import { get_sales_mysql_unsync, insert_sale_sync } from "@/background/mysql/queries/sale";
+import { get_sale_products_mysql_unsync, insert_sale_product_sync } from "@/background/mysql/queries/sale-product";
+import { get_suppliers_mysql_unsync, insert_supplier_sync } from "@/background/mysql/queries/supplier";
+import { get_clients_mysql_unsync, insert_client_sync } from "@/background/mysql/queries/client";
+import { insert_branch_sync } from "@/background/mysql/queries/branch";
+import { BgOfflineBakup } from "@/types/background";
 import { UserRoleMySQL } from "@/types/user-role";
 import { UserMySQL } from "@/types/user";
 import { CategoryMySQL } from "@/types/category";
@@ -36,9 +36,8 @@ import "@/background/mysql/events/user";
 import "@/background/mysql/events/user-role";
 import "@/background/mysql/events/user-role-permission";
 
-ipcMain.on("mysql-offline-bakup", async(e, data) => {
+ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    const connection = mysql.createConnection(mysql_connection);
-   let query = "";
 
    // Delete data
    await delete_table(connection, "client");
@@ -65,184 +64,108 @@ ipcMain.on("mysql-offline-bakup", async(e, data) => {
    // Add branches
    console.log("############");
    console.log("## Errors ##");
+   console.log("## Branch");
    for(let i = 0; i < data.branch.length; i++) {
       const curr_data = data.branch[i];
-      const new_id = await insert_branch(connection, curr_data);
-      if(new_id <= 0) {
-         console.log("## Branch");
+      const new_id = await insert_branch_sync(connection, curr_data);
+      if(new_id <= 0)
          console.log("data", curr_data);
-      }
    }
-
    // Add user roles
+   console.log("## UserRole");
    for(let i = 0; i < data.user_role.length; i++) {
       const curr_data = data.user_role[i];
-      query = "";
-      query += "insert into user_role set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "name = '" + curr_data.name + "', ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("###############");
-         console.log("## User Role ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_user_role_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add users
+   console.log("## User");
    for(let i = 0; i < data.user.length; i++) {
       const curr_data = data.user[i];
-      query = "";
-      query += "insert into users set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "username = '" + curr_data.username + "', ";
-      query += "email = '" + curr_data.email + "', ";
-      query += "password = '" + curr_data.password + "', ";
-      query += "first_name = '" + curr_data.first_name + "', ";
-      query += "last_name = '" + curr_data.last_name + "', ";
-      query += "id_role = " + curr_data.id_role + ", ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("##########");
-         console.log("## User ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_user_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add categories
+   console.log("## Category");
    for(let i = 0; i < data.category.length; i++) {
       const curr_data = data.category[i];
-      query = "";
-      query += "insert into category set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "name = '" + curr_data.name + "', ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("##############");
-         console.log("## Category ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_category_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add products
+   console.log("## Product");
    for(let i = 0; i < data.product.length; i++) {
       const curr_data = data.product[i];
-      query = "";
-      query += "insert into product set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      // query += "is_favorite = " + curr_data.is_favorite + ", ";
-      query += "code = " + parseStringField(curr_data.code) + ", ";
-      query += "name = '" + curr_data.name + "', ";
-      query += "description = " + parseStringField(curr_data.description) + ", ";
-      query += "buy_price = '" + curr_data.buy_price + "', ";
-      query += "sale_price = '" + curr_data.sale_price + "', ";
-      query += "quantity = " + curr_data.quantity + ", ";
-      query += "id_category = " + curr_data.id_category + ", ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("#############");
-         console.log("## Product ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_product_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add sales
+   console.log("## Sale");
    for(let i = 0; i < data.sale.length; i++) {
       const curr_data = data.sale[i];
-      query = "";
-      query += "insert into sale set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "total = " + curr_data.total + ", ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("##########");
-         console.log("## Sale ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_sale_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add sale products
+   console.log("## SaleProduct");
    for(let i = 0; i < data.sale_product.length; i++) {
       const curr_data = data.sale_product[i];
-      query = "";
-      query += "insert into sale_product set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "id_sale = " + curr_data.id_sale + ", ";
-      query += "id_product = " + curr_data.id_product + ", ";
-      query += "quantity = " + curr_data.quantity + ", ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("##################");
-         console.log("## Sale Product ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_sale_product_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add suppliers
+   console.log("## Supplier");
    for(let i = 0; i < data.supplier.length; i++) {
       const curr_data = data.supplier[i];
-      query = "";
-      query += "insert into supplier set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "name = '" + curr_data.name + "', ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("##############");
-         console.log("## Supplier ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_supplier_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
-
    // Add clients
+   console.log("## Client");
    for(let i = 0; i < data.client.length; i++) {
       const curr_data = data.client[i];
-      query = "";
-      query += "insert into client set ";
-      query += "id = " + curr_data.id + ", ";
-      query += "is_sync = 1, ";
-      query += "sync_type = null, ";
-      query += "first_name = '" + curr_data.first_name + "', ";
-      query += "last_name = '" + curr_data.last_name + "', ";
-      query += "address = " + parseStringField(curr_data.address) + ", ";
-      query += "cellphone = '" + curr_data.cellphone + "', ";
-      query += "cellphone2 = " + parseStringField(curr_data.cellphone2) + ", ";
-      query += "email = " + parseStringField(curr_data.email) + ", ";
-      query += "id_branch = " + curr_data.id_branch;
-
-      connection.query(query, function(error, rows) {
-         console.log("############");
-         console.log("## Client ##");
-         console.log("error", error);
-         console.log("rows", rows);
+      const new_id = await insert_client_sync(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null
       });
+      if(new_id <= 0)
+         console.log("data", curr_data);
    }
 
    connection.end(function() {
@@ -261,14 +184,14 @@ ipcMain.on("mysql-get-unsync-data", async(e) => {
    let supplier:SupplierMySQL[] = [];
    let client:ClientMySQL[] = [];
 
-   user_role = await get_user_roles_unsync(connection);
-   user = await get_users_unsync(connection);
-   category = await get_categories_unsync(connection);
-   product = await get_products_unsync(connection);
-   sale = await get_sales_unsync(connection);
-   sale_product = await get_sale_products_unsync(connection);
-   supplier = await get_suppliers_unsync(connection);
-   client = await get_clients_unsync(connection);
+   user_role = await get_user_roles_mysql_unsync(connection);
+   user = await get_users_mysql_unsync(connection);
+   category = await get_categories_mysql_unsync(connection);
+   product = await get_products_mysql_unsync(connection);
+   sale = await get_sales_mysql_unsync(connection);
+   sale_product = await get_sale_products_mysql_unsync(connection);
+   supplier = await get_suppliers_mysql_unsync(connection);
+   client = await get_clients_mysql_unsync(connection);
 
    e.sender.send("mysql-get-unsync-data-reply", {
       user_role: user_role,

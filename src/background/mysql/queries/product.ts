@@ -51,7 +51,7 @@ export const get_products = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_products_unsync = async(connection:Connection) => {
+export const get_products_mysql_unsync = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<ProductMySQL>>((resolve) => {
       const query = "select * from product where is_sync = 0";
       connection.query(query, async(error:MysqlError, rows:Array<ProductMySQL>) => {
