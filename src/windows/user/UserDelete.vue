@@ -174,7 +174,6 @@ export default defineComponent({
          first_name: "",
          last_name: "",
          id_role: -1,
-         id_user: -1,
          id_pos: -1,
          id_branch: -1,
          role: {
@@ -187,25 +186,6 @@ export default defineComponent({
             atributes_2: 0,
             atributes_3: 0,
             atributes_4: 0
-         },
-         user: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            user: null,
-            pos: null,
-            branch: null
          },
          pos: {
             id: -1,
@@ -252,11 +232,9 @@ export default defineComponent({
             user.first_name = data.data.first_name;
             user.last_name = data.data.last_name;
             user.id_role = data.data.id_role;
-            user.id_user = data.data.id_user;
             user.id_pos = data.data.id_pos;
             user.id_branch = data.data.id_branch;
             user.role = data.data.role;
-            user.user = data.data.user;
             user.pos = data.data.pos;
             user.branch = data.data.branch;
 

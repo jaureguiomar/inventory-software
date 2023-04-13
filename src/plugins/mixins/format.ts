@@ -151,11 +151,9 @@ export const format_user = (user:User|null) => {
          first_name: curr_data.first_name,
          last_name: curr_data.last_name,
          id_role: Number(curr_data.id_role),
-         id_user: Number(curr_data.id_user),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
          role: null,
-         user: null,
          pos: null,
          branch: null
       }

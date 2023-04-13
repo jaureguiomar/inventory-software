@@ -126,7 +126,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
+import { format_branch, format_pos, format_user_role } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { UsersResponse, WindowResponse, User } from "@/types/user";
@@ -306,11 +306,9 @@ export default defineComponent({
                            user.value[finded_index].first_name = data.data.first_name;
                            user.value[finded_index].last_name = data.data.last_name;
                            user.value[finded_index].id_role = data.data.id_role;
-                           user.value[finded_index].id_user = data.data.id_user;
                            user.value[finded_index].id_pos = data.data.id_pos;
                            user.value[finded_index].id_branch = data.data.id_branch;
                            user.value[finded_index].role = data.data.role;
-                           user.value[finded_index].user = data.data.user;
                            user.value[finded_index].pos = data.data.pos;
                            user.value[finded_index].branch = data.data.branch;
                         }
@@ -349,7 +347,6 @@ export default defineComponent({
                   let formatted_users:Array<User> = [];
                   for(let i = 0; i < data.length; i++) {
                      const formatted_role:UserRole|null = format_user_role(data[i].role);
-                     const formatted_user:User|null = format_user(data[i].user);
                      const formatted_pos:Pos|null = format_pos(data[i].pos);
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
 
@@ -364,11 +361,9 @@ export default defineComponent({
                         first_name: data[i].first_name,
                         last_name: data[i].last_name,
                         id_role: Number(data[i].id_role),
-                        id_user: Number(data[i].id_user),
                         id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
                         role: formatted_role,
-                        user: formatted_user,
                         pos: formatted_pos,
                         branch: formatted_branch
                      });
@@ -422,11 +417,9 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
-               id_user: item.id_role,
-               id_pos: item.id_role,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
                role: { ...item.role },
-               user: { ...item.user },
                pos: { ...item.pos },
                branch: { ...item.branch }
             }
@@ -451,11 +444,9 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
-               id_user: item.id_role,
-               id_pos: item.id_role,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
                role: { ...item.role },
-               user: { ...item.user },
                pos: { ...item.pos },
                branch: { ...item.branch }
             }
@@ -476,11 +467,9 @@ export default defineComponent({
                first_name: item.first_name,
                last_name: item.last_name,
                id_role: item.id_role,
-               id_user: item.id_role,
-               id_pos: item.id_role,
+               id_pos: item.id_pos,
                id_branch: item.id_branch,
                role: { ...item.role },
-               user: { ...item.user },
                pos: { ...item.pos },
                branch: { ...item.branch }
             }

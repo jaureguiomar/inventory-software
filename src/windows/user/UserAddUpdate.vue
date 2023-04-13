@@ -192,7 +192,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
+import { format_branch, format_pos, format_user_role } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/types/user";
 import { UserRole, UserRoleOneResponse, UserRolesResponse } from "@/types/user-role";
@@ -236,7 +236,6 @@ export default defineComponent({
          first_name: "",
          last_name: "",
          id_role: -1,
-         id_user: -1,
          id_pos: -1,
          id_branch: -1,
          role: {
@@ -249,25 +248,6 @@ export default defineComponent({
             atributes_2: 0,
             atributes_3: 0,
             atributes_4: 0
-         },
-         user: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            user: null,
-            pos: null,
-            branch: null
          },
          pos: {
             id: -1,
@@ -373,11 +353,9 @@ export default defineComponent({
             user.first_name = data.data.first_name;
             user.last_name = data.data.last_name;
             user.id_role = data.data.id_role;
-            user.id_user = data.data.id_user;
             user.id_pos = data.data.id_pos;
             user.id_branch = data.data.id_branch;
             user.role = data.data.role;
-            user.user = data.data.user;
             user.pos = data.data.pos;
             user.branch = data.data.branch;
 
@@ -504,7 +482,6 @@ export default defineComponent({
             first_name: "",
             last_name: "",
             id_role: -1,
-            id_user: -1,
             id_pos: -1,
             id_branch: -1,
             role: {
@@ -517,25 +494,6 @@ export default defineComponent({
                atributes_2: 0,
                atributes_3: 0,
                atributes_4: 0
-            },
-            user: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               username: "",
-               email: "",
-               password: "",
-               first_name: "",
-               last_name: "",
-               id_role: -1,
-               id_user: -1,
-               id_pos: -1,
-               id_branch: -1,
-               role: null,
-               user: null,
-               pos: null,
-               branch: null
             },
             pos: {
                id: -1,
@@ -583,7 +541,6 @@ export default defineComponent({
                   if(response.data.data) {
                      const data:User = response.data.data;
                      const formatted_role:UserRole|null = format_user_role(data.role);
-                     const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
                      const formatted_branch:Branch|null = format_branch(data.branch);
 
@@ -598,11 +555,9 @@ export default defineComponent({
                         first_name: data.first_name,
                         last_name: data.last_name,
                         id_role: Number(data.id_role),
-                        id_user: Number(data.id_user),
                         id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
                         role: formatted_role,
-                        user: formatted_user,
                         pos: formatted_pos,
                         branch: formatted_branch
                      };
@@ -665,7 +620,6 @@ export default defineComponent({
                   if(response.data.data) {
                      const data:User = response.data.data;
                      const formatted_role:UserRole|null = format_user_role(data.role);
-                     const formatted_user:User|null = format_user(data.user);
                      const formatted_pos:Pos|null = format_pos(data.pos);
                      const formatted_branch:Branch|null = format_branch(data.branch);
 
@@ -680,11 +634,9 @@ export default defineComponent({
                         first_name: data.first_name,
                         last_name: data.last_name,
                         id_role: Number(data.id_role),
-                        id_user: Number(data.id_user),
                         id_pos: Number(data.id_pos),
                         id_branch: Number(data.id_branch),
                         role: formatted_role,
-                        user: formatted_user,
                         pos: formatted_pos,
                         branch: formatted_branch
                      };

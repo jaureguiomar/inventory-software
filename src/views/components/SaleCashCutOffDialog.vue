@@ -280,7 +280,6 @@ export default {
 
                   for(let i = 0; i < data.length; i++) {
                      const formatted_role:UserRole|null = format_user_role(data[i].role);
-                     const formatted_user:User|null = format_user(data[i].user);
                      const formatted_pos:Pos|null = format_pos(data[i].pos);
                      const formatted_branch:Branch|null = format_branch(data[i].branch);
 
@@ -295,11 +294,9 @@ export default {
                         first_name: data[i].first_name,
                         last_name: data[i].last_name,
                         id_role: Number(data[i].id_role),
-                        id_user: Number(data[i].id_branch),
-                        id_pos: Number(data[i].id_branch),
+                        id_pos: Number(data[i].id_pos),
                         id_branch: Number(data[i].id_branch),
                         role: formatted_role,
-                        user: formatted_user,
                         pos: formatted_pos,
                         branch: formatted_branch
                      });

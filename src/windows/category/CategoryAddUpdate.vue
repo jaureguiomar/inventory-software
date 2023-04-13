@@ -154,11 +154,9 @@ export default defineComponent({
             first_name: "",
             last_name: "",
             id_role: -1,
-            id_user: -1,
             id_pos: -1,
             id_branch: -1,
             role: null,
-            user: null,
             pos: null,
             branch: null
          },
@@ -277,11 +275,9 @@ export default defineComponent({
                first_name: "",
                last_name: "",
                id_role: -1,
-               id_user: -1,
                id_pos: -1,
                id_branch: -1,
                role: null,
-               user: null,
                pos: null,
                branch: null
             },

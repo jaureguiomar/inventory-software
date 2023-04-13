@@ -17,7 +17,6 @@ export const get_users = async(connection:Connection) => {
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                const user_role:UserRole = await get_user_role_by_id(connection, rows[i].id_role);
-               const user:User = await get_user_by_id(connection, rows[i].id_user);
                const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
                const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
@@ -31,11 +30,9 @@ export const get_users = async(connection:Connection) => {
                   first_name: rows[i].first_name,
                   last_name: rows[i].last_name,
                   id_role: Number(rows[i].id_role),
-                  id_user: Number(rows[i].id_user),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
                   role: user_role,
-                  user: user,
                   pos: pos,
                   branch: branch
                });
@@ -55,7 +52,6 @@ export const get_users_mysql_unsync = async(connection:Connection) => {
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                const user_role:UserRole = await get_user_role_by_id(connection, rows[i].id_role);
-               const user:User = await get_user_by_id(connection, rows[i].id_user);
                const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
                const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
@@ -71,11 +67,9 @@ export const get_users_mysql_unsync = async(connection:Connection) => {
                   first_name: rows[i].first_name,
                   last_name: rows[i].last_name,
                   id_role: Number(rows[i].id_role),
-                  id_user: Number(rows[i].id_user),
                   id_pos: Number(rows[i].id_pos),
                   id_branch: Number(rows[i].id_branch),
                   role: user_role,
-                  user: user,
                   pos: pos,
                   branch: branch
                });
@@ -104,11 +98,9 @@ export const get_user_by_id = async(connection:Connection, id:number|null) => {
             first_name: "",
             last_name: "",
             id_role: -1,
-            id_user: -1,
             id_pos: -1,
             id_branch: -1,
             role: null,
-            user: null,
             pos: null,
             branch: null
          };
@@ -116,7 +108,6 @@ export const get_user_by_id = async(connection:Connection, id:number|null) => {
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];const user_role:UserRole = await get_user_role_by_id(connection, curr_row.id_role);
-               const user:User = await get_user_by_id(connection, curr_row.id_user);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_user = {
@@ -124,7 +115,6 @@ export const get_user_by_id = async(connection:Connection, id:number|null) => {
                   created: parseDate(curr_row.created),
                   updated: parseDate(curr_row.updated),
                   role: user_role,
-                  user: user,
                   pos: pos,
                   branch: branch
                };
@@ -153,11 +143,9 @@ export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
             first_name: "",
             last_name: "",
             id_role: -1,
-            id_user: -1,
             id_pos: -1,
             id_branch: -1,
             role: null,
-            user: null,
             pos: null,
             branch: null
          };
@@ -166,13 +154,11 @@ export const get_user_mysql_by_id = async(connection:Connection, id:number) => {
             if(rows.length > 0) {
                const curr_row = rows[0];
                const user_role:UserRole = await get_user_role_by_id(connection, curr_row.id_role);
-               const user:User = await get_user_by_id(connection, curr_row.id_user);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_user = {
                   ...curr_row,
                   role: user_role,
-                  user: user,
                   pos: pos,
                   branch: branch
                };
@@ -196,7 +182,6 @@ export const insert_user = async(connection:Connection, data:User) => {
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
       query += "id_role = " + data.id_role + ", ";
-      query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";
       query += "id_branch = " + data.id_branch;
 
@@ -225,7 +210,6 @@ export const insert_user_mysql = async(connection:Connection, data:UserMySQL) =>
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
       query += "id_role = " + data.id_role + ", ";
-      query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";
       query += "id_branch = " + data.id_branch;
 
@@ -254,7 +238,6 @@ export const update_user_mysql = async(connection:Connection, data:UserMySQL) =>
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
       query += "id_role = " + data.id_role + ", ";
-      query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";
       query += "id_branch = " + data.id_branch + " ";
       query += "where id = " + data.id;
