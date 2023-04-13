@@ -47,8 +47,16 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    await delete_table(connection, "sale");
    await delete_table(connection, "product");
    await delete_table(connection, "category");
+   await delete_table(connection, "activity_log");
+   await delete_table(connection, "activity_log_access");
+   await delete_table(connection, "activity_log_operation");
+   await delete_table(connection, "auth_token");
+   await delete_table(connection, "cash_cutoff");
+   await delete_table(connection, "cash_cutoff_type");
    await delete_table(connection, "users");
    await delete_table(connection, "user_role");
+   await delete_table(connection, "user_role_permission");
+   await delete_table(connection, "pos");
    await delete_table(connection, "branch");
 
    // // Reset auto_increments
@@ -86,104 +94,104 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
       if(new_id <= 0)
          console.log("data", curr_data);
    }
-   // Add users
-   console.log("## User");
-   for(let i = 0; i < data.user.length; i++) {
-      const curr_data = data.user[i];
-      const new_id = await insert_user_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
-   // Add categories
-   console.log("## Category");
-   for(let i = 0; i < data.category.length; i++) {
-      const curr_data = data.category[i];
-      const new_id = await insert_category_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
-   // Add products
-   console.log("## Product");
-   for(let i = 0; i < data.product.length; i++) {
-      const curr_data = data.product[i];
-      const new_id = await insert_product_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
-   // Add sales
-   console.log("## Sale");
-   for(let i = 0; i < data.sale.length; i++) {
-      const curr_data = data.sale[i];
-      const new_id = await insert_sale_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
-   // Add sale products
-   console.log("## SaleProduct");
-   for(let i = 0; i < data.sale_product.length; i++) {
-      const curr_data = data.sale_product[i];
-      const new_id = await insert_sale_product_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
-   // Add suppliers
-   console.log("## Supplier");
-   for(let i = 0; i < data.supplier.length; i++) {
-      const curr_data = data.supplier[i];
-      const new_id = await insert_supplier_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
-   // Add clients
-   console.log("## Client");
-   for(let i = 0; i < data.client.length; i++) {
-      const curr_data = data.client[i];
-      const new_id = await insert_client_mysql(connection, {
-         ...curr_data,
-         is_sync: 1,
-         sync_type: null,
-         created: new Date(),
-         updated: new Date()
-      });
-      if(new_id <= 0)
-         console.log("data", curr_data);
-   }
+   // // Add users
+   // console.log("## User");
+   // for(let i = 0; i < data.user.length; i++) {
+   //    const curr_data = data.user[i];
+   //    const new_id = await insert_user_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
+   // // Add categories
+   // console.log("## Category");
+   // for(let i = 0; i < data.category.length; i++) {
+   //    const curr_data = data.category[i];
+   //    const new_id = await insert_category_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
+   // // Add products
+   // console.log("## Product");
+   // for(let i = 0; i < data.product.length; i++) {
+   //    const curr_data = data.product[i];
+   //    const new_id = await insert_product_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
+   // // Add sales
+   // console.log("## Sale");
+   // for(let i = 0; i < data.sale.length; i++) {
+   //    const curr_data = data.sale[i];
+   //    const new_id = await insert_sale_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
+   // // Add sale products
+   // console.log("## SaleProduct");
+   // for(let i = 0; i < data.sale_product.length; i++) {
+   //    const curr_data = data.sale_product[i];
+   //    const new_id = await insert_sale_product_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
+   // // Add suppliers
+   // console.log("## Supplier");
+   // for(let i = 0; i < data.supplier.length; i++) {
+   //    const curr_data = data.supplier[i];
+   //    const new_id = await insert_supplier_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
+   // // Add clients
+   // console.log("## Client");
+   // for(let i = 0; i < data.client.length; i++) {
+   //    const curr_data = data.client[i];
+   //    const new_id = await insert_client_mysql(connection, {
+   //       ...curr_data,
+   //       is_sync: 1,
+   //       sync_type: null,
+   //       created: new Date(),
+   //       updated: new Date()
+   //    });
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
 
    connection.end(function() {
       e.sender.send("mysql-offline-bakup-reply");
