@@ -115,13 +115,9 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { UserRolesResponse, WindowResponse, UserRole } from "@/types/user-role";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -263,12 +259,6 @@ export default defineComponent({
                            userRole.value[finded_index].atributes_2 = data.data.atributes_2;
                            userRole.value[finded_index].atributes_3 = data.data.atributes_3;
                            userRole.value[finded_index].atributes_4 = data.data.atributes_4;
-                           userRole.value[finded_index].id_user = data.data.id_user;
-                           userRole.value[finded_index].id_pos = data.data.id_pos;
-                           userRole.value[finded_index].id_branch = data.data.id_branch;
-                           userRole.value[finded_index].user = data.data.user;
-                           userRole.value[finded_index].pos = data.data.pos;
-                           userRole.value[finded_index].branch = data.data.branch;
                         }
                      }
                   } else if(data.type === "delete") {
@@ -304,10 +294,6 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_categories:Array<UserRole> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
                      formatted_categories.push({
                         id: Number(data[i].id),
                         is_active: Number(data[i].is_active),
@@ -317,13 +303,7 @@ export default defineComponent({
                         atributes_1: Number(data[i].atributes_1),
                         atributes_2: Number(data[i].atributes_2),
                         atributes_3: Number(data[i].atributes_3),
-                        atributes_4: Number(data[i].atributes_4),
-                        id_user: Number(data[i].id_branch),
-                        id_pos: Number(data[i].id_branch),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch,
+                        atributes_4: Number(data[i].atributes_4)
                      });
                   }
                   userRole.value = formatted_categories;
@@ -373,13 +353,7 @@ export default defineComponent({
                atributes_1: item.atributes_1,
                atributes_2: item.atributes_2,
                atributes_3: item.atributes_3,
-               atributes_4: item.atributes_4,
-               id_user: item.id_user,
-               id_pos: item.id_pos,
-               id_branch: item.id_branch,
-               user: { ...item.user },
-               pos: { ...item.pos },
-               branch: { ...item.branch }
+               atributes_4: item.atributes_4
             }
          });
       };
@@ -400,13 +374,7 @@ export default defineComponent({
                atributes_1: item.atributes_1,
                atributes_2: item.atributes_2,
                atributes_3: item.atributes_3,
-               atributes_4: item.atributes_4,
-               id_user: item.id_user,
-               id_pos: item.id_pos,
-               id_branch: item.id_branch,
-               user: { ...item.user },
-               pos: { ...item.pos },
-               branch: { ...item.branch }
+               atributes_4: item.atributes_4
             }
          });
       };
@@ -423,13 +391,7 @@ export default defineComponent({
                atributes_1: item.atributes_1,
                atributes_2: item.atributes_2,
                atributes_3: item.atributes_3,
-               atributes_4: item.atributes_4,
-               id_user: item.id_user,
-               id_pos: item.id_pos,
-               id_branch: item.id_branch,
-               user: { ...item.user },
-               pos: { ...item.pos },
-               branch: { ...item.branch }
+               atributes_4: item.atributes_4
             }
          });
       };

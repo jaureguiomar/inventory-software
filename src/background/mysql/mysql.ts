@@ -36,6 +36,7 @@ import "@/background/mysql/events/supplier";
 import "@/background/mysql/events/user";
 import "@/background/mysql/events/user-role";
 import "@/background/mysql/events/user-role-permission";
+import { insert_pos } from "./queries/pos";
 
 ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    const connection = mysql.createConnection(mysql_connection);
@@ -80,6 +81,14 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
       if(new_id <= 0)
          console.log("data", curr_data);
    }
+   // // Add poss
+   // console.log("## Pos");
+   // for(let i = 0; i < data.pos.length; i++) {
+   //    const curr_data = data.pos[i];
+   //    const new_id = await insert_pos(connection, curr_data);
+   //    if(new_id <= 0)
+   //       console.log("data", curr_data);
+   // }
    // Add user roles
    console.log("## UserRole");
    for(let i = 0; i < data.user_role.length; i++) {
@@ -94,20 +103,20 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
       if(new_id <= 0)
          console.log("data", curr_data);
    }
-   // // Add users
-   // console.log("## User");
-   // for(let i = 0; i < data.user.length; i++) {
-   //    const curr_data = data.user[i];
-   //    const new_id = await insert_user_mysql(connection, {
-   //       ...curr_data,
-   //       is_sync: 1,
-   //       sync_type: null,
-   //       created: new Date(),
-   //       updated: new Date()
-   //    });
-   //    if(new_id <= 0)
-   //       console.log("data", curr_data);
-   // }
+   // Add users
+   console.log("## User");
+   for(let i = 0; i < data.user.length; i++) {
+      const curr_data = data.user[i];
+      const new_id = await insert_user_mysql(connection, {
+         ...curr_data,
+         is_sync: 1,
+         sync_type: null,
+         created: formattedStringDateToDate(curr_data.created),
+         updated: formattedStringDateToDate(curr_data.updated)
+      });
+      if(new_id <= 0)
+         console.log("data", curr_data);
+   }
    // // Add categories
    // console.log("## Category");
    // for(let i = 0; i < data.category.length; i++) {

@@ -1,7 +1,4 @@
 import { InputFieldString } from "@/types/general";
-import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
 
 // Main
 interface MainUserRole {
@@ -12,12 +9,6 @@ interface MainUserRole {
    atributes_2: number;
    atributes_3: number;
    atributes_4: number;
-   id_user: number;
-   id_pos: number;
-   id_branch: number;
-   user: User|null;
-   pos: Pos|null;
-   branch: Branch|null;
 }
 interface UserRole extends MainUserRole {
    created: string;

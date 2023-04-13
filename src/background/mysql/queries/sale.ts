@@ -201,7 +201,10 @@ export const insert_sale_mysql = async(connection:Connection, data:SaleMySQL) =>
       let query = "";
       query += "insert into sale set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "total = " + data.total + ", ";
       query += "is_supplier = " + data.is_supplier + ", ";
       query += "id_cash_cutoff = " + data.id_cash_cutoff + ", ";
@@ -224,7 +227,10 @@ export const update_sale_mysql = async(connection:Connection, data:SaleMySQL) =>
       let query = "";
       query += "update sale set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "total = " + data.total + ", ";
       query += "is_supplier = " + data.is_supplier + ", ";
       query += "id_cash_cutoff = " + data.id_cash_cutoff + ", ";

@@ -405,14 +405,10 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { format_user_permissions } from "@/plugins/mixins/permission";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, UserRoleField, UserRole, UserRoleResponse } from "@/types/user-role";
 import { UserRolePermission, UserRolePermissionsResponse } from "@/types/user-role-permission";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -446,49 +442,7 @@ export default defineComponent({
          atributes_1: 0,
          atributes_2: 0,
          atributes_3: 0,
-         atributes_4: 0,
-         id_user: -1,
-         id_pos: -1,
-         id_branch: -1,
-         user: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            user: null,
-            pos: null,
-            branch: null
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         atributes_4: 0
       });
       const field = reactive<UserRoleField>({
          name: {
@@ -525,12 +479,6 @@ export default defineComponent({
             userRole.atributes_2 = data.data.atributes_2;
             userRole.atributes_3 = data.data.atributes_3;
             userRole.atributes_4 = data.data.atributes_4;
-            userRole.id_user = data.data.id_user;
-            userRole.id_pos = data.data.id_pos;
-            userRole.id_branch = data.data.id_branch;
-            userRole.user = data.data.user;
-            userRole.pos = data.data.pos;
-            userRole.branch = data.data.branch;
 
             field.name.text = data.data.name;
          }
@@ -654,49 +602,7 @@ export default defineComponent({
             atributes_1: 0,
             atributes_2: 0,
             atributes_3: 0,
-            atributes_4: 0,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            user: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               username: "",
-               email: "",
-               password: "",
-               first_name: "",
-               last_name: "",
-               id_role: -1,
-               id_user: -1,
-               id_pos: -1,
-               id_branch: -1,
-               role: null,
-               user: null,
-               pos: null,
-               branch: null
-            },
-            pos: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               machine_id: "",
-               mac_address: "",
-               id_branch: -1,
-               branch: null
-            },
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            atributes_4: 0
          };
 
          let total_atributes_1 = 0;
@@ -747,10 +653,6 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:UserRole = response.data.data;
-                     const formatted_user:User|null = format_user(data.user);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -760,13 +662,7 @@ export default defineComponent({
                         atributes_1: Number(data.atributes_1),
                         atributes_2: Number(data.atributes_2),
                         atributes_3: Number(data.atributes_3),
-                        atributes_4: Number(data.atributes_4),
-                        id_user: Number(data.id_user),
-                        id_pos: Number(data.id_pos),
-                        id_branch: Number(data.id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
+                        atributes_4: Number(data.atributes_4)
                      };
 
                      create_activity_log({
@@ -825,10 +721,6 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:UserRole = response.data.data;
-                     const formatted_user:User|null = format_user(data.user);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
                      formatted_data = {
                         id: Number(data.id),
                         is_active: Number(data.is_active),
@@ -838,13 +730,7 @@ export default defineComponent({
                         atributes_1: Number(data.atributes_1),
                         atributes_2: Number(data.atributes_2),
                         atributes_3: Number(data.atributes_3),
-                        atributes_4: Number(data.atributes_4),
-                        id_user: Number(data.id_user),
-                        id_pos: Number(data.id_pos),
-                        id_branch: Number(data.id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
+                        atributes_4: Number(data.atributes_4)
                      };
 
                      create_activity_log({

@@ -179,7 +179,10 @@ export const insert_supplier_mysql = async(connection:Connection, data:SupplierM
       let query = "";
       query += "insert into supplier set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "name = '" + data.name + "', ";
       query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";
@@ -200,7 +203,10 @@ export const update_supplier_mysql = async(connection:Connection, data:SupplierM
       let query = "";
       query += "update supplier set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "name = '" + data.name + "', ";
       query += "id_user = " + data.id_user + ", ";
       query += "id_pos = " + data.id_pos + ", ";

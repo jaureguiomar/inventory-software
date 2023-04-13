@@ -215,7 +215,10 @@ export const insert_sale_product_mysql = async(connection:Connection, data:SaleP
       let query = "";
       query += "insert into sale_product set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "quantity = " + data.quantity + ", ";
       query += "id_sale = " + data.id_sale + ", ";
       query += "id_product = " + data.id_product + ", ";
@@ -238,7 +241,10 @@ export const update_sale_product_mysql = async(connection:Connection, data:SaleP
       let query = "";
       query += "update sale_product set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "quantity = " + data.quantity + ", ";
       query += "id_sale = " + data.id_sale + ", ";
       query += "id_product = " + data.id_product + ", ";

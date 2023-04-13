@@ -215,7 +215,10 @@ export const insert_user_mysql = async(connection:Connection, data:UserMySQL) =>
       let query = "";
       query += "insert into users set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "username = '" + data.username + "', ";
       query += "email = '" + data.email + "', ";
       query += "password = '" + data.password + "', ";
@@ -241,7 +244,10 @@ export const update_user_mysql = async(connection:Connection, data:UserMySQL) =>
       let query = "";
       query += "update users set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "username = '" + data.username + "', ";
       query += "email = '" + data.email + "', ";
       query += "password = '" + data.password + "', ";

@@ -248,13 +248,7 @@ export default defineComponent({
             atributes_1: 0,
             atributes_2: 0,
             atributes_3: 0,
-            atributes_4: 0,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            user: null,
-            pos: null,
-            branch: null
+            atributes_4: 0
          },
          user: {
             id: -1,
@@ -419,10 +413,6 @@ export default defineComponent({
                let formatted_roles:Array<UserRole> = [];
 
                for(let i = 0; i < data.length; i++) {
-                  const formatted_user:User|null = format_user(data[i].user);
-                  const formatted_pos:Pos|null = format_pos(data[i].pos);
-                  const formatted_branch:Branch|null = format_branch(data[i].branch);
-
                   formatted_roles.push({
                      id: Number(data[i].id),
                      is_active: Number(data[i].is_active),
@@ -432,13 +422,7 @@ export default defineComponent({
                      atributes_1: Number(data[i].atributes_1),
                      atributes_2: Number(data[i].atributes_2),
                      atributes_3: Number(data[i].atributes_3),
-                     atributes_4: Number(data[i].atributes_4),
-                     id_user: Number(data[i].id_user),
-                     id_pos: Number(data[i].id_pos),
-                     id_branch: Number(data[i].id_branch),
-                     user: formatted_user,
-                     pos: formatted_pos,
-                     branch: formatted_branch
+                     atributes_4: Number(data[i].atributes_4)
                   });
 
                   roleOptions.value.push(data[i].name);
@@ -532,13 +516,7 @@ export default defineComponent({
                atributes_1: 0,
                atributes_2: 0,
                atributes_3: 0,
-               atributes_4: 0,
-               id_user: -1,
-               id_pos: -1,
-               id_branch: -1,
-               user: null,
-               pos: null,
-               branch: null
+               atributes_4: 0
             },
             user: {
                id: -1,
@@ -758,10 +736,6 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data:UserRole = response.data.data;
-                  // const formatted_user:User|null = format_user(data.user);
-                  // const formatted_pos:Pos|null = format_pos(data.pos);
-                  // const formatted_branch:Branch|null = format_branch(data.branch);
-
                   formatted_data.role = {
                      id: Number(data.id),
                      is_active: Number(data.is_active),
@@ -771,16 +745,7 @@ export default defineComponent({
                      atributes_1: Number(data.atributes_1),
                      atributes_2: Number(data.atributes_2),
                      atributes_3: Number(data.atributes_3),
-                     atributes_4: Number(data.atributes_4),
-                     id_user: Number(data.id_user),
-                     id_pos: Number(data.id_pos),
-                     id_branch: Number(data.id_branch),
-                     user: null,
-                     pos: null,
-                     branch: null
-                     // user: formatted_user,
-                     // pos: formatted_pos,
-                     // branch: formatted_branch
+                     atributes_4: Number(data.atributes_4)
                   }
                } else {
                   Swal.fire({

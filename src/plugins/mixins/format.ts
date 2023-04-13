@@ -177,13 +177,7 @@ export const format_user_role = (user_role:UserRole|null) => {
          atributes_1: Number(curr_data.atributes_1),
          atributes_2: Number(curr_data.atributes_2),
          atributes_3: Number(curr_data.atributes_3),
-         atributes_4: Number(curr_data.atributes_4),
-         id_user: Number(curr_data.id_user),
-         id_pos: Number(curr_data.id_pos),
-         id_branch: Number(curr_data.id_branch),
-         user: null,
-         pos: null,
-         branch: null
+         atributes_4: Number(curr_data.atributes_4)
       }
    }
    return formatted_data;

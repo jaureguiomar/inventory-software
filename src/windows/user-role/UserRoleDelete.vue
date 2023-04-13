@@ -455,49 +455,7 @@ export default defineComponent({
          atributes_1: 0,
          atributes_2: 0,
          atributes_3: 0,
-         atributes_4: 0,
-         id_user: -1,
-         id_pos: -1,
-         id_branch: -1,
-         user: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            user: null,
-            pos: null,
-            branch: null
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         atributes_4: 0
       });
       const user_role_permission = ref<UserRolePermission[]>([]);
       const user_role_permissions_formatted = reactive({
@@ -531,12 +489,6 @@ export default defineComponent({
             userRole.atributes_2 = data.data.atributes_2;
             userRole.atributes_3 = data.data.atributes_3;
             userRole.atributes_4 = data.data.atributes_4;
-            userRole.id_user = data.data.id_user;
-            userRole.id_pos = data.data.id_pos;
-            userRole.id_branch = data.data.id_branch;
-            userRole.user = data.data.user;
-            userRole.pos = data.data.pos;
-            userRole.branch = data.data.branch;
 
             create_activity_log({
                name: "The user has access to user role delete report",

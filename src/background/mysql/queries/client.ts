@@ -204,7 +204,10 @@ export const insert_client_mysql = async(connection:Connection, data:ClientMySQL
       let query = "";
       query += "insert into client set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
       query += "address = '" + data.address + "', ";
@@ -230,7 +233,10 @@ export const update_client_mysql = async(connection:Connection, data:ClientMySQL
       let query = "";
       query += "update client set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "first_name = '" + data.first_name + "', ";
       query += "last_name = '" + data.last_name + "', ";
       query += "address = '" + data.address + "', ";

@@ -177,13 +177,7 @@ export default defineComponent({
             atributes_1: 0,
             atributes_2: 0,
             atributes_3: 0,
-            atributes_4: 0,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            user: null,
-            pos: null,
-            branch: null
+            atributes_4: 0
          },
          user: {
             id: -1,

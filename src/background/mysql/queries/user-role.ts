@@ -1,13 +1,7 @@
 import { Connection, MysqlError, OkPacket } from "mysql";
 import { parseDate } from "@/background/mysql/functions";
-import { get_user_by_id } from "@/background/mysql/queries/user";
-import { get_pos_by_id } from "@/background/mysql/queries/pos";
-import { get_branch_by_id } from "@/background/mysql/queries/branch";
 import { UserRole, UserRoleMySQL } from "@/types/user-role";
 import { MySQLDelete } from "@/types/general";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 
 export const get_user_roles = async(connection:Connection) => {
    const promise_get_categories = new Promise<Array<UserRole>>((resolve) => {
@@ -16,9 +10,6 @@ export const get_user_roles = async(connection:Connection) => {
          const data:Array<UserRole> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
-               const user:User = await get_user_by_id(connection, rows[i].id_user);
-               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
-               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -28,13 +19,7 @@ export const get_user_roles = async(connection:Connection) => {
                   atributes_1: Number(rows[i].atributes_1),
                   atributes_2: Number(rows[i].atributes_2),
                   atributes_3: Number(rows[i].atributes_3),
-                  atributes_4: Number(rows[i].atributes_4),
-                  id_user: Number(rows[i].id_user),
-                  id_pos: Number(rows[i].id_pos),
-                  id_branch: Number(rows[i].id_branch),
-                  user: user,
-                  pos: pos,
-                  branch: branch
+                  atributes_4: Number(rows[i].atributes_4)
                });
             }
          }
@@ -51,9 +36,6 @@ export const get_user_roles_mysql_unsync = async(connection:Connection) => {
          const data:Array<UserRoleMySQL> = [];
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
-               const user:User = await get_user_by_id(connection, rows[i].id_user);
-               const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
-               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
                   id: Number(rows[i].id),
                   is_active: rows[i].is_active,
@@ -65,13 +47,7 @@ export const get_user_roles_mysql_unsync = async(connection:Connection) => {
                   atributes_1: Number(rows[i].atributes_1),
                   atributes_2: Number(rows[i].atributes_2),
                   atributes_3: Number(rows[i].atributes_3),
-                  atributes_4: Number(rows[i].atributes_4),
-                  id_user: Number(rows[i].id_user),
-                  id_pos: Number(rows[i].id_pos),
-                  id_branch: Number(rows[i].id_branch),
-                  user: user,
-                  pos: pos,
-                  branch: branch
+                  atributes_4: Number(rows[i].atributes_4)
                });
             }
          }
@@ -94,28 +70,16 @@ export const get_user_role_by_id = async(connection:Connection, id:number) => {
             atributes_1: -1,
             atributes_2: -1,
             atributes_3: -1,
-            atributes_4: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            user: null,
-            pos: null,
-            branch: null
+            atributes_4: -1
          };
 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               const user:User = await get_user_by_id(connection, curr_row.id_user);
-               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
-               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_user_role = {
                   ...curr_row,
                   created: parseDate(curr_row.created),
-                  updated: parseDate(curr_row.updated),
-                  user: user,
-                  pos: pos,
-                  branch: branch
+                  updated: parseDate(curr_row.updated)
                };
             }
          }
@@ -140,27 +104,13 @@ export const get_user_role_mysql_by_id = async(connection:Connection, id:number)
             atributes_1: -1,
             atributes_2: -1,
             atributes_3: -1,
-            atributes_4: -1,
-            id_user: -1,
-            id_pos: -1,
-            id_branch: -1,
-            user: null,
-            pos: null,
-            branch: null
+            atributes_4: -1
          };
 
          if(!error) {
             if(rows.length > 0) {
                const curr_row = rows[0];
-               const user:User = await get_user_by_id(connection, curr_row.id_user);
-               const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
-               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
-               result_user_role = {
-                  ...curr_row,
-                  user: user,
-                  pos: pos,
-                  branch: branch
-               };
+               result_user_role = { ...curr_row };
             }
          }
          resolve(result_user_role);
@@ -179,10 +129,7 @@ export const insert_user_role = async(connection:Connection, data:UserRole) => {
       query += "atributes_1 = " + data.atributes_1 + ", ";
       query += "atributes_2 = " + data.atributes_2 + ", ";
       query += "atributes_3 = " + data.atributes_3 + ", ";
-      query += "atributes_4 = " + data.atributes_4 + ", ";
-      query += "id_user = " + data.id_user + ", ";
-      query += "id_pos = " + data.id_pos + ", ";
-      query += "id_branch = " + data.id_branch;
+      query += "atributes_4 = " + data.atributes_4;
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {
          let new_id:number = -1;
@@ -199,15 +146,15 @@ export const insert_user_role_mysql = async(connection:Connection, data:UserRole
       let query = "";
       query += "insert into user_role set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "name = '" + data.name + "', ";
       query += "atributes_1 = " + data.atributes_1 + ", ";
       query += "atributes_2 = " + data.atributes_2 + ", ";
       query += "atributes_3 = " + data.atributes_3 + ", ";
-      query += "atributes_4 = " + data.atributes_4 + ", ";
-      query += "id_user = " + data.id_user + ", ";
-      query += "id_pos = " + data.id_pos + ", ";
-      query += "id_branch = " + data.id_branch;
+      query += "atributes_4 = " + data.atributes_4;
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {
          let new_id:number = -1;
@@ -224,15 +171,15 @@ export const update_user_role_mysql = async(connection:Connection, data:UserRole
       let query = "";
       query += "update user_role set ";
       query += "is_sync = " + data.is_sync + ", ";
-      query += "sync_type = '" + data.sync_type + "', ";
+      if(data.sync_type)
+         query += "sync_type = '" + data.sync_type + "', ";
+      else
+         query += "sync_type = null, ";
       query += "name = '" + data.name + "', ";
       query += "atributes_1 = " + data.atributes_1 + ", ";
       query += "atributes_2 = " + data.atributes_2 + ", ";
       query += "atributes_3 = " + data.atributes_3 + ", ";
-      query += "atributes_4 = " + data.atributes_4 + ", ";
-      query += "id_user = " + data.id_user + ", ";
-      query += "id_pos = " + data.id_pos + ", ";
-      query += "id_branch = " + data.id_branch + " ";
+      query += "atributes_4 = " + data.atributes_4 + " ";
       query += "where id = " + data.id;
 
       connection.query(query, function(error) {
