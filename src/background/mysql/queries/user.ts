@@ -87,8 +87,10 @@ export const get_users_mysql_unsync = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-export const get_user_by_id = async(connection:Connection, id:number) => {
+export const get_user_by_id = async(connection:Connection, id:number|null) => {
    const promise_get_user_by_id = new Promise<User>((resolve) => {
+      if(!id)
+         id = 1;
       const query = "select * from users where is_active = 1 and id = " + id;
       connection.query(query, async(error:MysqlError, rows:Array<UserMySQL>) => {
          let result_user:User = {

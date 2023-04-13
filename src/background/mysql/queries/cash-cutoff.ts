@@ -17,7 +17,7 @@ export const get_cash_cutoffs = async(connection:Connection) => {
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                const user_open:User = await get_user_by_id(connection, rows[i].id_user_open);
-               const user_close:User = await get_user_by_id(connection, parseInt(rows[i].id_user_close?.toString() || "0"));
+               const user_close:User = await get_user_by_id(connection, rows[i].id_user_close);
                const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
                const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
@@ -56,7 +56,7 @@ export const get_cash_cutoffs_mysql_unsync = async(connection:Connection) => {
          if(!error) {
             for(let i = 0; i < rows.length; i++) {
                const user_open:User = await get_user_by_id(connection, rows[i].id_user_open);
-               const user_close:User = await get_user_by_id(connection, parseInt(rows[i].id_user_close?.toString() || "0"));
+               const user_close:User = await get_user_by_id(connection, rows[i].id_user_close);
                const pos:Pos = await get_pos_by_id(connection, rows[i].id_pos);
                const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
                data.push({
@@ -118,7 +118,7 @@ export const get_cash_cutoff_by_id = async(connection:Connection, id:number) => 
             if(rows.length > 0) {
                const curr_row = rows[0];
                const user_open:User = await get_user_by_id(connection, curr_row.id_user_open);
-               const user_close:User = await get_user_by_id(connection, parseInt(curr_row.id_user_close?.toString() || "0"));
+               const user_close:User = await get_user_by_id(connection, curr_row.id_user_close);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_cash_cutoff = {
@@ -169,7 +169,7 @@ export const get_cash_cutoff_mysql_by_id = async(connection:Connection, id:numbe
             if(rows.length > 0) {
                const curr_row = rows[0];
                const user_open:User = await get_user_by_id(connection, curr_row.id_user_open);
-               const user_close:User = await get_user_by_id(connection, parseInt(curr_row.id_user_close?.toString() || "0"));
+               const user_close:User = await get_user_by_id(connection, curr_row.id_user_close);
                const pos:Pos = await get_pos_by_id(connection, curr_row.id_pos);
                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
                result_cash_cutoff = {
