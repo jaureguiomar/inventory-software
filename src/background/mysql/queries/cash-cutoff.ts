@@ -219,10 +219,7 @@ export const insert_cash_cutoff_mysql = async(connection:Connection, data:CashCu
       let query = "";
       query += "insert into cash_cutoff set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "amount_open = " + data.amount_open + ", ";
       query += "amount_sale = " + data.amount_sale + ", ";
       query += "amount_supplier = " + data.amount_supplier + ", ";
@@ -249,10 +246,7 @@ export const update_cash_cutoff_mysql = async(connection:Connection, data:CashCu
       let query = "";
       query += "update cash_cutoff set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "amount_open = " + data.amount_open + ", ";
       query += "amount_sale = " + data.amount_sale + ", ";
       query += "amount_supplier = " + data.amount_supplier + ", ";

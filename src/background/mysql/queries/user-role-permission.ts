@@ -146,10 +146,7 @@ export const insert_user_role_permission_mysql = async(connection:Connection, da
       let query = "";
       query += "insert into user_role_permission set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "', ";
       query += "shortname = '" + data.shortname + "', ";
       query += "description = '" + data.description + "', ";
@@ -171,10 +168,7 @@ export const update_user_role_permission_mysql = async(connection:Connection, da
       let query = "";
       query += "update user_role_permission set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "', ";
       query += "shortname = '" + data.shortname + "', ";
       query += "description = '" + data.description + "', ";

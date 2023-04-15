@@ -226,10 +226,7 @@ export const insert_product_mysql = async(connection:Connection, data:ProductMyS
       let query = "";
       query += "insert into product set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "is_favorite = '" + data.is_favorite + "', ";
       query += "code = '" + data.code + "', ";
       query += "name = '" + data.name + "', ";
@@ -257,10 +254,7 @@ export const update_product_mysql = async(connection:Connection, data:ProductMyS
       let query = "";
       query += "update product set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "is_favorite = '" + data.is_favorite + "', ";
       query += "code = '" + data.code + "', ";
       query += "name = '" + data.name + "', ";

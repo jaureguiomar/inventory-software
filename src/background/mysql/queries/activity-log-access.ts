@@ -126,10 +126,7 @@ export const insert_activity_log_access_mysql = async(connection:Connection, dat
       let query = "";
       query += "insert into activity_log_access set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "'";
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {
@@ -147,10 +144,7 @@ export const update_activity_log_access_mysql = async(connection:Connection, dat
       let query = "";
       query += "update activity_log_access set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "' ";
       query += "where id = " + data.id;
 

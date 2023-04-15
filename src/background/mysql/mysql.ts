@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 import mysql from "mysql";
 import { mysql_connection } from "@/background/mysql/connection";
 import { formattedStringDateToDate } from "@/background/mysql/functions";
-import { update_sync_unsync_data, delete_table } from "@/background/mysql/queries/global";
+import { update_sync_unsync_data, delete_table, reset_auto_increment } from "@/background/mysql/queries/global";
 import { get_user_roles_mysql_unsync, insert_user_role_mysql } from "@/background/mysql/queries/user-role";
 import { get_users_mysql_unsync, insert_user_mysql } from "@/background/mysql/queries/user";
 import { get_categories_mysql_unsync, insert_category_mysql } from "@/background/mysql/queries/category";
@@ -40,6 +40,7 @@ import { insert_pos } from "./queries/pos";
 
 ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    const connection = mysql.createConnection(mysql_connection);
+   const display_errors = true;
 
    // Delete data
    await delete_table(connection, "client");
@@ -61,15 +62,22 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    await delete_table(connection, "branch");
 
    // // Reset auto_increments
-   // await reset_auto_increment(connection, "client");
-   // await reset_auto_increment(connection, "supplier");
-   // await reset_auto_increment(connection, "sale_product");
-   // await reset_auto_increment(connection, "sale");
-   // await reset_auto_increment(connection, "product");
-   // await reset_auto_increment(connection, "category");
-   // await reset_auto_increment(connection, "users");
-   // await reset_auto_increment(connection, "user_role");
-   // await reset_auto_increment(connection, "branch");
+   await reset_auto_increment(connection, "client");
+   await reset_auto_increment(connection, "supplier");
+   await reset_auto_increment(connection, "sale_product");
+   await reset_auto_increment(connection, "sale");
+   await reset_auto_increment(connection, "product");
+   await reset_auto_increment(connection, "category");
+   await reset_auto_increment(connection, "activity_log");
+   await reset_auto_increment(connection, "activity_log_access");
+   await reset_auto_increment(connection, "activity_log_operation");
+   await reset_auto_increment(connection, "auth_token");
+   await reset_auto_increment(connection, "cash_cutoff");
+   await reset_auto_increment(connection, "cash_cutoff_type");
+   await reset_auto_increment(connection, "users");
+   await reset_auto_increment(connection, "user_role_permission");
+   await reset_auto_increment(connection, "user_role");
+   await reset_auto_increment(connection, "branch");
 
    // Add branches
    console.log("############");
@@ -78,17 +86,17 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    for(let i = 0; i < data.branch.length; i++) {
       const curr_data = data.branch[i];
       const new_id = await insert_branch(connection, curr_data);
-      if(new_id <= 0)
+      if(new_id <= 0 && display_errors)
          console.log("data", curr_data);
    }
-   // // Add poss
-   // console.log("## Pos");
-   // for(let i = 0; i < data.pos.length; i++) {
-   //    const curr_data = data.pos[i];
-   //    const new_id = await insert_pos(connection, curr_data);
-   //    if(new_id <= 0)
-   //       console.log("data", curr_data);
-   // }
+   // Add poss
+   console.log("## Pos");
+   for(let i = 0; i < data.pos.length; i++) {
+      const curr_data = data.pos[i];
+      const new_id = await insert_pos(connection, curr_data);
+      if(new_id <= 0 && display_errors)
+         console.log("data", curr_data);
+   }
    // Add user roles
    console.log("## UserRole");
    for(let i = 0; i < data.user_role.length; i++) {
@@ -100,7 +108,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
          created: formattedStringDateToDate(curr_data.created),
          updated: formattedStringDateToDate(curr_data.updated)
       });
-      if(new_id <= 0)
+      if(new_id <= 0 && display_errors)
          console.log("data", curr_data);
    }
    // Add users
@@ -114,7 +122,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
          created: formattedStringDateToDate(curr_data.created),
          updated: formattedStringDateToDate(curr_data.updated)
       });
-      if(new_id <= 0)
+      if(new_id <= 0 && display_errors)
          console.log("data", curr_data);
    }
    // // Add categories
@@ -128,7 +136,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    //       created: new Date(),
    //       updated: new Date()
    //    });
-   //    if(new_id <= 0)
+   //    if(new_id <= 0 && display_errors)
    //       console.log("data", curr_data);
    // }
    // // Add products
@@ -142,7 +150,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    //       created: new Date(),
    //       updated: new Date()
    //    });
-   //    if(new_id <= 0)
+   //    if(new_id <= 0 && display_errors)
    //       console.log("data", curr_data);
    // }
    // // Add sales
@@ -156,7 +164,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    //       created: new Date(),
    //       updated: new Date()
    //    });
-   //    if(new_id <= 0)
+   //    if(new_id <= 0 && display_errors)
    //       console.log("data", curr_data);
    // }
    // // Add sale products
@@ -170,7 +178,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    //       created: new Date(),
    //       updated: new Date()
    //    });
-   //    if(new_id <= 0)
+   //    if(new_id <= 0 && display_errors)
    //       console.log("data", curr_data);
    // }
    // // Add suppliers
@@ -184,7 +192,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    //       created: new Date(),
    //       updated: new Date()
    //    });
-   //    if(new_id <= 0)
+   //    if(new_id <= 0 && display_errors)
    //       console.log("data", curr_data);
    // }
    // // Add clients
@@ -198,7 +206,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    //       created: new Date(),
    //       updated: new Date()
    //    });
-   //    if(new_id <= 0)
+   //    if(new_id <= 0 && display_errors)
    //       console.log("data", curr_data);
    // }
 

@@ -193,10 +193,7 @@ export const insert_category_mysql = async(connection:Connection, data:CategoryM
       let query = "";
       query += "insert into category set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "', ";
       query += "id_branch = " + data.id_branch;
 
@@ -215,10 +212,7 @@ export const update_category_mysql = async(connection:Connection, data:CategoryM
       let query = "";
       query += "update category set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "', ";
       query += "id_branch = " + data.id_branch + " ";
       query += "where id = " + data.id;

@@ -146,10 +146,7 @@ export const insert_user_role_mysql = async(connection:Connection, data:UserRole
       let query = "";
       query += "insert into user_role set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "', ";
       query += "atributes_1 = " + data.atributes_1 + ", ";
       query += "atributes_2 = " + data.atributes_2 + ", ";
@@ -171,10 +168,7 @@ export const update_user_role_mysql = async(connection:Connection, data:UserRole
       let query = "";
       query += "update user_role set ";
       query += "is_sync = " + data.is_sync + ", ";
-      if(data.sync_type)
-         query += "sync_type = '" + data.sync_type + "', ";
-      else
-         query += "sync_type = null, ";
+      query += "sync_type = " + ((data.sync_type) ? `'${ data.sync_type }'` : "null") + ", ";
       query += "name = '" + data.name + "', ";
       query += "atributes_1 = " + data.atributes_1 + ", ";
       query += "atributes_2 = " + data.atributes_2 + ", ";

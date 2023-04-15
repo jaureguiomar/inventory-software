@@ -130,8 +130,8 @@ export const insert_pos = async(connection:Connection, data:Pos) => {
       let query = "";
       query += "insert into pos set ";
       query += "name = '" + data.name + "', ";
-      query += "machine_id = '" + data.machine_id + "', ";
-      query += "mac_address = '" + data.mac_address + "', ";
+      query += "machine_id = " + ((data.machine_id) ? `'${ data.machine_id }'` : "null") + ", ";
+      query += "mac_address = " + ((data.mac_address) ? `'${ data.mac_address }'` : "null") + ", ";
       query += "id_branch = " + data.id_branch;
 
       connection.query(query, function(error:MysqlError, result:OkPacket) {

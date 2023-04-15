@@ -283,9 +283,9 @@ export const format_activity_log = (activity_log:ActivityLog|null) => {
          id_operation: Number(curr_data.id_operation),
          id_access: Number(curr_data.id_access),
          id_user: Number(curr_data.id_user),
-         operation: curr_data.operation,
-         access: curr_data.access,
-         user: curr_data.user
+         operation: null,
+         access: null,
+         user: null
       }
    }
    return formatted_data;
