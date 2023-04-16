@@ -1,21 +1,32 @@
-import { Category } from "@/types/category";
-import { User } from "@/types/user";
+import {
+   format_display_sale, format_display_sale_product, format_display_client,
+   format_display_product, format_display_product_m2m, format_display_category,
+   format_display_supplier, format_display_user, format_display_pos,
+   format_display_cash_cutoff, format_display_activity_log
+} from "@/plugins/mixins/format-display";
+import { Category, CategoryQuery } from "@/types/category";
+import { User, UserQuery } from "@/types/user";
 import { UserRole } from "@/types/user-role";
-import { Pos } from "@/types/pos";
+import { Pos, PosQuery } from "@/types/pos";
 import { Branch } from "@/types/branch";
-import { Sale } from "@/types/sale";
-import { Product, ProductM2M } from "@/types/product";
-import { CashCutoff } from "@/types/cash-cutoff";
-import { ActivityLog } from "@/types/activity-log";
+import { Sale, SaleQuery } from "@/types/sale";
+import { Product, ProductM2M, ProductM2MQuery, ProductQuery } from "@/types/product";
+import { CashCutoff, CashCutoffQuery } from "@/types/cash-cutoff";
+import { CashCutoffType } from "@/types/cash-cutoff-type";
+import { ActivityLog, ActivityLogQuery } from "@/types/activity-log";
 import { ActivityLogOperation } from "@/types/activity-log-operation";
 import { ActivityLogAccess } from "@/types/activity-log-access";
 import { UserRolePermission } from "@/types/user-role-permission";
+import { Client, ClientQuery } from "@/types/client";
+import { Supplier, SupplierQuery } from "@/types/supplier";
+import { SaleProduct, SaleProductQuery } from "@/types/sale-product";
 
-export const format_sale = (sale:Sale|null) => {
+export const format_sale = (sale:Sale|null, display?:SaleQuery) => {
    let formatted_data:Sale|null = null;
    const curr_data = (sale) ? sale : null;
 
    if(curr_data) {
+      const { cash_cutoff, user, pos, branch } = format_display_sale(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -27,20 +38,76 @@ export const format_sale = (sale:Sale|null) => {
          id_user: Number(curr_data.id_user),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
-         cash_cutoff: null,
-         user: null,
-         pos: null,
-         branch: null
-      }
+         cash_cutoff: cash_cutoff,
+         user: user,
+         pos: pos,
+         branch: branch
+      };
    }
    return formatted_data;
 };
 
-export const format_product = (product:Product|null) => {
+export const format_sale_product = (sale_product:SaleProduct|null, display?:SaleProductQuery) => {
+   let formatted_data:SaleProduct|null = null;
+   const curr_data = (sale_product) ? sale_product : null;
+
+   if(curr_data) {
+      const { sale, product, user, pos, branch } = format_display_sale_product(curr_data, display);
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         quantity: Number(curr_data.quantity),
+         id_sale: Number(curr_data.id_sale),
+         id_product: Number(curr_data.id_product),
+         id_user: Number(curr_data.id_user),
+         id_pos: Number(curr_data.id_pos),
+         id_branch: Number(curr_data.id_branch),
+         sale: sale,
+         product: product,
+         user: user,
+         pos: pos,
+         branch: branch
+      };
+   }
+   return formatted_data;
+};
+
+export const format_client = (client:Client|null, display?:ClientQuery) => {
+   let formatted_data:Client|null = null;
+   const curr_data = (client) ? client : null;
+
+   if(curr_data) {
+      const { user, pos, branch } = format_display_client(curr_data, display);
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         first_name: curr_data.first_name,
+         last_name: curr_data.last_name,
+         address: curr_data.address,
+         cellphone: curr_data.cellphone,
+         cellphone2: curr_data.cellphone2,
+         email: curr_data.email,
+         id_user: Number(curr_data.id_user),
+         id_pos: Number(curr_data.id_pos),
+         id_branch: Number(curr_data.id_branch),
+         user: user,
+         pos: pos,
+         branch: branch
+      };
+   }
+   return formatted_data;
+};
+
+export const format_product = (product:Product|null, display?:ProductQuery) => {
    let formatted_data:Product|null = null;
    const curr_data = (product) ? product : null;
 
    if(curr_data) {
+      const { category, user, pos, branch } = format_display_product(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -57,20 +124,21 @@ export const format_product = (product:Product|null) => {
          id_user: Number(curr_data.id_user),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
-         category: null,
-         user: null,
-         pos: null,
-         branch: null
-      }
+         category: category,
+         user: user,
+         pos: pos,
+         branch: branch
+      };
    }
    return formatted_data;
 };
 
-export const format_product_m2m = (product_m2m:ProductM2M|null) => {
+export const format_product_m2m = (product_m2m:ProductM2M|null, display?:ProductM2MQuery) => {
    let formatted_data:ProductM2M|null = null;
    const curr_data = (product_m2m) ? product_m2m : null;
 
    if(curr_data) {
+      const { product, sale_product } = format_display_product_m2m(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -87,10 +155,10 @@ export const format_product_m2m = (product_m2m:ProductM2M|null) => {
          id_user: Number(curr_data.id_user),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
-         category: null,
-         user: null,
-         pos: null,
-         branch: null,
+         category: product.category,
+         user: product.user,
+         pos: product.pos,
+         branch: product.branch,
          sale_product: {
             id: Number(curr_data.sale_product.id),
             is_active: Number(curr_data.sale_product.is_active),
@@ -102,22 +170,23 @@ export const format_product_m2m = (product_m2m:ProductM2M|null) => {
             id_user: Number(curr_data.sale_product.id_user),
             id_pos: Number(curr_data.sale_product.id_pos),
             id_branch: Number(curr_data.sale_product.id_branch),
-            sale: null,
-            product: null,
-            user: null,
-            pos: null,
-            branch: null
+            sale: sale_product.sale,
+            product: sale_product.product,
+            user: sale_product.user,
+            pos: sale_product.pos,
+            branch: sale_product.branch
          }
-      }
+      };
    }
    return formatted_data;
 };
 
-export const format_category = (category:Category|null) => {
+export const format_category = (category:Category|null, display?:CategoryQuery) => {
    let formatted_data:Category|null = null;
    const curr_data = (category) ? category : null;
 
    if(curr_data) {
+      const { user, pos, branch } = format_display_category(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -127,19 +196,43 @@ export const format_category = (category:Category|null) => {
          id_user: Number(curr_data.id_user),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
-         user: null,
-         pos: null,
-         branch: null
-      }
+         user: user,
+         pos: pos,
+         branch: branch
+      };
    }
    return formatted_data;
 };
 
-export const format_user = (user:User|null) => {
+export const format_supplier = (supplier:Supplier|null, display?:SupplierQuery) => {
+   let formatted_data:Supplier|null = null;
+   const curr_data = (supplier) ? supplier : null;
+
+   if(curr_data) {
+      const { user, pos, branch } = format_display_supplier(curr_data, display);
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         name: curr_data.name,
+         id_user: Number(curr_data.id_user),
+         id_pos: Number(curr_data.id_pos),
+         id_branch: Number(curr_data.id_branch),
+         user: user,
+         pos: pos,
+         branch: branch
+      };
+   }
+   return formatted_data;
+};
+
+export const format_user = (user:User|null, display?:UserQuery) => {
    let formatted_data:User|null = null;
    const curr_data = (user) ? user : null;
 
    if(curr_data) {
+      const { role, pos, branch } = format_display_user(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -153,10 +246,10 @@ export const format_user = (user:User|null) => {
          id_role: Number(curr_data.id_role),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
-         role: null,
-         pos: null,
-         branch: null
-      }
+         role: role,
+         pos: pos,
+         branch: branch
+      };
    }
    return formatted_data;
 };
@@ -176,7 +269,7 @@ export const format_user_role = (user_role:UserRole|null) => {
          atributes_2: Number(curr_data.atributes_2),
          atributes_3: Number(curr_data.atributes_3),
          atributes_4: Number(curr_data.atributes_4)
-      }
+      };
    }
    return formatted_data;
 };
@@ -196,16 +289,17 @@ export const format_user_role_permission = (user_role_permission:UserRolePermiss
          description: curr_data.description,
          attr_value: curr_data.attr_value,
          attr_level: Number(curr_data.attr_level)
-      }
+      };
    }
    return formatted_data;
 };
 
-export const format_pos = (pos:Pos|null) => {
+export const format_pos = (pos:Pos|null, display?:PosQuery) => {
    let formatted_data:Pos|null = null;
    const curr_data = (pos) ? pos : null;
 
    if(curr_data) {
+      const { branch } = format_display_pos(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -215,8 +309,8 @@ export const format_pos = (pos:Pos|null) => {
          machine_id: curr_data.machine_id,
          mac_address: curr_data.mac_address,
          id_branch: Number(curr_data.id_branch),
-         branch: null
-      }
+         branch: branch
+      };
    }
    return formatted_data;
 };
@@ -234,16 +328,17 @@ export const format_branch = (branch:Branch|null) => {
          name: curr_data.name,
          telephone: curr_data.telephone,
          address: curr_data.address
-      }
+      };
    }
    return formatted_data;
 };
 
-export const format_cash_cutoff = (cash_cutoff:CashCutoff|null) => {
+export const format_cash_cutoff = (cash_cutoff:CashCutoff|null, display?:CashCutoffQuery) => {
    let formatted_data:CashCutoff|null = null;
    const curr_data = (cash_cutoff) ? cash_cutoff : null;
 
    if(curr_data) {
+      const { user_open, user_close, pos, branch } = format_display_cash_cutoff(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -259,20 +354,37 @@ export const format_cash_cutoff = (cash_cutoff:CashCutoff|null) => {
          id_user_close: Number(curr_data.id_user_close),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
-         user_open: null,
-         user_close: null,
-         pos: null,
-         branch: null
-      }
+         user_open: user_open,
+         user_close: user_close,
+         pos: pos,
+         branch: branch
+      };
    }
    return formatted_data;
 };
 
-export const format_activity_log = (activity_log:ActivityLog|null) => {
+export const format_cash_cutoff_type = (cash_cutoff_type:CashCutoffType|null) => {
+   let formatted_data:CashCutoffType|null = null;
+   const curr_data = (cash_cutoff_type) ? cash_cutoff_type : null;
+
+   if(curr_data) {
+      formatted_data = {
+         id: Number(curr_data.id),
+         is_active: Number(curr_data.is_active),
+         created: curr_data.created,
+         updated: curr_data.updated,
+         name: curr_data.name
+      };
+   }
+   return formatted_data;
+};
+
+export const format_activity_log = (activity_log:ActivityLog|null, display?:ActivityLogQuery) => {
    let formatted_data:ActivityLog|null = null;
    const curr_data = (activity_log) ? activity_log : null;
 
    if(curr_data) {
+      const { operation, access, user } = format_display_activity_log(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -283,10 +395,10 @@ export const format_activity_log = (activity_log:ActivityLog|null) => {
          id_operation: Number(curr_data.id_operation),
          id_access: Number(curr_data.id_access),
          id_user: Number(curr_data.id_user),
-         operation: null,
-         access: null,
-         user: null
-      }
+         operation: operation,
+         access: access,
+         user: user
+      };
    }
    return formatted_data;
 };
@@ -302,7 +414,7 @@ export const format_activity_log_operation = (activity_log_operation:ActivityLog
          created: curr_data.created,
          updated: curr_data.updated,
          name: curr_data.name
-      }
+      };
    }
    return formatted_data;
 };
@@ -318,7 +430,7 @@ export const format_activity_log_access = (activity_log_access:ActivityLogAccess
          created: curr_data.created,
          updated: curr_data.updated,
          name: curr_data.name
-      }
+      };
    }
    return formatted_data;
 };

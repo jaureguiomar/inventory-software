@@ -1,9 +1,9 @@
 import { InputFieldNumber } from "@/types/general";
 import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Sale } from "@/types/sale";
-import { ProductM2M, Product } from "@/types/product";
+import { User, UserQuery } from "@/types/user";
+import { Pos, PosQuery } from "@/types/pos";
+import { Sale, SaleQuery } from "@/types/sale";
+import { ProductM2M, Product, ProductQuery } from "@/types/product";
 
 // Main
 interface MainSaleProduct {
@@ -33,6 +33,13 @@ interface SaleProductMySQL extends MainSaleProduct {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface SaleProductQuery {
+   sale: SaleQuery|boolean;
+   product: ProductQuery|boolean;
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props
@@ -115,6 +122,7 @@ export {
    SaleProduct,
    SaleProductM2M,
    SaleProductMySQL,
+   SaleProductQuery,
    Content,
    IPCParams,
    IPCParamsContent,

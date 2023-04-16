@@ -1,8 +1,8 @@
 import { InputFieldString } from "@/types/general";
 import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { CashCutoff } from "@/types/cash-cutoff";
+import { User, UserQuery } from "@/types/user";
+import { Pos, PosQuery } from "@/types/pos";
+import { CashCutoff, CashCutoffQuery } from "@/types/cash-cutoff";
 import { ProductM2M } from "@/types/product";
 
 // Main
@@ -34,6 +34,12 @@ interface SaleMySQL extends MainSale {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface SaleQuery {
+   cash_cutoff: CashCutoffQuery|boolean;
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props
@@ -121,6 +127,7 @@ export {
    Sale,
    SaleM2M,
    SaleMySQL,
+   SaleQuery,
    Content,
    IPCParams,
    IPCParamsM2M,

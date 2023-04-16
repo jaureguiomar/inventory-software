@@ -1,5 +1,5 @@
 import { InputFieldString } from "@/types/general";
-import { User } from "@/types/user";
+import { User, UserQuery } from "@/types/user";
 import { ActivityLogAccess } from "@/types/activity-log-access";
 import { ActivityLogOperation } from "@/types/activity-log-operation";
 
@@ -25,6 +25,11 @@ interface ActivityLogMySQL extends MainActivityLog {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface ActivityLogQuery {
+   operation: boolean;
+   access: boolean;
+   user: UserQuery|boolean;
 }
 
 // Other
@@ -107,6 +112,7 @@ interface ActivityLogsResponse {
 export {
    ActivityLog,
    ActivityLogMySQL,
+   ActivityLogQuery,
    ActivityLogInsert,
    Content,
    IPCParams,

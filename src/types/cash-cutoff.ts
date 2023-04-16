@@ -1,10 +1,10 @@
 import { InputFieldString, InputFieldNumber } from "@/types/general";
-import { User } from "@/types/user";
+import { User, UserQuery } from "@/types/user";
 import { Branch } from "@/types/branch";
-import { Pos } from "@/types/pos";
+import { Pos, PosQuery } from "@/types/pos";
 
 // Main
-interface MainCashCutoffPermission {
+interface MainCashCutoff {
    id: number;
    is_active: number;
    amount_open: number;
@@ -22,15 +22,21 @@ interface MainCashCutoffPermission {
    pos: Pos|null;
    branch: Branch|null;
 }
-interface CashCutoff extends MainCashCutoffPermission {
+interface CashCutoff extends MainCashCutoff {
    created: string;
    updated: string;
 }
-interface CashCutoffMySQL extends MainCashCutoffPermission {
+interface CashCutoffMySQL extends MainCashCutoff {
    is_sync: number;
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface CashCutoffQuery {
+   user_open: UserQuery|boolean;
+   user_close: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props
@@ -111,6 +117,7 @@ interface CashCutoffsResponse {
 export {
    CashCutoff,
    CashCutoffMySQL,
+   CashCutoffQuery,
    Content,
    IPCParams,
    IPCParamsContent,

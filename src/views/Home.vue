@@ -69,8 +69,14 @@ import axios from "axios";
 import { key } from "@/plugins/store"
 import {
    format_category, format_user, format_pos, format_branch,
-   format_user_role, format_product, format_sale, format_cash_cutoff
+   format_user_role, format_product, format_sale, format_cash_cutoff,
+   format_cash_cutoff_type, format_activity_log, format_activity_log_access,
+   format_activity_log_operation
 } from "@/plugins/mixins/format";
+import { ActivityLog, ActivityLogsResponse } from "@/types/activity-log";
+import { ActivityLogAccess, ActivityLogAccessesResponse } from "@/types/activity-log-access";
+import { ActivityLogOperation, ActivityLogOperationsResponse } from "@/types/activity-log-operation";
+import { UserRolePermission, UserRolePermissionsResponse } from "@/types/user-role-permission";
 import { Branch, BranchesResponse } from "@/types/branch";
 import { Client, ClientsResponse } from "@/types/client";
 import { Supplier, SuppliersResponse } from "@/types/supplier";
@@ -80,11 +86,13 @@ import { User, UsersResponse } from "@/types/user";
 import { UserRole, UserRolesResponse } from "@/types/user-role";
 import { SaleProduct, SaleProductsResponse } from "@/types/sale-product";
 import { Sale, SalesResponse } from "@/types/sale";
-import { Pos } from "@/types/pos";
-import { CashCutoff } from "@/types/cash-cutoff";
+import { Pos, PossResponse } from "@/types/pos";
+import { CashCutoff, CashCutoffsResponse } from "@/types/cash-cutoff";
+import { CashCutoffType, CashCutoffTypesResponse } from "@/types/cash-cutoff-type";
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
 import MenuHome from "@/views/layout/MenuHome.vue";
+import { format_client, format_supplier, format_sale_product, format_user_role_permission } from '../plugins/mixins/format';
 
 export default defineComponent({
    name: "home-component",
@@ -742,15 +750,127 @@ export default defineComponent({
          store.commit("SET_RETRIEVE_UNSYNC_DATA_DONE_DATA", true);
       };
       const onRefreshBakup = async() => {
+         let activity_log:Array<ActivityLog> = [];
+         let activity_log_access:Array<ActivityLogAccess> = [];
+         let activity_log_operation:Array<ActivityLogOperation> = [];
          let branch:Array<Branch> = [];
-         let client:Array<Client> = [];
-         let supplier:Array<Supplier> = [];
+         let cash_cutoff:Array<CashCutoff> = [];
+         let cash_cutoff_type:Array<CashCutoffType> = [];
          let category:Array<Category> = [];
+         let client:Array<Client> = [];
+         let pos:Array<Pos> = [];
          let product:Array<Product> = [];
          let sale:Array<Sale> = [];
          let sale_product:Array<SaleProduct> = [];
-         let user_role:Array<UserRole> = [];
+         let supplier:Array<Supplier> = [];
          let user:Array<User> = [];
+         let user_role:Array<UserRole> = [];
+         let user_role_permission:Array<UserRolePermission> = [];
+
+         // Get Activity Logs
+         try {
+            let response = await axios.get<ActivityLogsResponse>(`${ getServer.value }/activity-log`, {
+               headers: {
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+               }
+            });
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<ActivityLog> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const activity_log:ActivityLog|null = format_activity_log(data[i]);
+                     if(activity_log)
+                        formatted_data.push(activity_log);
+                  }
+                  activity_log = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("activity-log-error", error);
+         }
+
+         // Get Activity Logs Access
+         try {
+            let response = await axios.get<ActivityLogAccessesResponse>(`${ getServer.value }/activity-log-access`, {
+               headers: {
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+               }
+            });
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<ActivityLogAccess> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const activity_log_access:ActivityLogAccess|null = format_activity_log_access(data[i]);
+                     if(activity_log_access)
+                        formatted_data.push(activity_log_access);
+                  }
+                  activity_log_access = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("activity-log-access-error", error);
+         }
+
+         // Get Activity Logs Operation
+         try {
+            let response = await axios.get<ActivityLogOperationsResponse>(`${ getServer.value }/activity-log-operation`, {
+               headers: {
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+               }
+            });
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<ActivityLogOperation> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const activity_log_operation:ActivityLogOperation|null = format_activity_log_operation(data[i]);
+                     if(activity_log_operation)
+                        formatted_data.push(activity_log_operation);
+                  }
+                  activity_log_operation = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("activity-log-operation-error", error);
+         }
 
          // Get Branches
          try {
@@ -760,15 +880,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Branch> = [];
                   for(let i = 0; i < data.length; i++) {
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        telephone: data[i].telephone,
-                        address: data[i].address
-                     });
+                     const branch:Branch|null = format_branch(data[i]);
+                     if(branch)
+                        formatted_data.push(branch);
                   }
                   branch = formatted_data;
                } else {
@@ -789,6 +903,107 @@ export default defineComponent({
             console.log("branch-error", error);
          }
 
+         // Get Pos
+         try {
+            let response = await axios.get<PossResponse>(`${ getServer.value }/pos`);
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<Pos> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const pos:Pos|null = format_pos(data[i]);
+                     if(pos)
+                        formatted_data.push(pos);
+                  }
+                  pos = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("pos-error", error);
+         }
+
+         // Get Cash Cutoffs
+         try {
+            let response = await axios.get<CashCutoffsResponse>(`${ getServer.value }/cash-cutoff`, {
+               headers: {
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+               }
+            });
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<CashCutoff> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i]);
+                     if(cash_cutoff)
+                        formatted_data.push(cash_cutoff);
+                  }
+                  cash_cutoff = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("cash-cutoff-error", error);
+         }
+
+         // Get Cash Cutoff Types
+         try {
+            let response = await axios.get<CashCutoffTypesResponse>(`${ getServer.value }/cash-cutoff`, {
+               headers: {
+                  "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+               }
+            });
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<CashCutoffType> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const cash_cutoff_type:CashCutoffType|null = format_cash_cutoff_type(data[i]);
+                     if(cash_cutoff_type)
+                        formatted_data.push(cash_cutoff_type);
+                  }
+                  cash_cutoff_type = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("cash-cutoff-type-error", error);
+         }
+
          // Get Clients
          try {
             let response = await axios.get<ClientsResponse>(`${ getServer.value }/client`,
@@ -803,28 +1018,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        first_name: data[i].first_name,
-                        last_name: data[i].last_name,
-                        address: data[i].address,
-                        cellphone: data[i].cellphone,
-                        cellphone2: data[i].cellphone2,
-                        email: data[i].email,
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const client:Client|null = format_client(data[i]);
+                     if(client)
+                        formatted_data.push(client);
                   }
                   client = formatted_data;
                } else {
@@ -859,23 +1055,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Supplier> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const supplier:Supplier|null = format_supplier(data[i]);
+                     if(supplier)
+                        formatted_data.push(supplier);
                   }
                   supplier = formatted_data;
                } else {
@@ -910,23 +1092,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Category> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const category:Category|null = format_category(data[i]);
+                     if(category)
+                        formatted_data.push(category);
                   }
                   category = formatted_data;
                } else {
@@ -965,32 +1133,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_category:Category|null = format_category(data[i].category);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        is_favorite: Number(data[i].is_favorite),
-                        code: data[i].code,
-                        name: data[i].name,
-                        description: data[i].description,
-                        buy_price: data[i].buy_price,
-                        sale_price: data[i].sale_price,
-                        quantity: Number(data[i].quantity),
-                        id_category: Number(data[i].id_category),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        category: formatted_category,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const product:Product|null = format_product(data[i]);
+                     if(product)
+                        formatted_data.push(product);
                   }
                   product = formatted_data;
                } else {
@@ -1029,27 +1174,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Sale> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i].cash_cutoff);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        total: data[i].total,
-                        is_supplier: Number(data[i].is_supplier),
-                        id_cash_cutoff: Number(data[i].id_cash_cutoff),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        cash_cutoff: formatted_cash_cutoff,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const sale:Sale|null = format_sale(data[i]);
+                     if(sale)
+                        formatted_data.push(sale);
                   }
                   sale = formatted_data;
                } else {
@@ -1088,29 +1215,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<SaleProduct> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_sale:Sale|null = format_sale(data[i].sale);
-                     const formatted_product:Product|null = format_product(data[i].product);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        quantity: Number(data[i].quantity),
-                        id_sale: Number(data[i].id_sale),
-                        id_product: Number(data[i].id_product),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        sale: formatted_sale,
-                        product: formatted_product,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const sale_product:SaleProduct|null = format_sale_product(data[i]);
+                     if(sale_product)
+                        formatted_data.push(sale_product);
                   }
                   sale_product = formatted_data;
                } else {
@@ -1145,27 +1252,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<UserRole> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        atributes_1: Number(data[i].atributes_1),
-                        atributes_2: Number(data[i].atributes_2),
-                        atributes_3: Number(data[i].atributes_3),
-                        atributes_4: Number(data[i].atributes_4),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const user_role:UserRole|null = format_user_role(data[i]);
+                     if(user_role)
+                        formatted_data.push(user_role);
                   }
                   user_role = formatted_data;
                } else {
@@ -1200,30 +1289,9 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<User> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_role:UserRole|null = format_user_role(data[i].role);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_data.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        username: data[i].username,
-                        email: data[i].email,
-                        password: data[i].password,
-                        first_name: data[i].first_name,
-                        last_name: data[i].last_name,
-                        id_role: Number(data[i].id_role),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        role: formatted_role,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const user:User|null = format_user(data[i]);
+                     if(user)
+                        formatted_data.push(user);
                   }
                   user = formatted_data;
                } else {
@@ -1244,17 +1312,80 @@ export default defineComponent({
             console.log("user-error", error);
          }
 
+         // Get User Role Permissions
+         try {
+            let response = await axios.get<UserRolePermissionsResponse>(`${ getServer.value }/user-role-permission`,
+               {
+                  headers: {
+                     "Authorization": `Bearer ${ getAuthToken.value.access_token }`
+                  }
+               }
+            );
+            if(response) {
+               if(response.data.data) {
+                  const data = response.data.data;
+                  let formatted_data:Array<UserRolePermission> = [];
+                  for(let i = 0; i < data.length; i++) {
+                     const user_role_permission:UserRolePermission|null = format_user_role_permission(data[i]);
+                     if(user_role_permission)
+                        formatted_data.push(user_role_permission);
+                  }
+                  user_role_permission = formatted_data;
+               } else {
+                  Swal.fire({
+                     title: "Error",
+                     text: t("global.default_error"),
+                     icon: "error"
+                  });
+               }
+            } else {
+               Swal.fire({
+                  title: "Error",
+                  text: t("global.default_error"),
+                  icon: "error"
+               });
+            }
+         } catch (error) {
+            console.log("user-role-permission-error", error);
+         }
+
+         console.log("data", {
+            activity_log: activity_log,
+            activity_log_access: activity_log_access,
+            activity_log_operation: activity_log_operation,
+            branch: branch,
+            cash_cutoff: cash_cutoff,
+            cash_cutoff_type: cash_cutoff_type,
+            category: category,
+            client: client,
+            pos: pos,
+            product: product,
+            sale: sale,
+            sale_product: sale_product,
+            supplier: supplier,
+            user: user,
+            user_role: user_role,
+            user_role_permission: user_role_permission
+         });
+
          if(!getOfflineBakupDone.value) {
             window.api.send("mysql-offline-bakup", {
+               activity_log: activity_log,
+               activity_log_access: activity_log_access,
+               activity_log_operation: activity_log_operation,
                branch: branch,
-               client: client,
-               supplier: supplier,
+               cash_cutoff: cash_cutoff,
+               cash_cutoff_type: cash_cutoff_type,
                category: category,
+               client: client,
+               pos: pos,
                product: product,
                sale: sale,
                sale_product: sale_product,
+               supplier: supplier,
+               user: user,
                user_role: user_role,
-               user: user
+               user_role_permission: user_role_permission
             });
          }
          window.api.receive("mysql-offline-bakup-reply", function() {

@@ -1,7 +1,7 @@
 import { InputFieldString } from "@/types/general";
 import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
+import { User, UserQuery } from "@/types/user";
+import { Pos, PosQuery } from "@/types/pos";
 
 // Main
 interface MainCategory {
@@ -24,6 +24,11 @@ interface CategoryMySQL extends MainCategory {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface CategoryQuery {
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props
@@ -95,6 +100,7 @@ interface CategoriesResponse {
 export {
    Category,
    CategoryMySQL,
+   CategoryQuery,
    Content,
    IPCParams,
    IPCParamsContent,

@@ -1,7 +1,7 @@
 import { InputFieldString } from "@/types/general";
 import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
+import { User, UserQuery } from "@/types/user";
+import { Pos, PosQuery } from "@/types/pos";
 
 // Main
 interface MainClient {
@@ -29,6 +29,11 @@ interface ClientMySQL extends MainClient {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface ClientQuery {
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props
@@ -105,6 +110,7 @@ interface ClientsResponse {
 export {
    Client,
    ClientMySQL,
+   ClientQuery,
    Content,
    IPCParams,
    IPCParamsContent,

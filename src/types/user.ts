@@ -1,7 +1,7 @@
 import { InputFieldNumber, InputFieldString } from "@/types/general";
 import { UserRole } from "@/types/user-role";
 import { Branch } from "@/types/branch";
-import { Pos } from "@/types/pos";
+import { Pos, PosQuery } from "@/types/pos";
 
 // Main
 interface MainUser {
@@ -28,6 +28,11 @@ interface UserMySQL extends MainUser {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface UserQuery {
+   role: boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props
@@ -129,6 +134,7 @@ interface UsersResponse {
 export {
    User,
    UserMySQL,
+   UserQuery,
    Content,
    IPCParams,
    IPCParamsContent,

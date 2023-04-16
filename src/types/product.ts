@@ -1,9 +1,10 @@
 import { InputFieldString, InputFieldNumber, InputFieldBoolean } from "@/types/general";
-import { Category } from "@/types/category";
+import { Category, CategoryQuery } from "@/types/category";
 import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
+import { User, UserQuery } from "@/types/user";
+import { Pos, PosQuery } from "@/types/pos";
 import { SaleProduct } from "@/types/sale-product";
+import { SaleQuery } from "./sale";
 
 // Main
 interface MainProduct {
@@ -39,6 +40,25 @@ interface ProductMySQL extends MainProduct {
    sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
+}
+interface ProductQuery {
+   category: CategoryQuery|boolean;
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
+}
+interface ProductM2MQuery {
+   category: CategoryQuery|boolean;
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
+   sale_product: {
+      sale: SaleQuery|boolean;
+      product: ProductQuery|boolean;
+      user: UserQuery|boolean;
+      pos: PosQuery|boolean;
+      branch: boolean;
+   }
 }
 
 // Props
@@ -118,6 +138,8 @@ export {
    Product,
    ProductM2M,
    ProductMySQL,
+   ProductQuery,
+   ProductM2MQuery,
    Content,
    IPCParams,
    IPCParamsContent,

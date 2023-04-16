@@ -1,42 +1,32 @@
 import { InputFieldString } from "@/types/general";
-import { Branch } from "@/types/branch";
 
 // Main
-interface MainPos {
+interface MainCashCutoffType {
    id: number;
    is_active: number;
    name: string;
-   machine_id: string;
-   mac_address: string;
-   id_branch: number;
-   branch: Branch|null;
 }
-interface Pos extends MainPos {
+interface CashCutoffType extends MainCashCutoffType {
    created: string;
    updated: string;
 }
-interface PosMySQL extends MainPos {
-   // is_sync: number;
-   // sync_type: "add"|"update"|"delete"|null;
+interface CashCutoffTypeMySQL extends MainCashCutoffType {
+   is_sync: number;
+   sync_type: "add"|"update"|"delete"|null;
    created: Date;
    updated: Date;
 }
-interface PosQuery {
-   branch: boolean;
-}
 
 // Props
-interface PosField {
+interface CashCutoffTypeField {
    name: InputFieldString;
-   machine_id: InputFieldString;
-   mac_address: InputFieldString;
 }
 
 // IPCParams
 interface IPCParams {
    id: number;
    type: string;
-   data: Pos;
+   data: CashCutoffType;
 }
 
 // IPCParams Content
@@ -48,7 +38,7 @@ interface IPCParamsContent {
    id: number;
    type: string;
    content: Content;
-   data?: Pos;
+   data?: CashCutoffType;
 }
 
 // Page
@@ -61,14 +51,14 @@ interface Page {
 // Window response
 interface WindowResponse {
    id: number;
-   data: Pos|null;
+   data: CashCutoffType|null;
    result: string;
    type: string;
 }
 
 // Axios response
 // interface ResponseOk {
-//    data: Pos;
+//    data: CashCutoffType;
 //    ok: boolean;
 //    message: string;
 // }
@@ -77,33 +67,32 @@ interface WindowResponse {
 //    message: string|null;
 //    no_error: number;
 // }
-// interface PosResponse {
+// interface CashCutoffTypeResponse {
 //    data: ResponseOk;
 //    error: ResponseError;
 // }
-interface PosResponse {
-   data: Pos;
+interface CashCutoffTypeResponse {
+   data: CashCutoffType;
 }
-interface PosOneResponse {
-   data: Pos;
+interface CashCutoffTypeOneResponse {
+   data: CashCutoffType;
    // error: ResponseError;
 }
-interface PossResponse {
-   data: Array<Pos>;
+interface CashCutoffTypesResponse {
+   data: Array<CashCutoffType>;
    // error: ResponseError;
 }
 
 export {
-   Pos,
-   PosMySQL,
-   PosQuery,
+   CashCutoffType,
+   CashCutoffTypeMySQL,
    Content,
    IPCParams,
    IPCParamsContent,
-   PosResponse,
-   PosOneResponse,
-   PossResponse,
+   CashCutoffTypeResponse,
+   CashCutoffTypeOneResponse,
+   CashCutoffTypesResponse,
    WindowResponse,
    Page,
-   PosField
+   CashCutoffTypeField,
 };

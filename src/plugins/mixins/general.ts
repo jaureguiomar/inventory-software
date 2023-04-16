@@ -1,3 +1,12 @@
+export const verifyDisplayField = (value:any) => {
+   const value_type = typeof(value);
+   if(value_type === "object")
+      return true;
+   if(value_type === "boolean")
+      return value;
+   return false;
+};
+
 export const findValueBy = (all_data, value, key) => {
    let finded_index = -1;
    for(let i = 0; i < all_data.length; i++) {
