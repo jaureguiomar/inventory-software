@@ -32,32 +32,32 @@ export const get_poss = async(connection:Connection) => {
    return await promise_get_categories;
 }
 
-// export const get_poss_unsync = async(connection:Connection) => {
-//    const promise_get_categories = new Promise<Array<PosMySQL>>((resolve) => {
-//       const query = "select * from pos where is_sync = 0";
-//       connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
-//          const data:Array<PosMySQL> = [];
-//          if(!error) {
-//             for(let i = 0; i < rows.length; i++) {
-//                const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
-//                data.push({
-//                   id: Number(rows[i].id),
-//                   is_active: rows[i].is_active,
-//                   created: rows[i].created,
-//                   updated: rows[i].updated,
-//                   name: rows[i].name,
-//                   machine_id: rows[i].machine_id,
-//                   mac_address: rows[i].mac_address,
-//                   id_branch: Number(rows[i].id_branch),
-//                   branch: branch
-//                });
-//             }
-//          }
-//          resolve(data);
-//       });
-//    });
-//    return await promise_get_categories;
-// }
+export const get_poss_mysql_unsync = async(connection:Connection) => {
+   const promise_get_categories = new Promise<Array<PosMySQL>>((resolve) => {
+      const query = "select * from pos where is_sync = 0";
+      connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
+         const data:Array<PosMySQL> = [];
+         if(!error) {
+            for(let i = 0; i < rows.length; i++) {
+               const branch:Branch = await get_branch_by_id(connection, rows[i].id_branch);
+               data.push({
+                  id: Number(rows[i].id),
+                  is_active: rows[i].is_active,
+                  created: rows[i].created,
+                  updated: rows[i].updated,
+                  name: rows[i].name,
+                  machine_id: rows[i].machine_id,
+                  mac_address: rows[i].mac_address,
+                  id_branch: Number(rows[i].id_branch),
+                  branch: branch
+               });
+            }
+         }
+         resolve(data);
+      });
+   });
+   return await promise_get_categories;
+}
 
 export const get_pos_by_id = async(connection:Connection, id:number) => {
    const promise_get_pos_by_id = new Promise<Pos>((resolve) => {
@@ -93,37 +93,37 @@ export const get_pos_by_id = async(connection:Connection, id:number) => {
    return await promise_get_pos_by_id;
 };
 
-// export const get_pos_mysql_by_id = async(connection:Connection, id:number) => {
-//    const promise_get_pos_mysql_by_id = new Promise<PosMySQL>((resolve) => {
-//       const query = "select * from pos where is_active = 1 and id = " + id;
-//       connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
-//          let result_pos:PosMySQL = {
-//             id: -1,
-//             is_active: -1,
-//             created: new Date(),
-//             updated: new Date(),
-//             name: "",
-//             machine_id: "",
-//             mac_address: "",
-//             id_branch: -1,
-//             branch: null
-//          };
+export const get_pos_mysql_by_id = async(connection:Connection, id:number) => {
+   const promise_get_pos_mysql_by_id = new Promise<PosMySQL>((resolve) => {
+      const query = "select * from pos where is_active = 1 and id = " + id;
+      connection.query(query, async(error:MysqlError, rows:Array<PosMySQL>) => {
+         let result_pos:PosMySQL = {
+            id: -1,
+            is_active: -1,
+            created: new Date(),
+            updated: new Date(),
+            name: "",
+            machine_id: "",
+            mac_address: "",
+            id_branch: -1,
+            branch: null
+         };
 
-//          if(!error) {
-//             if(rows.length > 0) {
-//                const curr_row = rows[0];
-//                const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
-//                result_pos = {
-//                   ...curr_row,
-//                   branch: branch
-//                };
-//             }
-//          }
-//          resolve(result_pos);
-//       });
-//    });
-//    return await promise_get_pos_mysql_by_id;
-// };
+         if(!error) {
+            if(rows.length > 0) {
+               const curr_row = rows[0];
+               const branch:Branch = await get_branch_by_id(connection, curr_row.id_branch);
+               result_pos = {
+                  ...curr_row,
+                  branch: branch
+               };
+            }
+         }
+         resolve(result_pos);
+      });
+   });
+   return await promise_get_pos_mysql_by_id;
+};
 
 export const insert_pos = async(connection:Connection, data:Pos) => {
    const promise_insert_pos = new Promise<number>((resolve) => {

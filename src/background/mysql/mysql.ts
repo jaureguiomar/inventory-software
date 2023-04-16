@@ -11,14 +11,14 @@ import { get_sales_mysql_unsync, insert_sale_mysql } from "@/background/mysql/qu
 import { get_sale_products_mysql_unsync, insert_sale_product_mysql } from "@/background/mysql/queries/sale-product";
 import { get_suppliers_mysql_unsync, insert_supplier_mysql } from "@/background/mysql/queries/supplier";
 import { get_clients_mysql_unsync, insert_client_mysql } from "@/background/mysql/queries/client";
-import { insert_user_role_permission_mysql } from "@/background/mysql/queries/user-role-permission";
-import { insert_cash_cutoff_mysql } from "@/background/mysql/queries/cash-cutoff";
-import { insert_cash_cutoff_type_mysql } from "@/background/mysql/queries/cash-cutoff-type";
-import { insert_activity_log_operation_mysql } from "@/background/mysql/queries/activity-log-operation";
-import { insert_activity_log_access_mysql } from "@/background/mysql/queries/activity-log-access";
-import { insert_activity_log_mysql } from "@/background/mysql/queries/activity-log";
-import { insert_pos } from "@/background/mysql/queries/pos";
-import { insert_branch } from "@/background/mysql/queries/branch";
+import { get_user_role_permissions_mysql_unsync, insert_user_role_permission_mysql } from "@/background/mysql/queries/user-role-permission";
+import { get_cash_cutoffs_mysql_unsync, insert_cash_cutoff_mysql } from "@/background/mysql/queries/cash-cutoff";
+import { get_cash_cutoff_types_mysql_unsync, insert_cash_cutoff_type_mysql } from "@/background/mysql/queries/cash-cutoff-type";
+import { get_activity_log_operations_mysql_unsync, insert_activity_log_operation_mysql } from "@/background/mysql/queries/activity-log-operation";
+import { get_activity_log_accesses_mysql_unsync, insert_activity_log_access_mysql } from "@/background/mysql/queries/activity-log-access";
+import { get_activity_logs_mysql_unsync, insert_activity_log_mysql } from "@/background/mysql/queries/activity-log";
+import { get_poss, get_poss_mysql_unsync, insert_pos } from "@/background/mysql/queries/pos";
+import { get_branches, get_branches_mysql_unsync, insert_branch } from "@/background/mysql/queries/branch";
 import { BgOfflineBakup } from "@/types/background";
 import { UserRoleMySQL } from "@/types/user-role";
 import { UserMySQL } from "@/types/user";
@@ -28,6 +28,14 @@ import { SaleMySQL } from "@/types/sale";
 import { SaleProductMySQL } from "@/types/sale-product";
 import { SupplierMySQL } from "@/types/supplier";
 import { ClientMySQL } from "@/types/client";
+import { BranchMySQL } from "@/types/branch";
+import { PosMySQL } from "@/types/pos";
+import { ActivityLogMySQL } from "@/types/activity-log";
+import { ActivityLogAccessMySQL } from "@/types/activity-log-access";
+import { ActivityLogOperationMySQL } from "@/types/activity-log-operation";
+import { CashCutoffMySQL } from "@/types/cash-cutoff";
+import { CashCutoffTypeMySQL } from "@/types/cash-cutoff-type";
+import { UserRolePermissionMySQL } from "@/types/user-role-permission";
 import "@/background/mysql/events/activity-log";
 import "@/background/mysql/events/activity-log-access";
 import "@/background/mysql/events/activity-log-operation";
@@ -308,33 +316,57 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
 
 ipcMain.on("mysql-get-unsync-data", async(e) => {
    const connection = mysql.createConnection(mysql_connection);
-   let user_role:UserRoleMySQL[] = [];
-   let user:UserMySQL[] = [];
+   let activity_log:ActivityLogMySQL[] = [];
+   let activity_log_access:ActivityLogAccessMySQL[] = [];
+   let activity_log_operation:ActivityLogOperationMySQL[] = [];
+   let branch:BranchMySQL[] = [];
+   let cash_cutoff:CashCutoffMySQL[] = [];
+   let cash_cutoff_type:CashCutoffTypeMySQL[] = [];
    let category:CategoryMySQL[] = [];
+   let client:ClientMySQL[] = [];
+   let pos:PosMySQL[] = [];
    let product:ProductMySQL[] = [];
    let sale:SaleMySQL[] = [];
    let sale_product:SaleProductMySQL[] = [];
    let supplier:SupplierMySQL[] = [];
-   let client:ClientMySQL[] = [];
+   let user:UserMySQL[] = [];
+   let user_role:UserRoleMySQL[] = [];
+   let user_role_permission:UserRolePermissionMySQL[] = [];
 
-   user_role = await get_user_roles_mysql_unsync(connection);
-   user = await get_users_mysql_unsync(connection);
+   activity_log = await get_activity_logs_mysql_unsync(connection);
+   activity_log_access = await get_activity_log_accesses_mysql_unsync(connection);
+   activity_log_operation = await get_activity_log_operations_mysql_unsync(connection);
+   branch = await get_branches_mysql_unsync(connection);
+   cash_cutoff = await get_cash_cutoffs_mysql_unsync(connection);
+   cash_cutoff_type = await get_cash_cutoff_types_mysql_unsync(connection);
    category = await get_categories_mysql_unsync(connection);
+   client = await get_clients_mysql_unsync(connection);
+   pos = await get_poss_mysql_unsync(connection);
    product = await get_products_mysql_unsync(connection);
    sale = await get_sales_mysql_unsync(connection);
    sale_product = await get_sale_products_mysql_unsync(connection);
    supplier = await get_suppliers_mysql_unsync(connection);
-   client = await get_clients_mysql_unsync(connection);
+   user = await get_users_mysql_unsync(connection);
+   user_role = await get_user_roles_mysql_unsync(connection);
+   user_role_permission = await get_user_role_permissions_mysql_unsync(connection);
 
    e.sender.send("mysql-get-unsync-data-reply", {
-      user_role: user_role,
-      user: user,
+      activity_log: activity_log,
+      activity_log_access: activity_log_access,
+      activity_log_operation: activity_log_operation,
+      branch: branch,
+      cash_cutoff: cash_cutoff,
+      cash_cutoff_type: cash_cutoff_type,
       category: category,
+      client: client,
+      pos: pos,
       product: product,
       sale: sale,
       sale_product: sale_product,
       supplier: supplier,
-      client: client
+      user: user,
+      user_role: user_role,
+      user_role_permission: user_role_permission
    });
 });
 
