@@ -3,6 +3,7 @@ import { ActivityLogAccess } from "@/types/activity-log-access";
 import { ActivityLogOperation } from "@/types/activity-log-operation";
 import { Branch } from "@/types/branch";
 import { CashCutoff } from "@/types/cash-cutoff";
+import { CashCutoffType } from "@/types/cash-cutoff-type";
 import { Category } from "@/types/category";
 import { Client } from "@/types/client";
 import { Pos } from "@/types/pos";
@@ -19,7 +20,8 @@ interface BgOfflineBakup {
    activity_log_access: ActivityLogAccess[];
    activity_log_operation: ActivityLogOperation[];
    branch: Branch[];
-   casdh_cutoff: CashCutoff[];
+   cash_cutoff: CashCutoff[];
+   cash_cutoff_type: CashCutoffType[];
    category: Category[];
    client: Client[];
    pos: Pos[];
