@@ -77,6 +77,7 @@ ipcMain.on("mysql-offline-bakup", async(e, data:BgOfflineBakup) => {
    await reset_auto_increment(connection, "users");
    await reset_auto_increment(connection, "user_role_permission");
    await reset_auto_increment(connection, "user_role");
+   await reset_auto_increment(connection, "pos");
    await reset_auto_increment(connection, "branch");
 
    // Add branches
