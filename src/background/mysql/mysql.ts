@@ -17,8 +17,8 @@ import { get_cash_cutoff_types_mysql_unsync, insert_cash_cutoff_type_mysql } fro
 import { get_activity_log_operations_mysql_unsync, insert_activity_log_operation_mysql } from "@/background/mysql/queries/activity-log-operation";
 import { get_activity_log_accesses_mysql_unsync, insert_activity_log_access_mysql } from "@/background/mysql/queries/activity-log-access";
 import { get_activity_logs_mysql_unsync, insert_activity_log_mysql } from "@/background/mysql/queries/activity-log";
-import { get_poss, get_poss_mysql_unsync, insert_pos } from "@/background/mysql/queries/pos";
-import { get_branches, get_branches_mysql_unsync, insert_branch } from "@/background/mysql/queries/branch";
+import { get_poss_mysql_unsync, insert_pos } from "@/background/mysql/queries/pos";
+import { get_branches_mysql_unsync, insert_branch } from "@/background/mysql/queries/branch";
 import { BgOfflineBakup } from "@/types/background";
 import { UserRoleMySQL } from "@/types/user-role";
 import { UserMySQL } from "@/types/user";
