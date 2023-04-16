@@ -1,7 +1,4 @@
 import { InputFieldNumber } from "@/types/general";
-import { Branch } from "@/types/branch";
-import { User, UserQuery } from "@/types/user";
-import { Pos, PosQuery } from "@/types/pos";
 import { Sale, SaleQuery } from "@/types/sale";
 import { ProductM2M, Product, ProductQuery } from "@/types/product";
 
@@ -12,14 +9,8 @@ interface MainSaleProduct {
    quantity: number;
    id_sale: number;
    id_product: number;
-   id_user: number;
-   id_pos: number;
-   id_branch: number;
    sale: Sale|null;
    product: Product|null;
-   user: User|null;
-   pos: Pos|null;
-   branch: Branch|null;
 }
 interface SaleProduct extends MainSaleProduct {
    created: string;
@@ -37,9 +28,6 @@ interface SaleProductMySQL extends MainSaleProduct {
 interface SaleProductQuery {
    sale: SaleQuery|boolean;
    product: ProductQuery|boolean;
-   user: UserQuery|boolean;
-   pos: PosQuery|boolean;
-   branch: boolean;
 }
 
 // Props

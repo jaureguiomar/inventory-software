@@ -425,6 +425,7 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_user_role_permission } from "@/plugins/mixins/format";
 import { getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user_permissions } from "@/plugins/mixins/permission";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
@@ -510,21 +511,13 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data = response.data.data;
-                     let formatted_user_role_permissions:Array<UserRolePermission> = [];
+                     let formatted_data:Array<UserRolePermission> = [];
                      for(let i = 0; i < data.length; i++) {
-                        formatted_user_role_permissions.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           name: data[i].name,
-                           shortname: data[i].shortname,
-                           description: data[i].description,
-                           attr_value: data[i].attr_value,
-                           attr_level: Number(data[i].attr_level)
-                        });
+                        const user_role_permission = format_user_role_permission(data[i]);
+                        if(user_role_permission)
+                           formatted_data.push(user_role_permission);
                      }
-                     user_role_permission.value = formatted_user_role_permissions;
+                     user_role_permission.value = formatted_data;
 
                      // Format Permissions
                      const user_permissions = {

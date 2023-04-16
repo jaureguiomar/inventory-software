@@ -112,17 +112,14 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_activity_log } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_user, format_activity_log_operation, format_activity_log_access } from "@/plugins/mixins/format";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { ActivityLogsResponse, WindowResponse, ActivityLog } from "@/types/activity-log";
-import { User } from "@/types/user";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
-import { ActivityLogOperation } from "@/types/activity-log-operation";
-import { ActivityLogAccess } from "@/types/activity-log-access";
 
 export default defineComponent({
    name: "activity-log-component",
@@ -287,28 +284,13 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_categories:Array<ActivityLog> = [];
+                  let formatted_data:Array<ActivityLog> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_operation:ActivityLogOperation|null = format_activity_log_operation(data[i].operation);
-                     const formatted_access:ActivityLogAccess|null = format_activity_log_access(data[i].access);
-                     const formatted_user:User|null = format_user(data[i].user);
-
-                     formatted_categories.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        extra_data: data[i].extra_data,
-                        id_operation: Number(data[i].id_operation),
-                        id_access: Number(data[i].id_access),
-                        id_user: Number(data[i].id_user),
-                        operation: formatted_operation,
-                        access: formatted_access,
-                        user: formatted_user
-                     });
+                     const activity_log = format_activity_log(data[i]);
+                     if(activity_log)
+                        formatted_data.push(activity_log);
                   }
-                  activityLog.value = formatted_categories;
+                  activityLog.value = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",

@@ -138,14 +138,11 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
-import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
+import { format_cash_cutoff } from "@/plugins/mixins/format";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { CashCutoff, CashCutoffsResponse, WindowResponse } from "@/types/cash-cutoff";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -358,36 +355,13 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_cash_cutoff:Array<CashCutoff> = [];
+                  let formatted_data:Array<CashCutoff> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user_open:User|null = format_user(data[i].user_open);
-                     const formatted_user_Close:User|null = format_user(data[i].user_close);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_cash_cutoff.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        amount_open: data[i].amount_open,
-                        amount_sale: data[i].amount_sale,
-                        amount_supplier: data[i].amount_supplier,
-                        amount_close: data[i].amount_close,
-                        date_close: data[i].date_close,
-                        id_type: data[i].id_type,
-                        id_user_open: data[i].id_user_open,
-                        id_user_close: data[i].id_user_close,
-                        id_pos: data[i].id_pos,
-                        id_branch: data[i].id_branch,
-                        user_open: formatted_user_open,
-                        user_close: formatted_user_Close,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const pos = format_cash_cutoff(data[i]);
+                     if(pos)
+                        formatted_data.push(pos);
                   }
-
-                  cashCutoff.value = formatted_cash_cutoff;
+                  cashCutoff.value = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",

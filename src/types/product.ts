@@ -48,17 +48,17 @@ interface ProductQuery {
    branch: boolean;
 }
 interface ProductM2MQuery {
-   category: CategoryQuery|boolean;
-   user: UserQuery|boolean;
-   pos: PosQuery|boolean;
-   branch: boolean;
    sale_product: {
       sale: SaleQuery|boolean;
       product: ProductQuery|boolean;
       user: UserQuery|boolean;
       pos: PosQuery|boolean;
       branch: boolean;
-   }
+   },
+   category: CategoryQuery|boolean;
+   user: UserQuery|boolean;
+   pos: PosQuery|boolean;
+   branch: boolean;
 }
 
 // Props

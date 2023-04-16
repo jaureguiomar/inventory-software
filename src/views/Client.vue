@@ -114,14 +114,11 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_client } from "@/plugins/mixins/format";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_user, format_pos, format_branch } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { ClientsResponse, WindowResponse, Client } from "@/types/client";
-import { Branch } from "@/types/branch";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -345,32 +342,13 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_clients:Array<Client> = [];
+                  let formatted_data:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_clients.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        first_name: data[i].first_name,
-                        last_name: data[i].last_name,
-                        address: data[i].address,
-                        cellphone: data[i].cellphone,
-                        cellphone2: data[i].cellphone2,
-                        email: data[i].email,
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const client = format_client(data[i]);
+                     if(client)
+                        formatted_data.push(client);
                   }
-                  client.value = formatted_clients;
+                  client.value = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",

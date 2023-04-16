@@ -1,4 +1,5 @@
 import { InputFieldString, InputFieldNumber } from "@/types/general";
+import { CashCutoffType } from "@/types/cash-cutoff-type";
 import { User, UserQuery } from "@/types/user";
 import { Branch } from "@/types/branch";
 import { Pos, PosQuery } from "@/types/pos";
@@ -17,6 +18,7 @@ interface MainCashCutoff {
    id_user_close: number|null;
    id_pos: number;
    id_branch: number;
+   type: CashCutoffType|null;
    user_open: User|null;
    user_close: User|null;
    pos: Pos|null;
@@ -33,6 +35,7 @@ interface CashCutoffMySQL extends MainCashCutoff {
    updated: Date;
 }
 interface CashCutoffQuery {
+   type: boolean;
    user_open: UserQuery|boolean;
    user_close: UserQuery|boolean;
    pos: PosQuery|boolean;

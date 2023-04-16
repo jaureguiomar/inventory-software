@@ -125,15 +125,11 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_product } from "@/plugins/mixins/format";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { ProductsResponse, WindowResponse, Product } from "@/types/product";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
-import { Category } from "@/types/category";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -373,36 +369,13 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_products:Array<Product> = [];
+                  let formatted_data:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_category:Category|null = format_category(data[i].category);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_products.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        is_favorite: Number(data[i].is_favorite),
-                        code: data[i].code,
-                        name: data[i].name,
-                        description: data[i].description,
-                        buy_price: data[i].buy_price,
-                        sale_price: data[i].sale_price,
-                        quantity: Number(data[i].quantity),
-                        id_category: Number(data[i].id_category),
-                        id_user: Number(data[i].id_user),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        category: formatted_category,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
+                     const product = format_product(data[i]);
+                     if(product)
+                        formatted_data.push(product);
                   }
-                  product.value = formatted_products;
+                  product.value = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",

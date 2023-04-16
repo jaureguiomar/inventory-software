@@ -1,7 +1,7 @@
 import { verifyDisplayField } from "@/plugins/mixins/general";
 import {
    format_activity_log_access, format_activity_log_operation, format_branch,
-   format_cash_cutoff, format_category, format_pos, format_product,
+   format_cash_cutoff, format_cash_cutoff_type, format_category, format_pos, format_product,
    format_sale, format_user, format_user_role
 } from "@/plugins/mixins/format";
 import { Category, CategoryQuery } from "@/types/category";
@@ -18,6 +18,7 @@ import { ActivityLogAccess } from "@/types/activity-log-access";
 import { Client, ClientQuery } from "@/types/client";
 import { Supplier, SupplierQuery } from "@/types/supplier";
 import { SaleProduct, SaleProductQuery } from "@/types/sale-product";
+import { CashCutoffType } from "@/types/cash-cutoff-type";
 
 export const format_display_sale = (row:Sale, display?:SaleQuery) => {
    let cash_cutoff:CashCutoff|null = null;
@@ -27,6 +28,7 @@ export const format_display_sale = (row:Sale, display?:SaleQuery) => {
 
    if(verifyDisplayField(display?.cash_cutoff)) {
       const formattedDisplay:CashCutoffQuery = (typeof(display?.cash_cutoff) === "object" ? display?.cash_cutoff : {
+         type: false,
          user_open: false,
          user_close: false,
          pos: false,
@@ -58,9 +60,6 @@ export const format_display_sale = (row:Sale, display?:SaleQuery) => {
 export const format_display_sale_product = (row:SaleProduct, display?:SaleProductQuery) => {
    let sale:Sale|null = null;
    let product:Product|null = null;
-   let user:User|null = null;
-   let pos:Pos|null = null;
-   let branch:Branch|null = null;
 
    if(verifyDisplayField(display?.sale)) {
       const formattedDisplay:SaleQuery = (typeof(display?.sale) === "object" ? display?.sale : {
@@ -80,25 +79,10 @@ export const format_display_sale_product = (row:SaleProduct, display?:SaleProduc
       });
       product = format_product(row.product, formattedDisplay);
    }
-   if(verifyDisplayField(display?.user)) {
-      const formattedDisplay:UserQuery = (typeof(display?.user) === "object" ? display?.user : {
-         role: false,
-         pos: false,
-         branch: false
-      });
-      user = format_user(row.user, formattedDisplay);
-   }
-   if(verifyDisplayField(display?.pos))
-      pos = format_pos(row.pos);
-   if(verifyDisplayField(display?.branch))
-      branch = format_branch(row.branch);
 
    return {
       sale: sale,
-      product: product,
-      user: user,
-      pos: pos,
-      branch: branch
+      product: product
    };
 };
 
@@ -169,9 +153,6 @@ export const format_display_product_m2m = (row:ProductM2M, display?:ProductM2MQu
    let product_branch:Branch|null = null;
    let sale_product_sale:Sale|null = null;
    let sale_product_product:Product|null = null;
-   let sale_product_user:User|null = null;
-   let sale_product_pos:Pos|null = null;
-   let sale_product_branch:Branch|null = null;
 
    // Sale
    if(verifyDisplayField(display?.category)) {
@@ -214,18 +195,6 @@ export const format_display_product_m2m = (row:ProductM2M, display?:ProductM2MQu
       });
       sale_product_product = format_product(row.sale_product.product, formattedDisplay);
    }
-   if(verifyDisplayField(display?.sale_product.user)) {
-      const formattedDisplay:UserQuery = (typeof(display?.sale_product.user) === "object" ? display?.sale_product.user : {
-         role: false,
-         pos: false,
-         branch: false
-      });
-      sale_product_user = format_user(row.sale_product.user, formattedDisplay);
-   }
-   if(verifyDisplayField(display?.sale_product.pos))
-      sale_product_pos = format_pos(row.sale_product.pos);
-   if(verifyDisplayField(display?.sale_product.branch))
-      sale_product_branch = format_branch(row.sale_product.branch);
 
    return {
       product: {
@@ -236,10 +205,7 @@ export const format_display_product_m2m = (row:ProductM2M, display?:ProductM2MQu
       },
       sale_product: {
          sale: sale_product_sale,
-         product: sale_product_product,
-         user: sale_product_user,
-         pos: sale_product_pos,
-         branch: sale_product_branch
+         product: sale_product_product
       }
    };
 };
@@ -323,11 +289,14 @@ export const format_display_pos = (row:Pos, display?:PosQuery) => {
 };
 
 export const format_display_cash_cutoff = (row:CashCutoff, display?:CashCutoffQuery) => {
+   let type:CashCutoffType|null = null;
    let user_open:User|null = null;
    let user_close:User|null = null;
    let pos:Pos|null = null;
    let branch:Branch|null = null;
 
+   if(verifyDisplayField(display?.type))
+      type = format_cash_cutoff_type(row.type);
    if(verifyDisplayField(display?.user_open)) {
       const formattedDisplay:UserQuery = (typeof(display?.user_open) === "object" ? display?.user_open : {
          role: false,
@@ -350,6 +319,7 @@ export const format_display_cash_cutoff = (row:CashCutoff, display?:CashCutoffQu
       branch = format_branch(row.branch);
 
    return {
+      type: type,
       user_open: user_open,
       user_close: user_close,
       pos: pos,

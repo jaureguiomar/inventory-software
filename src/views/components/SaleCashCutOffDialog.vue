@@ -129,11 +129,10 @@ import axios from "axios";
 import { useStore } from "vuex";
 import { ref, reactive, computed, onMounted } from "vue";
 import { useDialogPluginComponent } from "quasar";
-import { format_branch, format_pos, format_user, format_user_role } from "@/plugins/mixins/format";
+import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { key } from "@/plugins/store";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
-import { UserRole } from "@/types/user-role";
 import { User, UsersResponse } from "@/types/user";
 import { Pos } from "@/types/pos";
 import { Branch } from "@/types/branch";
@@ -182,6 +181,7 @@ export default {
          id_user_close: -1,
          id_pos: -1,
          id_branch: -1,
+         type: null,
          user_open: null,
          user_close: null,
          pos: null,
@@ -275,36 +275,18 @@ export default {
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_users:Array<User> = [];
-                  let formatted_users_input:Array<string> = [];
+                  let formatted_data:Array<User> = [];
+                  let formatted_data_input:Array<string> = [];
 
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_role:UserRole|null = format_user_role(data[i].role);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_users.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        username: data[i].username,
-                        email: data[i].email,
-                        password: data[i].password,
-                        first_name: data[i].first_name,
-                        last_name: data[i].last_name,
-                        id_role: Number(data[i].id_role),
-                        id_pos: Number(data[i].id_pos),
-                        id_branch: Number(data[i].id_branch),
-                        role: formatted_role,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
-                     formatted_users_input.push(data[i].username);
+                     const user = format_user(data[i]);
+                     if(user)
+                        formatted_data.push(user);
+                     formatted_data_input.push(data[i].username);
                   }
-                  allUsersOptions.value = formatted_users_input;
-                  allUsersFilteredOptions.value = formatted_users_input;
-                  allUsers.value = formatted_users;
+                  allUsersOptions.value = formatted_data_input;
+                  allUsersFilteredOptions.value = formatted_data_input;
+                  allUsers.value = formatted_data;
                } else {
                   // Swal.fire({
                   //    title: "Error",

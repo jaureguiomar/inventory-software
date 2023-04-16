@@ -215,13 +215,10 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins/general";
-import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
+import { format_category, format_product } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/types/product";
 import { Category, CategoryOneResponse, CategoriesResponse } from "@/types/category";
-import { User } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -282,43 +279,9 @@ export default defineComponent({
             pos: null,
             branch: null
          },
-         user: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            pos: null,
-            branch: null
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         user: null,
+         pos: null,
+         branch: null
       });
       const field = reactive<ProductField>({
          is_favorite: {
@@ -461,31 +424,15 @@ export default defineComponent({
          if(response) {
             if(response.data.data) {
                const data = response.data.data;
-               let formatted_categories:Array<Category> = [];
-
+               let formatted_data:Array<Category> = [];
                for(let i = 0; i < data.length; i++) {
-                  const formatted_user:User|null = format_user(data[i].user);
-                  const formatted_pos:Pos|null = format_pos(data[i].pos);
-                  const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                  formatted_categories.push({
-                     id: Number(data[i].id),
-                     is_active: Number(data[i].is_active),
-                     created: data[i].created,
-                     updated: data[i].updated,
-                     name: data[i].name,
-                     id_user: Number(data[i].id_branch),
-                     id_pos: Number(data[i].id_branch),
-                     id_branch: Number(data[i].id_branch),
-                     user: formatted_user,
-                     pos: formatted_pos,
-                     branch: formatted_branch
-                  });
-
+                  const category = format_category(data[i]);
+                  if(category)
+                     formatted_data.push(category);
                   categoryOptions.value.push(data[i].name);
                   categoryFilteredOptions.value.push(data[i].name);
                }
-               category.value = formatted_categories;
+               category.value = formatted_data;
             } else {
                Swal.fire({
                   title: "Error",
@@ -610,43 +557,9 @@ export default defineComponent({
                pos: null,
                branch: null
             },
-            user: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               username: "",
-               email: "",
-               password: "",
-               first_name: "",
-               last_name: "",
-               id_role: -1,
-               id_pos: -1,
-               id_branch: -1,
-               role: null,
-               pos: null,
-               branch: null
-            },
-            pos: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               machine_id: "",
-               mac_address: "",
-               id_branch: -1,
-               branch: null
-            },
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            user: null,
+            pos: null,
+            branch: null
          };
 
          // Get "id_category"
@@ -681,32 +594,9 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Product = response.data.data;
-                     const formatted_category:Category|null = format_category(data.category);
-                     const formatted_user:User|null = format_user(data.user);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        is_favorite: Number(data.is_favorite),
-                        code: data.code,
-                        name: data.name,
-                        description: data.description,
-                        buy_price: data.buy_price,
-                        sale_price: data.sale_price,
-                        quantity: Number(data.quantity),
-                        id_category: Number(data.id_category),
-                        id_user: Number(data.id_user),
-                        id_pos: Number(data.id_pos),
-                        id_branch: Number(data.id_branch),
-                        category: formatted_category,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     };
+                     const product = format_product(data);
+                     if(product)
+                        formatted_data = product;
 
                      create_activity_log({
                         name: `The user has added a product item`,
@@ -767,32 +657,9 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Product = response.data.data;
-                     const formatted_category:Category|null = format_category(data.category);
-                     const formatted_user:User|null = format_user(data.user);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        is_favorite: Number(data.is_favorite),
-                        code: data.code,
-                        name: data.name,
-                        description: data.description,
-                        buy_price: data.buy_price,
-                        sale_price: data.sale_price,
-                        quantity: Number(data.quantity),
-                        id_category: Number(data.id_category),
-                        id_user: Number(data.id_user),
-                        id_pos: Number(data.id_pos),
-                        id_branch: Number(data.id_branch),
-                        category: formatted_category,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     };
+                     const product = format_product(data);
+                     if(product)
+                        formatted_data = product;
 
                      create_activity_log({
                         name: `The user has updated a product item`,
@@ -841,23 +708,9 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data:Category = response.data.data;
-                  // const formatted_user:User|null = format_user(data.user);
-                  // const formatted_pos:Pos|null = format_pos(data.pos);
-                  // const formatted_branch:Branch|null = format_branch(data.branch);
-
-                  formatted_data.category = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     name: data.name,
-                     id_user: Number(data.id_user),
-                     id_pos: Number(data.id_pos),
-                     id_branch: Number(data.id_branch),
-                     user: null,
-                     pos: null,
-                     branch: null
-                  }
+                  const category = format_category(data);
+                  if(category)
+                     formatted_data.category = category;
                } else {
                   Swal.fire({
                      title: "Error",

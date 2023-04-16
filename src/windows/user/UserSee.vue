@@ -167,37 +167,9 @@ export default defineComponent({
          id_role: -1,
          id_pos: -1,
          id_branch: -1,
-         role: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            atributes_1: 0,
-            atributes_2: 0,
-            atributes_3: 0,
-            atributes_4: 0
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         role: null,
+         pos: null,
+         branch: null
       });
       const loaded = ref(false);
       const getServer = computed(() => {

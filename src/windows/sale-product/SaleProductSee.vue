@@ -157,63 +157,10 @@ export default defineComponent({
          id_pos: -1,
          id_branch: -1,
          products: [],
-         cash_cutoff: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            amount_open: -1,
-            amount_sale: -1,
-            amount_supplier: -1,
-            amount_close: -1,
-            date_close: "",
-            id_type: -1,
-            id_user_open: -1,
-            id_user_close: -1,
-            id_pos: -1,
-            id_branch: -1,
-            user_open: null,
-            user_close: null,
-            pos: null,
-            branch: null
-         },
-         user: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            pos: null,
-            branch: null
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         cash_cutoff: null,
+         user: null,
+         pos: null,
+         branch: null
       });
       const productVisibleColumns = ref<Array<string>>([
          "id", "created", "updated", "code", "name",

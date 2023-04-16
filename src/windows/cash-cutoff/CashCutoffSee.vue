@@ -189,60 +189,11 @@ export default defineComponent({
          id_user_close: -1,
          id_pos: -1,
          id_branch: -1,
-         user_open: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            pos: null,
-            branch: null
-         },
-         user_close: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            username: "",
-            email: "",
-            password: "",
-            first_name: "",
-            last_name: "",
-            id_role: -1,
-            id_pos: -1,
-            id_branch: -1,
-            role: null,
-            pos: null,
-            branch: null
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         type: null,
+         user_open: null,
+         user_close: null,
+         pos: null,
+         branch: null
       });
       const idTypeParsed = ref<string>("");
       const loaded = ref(false);

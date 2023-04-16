@@ -114,6 +114,7 @@ import { useStore } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_user_role } from "@/plugins/mixins/format";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
@@ -292,21 +293,13 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_categories:Array<UserRole> = [];
+                  let formatted_data:Array<UserRole> = [];
                   for(let i = 0; i < data.length; i++) {
-                     formatted_categories.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        atributes_1: Number(data[i].atributes_1),
-                        atributes_2: Number(data[i].atributes_2),
-                        atributes_3: Number(data[i].atributes_3),
-                        atributes_4: Number(data[i].atributes_4)
-                     });
+                     const user = format_user_role(data[i]);
+                     if(user)
+                        formatted_data.push(user);
                   }
-                  userRole.value = formatted_categories;
+                  userRole.value = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",

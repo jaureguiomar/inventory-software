@@ -71,7 +71,8 @@ import {
    format_category, format_user, format_pos, format_branch,
    format_user_role, format_product, format_sale, format_cash_cutoff,
    format_cash_cutoff_type, format_activity_log, format_activity_log_access,
-   format_activity_log_operation
+   format_activity_log_operation, format_client, format_supplier,
+   format_sale_product, format_user_role_permission
 } from "@/plugins/mixins/format";
 import { ActivityLog, ActivityLogsResponse } from "@/types/activity-log";
 import { ActivityLogAccess, ActivityLogAccessesResponse } from "@/types/activity-log-access";
@@ -92,7 +93,6 @@ import { CashCutoffType, CashCutoffTypesResponse } from "@/types/cash-cutoff-typ
 import Banner from "@/views/layout/Banner.vue";
 import Content from "@/views/layout/Content.vue";
 import MenuHome from "@/views/layout/MenuHome.vue";
-import { format_client, format_supplier, format_sale_product, format_user_role_permission } from '../plugins/mixins/format';
 
 export default defineComponent({
    name: "home-component",

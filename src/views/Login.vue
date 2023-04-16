@@ -37,6 +37,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_user_role_permission, format_user_role } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { UserAuthResponse } from "@/types/user";
 import { SessionStore, UserRoleStore } from "@/types/store";
@@ -73,18 +74,9 @@ export default defineComponent({
 
                for(let i = 0; i < response.data.data.length; i++) {
                   const curr_data = response.data.data[i];
-                  const curr_formatted_data = {
-                     id: Number(curr_data.id),
-                     is_active: Number(curr_data.is_active),
-                     created: curr_data.created,
-                     updated: curr_data.updated,
-                     name: curr_data.name,
-                     shortname: curr_data.shortname,
-                     description: curr_data.description,
-                     attr_value: curr_data.attr_value,
-                     attr_level: Number(curr_data.attr_level)
-                  };
-                  formatted_data.push(curr_formatted_data);
+                  const user_role_permission = format_user_role_permission(curr_data);
+                  if(user_role_permission)
+                     formatted_data.push(user_role_permission);
                }
                userRolePermission.value = formatted_data;
             }
@@ -123,14 +115,9 @@ export default defineComponent({
                   const curr_role = (data.role) ? data.role : null;
 
                   if(curr_role) {
-                     formatted_role_store = {
-                        id: Number(curr_role.id),
-                        name: curr_role.name,
-                        atributes_1: curr_role.atributes_1,
-                        atributes_2: curr_role.atributes_2,
-                        atributes_3: curr_role.atributes_3,
-                        atributes_4: curr_role.atributes_4
-                     };
+                     const user_role = format_user_role(curr_role);
+                     if(user_role)
+                        formatted_role_store = user_role;
                   }
 
                   const new_user:SessionStore = {

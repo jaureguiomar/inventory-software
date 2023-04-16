@@ -108,6 +108,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_pos } from "@/plugins/mixins/format";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { format_branch } from "@/plugins/mixins/format";
 import { Branch, BranchesResponse, BranchField } from "@/types/branch";
@@ -211,23 +212,15 @@ export default defineComponent({
                   if(response.data.data) {
                      const data = response.data.data;
                      response.data.data
-                     let formatted_branches:Array<Branch> = [];
-
+                     let formatted_data:Array<Branch> = [];
                      for(let i = 0; i < data.length; i++) {
-                        formatted_branches.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           name: data[i].name,
-                           telephone: data[i].telephone,
-                           address: data[i].address
-                        });
-
+                        const branch = format_branch(data[i]);
+                        if(branch)
+                           formatted_data.push(branch);
                         branchOptions.value.push(data[i].name);
                         branchFilteredOptions.value.push(data[i].name);
                      }
-                     branch.value = formatted_branches;
+                     branch.value = formatted_data;
                   } else {
                      Swal.fire({
                         title: "Error",
@@ -348,26 +341,16 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data = response.data.data;
-                     let formatted_poss:Array<Pos> = [];
+                     let formatted_data:Array<Pos> = [];
 
                      for(let i = 0; i < data.length; i++) {
-                        const formatted_branch:Branch|null = format_branch(data[i].branch);
-                        formatted_poss.push({
-                           id: Number(data[i].id),
-                           is_active: Number(data[i].is_active),
-                           created: data[i].created,
-                           updated: data[i].updated,
-                           name: data[i].name,
-                           machine_id: data[i].machine_id,
-                           mac_address: data[i].mac_address,
-                           id_branch: Number(data[i].id_branch),
-                           branch: formatted_branch
-                        });
-
+                        const pos = format_pos(data[i]);
+                        if(pos)
+                           formatted_data.push(pos);
                         posOptions.value.push(data[i].name);
                         posFilteredOptions.value.push(data[i].name);
                      }
-                     pos.value = formatted_poss;
+                     pos.value = formatted_data;
                   } else {
                      Swal.fire({
                         title: "Error",

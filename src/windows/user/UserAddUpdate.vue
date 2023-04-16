@@ -191,13 +191,11 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_user, format_user_role } from "@/plugins/mixins/format";
 import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins/general";
-import { format_branch, format_pos, format_user_role } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/types/user";
 import { UserRole, UserRoleOneResponse, UserRolesResponse } from "@/types/user-role";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 import Banner from "@/views/layout/Banner.vue";
 import Menu from "@/views/layout/Menu.vue";
 import Content from "@/views/layout/Content.vue";
@@ -238,37 +236,9 @@ export default defineComponent({
          id_role: -1,
          id_pos: -1,
          id_branch: -1,
-         role: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            atributes_1: 0,
-            atributes_2: 0,
-            atributes_3: 0,
-            atributes_4: 0
-         },
-         pos: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            machine_id: "",
-            mac_address: "",
-            id_branch: -1,
-            branch: null
-         },
-         branch: {
-            id: -1,
-            is_active: -1,
-            created: "",
-            updated: "",
-            name: "",
-            telephone: "",
-            address: ""
-         }
+         role: null,
+         pos: null,
+         branch: null
       });
       const field = reactive<UserField>({
          username: {
@@ -388,25 +358,16 @@ export default defineComponent({
          if(response) {
             if(response.data.data) {
                const data = response.data.data;
-               let formatted_roles:Array<UserRole> = [];
+               let formatted_data:Array<UserRole> = [];
 
                for(let i = 0; i < data.length; i++) {
-                  formatted_roles.push({
-                     id: Number(data[i].id),
-                     is_active: Number(data[i].is_active),
-                     created: data[i].created,
-                     updated: data[i].updated,
-                     name: data[i].name,
-                     atributes_1: Number(data[i].atributes_1),
-                     atributes_2: Number(data[i].atributes_2),
-                     atributes_3: Number(data[i].atributes_3),
-                     atributes_4: Number(data[i].atributes_4)
-                  });
-
+                  const user_role = format_user_role(data[i]);
+                  if(user_role)
+                     formatted_data.push(user_role);
                   roleOptions.value.push(data[i].name);
                   roleFilteredOptions.value.push(data[i].name);
                }
-               role.value = formatted_roles;
+               role.value = formatted_data;
             } else {
                Swal.fire({
                   title: "Error",
@@ -484,37 +445,9 @@ export default defineComponent({
             id_role: -1,
             id_pos: -1,
             id_branch: -1,
-            role: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               atributes_1: 0,
-               atributes_2: 0,
-               atributes_3: 0,
-               atributes_4: 0
-            },
-            pos: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               machine_id: "",
-               mac_address: "",
-               id_branch: -1,
-               branch: null
-            },
-            branch: {
-               id: -1,
-               is_active: -1,
-               created: "",
-               updated: "",
-               name: "",
-               telephone: "",
-               address: ""
-            }
+            role: null,
+            pos: null,
+            branch: null
          };
 
          if(page.id <= 0) {
@@ -540,27 +473,9 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:User = response.data.data;
-                     const formatted_role:UserRole|null = format_user_role(data.role);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        username: data.username,
-                        email: data.email,
-                        password: data.password,
-                        first_name: data.first_name,
-                        last_name: data.last_name,
-                        id_role: Number(data.id_role),
-                        id_pos: Number(data.id_pos),
-                        id_branch: Number(data.id_branch),
-                        role: formatted_role,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     };
+                     const user = format_user(data);
+                     if(user)
+                        formatted_data = user;
 
                      create_activity_log({
                         name: `The user has added a user item`,
@@ -619,27 +534,9 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:User = response.data.data;
-                     const formatted_role:UserRole|null = format_user_role(data.role);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        username: data.username,
-                        email: data.email,
-                        password: data.password,
-                        first_name: data.first_name,
-                        last_name: data.last_name,
-                        id_role: Number(data.id_role),
-                        id_pos: Number(data.id_pos),
-                        id_branch: Number(data.id_branch),
-                        role: formatted_role,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     };
+                     const user = format_user(data);
+                     if(user)
+                        formatted_data = user;
 
                      create_activity_log({
                         name: `The user has updated a user item`,
@@ -688,17 +585,9 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data:UserRole = response.data.data;
-                  formatted_data.role = {
-                     id: Number(data.id),
-                     is_active: Number(data.is_active),
-                     created: data.created,
-                     updated: data.updated,
-                     name: data.name,
-                     atributes_1: Number(data.atributes_1),
-                     atributes_2: Number(data.atributes_2),
-                     atributes_3: Number(data.atributes_3),
-                     atributes_4: Number(data.atributes_4)
-                  }
+                  const user_role = format_user_role(data);
+                  if(user_role)
+                     formatted_data.role = user_role;
                } else {
                   Swal.fire({
                      title: "Error",

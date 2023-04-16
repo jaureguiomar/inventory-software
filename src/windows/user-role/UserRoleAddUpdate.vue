@@ -404,6 +404,7 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
+import { format_user_role_permission, format_user_role } from "@/plugins/mixins/format";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_user_permissions } from "@/plugins/mixins/permission";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
@@ -503,21 +504,13 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_user_role_permissions:Array<UserRolePermission> = [];
+                  let formatted_data:Array<UserRolePermission> = [];
                   for(let i = 0; i < data.length; i++) {
-                     formatted_user_role_permissions.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        name: data[i].name,
-                        shortname: data[i].shortname,
-                        description: data[i].description,
-                        attr_value: data[i].attr_value,
-                        attr_level: Number(data[i].attr_level)
-                     });
+                     const user_role_permission = format_user_role_permission(data[i]);
+                     if(user_role_permission)
+                        formatted_data.push(user_role_permission);
                   }
-                  user_role_permission.value = formatted_user_role_permissions;
+                  user_role_permission.value = formatted_data;
 
                   // Format Permissions
                   const user_permissions = {
@@ -653,17 +646,9 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:UserRole = response.data.data;
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        name: data.name,
-                        atributes_1: Number(data.atributes_1),
-                        atributes_2: Number(data.atributes_2),
-                        atributes_3: Number(data.atributes_3),
-                        atributes_4: Number(data.atributes_4)
-                     };
+                     const user_role = format_user_role(data);
+                     if(user_role)
+                        formatted_data = user_role;
 
                      create_activity_log({
                         name: `The user has added a user role item`,
@@ -721,17 +706,9 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:UserRole = response.data.data;
-                     formatted_data = {
-                        id: Number(data.id),
-                        is_active: Number(data.is_active),
-                        created: data.created,
-                        updated: data.updated,
-                        name: data.name,
-                        atributes_1: Number(data.atributes_1),
-                        atributes_2: Number(data.atributes_2),
-                        atributes_3: Number(data.atributes_3),
-                        atributes_4: Number(data.atributes_4)
-                     };
+                     const user_role = format_user_role(data);
+                     if(user_role)
+                        formatted_data = user_role;
 
                      create_activity_log({
                         name: `The user has updated a user role item`,

@@ -269,14 +269,14 @@ import { useQuasar } from "quasar";
 import { useStore } from "vuex";
 import { defineComponent, getCurrentInstance, ref, reactive, computed, onMounted, onBeforeUnmount } from "vue";
 import { key } from "@/plugins/store";
+import { format_product } from "@/plugins/mixins/format";
 import { findValueBy } from "@/plugins/mixins/general";
-import { format_branch, format_category, format_pos, format_user } from "@/plugins/mixins/format";
+import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { Product, ProductsResponse } from "@/types/product";
 import { Sale, SaleResponse } from "@/types/sale";
 import { User } from "@/types/user";
 import { Pos } from "@/types/pos";
-import { Category } from "@/types/category";
 import { Branch } from "@/types/branch";
 import { CashCutoff, CashCutoffOneResponse } from "@/types/cash-cutoff";
 import { SaleProduct, SaleProductM2M, SaleProductResponse, SaleProductsM2MResponse } from "@/types/sale-product";
@@ -341,6 +341,7 @@ export default defineComponent({
          id_user_close: -1,
          id_pos: -1,
          id_branch: -1,
+         type: null,
          user_open: null,
          user_close: null,
          pos: null,
@@ -366,39 +367,16 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_products:Array<Product> = [];
-                  let formatted_products_input:Array<string> = [];
+                  let formatted_data:Array<Product> = [];
+                  let formatted_data_input:Array<string> = [];
 
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_category:Category|null = format_category(data[i].category);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_products.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        is_favorite: Number(data[i].is_favorite),
-                        code: data[i].code,
-                        name: data[i].name,
-                        description: data[i].description,
-                        buy_price: data[i].buy_price,
-                        sale_price: data[i].sale_price,
-                        quantity: Number(data[i].quantity),
-                        id_category: Number(data[i].id_category),
-                        id_user: Number(data[i].id_branch),
-                        id_pos: Number(data[i].id_branch),
-                        id_branch: Number(data[i].id_branch),
-                        category: formatted_category,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
-                     formatted_products_input.push(data[i].name);
+                     const product = format_product(data[i]);
+                     if(product)
+                        formatted_data.push(product);
+                     formatted_data_input.push(data[i].name);
                   }
-                  allProductsFavorites.value = formatted_products;
+                  allProductsFavorites.value = formatted_data;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -431,40 +409,17 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data = response.data.data;
-                  let formatted_products:Array<Product> = [];
-                  let formatted_products_input:Array<string> = [];
+                  let formatted_data:Array<Product> = [];
+                  let formatted_data_input:Array<string> = [];
 
                   for(let i = 0; i < data.length; i++) {
-                     const formatted_category:Category|null = format_category(data[i].category);
-                     const formatted_user:User|null = format_user(data[i].user);
-                     const formatted_pos:Pos|null = format_pos(data[i].pos);
-                     const formatted_branch:Branch|null = format_branch(data[i].branch);
-
-                     formatted_products.push({
-                        id: Number(data[i].id),
-                        is_active: Number(data[i].is_active),
-                        created: data[i].created,
-                        updated: data[i].updated,
-                        is_favorite: Number(data[i].is_favorite),
-                        code: data[i].code,
-                        name: data[i].name,
-                        description: data[i].description,
-                        buy_price: data[i].buy_price,
-                        sale_price: data[i].sale_price,
-                        quantity: Number(data[i].quantity),
-                        id_category: Number(data[i].id_category),
-                        id_user: Number(data[i].id_branch),
-                        id_pos: Number(data[i].id_branch),
-                        id_branch: Number(data[i].id_branch),
-                        category: formatted_category,
-                        user: formatted_user,
-                        pos: formatted_pos,
-                        branch: formatted_branch
-                     });
-                     formatted_products_input.push(data[i].name);
+                     const product = format_product(data[i]);
+                     if(product)
+                        formatted_data.push(product);
+                     formatted_data_input.push(data[i].name);
                   }
-                  allProductsOptions.value = formatted_products_input;
-                  allProductsFilteredOptions.value = formatted_products_input;
+                  allProductsOptions.value = formatted_data_input;
+                  allProductsFilteredOptions.value = formatted_data_input;
                } else {
                   Swal.fire({
                      title: "Error",
@@ -799,14 +754,8 @@ export default defineComponent({
                   quantity: -1,
                   id_sale: -1,
                   id_product: -1,
-                  id_user: -1,
-                  id_pos: -1,
-                  id_branch: -1,
                   sale: null,
-                  product: null,
-                  user: null,
-                  pos: null,
-                  branch: null
+                  product: null
                };
                let sale_product_error = false;
                for(let i = 0; i < getSaleCurrSaleProduct.value.length; i++) {

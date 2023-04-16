@@ -52,7 +52,7 @@ export const format_sale_product = (sale_product:SaleProduct|null, display?:Sale
    const curr_data = (sale_product) ? sale_product : null;
 
    if(curr_data) {
-      const { sale, product, user, pos, branch } = format_display_sale_product(curr_data, display);
+      const { sale, product } = format_display_sale_product(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -61,14 +61,8 @@ export const format_sale_product = (sale_product:SaleProduct|null, display?:Sale
          quantity: Number(curr_data.quantity),
          id_sale: Number(curr_data.id_sale),
          id_product: Number(curr_data.id_product),
-         id_user: Number(curr_data.id_user),
-         id_pos: Number(curr_data.id_pos),
-         id_branch: Number(curr_data.id_branch),
          sale: sale,
-         product: product,
-         user: user,
-         pos: pos,
-         branch: branch
+         product: product
       };
    }
    return formatted_data;
@@ -167,14 +161,8 @@ export const format_product_m2m = (product_m2m:ProductM2M|null, display?:Product
             quantity: Number(curr_data.sale_product.quantity),
             id_sale: Number(curr_data.sale_product.id_sale),
             id_product: Number(curr_data.sale_product.id_product),
-            id_user: Number(curr_data.sale_product.id_user),
-            id_pos: Number(curr_data.sale_product.id_pos),
-            id_branch: Number(curr_data.sale_product.id_branch),
             sale: sale_product.sale,
-            product: sale_product.product,
-            user: sale_product.user,
-            pos: sale_product.pos,
-            branch: sale_product.branch
+            product: sale_product.product
          }
       };
    }
@@ -338,7 +326,7 @@ export const format_cash_cutoff = (cash_cutoff:CashCutoff|null, display?:CashCut
    const curr_data = (cash_cutoff) ? cash_cutoff : null;
 
    if(curr_data) {
-      const { user_open, user_close, pos, branch } = format_display_cash_cutoff(curr_data, display);
+      const { type, user_open, user_close, pos, branch } = format_display_cash_cutoff(curr_data, display);
       formatted_data = {
          id: Number(curr_data.id),
          is_active: Number(curr_data.is_active),
@@ -354,6 +342,7 @@ export const format_cash_cutoff = (cash_cutoff:CashCutoff|null, display?:CashCut
          id_user_close: Number(curr_data.id_user_close),
          id_pos: Number(curr_data.id_pos),
          id_branch: Number(curr_data.id_branch),
+         type: type,
          user_open: user_open,
          user_close: user_close,
          pos: pos,
