@@ -104,6 +104,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_category } from "@/plugins/mixins/format";
+import { fd_data_category } from "@/plugins/mixins/format-display-data";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, CategoryField, CategoryResponse, Category } from "@/types/category";
@@ -257,7 +258,7 @@ export default defineComponent({
                   if(response) {
                      if(response.data.data) {
                         const data:Category = response.data.data;
-                        const category = format_category(data);
+                        const category = format_category(data, fd_data_category);
                         if(category)
                            formatted_data = category;
 
@@ -302,7 +303,7 @@ export default defineComponent({
                   id_branch: getBranchId.value
                });
                window.api.receive("mysql-create-category-reply", function(data:Category) {
-                  const category = format_category(data);
+                  const category = format_category(data, fd_data_category);
                   if(category)
                      formatted_data = category;
                   window.api.send("category-module-window-dialog", {
@@ -339,7 +340,7 @@ export default defineComponent({
                   if(response) {
                      if(response.data.data) {
                         const data:Category = response.data.data;
-                        const category = format_category(data);
+                        const category = format_category(data, fd_data_category);
                         if(category)
                            formatted_data = category;
 
@@ -385,7 +386,7 @@ export default defineComponent({
                   id_branch: getBranchId.value
                });
                window.api.receive("mysql-update-category-reply", function(data:Category) {
-                  const category = format_category(data);
+                  const category = format_category(data, fd_data_category);
                   if(category)
                      formatted_data = category;
                   window.api.send("category-module-window-dialog", {

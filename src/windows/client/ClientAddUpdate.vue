@@ -183,6 +183,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_client } from "@/plugins/mixins/format";
+import { fd_data_client } from "@/plugins/mixins/format-display-data";
 import { validateField, getFormattedDateString, formatEmail } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, ClientField, ClientResponse, Client } from "@/types/client";
@@ -417,7 +418,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Client = response.data.data;
-                     const client = format_client(data);
+                     const client = format_client(data, fd_data_client);
                      if(client)
                         formatted_data = client;
 
@@ -478,7 +479,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Client = response.data.data;
-                     const client = format_client(data);
+                     const client = format_client(data, fd_data_client);
                      if(client)
                         formatted_data = client;
 

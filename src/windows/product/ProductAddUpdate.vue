@@ -214,8 +214,9 @@ import { useI18n } from "vue-i18n/index";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
-import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins/general";
 import { format_category, format_product } from "@/plugins/mixins/format";
+import { fd_data_category, fd_data_product } from "@/plugins/mixins/format-display-data";
+import { validateField, findValueBy, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, ProductField, ProductResponse, Product } from "@/types/product";
 import { Category, CategoryOneResponse, CategoriesResponse } from "@/types/category";
@@ -426,7 +427,7 @@ export default defineComponent({
                const data = response.data.data;
                let formatted_data:Array<Category> = [];
                for(let i = 0; i < data.length; i++) {
-                  const category = format_category(data[i]);
+                  const category = format_category(data[i], fd_data_category);
                   if(category)
                      formatted_data.push(category);
                   categoryOptions.value.push(data[i].name);
@@ -594,7 +595,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Product = response.data.data;
-                     const product = format_product(data);
+                     const product = format_product(data, fd_data_product);
                      if(product)
                         formatted_data = product;
 
@@ -657,7 +658,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Product = response.data.data;
-                     const product = format_product(data);
+                     const product = format_product(data, fd_data_product);
                      if(product)
                         formatted_data = product;
 
@@ -708,7 +709,7 @@ export default defineComponent({
             if(response) {
                if(response.data.data) {
                   const data:Category = response.data.data;
-                  const category = format_category(data);
+                  const category = format_category(data, fd_data_category);
                   if(category)
                      formatted_data.category = category;
                } else {

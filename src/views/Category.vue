@@ -115,6 +115,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_category } from "@/plugins/mixins/format";
+import { fd_data_category } from "@/plugins/mixins/format-display-data";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
@@ -305,7 +306,7 @@ export default defineComponent({
                      const data = response.data.data;
                      let formatted_data:Array<Category> = [];
                      for(let i = 0; i < data.length; i++) {
-                        const category = format_category(data[i]);
+                        const category = format_category(data[i], fd_data_category);
                         if(category)
                            formatted_data.push(category);
                      }

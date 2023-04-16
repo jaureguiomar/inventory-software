@@ -129,15 +129,15 @@ import axios from "axios";
 import { useStore } from "vuex";
 import { ref, reactive, computed, onMounted } from "vue";
 import { useDialogPluginComponent } from "quasar";
-import { format_branch, format_pos, format_user } from "@/plugins/mixins/format";
+import { format_user } from "@/plugins/mixins/format";
+import { fd_data_user, fd_data_cash_cutoff } from "@/plugins/mixins/format-display-data";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { key } from "@/plugins/store";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { User, UsersResponse } from "@/types/user";
-import { Pos } from "@/types/pos";
-import { Branch } from "@/types/branch";
 import { CashCutoff, CashCutoffOneResponse, CashCutoffResponse } from "@/types/cash-cutoff";
 import { SaleProductsM2MResponse } from "@/types/sale-product";
+import { format_cash_cutoff } from '../../plugins/mixins/format';
 
 export default {
    emits: [
@@ -219,29 +219,9 @@ export default {
                if(response.data.data) {
                   const data = response.data.data;
                   if(data) {
-                     const formatted_user_open:User|null = format_user(data.user_open);
-                     const formatted_user_close:User|null = format_user(data.user_close);
-                     const formatted_pos:Pos|null = format_pos(data.pos);
-                     const formatted_branch:Branch|null = format_branch(data.branch);
-
-                     lastCashCutoff.id = Number(data.id);
-                     lastCashCutoff.is_active = Number(data.is_active);
-                     lastCashCutoff.created = data.created;
-                     lastCashCutoff.updated = data.updated;
-                     lastCashCutoff.amount_open = data.amount_open;
-                     lastCashCutoff.amount_sale = data.amount_sale;
-                     lastCashCutoff.amount_supplier = data.amount_supplier;
-                     lastCashCutoff.amount_close = data.amount_close;
-                     lastCashCutoff.date_close = data.date_close;
-                     lastCashCutoff.id_type = Number(data.id_type);
-                     lastCashCutoff.id_user_open = Number(data.id_user_open);
-                     lastCashCutoff.id_user_close = Number(data.id_user_close);
-                     lastCashCutoff.id_pos = Number(data.id_pos);
-                     lastCashCutoff.id_branch = Number(data.id_branch);
-                     lastCashCutoff.user_open = formatted_user_open;
-                     lastCashCutoff.user_close = formatted_user_close;
-                     lastCashCutoff.pos = formatted_pos;
-                     lastCashCutoff.branch = formatted_branch;
+                     const cash_cutoff = format_cash_cutoff(data, fd_data_cash_cutoff);
+                     if(cash_cutoff)
+                        Object.assign(lastCashCutoff, cash_cutoff);
                   }
                } else {
                   // Swal.fire({
@@ -279,7 +259,7 @@ export default {
                   let formatted_data_input:Array<string> = [];
 
                   for(let i = 0; i < data.length; i++) {
-                     const user = format_user(data[i]);
+                     const user = format_user(data[i], fd_data_user);
                      if(user)
                         formatted_data.push(user);
                      formatted_data_input.push(data[i].username);

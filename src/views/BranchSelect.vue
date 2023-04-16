@@ -109,6 +109,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_pos } from "@/plugins/mixins/format";
+import { fd_data_pos } from "@/plugins/mixins/format-display-data";
 import { findValueBy, validateField } from "@/plugins/mixins/general";
 import { format_branch } from "@/plugins/mixins/format";
 import { Branch, BranchesResponse, BranchField } from "@/types/branch";
@@ -344,7 +345,7 @@ export default defineComponent({
                      let formatted_data:Array<Pos> = [];
 
                      for(let i = 0; i < data.length; i++) {
-                        const pos = format_pos(data[i]);
+                        const pos = format_pos(data[i], fd_data_pos);
                         if(pos)
                            formatted_data.push(pos);
                         posOptions.value.push(data[i].name);

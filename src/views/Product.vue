@@ -126,6 +126,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_product } from "@/plugins/mixins/format";
+import { fd_data_product } from "@/plugins/mixins/format-display-data";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
@@ -371,7 +372,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const product = format_product(data[i]);
+                     const product = format_product(data[i], fd_data_product);
                      if(product)
                         formatted_data.push(product);
                   }

@@ -104,6 +104,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_supplier } from "@/plugins/mixins/format";
+import { fd_data_supplier } from "@/plugins/mixins/format-display-data";
 import { validateField, getFormattedDateString } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, SupplierField, SupplierResponse, Supplier } from "@/types/supplier";
@@ -247,7 +248,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Supplier = response.data.data;
-                     const supplier = format_supplier(data);
+                     const supplier = format_supplier(data, fd_data_supplier);
                      if(supplier)
                         formatted_data = supplier;
 
@@ -303,7 +304,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:Supplier = response.data.data;
-                     const supplier = format_supplier(data);
+                     const supplier = format_supplier(data, fd_data_supplier);
                      if(supplier)
                         formatted_data = supplier;
 

@@ -74,6 +74,11 @@ import {
    format_activity_log_operation, format_client, format_supplier,
    format_sale_product, format_user_role_permission
 } from "@/plugins/mixins/format";
+import {
+   fd_data_category, fd_data_user, fd_data_pos, fd_data_product,
+   fd_data_sale, fd_data_cash_cutoff, fd_data_activity_log, fd_data_client,
+   fd_data_supplier, fd_data_sale_product
+} from "@/plugins/mixins/format-display-data";
 import { ActivityLog, ActivityLogsResponse } from "@/types/activity-log";
 import { ActivityLogAccess, ActivityLogAccessesResponse } from "@/types/activity-log-access";
 import { ActivityLogOperation, ActivityLogOperationsResponse } from "@/types/activity-log-operation";
@@ -779,7 +784,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<ActivityLog> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const activity_log:ActivityLog|null = format_activity_log(data[i]);
+                     const activity_log:ActivityLog|null = format_activity_log(data[i], fd_data_activity_log);
                      if(activity_log)
                         formatted_data.push(activity_log);
                   }
@@ -911,7 +916,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Pos> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const pos:Pos|null = format_pos(data[i]);
+                     const pos:Pos|null = format_pos(data[i], fd_data_pos);
                      if(pos)
                         formatted_data.push(pos);
                   }
@@ -946,7 +951,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<CashCutoff> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i]);
+                     const cash_cutoff:CashCutoff|null = format_cash_cutoff(data[i], fd_data_cash_cutoff);
                      if(cash_cutoff)
                         formatted_data.push(cash_cutoff);
                   }
@@ -1018,7 +1023,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Client> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const client:Client|null = format_client(data[i]);
+                     const client:Client|null = format_client(data[i], fd_data_client);
                      if(client)
                         formatted_data.push(client);
                   }
@@ -1055,7 +1060,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Supplier> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const supplier:Supplier|null = format_supplier(data[i]);
+                     const supplier:Supplier|null = format_supplier(data[i], fd_data_supplier);
                      if(supplier)
                         formatted_data.push(supplier);
                   }
@@ -1092,7 +1097,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Category> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const category:Category|null = format_category(data[i]);
+                     const category:Category|null = format_category(data[i], fd_data_category);
                      if(category)
                         formatted_data.push(category);
                   }
@@ -1133,7 +1138,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Product> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const product:Product|null = format_product(data[i]);
+                     const product:Product|null = format_product(data[i], fd_data_product);
                      if(product)
                         formatted_data.push(product);
                   }
@@ -1174,7 +1179,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<Sale> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const sale:Sale|null = format_sale(data[i]);
+                     const sale:Sale|null = format_sale(data[i], fd_data_sale);
                      if(sale)
                         formatted_data.push(sale);
                   }
@@ -1215,7 +1220,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<SaleProduct> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const sale_product:SaleProduct|null = format_sale_product(data[i]);
+                     const sale_product:SaleProduct|null = format_sale_product(data[i], fd_data_sale_product);
                      if(sale_product)
                         formatted_data.push(sale_product);
                   }
@@ -1289,7 +1294,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<User> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const user:User|null = format_user(data[i]);
+                     const user:User|null = format_user(data[i], fd_data_user);
                      if(user)
                         formatted_data.push(user);
                   }

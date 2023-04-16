@@ -192,6 +192,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_user, format_user_role } from "@/plugins/mixins/format";
+import { fd_data_user } from "@/plugins/mixins/format-display-data";
 import { validateField, getFormattedDateString, formatEmail, findValueBy } from "@/plugins/mixins/general";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { IPCParamsContent, Page, UserField, UserResponse, User } from "@/types/user";
@@ -359,7 +360,6 @@ export default defineComponent({
             if(response.data.data) {
                const data = response.data.data;
                let formatted_data:Array<UserRole> = [];
-
                for(let i = 0; i < data.length; i++) {
                   const user_role = format_user_role(data[i]);
                   if(user_role)
@@ -473,7 +473,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:User = response.data.data;
-                     const user = format_user(data);
+                     const user = format_user(data, fd_data_user);
                      if(user)
                         formatted_data = user;
 
@@ -534,7 +534,7 @@ export default defineComponent({
                if(response) {
                   if(response.data.data) {
                      const data:User = response.data.data;
-                     const user = format_user(data);
+                     const user = format_user(data, fd_data_user);
                      if(user)
                         formatted_data = user;
 

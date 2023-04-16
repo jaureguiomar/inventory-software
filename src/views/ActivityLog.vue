@@ -113,6 +113,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { key } from "@/plugins/store";
 import { format_activity_log } from "@/plugins/mixins/format";
+import { fd_data_activity_log } from "@/plugins/mixins/format-display-data";
 import { create_activity_log, ACTIVITY_LOG_ACCESS, ACTIVITY_LOG_OPERATION } from "@/plugins/mixins/activity-log";
 import { getFormattedDate, getFormattedDateString } from "@/plugins/mixins/general";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
@@ -286,7 +287,7 @@ export default defineComponent({
                   const data = response.data.data;
                   let formatted_data:Array<ActivityLog> = [];
                   for(let i = 0; i < data.length; i++) {
-                     const activity_log = format_activity_log(data[i]);
+                     const activity_log = format_activity_log(data[i], fd_data_activity_log);
                      if(activity_log)
                         formatted_data.push(activity_log);
                   }
