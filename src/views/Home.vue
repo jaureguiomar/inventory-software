@@ -1122,12 +1122,8 @@ export default defineComponent({
 
          // Get Products
          try {
-            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product/find`,
+            let response = await axios.get<ProductsResponse>(`${ getServer.value }/product`,
                {
-                  params: {
-                     field: "id_branch",
-                     query: getBranchId.value
-                  },
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
@@ -1163,12 +1159,8 @@ export default defineComponent({
 
          // Get Sales
          try {
-            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale/find`,
+            let response = await axios.get<SalesResponse>(`${ getServer.value }/sale`,
                {
-                  params: {
-                     field: "id_branch",
-                     query: getBranchId.value
-                  },
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
@@ -1204,12 +1196,8 @@ export default defineComponent({
 
          // Get Sale Products
          try {
-            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale-product/find`,
+            let response = await axios.get<SaleProductsResponse>(`${ getServer.value }/sale-product`,
                {
-                  params: {
-                     field: "id_branch",
-                     query: getBranchId.value
-                  },
                   headers: {
                      "Authorization": `Bearer ${ getAuthToken.value.access_token }`
                   }
@@ -1354,25 +1342,6 @@ export default defineComponent({
             console.log("user-role-permission-error", error);
          }
 
-         console.log("data", {
-            activity_log: activity_log,
-            activity_log_access: activity_log_access,
-            activity_log_operation: activity_log_operation,
-            branch: branch,
-            cash_cutoff: cash_cutoff,
-            cash_cutoff_type: cash_cutoff_type,
-            category: category,
-            client: client,
-            pos: pos,
-            product: product,
-            sale: sale,
-            sale_product: sale_product,
-            supplier: supplier,
-            user: user,
-            user_role: user_role,
-            user_role_permission: user_role_permission
-         });
-
          if(!getOfflineBakupDone.value) {
             window.api.send("mysql-offline-bakup", {
                activity_log: activity_log,
@@ -1417,9 +1386,6 @@ export default defineComponent({
       });
       const getAuthToken = computed(() => {
          return store.getters["getAuthToken"];
-      });
-      const getBranchId = computed(() => {
-         return store.getters["getBranchId"];
       });
    }
 });
