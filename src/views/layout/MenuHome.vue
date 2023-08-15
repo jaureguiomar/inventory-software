@@ -73,6 +73,8 @@
 import { defineComponent, ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n/index";
+import Swal from "sweetalert2";
 import { key } from "@/plugins/store";
 import { validate_permission, get_permission_by_id } from "@/plugins/mixins/permission";
 import { SessionStore } from "@/types/store";
@@ -80,6 +82,7 @@ import { SessionStore } from "@/types/store";
 export default defineComponent({
    name: "menu-home-component",
    setup() {
+      const { t } = useI18n();
       const store = useStore(key);
       const router = useRouter();
       const permissionSaleAccess = ref(false);
@@ -100,26 +103,34 @@ export default defineComponent({
       });
 
       onMounted(() => {
-         const permission1 = get_permission_by_id(1, getSessionPermission.value);
-         const permission2 = get_permission_by_id(2, getSessionPermission.value);
-         const permission3 = get_permission_by_id(3, getSessionPermission.value);
-         const permission4 = get_permission_by_id(4, getSessionPermission.value);
-         const permission5 = get_permission_by_id(5, getSessionPermission.value);
-         const permission6 = get_permission_by_id(6, getSessionPermission.value);
-         const permission7 = get_permission_by_id(7, getSessionPermission.value);
-         const permission8 = get_permission_by_id(8, getSessionPermission.value);
-         const permission9 = get_permission_by_id(9, getSessionPermission.value);
-         const permission10 = get_permission_by_id(10, getSessionPermission.value);
-         permissionSaleAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
-         permissionClientAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
-         permissionSupplierAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
-         permissionProductsAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
-         permissionCategoriesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission5.attr_value);
-         permissionUsersAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission6.attr_value);
-         permissionRolesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission7.attr_value);
-         permissionSalesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission8.attr_value);
-         permissionCashCutoffAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission9.attr_value);
-         permissionActivityLogAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission10.attr_value);
+         try {
+            const permission1 = get_permission_by_id(1, getSessionPermission.value);
+            const permission2 = get_permission_by_id(2, getSessionPermission.value);
+            const permission3 = get_permission_by_id(3, getSessionPermission.value);
+            const permission4 = get_permission_by_id(4, getSessionPermission.value);
+            const permission5 = get_permission_by_id(5, getSessionPermission.value);
+            const permission6 = get_permission_by_id(6, getSessionPermission.value);
+            const permission7 = get_permission_by_id(7, getSessionPermission.value);
+            const permission8 = get_permission_by_id(8, getSessionPermission.value);
+            const permission9 = get_permission_by_id(9, getSessionPermission.value);
+            const permission10 = get_permission_by_id(10, getSessionPermission.value);
+            permissionSaleAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission1.attr_value);
+            permissionClientAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission2.attr_value);
+            permissionSupplierAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission3.attr_value);
+            permissionProductsAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission4.attr_value);
+            permissionCategoriesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission5.attr_value);
+            permissionUsersAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission6.attr_value);
+            permissionRolesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission7.attr_value);
+            permissionSalesAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission8.attr_value);
+            permissionCashCutoffAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission9.attr_value);
+            permissionActivityLogAccess.value = validate_permission(getSessionUserRole.value.atributes_1, permission10.attr_value);
+         } catch (error) {
+            Swal.fire({
+               title: "Error",
+               text: t("global.default_error"),
+               icon: "error"
+            });
+         }
       });
 
       const onLogout = () => {

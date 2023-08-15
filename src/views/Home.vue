@@ -79,6 +79,7 @@ import {
    fd_data_sale, fd_data_cash_cutoff, fd_data_activity_log, fd_data_client,
    fd_data_supplier, fd_data_sale_product
 } from "@/plugins/mixins/format-display-data";
+import { BgOfflineMySQLBakup } from "@/types/background";
 import { ActivityLog, ActivityLogsResponse } from "@/types/activity-log";
 import { ActivityLogAccess, ActivityLogAccessesResponse } from "@/types/activity-log-access";
 import { ActivityLogOperation, ActivityLogOperationsResponse } from "@/types/activity-log-operation";
@@ -125,7 +126,7 @@ export default defineComponent({
 
       const onOnline = () => {
          window.api.send("mysql-get-unsync-data");
-         window.api.receive("mysql-get-unsync-data-reply", async function(data) {
+         window.api.receive("mysql-get-unsync-data-reply", async function(data:BgOfflineMySQLBakup) {
             // Sync User Roles
             for(let i = 0; i < data.user_role.length; i++) {
                const curr_data = data.user_role[i];
@@ -133,10 +134,11 @@ export default defineComponent({
                   try {
                      let response = await axios.put<UserRolesResponse>(`${ getServer.value }/user-role`,
                         {
-                           total: curr_data.total,
-                           id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           name: curr_data.name,
+                           atributes_1: curr_data.atributes_1,
+                           atributes_2: curr_data.atributes_2,
+                           atributes_3: curr_data.atributes_3,
+                           atributes_4: curr_data.atributes_4
                         },
                         {
                            headers: {
@@ -158,10 +160,11 @@ export default defineComponent({
                      let response = await axios.post<UserRolesResponse>(`${ getServer.value }/user-role`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
-                           id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           name: curr_data.name,
+                           atributes_1: curr_data.atributes_1,
+                           atributes_2: curr_data.atributes_2,
+                           atributes_3: curr_data.atributes_3,
+                           atributes_4: curr_data.atributes_4
                         },
                         {
                            headers: {
@@ -210,10 +213,14 @@ export default defineComponent({
                   try {
                      let response = await axios.put<UsersResponse>(`${ getServer.value }/user`,
                         {
-                           total: curr_data.total,
-                           id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           username: curr_data.username,
+                           email: curr_data.email,
+                           password: curr_data.password,
+                           first_name: curr_data.first_name,
+                           last_name: curr_data.last_name,
+                           id_role: curr_data.id_role,
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -235,10 +242,14 @@ export default defineComponent({
                      let response = await axios.post<UsersResponse>(`${ getServer.value }/user`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
-                           id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           username: curr_data.username,
+                           email: curr_data.email,
+                           password: curr_data.password,
+                           first_name: curr_data.first_name,
+                           last_name: curr_data.last_name,
+                           id_role: curr_data.id_role,
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -287,10 +298,10 @@ export default defineComponent({
                   try {
                      let response = await axios.put<CategoriesResponse>(`${ getServer.value }/category`,
                         {
-                           total: curr_data.total,
+                           name: curr_data.name,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -312,10 +323,10 @@ export default defineComponent({
                      let response = await axios.post<CategoriesResponse>(`${ getServer.value }/category`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
+                           name: curr_data.name,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -364,10 +375,17 @@ export default defineComponent({
                   try {
                      let response = await axios.put<ProductsResponse>(`${ getServer.value }/product`,
                         {
-                           total: curr_data.total,
+                           is_favorite: curr_data.is_favorite,
+                           code: curr_data.code,
+                           name: curr_data.name,
+                           description: curr_data.description,
+                           buy_price: curr_data.buy_price,
+                           sale_price: curr_data.sale_price,
+                           quantity: curr_data.quantity,
+                           id_category: curr_data.id_category,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -389,10 +407,17 @@ export default defineComponent({
                      let response = await axios.post<ProductsResponse>(`${ getServer.value }/product`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
+                           is_favorite: curr_data.is_favorite,
+                           code: curr_data.code,
+                           name: curr_data.name,
+                           description: curr_data.description,
+                           buy_price: curr_data.buy_price,
+                           sale_price: curr_data.sale_price,
+                           quantity: curr_data.quantity,
+                           id_category: curr_data.id_category,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -442,9 +467,11 @@ export default defineComponent({
                      let response = await axios.put<SalesResponse>(`${ getServer.value }/sale`,
                         {
                            total: curr_data.total,
+                           is_supplier: curr_data.is_supplier,
+                           id_cash_cutoff: curr_data.id_cash_cutoff,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -467,9 +494,11 @@ export default defineComponent({
                         {
                            id: curr_data.id,
                            total: curr_data.total,
+                           is_supplier: curr_data.is_supplier,
+                           id_cash_cutoff: curr_data.id_cash_cutoff,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -518,10 +547,9 @@ export default defineComponent({
                   try {
                      let response = await axios.put<SaleProductsResponse>(`${ getServer.value }/sale-product`,
                         {
-                           total: curr_data.total,
-                           id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           quantity: curr_data.quantity,
+                           id_sale: curr_data.id_sale,
+                           id_product: curr_data.id_product
                         },
                         {
                            headers: {
@@ -543,10 +571,9 @@ export default defineComponent({
                      let response = await axios.post<SaleProductsResponse>(`${ getServer.value }/sale-product`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
-                           id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           quantity: curr_data.quantity,
+                           id_sale: curr_data.id_sale,
+                           id_product: curr_data.id_product
                         },
                         {
                            headers: {
@@ -595,10 +622,10 @@ export default defineComponent({
                   try {
                      let response = await axios.put<SuppliersResponse>(`${ getServer.value }/supplier`,
                         {
-                           total: curr_data.total,
+                           name: curr_data.name,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -620,10 +647,10 @@ export default defineComponent({
                      let response = await axios.post<SuppliersResponse>(`${ getServer.value }/supplier`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
+                           name: curr_data.name,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -672,10 +699,15 @@ export default defineComponent({
                   try {
                      let response = await axios.put<ClientsResponse>(`${ getServer.value }/client`,
                         {
-                           total: curr_data.total,
+                           first_name: curr_data.first_name,
+                           last_name: curr_data.last_name,
+                           address: curr_data.address,
+                           cellphone: curr_data.cellphone,
+                           cellphone2: curr_data.cellphone2,
+                           email: curr_data.email,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
@@ -697,10 +729,15 @@ export default defineComponent({
                      let response = await axios.post<ClientsResponse>(`${ getServer.value }/client`,
                         {
                            id: curr_data.id,
-                           total: curr_data.total,
+                           first_name: curr_data.first_name,
+                           last_name: curr_data.last_name,
+                           address: curr_data.address,
+                           cellphone: curr_data.cellphone,
+                           cellphone2: curr_data.cellphone2,
+                           email: curr_data.email,
                            id_user: curr_data.id_user,
-                           id_pos: curr_data.value,
-                           id_branch: curr_data.value
+                           id_pos: curr_data.id_pos,
+                           id_branch: curr_data.id_branch
                         },
                         {
                            headers: {
